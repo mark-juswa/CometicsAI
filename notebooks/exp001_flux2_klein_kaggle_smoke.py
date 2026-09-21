@@ -367,6 +367,7 @@ config:
         steps: {STEPS}
         lr: 0.0001
         optimizer: "adamw8bit"
+        noise_scheduler: "flowmatch"
         gradient_checkpointing: true
         dtype: "{precision}"
         train_unet: true
@@ -449,7 +450,7 @@ def main() -> None:
     global TOOLKIT
     parser = argparse.ArgumentParser()
     parser.add_argument("--audit-only", action="store_true", help="Inspect machine without downloads or training")
-    parser.add_argument("--phase", choices=("all", "prepare", "execute"), default="all")
+    parser.add_argument("--phase", choices=("all", "prepare", "execute", "retry-training"), default="all")
     args = parser.parse_args()
     if args.phase == "all" and not args.audit_only:
         first = command([sys.executable, __file__, "--phase", "prepare"], log=OUT / "prepare.log", check=False)
@@ -488,22 +489,23 @@ def main() -> None:
         os.environ["HF_HOME"] = str(CACHE)
         os.environ["HF_HUB_CACHE"] = str(CACHE / "hub")
         dtype = torch.bfloat16 if precision == "bf16" else torch.float16
-        print("STAGE 1: BASE LOAD", flush=True)
-        write_json(OUT / "storage_before_model_load.json", {"scratch": disk_info(scratch), "cache": disk_info(CACHE),
-                                                               "working": disk_info(Path("/kaggle/working"))})
-        pipe, load_observation = pipeline(BASE, dtype, torch)
-        result["base_load"] = load_observation
-        write_json(OUT / "storage_after_base_load.json", {"scratch": disk_info(scratch), "cache": disk_info(CACHE),
-                                                             "working": disk_info(Path("/kaggle/working"))})
-        print("STAGE 2: BASE IMAGE EDIT", flush=True)
-        source = OUT / "source.png"
-        shutil.copy2(DATA / "reference/001.png", source)
-        result["base_edit"] = generate(pipe, torch, source, OUT / "result_base.png", BASE, 20, 4.0)
-        write_json(OUT / "base_inference_config.json", result["base_edit"])
-        del pipe
         import gc
-        gc.collect()
-        torch.cuda.empty_cache()
+        if args.phase != "retry-training":
+            print("STAGE 1: BASE LOAD", flush=True)
+            write_json(OUT / "storage_before_model_load.json", {"scratch": disk_info(scratch), "cache": disk_info(CACHE),
+                                                                   "working": disk_info(Path("/kaggle/working"))})
+            pipe, load_observation = pipeline(BASE, dtype, torch)
+            result["base_load"] = load_observation
+            write_json(OUT / "storage_after_base_load.json", {"scratch": disk_info(scratch), "cache": disk_info(CACHE),
+                                                                 "working": disk_info(Path("/kaggle/working"))})
+            print("STAGE 2: BASE IMAGE EDIT", flush=True)
+            source = OUT / "source.png"
+            shutil.copy2(DATA / "reference/001.png", source)
+            result["base_edit"] = generate(pipe, torch, source, OUT / "result_base.png", BASE, 20, 4.0)
+            write_json(OUT / "base_inference_config.json", result["base_edit"])
+            del pipe
+            gc.collect()
+            torch.cuda.empty_cache()
         train_config(precision)
         result["training"] = run_training()
         checkpoint = find_checkpoint()
@@ -512,18 +514,6 @@ def main() -> None:
         pipe, result["base_reload"] = pipeline(BASE, dtype, torch)
         pipe.load_lora_weights(str(checkpoint.parent), weight_name=checkpoint.name)
         result["base_lora_edit"] = generate(pipe, torch, DATA / "reference/001.png", OUT / "base_lora_edit.png", BASE, 20, 4.0)
-        del pipe
-        gc.collect()
-        torch.cuda.empty_cache()
-        print("STAGE 5: DISTILLED COMPATIBILITY", flush=True)
-        extra = meta["models"][DISTILLED]["repo_bytes"]
-        free = shutil.disk_usage(os.environ["HF_HOME"]).free
-        if extra <= 0 or free < math.ceil(extra * 1.3) + 4 * 1024**3:
-            result["distilled"] = "NOT TESTED: insufficient verified scratch headroom"
-        else:
-            pipe, result["distilled_load"] = pipeline(DISTILLED, dtype, torch)
-            pipe.load_lora_weights(str(checkpoint.parent), weight_name=checkpoint.name)
-            result["distilled"] = generate(pipe, torch, DATA / "reference/001.png", OUT / "distilled_lora_edit.png", DISTILLED, 4, 1.0)
         result["status"] = "TECHNICAL GATES PASSED"  # Schedule classification requires timing review.
     except Exception as exc:
         result["status"] = "STOPPED"

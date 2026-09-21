@@ -1,0 +1,60 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*token*.txt
+kaggle.json
+*secrets*.json
+
+# Python and notebooks
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+
+# Node and frontend caches
+node_modules/
+.next/
+.nuxt/
+dist/
+build/
+.turbo/
+.cache/
+
+# Hugging Face and model caches
+.huggingface/
+.hf_cache/
+hf_cache/
+huggingface_cache/
+transformers_cache/
+model_cache/
+
+# Generated data, images, weights and checkpoints
+data/generated/
+datasets/generated/
+outputs/
+artifacts/
+checkpoints/
+models/downloaded/
+kaggle/working/
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.bin
+*.gguf
+*.onnx
+
+# Experiment downloads and bulky transient logs
+wandb/
+runs/
+lightning_logs/
+*.zip
+*.tar
+*.tar.gz

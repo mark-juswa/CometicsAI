@@ -163,7 +163,8 @@ def audit() -> tuple[dict, object]:
                             "capability": list(torch.cuda.get_device_capability(i)),
                             "native_bf16": bool(torch.cuda.get_device_capability(i)[0] >= 8),
                             "torch_bf16_supported": bool(torch.cuda.is_bf16_supported()) if i == 0 and hasattr(torch.cuda, "is_bf16_supported") else None})
-    env = {"utc": utc_now(), "python": sys.version, "platform": platform.platform(),
+    env = {"utc": utc_now(), "python": sys.version, "python_executable": sys.executable,
+           "platform": platform.platform(),
            "torch": torch.__version__, "torch_cuda_runtime": torch.version.cuda,
            "cuda_available": cuda, "gpu_count": len(devices), "gpus": devices,
            "system_ram_bytes": ram, "disks": [disk_info(Path(p)) for p in (Path("/"), Path("/tmp"), Path("/kaggle/temp"), Path("/kaggle/working"))],
@@ -172,6 +173,11 @@ def audit() -> tuple[dict, object]:
     write_json(OUT / "environment.json", env)
     print(json.dumps(env, indent=2, default=str), flush=True)
     if not cuda or not devices:
+        if "+cpu" in torch.__version__:
+            raise RuntimeError(
+                f"STOP: CPU-only PyTorch {torch.__version__} under {sys.executable}; "
+                "launch this script with the active notebook kernel's sys.executable, then verify the accelerator if CUDA is still unavailable"
+            )
         raise RuntimeError("STOP: no CUDA GPU was allocated; enable a free GPU session before model downloads")
     return env, torch
 

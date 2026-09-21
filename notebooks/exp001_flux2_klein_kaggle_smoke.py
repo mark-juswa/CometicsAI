@@ -19,6 +19,7 @@ import shutil
 import statistics
 import subprocess
 import sys
+import threading
 import time
 import traceback
 from pathlib import Path
@@ -30,9 +31,11 @@ PROMPT = "Change the blue square in the center to bright red; keep the white bac
 SEED = 1977
 SIZE = 512
 STEPS = 20
+AI_TOOLKIT_COMMIT = "a8dfcf7d7e2b38ccc7b2fb68ece9c6358e61e7a7"
 OUT = Path("/kaggle/working/exp001")
 DATA = OUT / "synthetic_pairs"
-TOOLKIT = Path("/kaggle/temp/exp001-ai-toolkit")
+TOOLKIT = Path("/tmp/exp001-ai-toolkit")
+CACHE = Path("/tmp/hf-cache")
 TRAIN_OUT = OUT / "training"
 CONFIG = OUT / "train_config.yaml"
 RESULT = OUT / "result.json"
@@ -78,6 +81,61 @@ def disk_info(path: Path) -> dict:
     d = shutil.disk_usage(path)
     return {"path": str(path), "exists": True, "total_bytes": d.total, "free_bytes": d.free,
             "device_id": path.stat().st_dev}
+
+
+def memory_info(torch=None) -> dict:
+    try:
+        import psutil
+        process = psutil.Process()
+        system = psutil.virtual_memory()
+        cpu = {"process_rss_bytes": process.memory_info().rss,
+               "system_available_bytes": system.available,
+               "system_used_bytes": system.used}
+    except Exception as exc:
+        cpu = {"error": f"{type(exc).__name__}: {exc}"}
+    gpu = None
+    if torch is not None and torch.cuda.is_available():
+        gpu = {"allocated_bytes": torch.cuda.memory_allocated(0),
+               "reserved_bytes": torch.cuda.memory_reserved(0),
+               "peak_allocated_bytes": torch.cuda.max_memory_allocated(0),
+               "peak_reserved_bytes": torch.cuda.max_memory_reserved(0)}
+    return {"utc": utc_now(), "cpu": cpu, "gpu0": gpu}
+
+
+class GpuMemorySampler:
+    """Samples whole-device memory so subprocess training is measurable."""
+    def __init__(self, interval_s: float = 0.5):
+        self.interval_s = interval_s
+        self.values_mib: list[int] = []
+        self._stop = threading.Event()
+        self._thread: threading.Thread | None = None
+
+    def _sample(self) -> None:
+        while not self._stop.is_set():
+            proc = subprocess.run(
+                ["nvidia-smi", "--query-gpu=memory.used", "--format=csv,noheader,nounits", "-i", "0"],
+                text=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+            )
+            if proc.returncode == 0:
+                try:
+                    self.values_mib.append(int(proc.stdout.strip().splitlines()[0]))
+                except (ValueError, IndexError):
+                    pass
+            self._stop.wait(self.interval_s)
+
+    def __enter__(self):
+        self._thread = threading.Thread(target=self._sample, daemon=True)
+        self._thread.start()
+        return self
+
+    def __exit__(self, *_):
+        self._stop.set()
+        if self._thread:
+            self._thread.join(timeout=2)
+
+    @property
+    def peak_mib(self) -> int | None:
+        return max(self.values_mib, default=None)
 
 
 def audit() -> tuple[dict, object]:
@@ -127,7 +185,7 @@ def choose_precision(env: dict) -> str:
 
 
 def model_preflight() -> dict:
-    global TOOLKIT
+    global TOOLKIT, CACHE
     print("MODEL ACCESS AND STORAGE PREFLIGHT", flush=True)
     from huggingface_hub import HfApi
     token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN")
@@ -145,8 +203,8 @@ def model_preflight() -> dict:
         info = api.model_info(model, files_metadata=True)
         size = sum((f.size or 0) for f in info.siblings or [])
         metadata[model] = {"revision": info.sha, "repo_bytes": size}
-    # /kaggle/working is saved output; use disposable scratch for downloaded weights.
-    scratch = next((p for p in (Path("/kaggle/temp"), Path("/tmp")) if p.exists() and os.access(p, os.W_OK)), None)
+    # /kaggle/working is saved output. The Supervisor measured /tmp as the large disposable mount.
+    scratch = next((p for p in (Path("/tmp"), Path("/kaggle/temp")) if p.exists() and os.access(p, os.W_OK)), None)
     if scratch is None:
         raise RuntimeError("STOP: no writable ephemeral scratch directory")
     base_size = metadata[BASE]["repo_bytes"]
@@ -161,11 +219,11 @@ def model_preflight() -> dict:
     write_json(OUT / "preflight.json", preflight)
     if free < required:
         raise RuntimeError(f"STOP: scratch free {free} < conservative Base download need {required}; no weights downloaded")
-    cache = scratch / "exp001-hf-cache"
-    cache.mkdir(exist_ok=True)
+    CACHE = scratch / "hf-cache"
+    CACHE.mkdir(exist_ok=True)
     TOOLKIT = scratch / "exp001-ai-toolkit"
-    os.environ["HF_HOME"] = str(cache)
-    os.environ["HUGGINGFACE_HUB_CACHE"] = str(cache / "hub")
+    os.environ["HF_HOME"] = str(CACHE)
+    os.environ["HF_HUB_CACHE"] = str(CACHE / "hub")
     return preflight
 
 
@@ -192,11 +250,17 @@ def make_pairs() -> None:
 
 def pipeline(model_id: str, dtype, torch):
     from diffusers import Flux2KleinPipeline
+    torch.cuda.reset_peak_memory_stats(0)
     t0 = time.monotonic()
-    pipe = Flux2KleinPipeline.from_pretrained(model_id, torch_dtype=dtype, cache_dir=os.environ["HUGGINGFACE_HUB_CACHE"])
-    pipe.enable_model_cpu_offload()
-    print(f"Loaded {model_id} with CPU offload in {time.monotonic() - t0:.1f}s", flush=True)
-    return pipe, time.monotonic() - t0
+    with GpuMemorySampler() as sampler:
+        pipe = Flux2KleinPipeline.from_pretrained(model_id, torch_dtype=dtype, cache_dir=os.environ["HF_HUB_CACHE"])
+        pipe.enable_model_cpu_offload(gpu_id=0)
+    elapsed = time.monotonic() - t0
+    observation = {"model": model_id, "load_seconds": elapsed, "dtype": str(dtype),
+                   "strategy": "Diffusers enable_model_cpu_offload on cuda:0",
+                   "whole_gpu_peak_mib": sampler.peak_mib, "memory_after_load": memory_info(torch)}
+    print(f"Loaded {model_id} with CPU offload in {elapsed:.1f}s", flush=True)
+    return pipe, observation
 
 
 def generate(pipe, torch, source: Path, dest: Path, model_id: str, steps: int, guidance: float) -> dict:
@@ -218,26 +282,63 @@ def generate(pipe, torch, source: Path, dest: Path, model_id: str, steps: int, g
 def install_toolkit() -> tuple[str, dict]:
     print("TRAINER INSTALL AND VERSION CAPTURE", flush=True)
     if not TOOLKIT.exists():
-        command(["git", "clone", "--depth", "1", "https://github.com/ostris/ai-toolkit.git", str(TOOLKIT)],
-                log=OUT / "trainer_clone.log")
+        TOOLKIT.mkdir(parents=True)
+        command(["git", "init"], cwd=TOOLKIT, log=OUT / "trainer_git_init.log")
+        command(["git", "remote", "add", "origin", "https://github.com/ostris/ai-toolkit.git"], cwd=TOOLKIT)
+        command(["git", "fetch", "--depth", "1", "origin", AI_TOOLKIT_COMMIT], cwd=TOOLKIT,
+                log=OUT / "trainer_fetch.log")
+        command(["git", "checkout", "--detach", "FETCH_HEAD"], cwd=TOOLKIT)
     sha = command(["git", "rev-parse", "HEAD"], cwd=TOOLKIT).stdout.strip()
-    command([sys.executable, "-m", "pip", "install", "-r", str(TOOLKIT / "requirements.txt")],
+    if sha != AI_TOOLKIT_COMMIT:
+        raise RuntimeError(f"STOP: AI Toolkit revision {sha} does not match pinned {AI_TOOLKIT_COMMIT}")
+    torch_before = version("torch")
+    import torch
+    cuda_before = torch.version.cuda
+    constraints = OUT / "kaggle_torch_constraints.txt"
+    pinned = [f"torch=={torch_before}"]
+    for package in ("torchvision", "torchaudio"):
+        observed = version(package)
+        if observed:
+            pinned.append(f"{package}=={observed}")
+    constraints.write_text("\n".join(pinned) + "\n", encoding="utf-8")
+    install_args = [sys.executable, "-m", "pip", "install", "--constraint", str(constraints),
+                    "-r", str(TOOLKIT / "requirements.txt")]
+    command(install_args,
             log=OUT / "trainer_install.log")
+    torch_after = version("torch")
+    check_code = (
+        "import json, torch; print(json.dumps({"
+        "'torch': torch.__version__, 'torch_cuda_runtime': torch.version.cuda, "
+        "'cuda_available': torch.cuda.is_available(), "
+        "'gpu0': torch.cuda.get_device_name(0) if torch.cuda.is_available() else None}))"
+    )
+    checked = command([sys.executable, "-c", check_code], log=OUT / "torch_after_install.log")
+    runtime_check = json.loads(checked.stdout.strip().splitlines()[-1])
+    if torch_after != torch_before or runtime_check["torch_cuda_runtime"] != cuda_before:
+        raise RuntimeError(f"STOP: dependency install changed PyTorch/CUDA from {torch_before}/{cuda_before} "
+                           f"to {torch_after}/{runtime_check['torch_cuda_runtime']}; do not continue")
+    if not runtime_check["cuda_available"]:
+        raise RuntimeError("STOP: CUDA became unavailable after dependency installation")
     packages = {p: version(p) for p in ("torch", "diffusers", "transformers", "accelerate", "peft", "huggingface-hub", "bitsandbytes", "optimum-quanto")}
     write_json(OUT / "dependencies.json", {"ai_toolkit_commit": sha, "packages": packages,
-                                             "install_command": f"{sys.executable} -m pip install -r {TOOLKIT / 'requirements.txt'}"})
+                                             "runtime_check_after_install": runtime_check,
+                                             "constraints": pinned,
+                                             "install_command": " ".join(install_args)})
     return sha, packages
 
 
 def train_config(precision: str) -> None:
     # Based on BFL's AI Toolkit Klein YAML plus its documented control_path edit dataset.
     # Deliberately tiny: tests optimizer/checkpoint plumbing, not hairstyle quality.
+    training_path = TRAIN_OUT.as_posix()
+    target_path = (DATA / "target").as_posix()
+    reference_path = (DATA / "reference").as_posix()
     yaml = f'''job: "extension"
 config:
   name: "exp001_tiny_edit"
   process:
     - type: "diffusion_trainer"
-      training_folder: "{TRAIN_OUT}"
+      training_folder: "{training_path}"
       device: "cuda:0"
       performance_log_every: 5
       network:
@@ -251,8 +352,8 @@ config:
         save_every: {STEPS}
         max_step_saves_to_keep: 1
       datasets:
-        - folder_path: "{DATA / 'target'}"
-          control_path: "{DATA / 'reference'}"
+        - folder_path: "{target_path}"
+          control_path: "{reference_path}"
           caption_ext: "txt"
           resolution: [{SIZE}]
       train:
@@ -284,26 +385,28 @@ def run_training() -> dict:
     start = time.monotonic()
     print("$", " ".join(cmd), flush=True)
     progress_times: dict[int, float] = {}
-    with (OUT / "train.log").open("w", encoding="utf-8") as log:
-        proc = subprocess.Popen(cmd, cwd=TOOLKIT, text=True, stdout=subprocess.PIPE,
-                                stderr=subprocess.STDOUT, bufsize=1)
-        assert proc.stdout is not None
-        for line in proc.stdout:
-            log.write(line)
-            log.flush()
-            print(line, end="", flush=True)
-            for match in re.finditer(r"\b(\d+)/" + str(STEPS) + r"\b", line):
-                step = int(match.group(1))
-                if step > 0:
-                    progress_times.setdefault(step, time.monotonic())
-        proc.wait()
+    with GpuMemorySampler() as sampler:
+        with (OUT / "train.log").open("w", encoding="utf-8") as log:
+            proc = subprocess.Popen(cmd, cwd=TOOLKIT, text=True, stdout=subprocess.PIPE,
+                                    stderr=subprocess.STDOUT, bufsize=1)
+            assert proc.stdout is not None
+            for line in proc.stdout:
+                log.write(line)
+                log.flush()
+                print(line, end="", flush=True)
+                for match in re.finditer(r"\b(\d+)/" + str(STEPS) + r"\b", line):
+                    step = int(match.group(1))
+                    if step > 0:
+                        progress_times.setdefault(step, time.monotonic())
+            proc.wait()
     elapsed = time.monotonic() - start
     logs = (OUT / "train.log").read_text(encoding="utf-8", errors="replace")
     progress = [int(x) for x in re.findall(r"\b(\d+)/" + str(STEPS) + r"\b", logs)]
     loss_lines = [line for line in logs.splitlines() if re.search(r"\bloss\b", line, re.I)]
     result = {"command": " ".join(cmd), "exit_code": proc.returncode, "wall_s_including_load": elapsed,
               "configured_steps": STEPS, "highest_step_seen": max(progress, default=None),
-              "loss_line_count": len(loss_lines), "last_loss_lines": loss_lines[-5:]}
+              "loss_line_count": len(loss_lines), "last_loss_lines": loss_lines[-5:],
+              "whole_gpu_peak_mib": sampler.peak_mib}
     write_json(OUT / "training_result.json", result)
     if proc.returncode:
         raise RuntimeError("STOP: trainer failed; preserve train.log and do not start an unrelated fix chain")
@@ -364,6 +467,8 @@ def main() -> None:
             result["status"] = "PREPARED"
             return
         # Execute in a fresh Python process after dependency installation.
+        # Hide GPU 1 before importing torch so neither Diffusers nor AI Toolkit can use it.
+        os.environ["CUDA_VISIBLE_DEVICES"] = "0"
         import torch
         env = json.loads((OUT / "environment.json").read_text(encoding="utf-8"))
         precision = choose_precision(env)
@@ -373,15 +478,22 @@ def main() -> None:
         TOOLKIT = scratch / "exp001-ai-toolkit"
         if shutil.disk_usage(scratch).free < meta["base_download_headroom_bytes"]:
             raise RuntimeError("STOP: scratch capacity fell below Base download headroom after trainer installation")
-        cache = scratch / "exp001-hf-cache"
-        os.environ["HF_HOME"] = str(cache)
-        os.environ["HUGGINGFACE_HUB_CACHE"] = str(cache / "hub")
+        CACHE = scratch / "hf-cache"
+        os.environ["HF_HOME"] = str(CACHE)
+        os.environ["HF_HUB_CACHE"] = str(CACHE / "hub")
         dtype = torch.bfloat16 if precision == "bf16" else torch.float16
         print("STAGE 1: BASE LOAD", flush=True)
-        pipe, load_s = pipeline(BASE, dtype, torch)
-        result["base_load_s"] = load_s
+        write_json(OUT / "storage_before_model_load.json", {"scratch": disk_info(scratch), "cache": disk_info(CACHE),
+                                                               "working": disk_info(Path("/kaggle/working"))})
+        pipe, load_observation = pipeline(BASE, dtype, torch)
+        result["base_load"] = load_observation
+        write_json(OUT / "storage_after_base_load.json", {"scratch": disk_info(scratch), "cache": disk_info(CACHE),
+                                                             "working": disk_info(Path("/kaggle/working"))})
         print("STAGE 2: BASE IMAGE EDIT", flush=True)
-        result["base_edit"] = generate(pipe, torch, DATA / "reference/001.png", OUT / "base_edit.png", BASE, 20, 4.0)
+        source = OUT / "source.png"
+        shutil.copy2(DATA / "reference/001.png", source)
+        result["base_edit"] = generate(pipe, torch, source, OUT / "result_base.png", BASE, 20, 4.0)
+        write_json(OUT / "base_inference_config.json", result["base_edit"])
         del pipe
         import gc
         gc.collect()
@@ -391,8 +503,8 @@ def main() -> None:
         checkpoint = find_checkpoint()
         result["checkpoint"] = {"path": str(checkpoint), "bytes": checkpoint.stat().st_size}
         print("STAGE 4: FRESH BASE LOAD + ADAPTER + EDIT", flush=True)
-        pipe, _ = pipeline(BASE, dtype, torch)
-        pipe.load_lora_weights(str(checkpoint))
+        pipe, result["base_reload"] = pipeline(BASE, dtype, torch)
+        pipe.load_lora_weights(str(checkpoint.parent), weight_name=checkpoint.name)
         result["base_lora_edit"] = generate(pipe, torch, DATA / "reference/001.png", OUT / "base_lora_edit.png", BASE, 20, 4.0)
         del pipe
         gc.collect()
@@ -403,10 +515,10 @@ def main() -> None:
         if extra <= 0 or free < math.ceil(extra * 1.3) + 4 * 1024**3:
             result["distilled"] = "NOT TESTED: insufficient verified scratch headroom"
         else:
-            pipe, _ = pipeline(DISTILLED, dtype, torch)
-            pipe.load_lora_weights(str(checkpoint))
+            pipe, result["distilled_load"] = pipeline(DISTILLED, dtype, torch)
+            pipe.load_lora_weights(str(checkpoint.parent), weight_name=checkpoint.name)
             result["distilled"] = generate(pipe, torch, DATA / "reference/001.png", OUT / "distilled_lora_edit.png", DISTILLED, 4, 1.0)
-        result["status"] = "GREEN TECHNICAL GATES"  # Schedule classification still requires measured step timing review.
+        result["status"] = "TECHNICAL GATES PASSED"  # Schedule classification requires timing review.
     except Exception as exc:
         result["status"] = "STOPPED"
         result["error"] = f"{type(exc).__name__}: {exc}"

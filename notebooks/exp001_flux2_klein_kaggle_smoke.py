@@ -51,7 +51,10 @@ def command(args: list[str], *, cwd: Path | None = None, log: Path | None = None
     shown = " ".join(args)
     print("$", shown, flush=True)
     start = time.monotonic()
-    proc = subprocess.run(args, cwd=cwd, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    try:
+        proc = subprocess.run(args, cwd=cwd, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    except FileNotFoundError as exc:
+        proc = subprocess.CompletedProcess(args, 127, f"{type(exc).__name__}: {exc}\n")
     if log:
         log.parent.mkdir(parents=True, exist_ok=True)
         log.write_text(proc.stdout, encoding="utf-8", errors="replace")

@@ -1,0 +1,24 @@
+{
+  "source_repository": "yikaiwang/FaceSketches-HairStyle40",
+  "source_revision": "45de974926fe64551fc2d0b80973335e20ca10e2",
+  "source_license_declared": "apache-2.0",
+  "source_subtree": "FaceSketches-HairStyle40/image",
+  "selection_basis": "Manual review of all 30 original-photo thumbnails in each approved class; prefer visible face and complete representative hairstyle, lower occlusion and varied identities.",
+  "styles": {
+    "CrewCut": {
+      "alternate_style": "BobHair",
+      "train": ["1.jpg", "5.jpg", "7.jpg", "11.jpg", "13.jpg", "15.jpg", "20.jpg", "23.jpg"],
+      "val": ["26.jpg", "30.jpg"]
+    },
+    "BobHair": {
+      "alternate_style": "LayeredHair",
+      "train": ["1.jpg", "2.jpg", "4.jpg", "11.jpg", "15.jpg", "16.jpg", "20.jpg", "30.png"],
+      "val": ["28.jpg", "29.jpg"]
+    },
+    "LayeredHair": {
+      "alternate_style": "CrewCut",
+      "train": ["4.jpg", "9.jpg", "10.jpg", "11.jpg", "12.jpg", "14.jpg", "15.png", "19.jpg"],
+      "val": ["22.jpg", "23.jpg"]
+    }
+  }
+}

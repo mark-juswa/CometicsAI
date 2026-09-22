@@ -38,6 +38,8 @@ model_cache/
 
 # Generated data, images, weights and checkpoints
 data/generated/
+data/source/
+data/dataset_v1/
 datasets/generated/
 outputs/
 artifacts/

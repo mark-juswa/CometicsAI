@@ -1,11 +1,11 @@
 # Data
 
-Source: Supervisor's CODEX HANDOFF 001. Dataset strategy decision: PROPOSED; actual dataset evidence: UNKNOWN.
+Source: Supervisor's CODEX HANDOFF 001 and approved DATA-001. Dataset V1 strategy: CONFIRMED; source inspection and selection: VERIFIED; paired generation: NOT STARTED.
 
 Intended paired-edit example: a source portrait of one person with an original or synthetic alternate hairstyle, a target portrait of that same person with the desired style, and an editing instruction that asks for the target hairstyle while preserving identity, pose, clothing, background, and lighting.
 
-Preliminary planning numbers are approximately six hairstyle categories, 60 training pairs, and 12 held-out validation pairs, 72 total. These are PROPOSED targets, not inspected counts or a created split. Candidate FaceSketches-HairStyle40 or Hairstyle30k-derived sources are unselected. Source, licensing, allowed uses, class names, usable images, quality, provenance, consent/privacy implications, and split leakage are NEEDS VERIFICATION before preparation.
+The earlier six-category, 72-pair preliminary plan is superseded for V1 by the Supervisor's three exact classes: `CrewCut`, `BobHair`, `LayeredHair`. The [DATA-001 record](../docs/data/DATA-001.md) pins `yikaiwang/FaceSketches-HairStyle40` at `45de974926fe64551fc2d0b80973335e20ca10e2`: its card declares Apache-2.0, its original photo folders each contain 30 decodable images, and a hand-reviewed provisional selection has ten per class (eight train and two validation identity groups). The source card names Hairstyle30k as upstream; it does not document individual photograph rights. No generated counterparts have been accepted, so 48 train + 12 validation directional pairs remain a target, not an existing dataset.
 
-PROPOSED synthetic-pair method: start from a real target-style photograph, use a pretrained editor to make a different/neutral hairstyle source, then pair that synthetic source with the original target. Whether identity and non-hair regions remain suitable, whether generation is feasible at $0, and whether the training signal helps are NEEDS VERIFICATION. No pairs are claimed to exist.
+CONFIRMED V1 construction: `CrewCut → BobHair → LayeredHair → CrewCut`; one pretrained Base alternate per selected original, at most one regeneration per failed output, explicit visual acceptance, then both edit directions kept within the original identity group's split. Identity and non-hair preservation, generated quality, and any training benefit remain NEEDS VERIFICATION. No directional pairs are claimed to exist.
 
 When data work is authorized, record source URLs, license evidence, transformations, pairing provenance, exclusions, class mapping, and exact split manifest. Keep detailed dataset evidence outside this summary.

@@ -1,0 +1,1182 @@
+{
+  "source": "yikaiwang/FaceSketches-HairStyle40",
+  "revision": "45de974926fe64551fc2d0b80973335e20ca10e2",
+  "duplicate_sha256_groups": [
+    [
+      "CrewCut/23.jpg",
+      "CrewCut/4.jpg"
+    ]
+  ],
+  "candidates": [
+    {
+      "class": "CrewCut",
+      "filename": "1.jpg",
+      "source": "image/CrewCut/1.jpg",
+      "sha256": "dedd4853223fb1b4f3dafe62e9635650973c1e8faf0133772059d801fb5e2ccb",
+      "dimensions": [
+        400,
+        400
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "10.jpg",
+      "source": "image/CrewCut/10.jpg",
+      "sha256": "00fbcbe276b5c20cdc33296f399a2b40a23930e0e81dbd4721bf2e5ac991cc6e",
+      "dimensions": [
+        700,
+        400
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "11.jpg",
+      "source": "image/CrewCut/11.jpg",
+      "sha256": "30adeaf079e1f01c1669e249e1a45167a0d82dcc9067c41e959dc40d71310a3e",
+      "dimensions": [
+        450,
+        639
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "12.jpg",
+      "source": "image/CrewCut/12.jpg",
+      "sha256": "3a69e88d7be4eb1d5d39220641bb6c0090dcb0e5e1fed509b1099738e95f044e",
+      "dimensions": [
+        460,
+        643
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Strong three-quarter angle with source watermark"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "13.jpg",
+      "source": "image/CrewCut/13.jpg",
+      "sha256": "a130adc5c1025f1461eea39eecabc53b4313d7ea7dfdebdf960f86477eb8b611",
+      "dimensions": [
+        400,
+        400
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "14.jpg",
+      "source": "image/CrewCut/14.jpg",
+      "sha256": "c6e6f88cd8ef2ae171210419f244b8e8667e7b08b85b4ba1ddf9d36f7da8ff50",
+      "dimensions": [
+        410,
+        410
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Colored glasses partially obscure face"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "15.jpg",
+      "source": "image/CrewCut/15.jpg",
+      "sha256": "d4a5d2b3fe5fa1cb10f10c46acd3a2c8414291e6afedfddc7a497dd5bd87bdd4",
+      "dimensions": [
+        2313,
+        3000
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "16.jpg",
+      "source": "image/CrewCut/16.jpg",
+      "sha256": "6aa7216b6ac5c11fc53d4f491c2a23e9a4c5184a426df580cdb208641dafcd6f",
+      "dimensions": [
+        500,
+        660
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "17.jpg",
+      "source": "image/CrewCut/17.jpg",
+      "sha256": "952981a79491ff20710512baf78d397c8eff4ce60c94b0ba97cef52df133cdf6",
+      "dimensions": [
+        450,
+        450
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "18.jpg",
+      "source": "image/CrewCut/18.jpg",
+      "sha256": "56f341077fde3a53cbb30f8f4be23a04c042cf98fd8c77aeb028b98c3c9c349b",
+      "dimensions": [
+        1080,
+        1080
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "19.jpg",
+      "source": "image/CrewCut/19.jpg",
+      "sha256": "988182026ae5f8422980a9ae7d5905945cd7f354665e735d0ab18558867a35b5",
+      "dimensions": [
+        500,
+        699
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Strong three-quarter angle"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "2.jpg",
+      "source": "image/CrewCut/2.jpg",
+      "sha256": "a1711774550ae72d1d46a9f5255c369b0c50a1c1f5d0dea0b7d4d5aedcd4c135",
+      "dimensions": [
+        740,
+        987
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Distant event framing; small face and hair"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "20.jpg",
+      "source": "image/CrewCut/20.jpg",
+      "sha256": "39485c588aec2d488f54e7cb53798db1e467ddeac794dba7831d05f621696831",
+      "dimensions": [
+        500,
+        736
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "21.jpg",
+      "source": "image/CrewCut/21.jpg",
+      "sha256": "188d59bedb4357de9b57cb7198b56ebd0350e22d4b0778a2182e01109715ab0c",
+      "dimensions": [
+        750,
+        750
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "22.jpg",
+      "source": "image/CrewCut/22.jpg",
+      "sha256": "442e1596403afa86530a3b4874275c03674fb9ebd56ca1a23557eee027675247",
+      "dimensions": [
+        500,
+        633
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Strong three-quarter angle"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "23.jpg",
+      "source": "image/CrewCut/23.jpg",
+      "sha256": "cec0e0696624579a4e565f02ef270931e66f701a1b4f3adfc7c535b465c0877b",
+      "dimensions": [
+        500,
+        500
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "24.jpg",
+      "source": "image/CrewCut/24.jpg",
+      "sha256": "0d199a24467c47b6c72a958b2f662f4065ff91d95482119e85d43b4ed38004f0",
+      "dimensions": [
+        675,
+        905
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "25.jpg",
+      "source": "image/CrewCut/25.jpg",
+      "sha256": "c644425255415d8ec348ac3d4916265fdee81c7850fd7395afac96f515010d16",
+      "dimensions": [
+        500,
+        750
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "26.jpg",
+      "source": "image/CrewCut/26.jpg",
+      "sha256": "d58d1f48dbb86ba695dd1c408c6fb214cccdb1eb5c62b9d99b9310df1db630fc",
+      "dimensions": [
+        500,
+        525
+      ],
+      "decision": "SELECT",
+      "split": "val",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "27.jpg",
+      "source": "image/CrewCut/27.jpg",
+      "sha256": "026f827b0182cf6e8d23fb0c71ca2232c3e54b1729762057b9212191faabf3ee",
+      "dimensions": [
+        500,
+        500
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "28.jpg",
+      "source": "image/CrewCut/28.jpg",
+      "sha256": "97deeaa310f70eb7643f860ba153c521b869e18a9be5d5bda7eb6e0902bd7068",
+      "dimensions": [
+        500,
+        699
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "29.jpg",
+      "source": "image/CrewCut/29.jpg",
+      "sha256": "84bbf9cb7b9c70a68f2c1f09e3c5e05c53430f4d3a2589c9ecca481672dc6743",
+      "dimensions": [
+        620,
+        516
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Distant full-body framing; small face and hair"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "3.jpg",
+      "source": "image/CrewCut/3.jpg",
+      "sha256": "b7d1e305820cbaede91d2d24ced8674f9bb9803301742affacb35132fe0a16c4",
+      "dimensions": [
+        500,
+        500
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Strong side angle and monochrome photograph"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "30.jpg",
+      "source": "image/CrewCut/30.jpg",
+      "sha256": "d9f7b9386031693a074e142bf53bb154136abb5ed868a6ecdcddb88298fe0dbd",
+      "dimensions": [
+        398,
+        577
+      ],
+      "decision": "SELECT",
+      "split": "val",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "4.jpg",
+      "source": "image/CrewCut/4.jpg",
+      "sha256": "cec0e0696624579a4e565f02ef270931e66f701a1b4f3adfc7c535b465c0877b",
+      "dimensions": [
+        500,
+        500
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Repeated subject also shown in candidate 23.jpg"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "5.jpg",
+      "source": "image/CrewCut/5.jpg",
+      "sha256": "19637e7d9bd03a84482fabf7071926a2110c85d448cd4b2866c519dae9dae512",
+      "dimensions": [
+        500,
+        500
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "6.jpg",
+      "source": "image/CrewCut/6.jpg",
+      "sha256": "0980c6fa5a3c3f7ac9bffdf9e0e2953a229c664a2a1a31e05ede55d18307edf2",
+      "dimensions": [
+        500,
+        500
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Extreme profile view"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "7.jpg",
+      "source": "image/CrewCut/7.jpg",
+      "sha256": "41adc06b53f273fc11fccb8d5309c35de13452111b934a4500c2695fd3c4bd16",
+      "dimensions": [
+        675,
+        901
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "8.jpg",
+      "source": "image/CrewCut/8.jpg",
+      "sha256": "71638805afd8829c1ec7115a8bde7dc9335dafd5c5a1fe44d71ea0374a2f643d",
+      "dimensions": [
+        500,
+        500
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Repeated subject also shown in candidate 27.jpg"
+    },
+    {
+      "class": "CrewCut",
+      "filename": "9.jpg",
+      "source": "image/CrewCut/9.jpg",
+      "sha256": "a2a46bc8e9ebb255bdbd972308c3aa97ef579e714a08bdc4dd7eb0ebefc39f53",
+      "dimensions": [
+        500,
+        500
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "BobHair",
+      "filename": "1.jpg",
+      "source": "image/BobHair/1.jpg",
+      "sha256": "f0e29226cff8df65fea8e154321c0e78522fee3d1dd99155a1ed672f8bc89e65",
+      "dimensions": [
+        1000,
+        1260
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "BobHair",
+      "filename": "10.jpg",
+      "source": "image/BobHair/10.jpg",
+      "sha256": "8917d91582ddc89941683ef3ebf61c8d0d69760728d18188e5d8b12607eab70f",
+      "dimensions": [
+        980,
+        1246
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Longer hair makes bob class less distinct"
+    },
+    {
+      "class": "BobHair",
+      "filename": "11.jpg",
+      "source": "image/BobHair/11.jpg",
+      "sha256": "f528c15019c89f15e4884631b2b42064597da85cc7c360c2f97c29bb5c7f0443",
+      "dimensions": [
+        579,
+        700
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "BobHair",
+      "filename": "12.jpg",
+      "source": "image/BobHair/12.jpg",
+      "sha256": "64c4857d8b5cdf6f03fa3f06f1716d2e758d7723b30de9555a23c13834ed9601",
+      "dimensions": [
+        980,
+        1277
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Strong side angle"
+    },
+    {
+      "class": "BobHair",
+      "filename": "13.jpg",
+      "source": "image/BobHair/13.jpg",
+      "sha256": "e6511be9071f75a34b3b437c7042a8f362dea3c339a97504aa509ef1ba8c66bb",
+      "dimensions": [
+        500,
+        600
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "BobHair",
+      "filename": "14.jpg",
+      "source": "image/BobHair/14.jpg",
+      "sha256": "191f8f532d9875649dd0189bd280e8892c4588adb2bb565b2b33b64176cb94f6",
+      "dimensions": [
+        450,
+        450
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Repeated subject also shown in candidate 8.jpg"
+    },
+    {
+      "class": "BobHair",
+      "filename": "15.jpg",
+      "source": "image/BobHair/15.jpg",
+      "sha256": "0396591bae01ca20bde63f1e39a79850b117f3b115afddef6ce91d492793b82b",
+      "dimensions": [
+        980,
+        1135
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "BobHair",
+      "filename": "16.jpg",
+      "source": "image/BobHair/16.jpg",
+      "sha256": "020d6f780e39566c274e425e56b134922cab18f350130e6ac2262562a53561b6",
+      "dimensions": [
+        1000,
+        1500
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "BobHair",
+      "filename": "17.jpg",
+      "source": "image/BobHair/17.jpg",
+      "sha256": "c60f977f89c69d39408139c51bfaf95a8e25d4eca0418ac2736f8b9dad606dda",
+      "dimensions": [
+        500,
+        578
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Sunglasses hide the eyes"
+    },
+    {
+      "class": "BobHair",
+      "filename": "18.jpg",
+      "source": "image/BobHair/18.jpg",
+      "sha256": "38b8bf071859b03966da7c001438e879cc447b7904b3c23fe59abd655e37c977",
+      "dimensions": [
+        600,
+        609
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Sunglasses hide the eyes"
+    },
+    {
+      "class": "BobHair",
+      "filename": "19.jpg",
+      "source": "image/BobHair/19.jpg",
+      "sha256": "57c646a1c54797443a4577b571287e24031c88d3a45a9e59320b80ad8246f0e4",
+      "dimensions": [
+        500,
+        750
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Low light and strong shadow across face"
+    },
+    {
+      "class": "BobHair",
+      "filename": "2.jpg",
+      "source": "image/BobHair/2.jpg",
+      "sha256": "239cdc9bbd6d81c5d64aa7714492062b963afa79f58116f10cf83e68b1c66007",
+      "dimensions": [
+        526,
+        783
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "BobHair",
+      "filename": "20.jpg",
+      "source": "image/BobHair/20.jpg",
+      "sha256": "7bef4e95885cdd728dab965edb65d63683f2dd13821b3590324f68ccf3980aad",
+      "dimensions": [
+        500,
+        558
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "BobHair",
+      "filename": "21.jpg",
+      "source": "image/BobHair/21.jpg",
+      "sha256": "b818893c718d8cf526e22cff8f0e0ae137bf1aa0d23724ca323bfc935987472d",
+      "dimensions": [
+        350,
+        400
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Large source watermark across lower portrait"
+    },
+    {
+      "class": "BobHair",
+      "filename": "22.jpg",
+      "source": "image/BobHair/22.jpg",
+      "sha256": "de581c0639ac268d4a8306004f69e1a28810a1774652a14c2598e3e7a8c3fab6",
+      "dimensions": [
+        979,
+        1245
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Strong side angle"
+    },
+    {
+      "class": "BobHair",
+      "filename": "23.jpg",
+      "source": "image/BobHair/23.jpg",
+      "sha256": "639c9f2bee55db44f5e7f63a5650668570375c96c40c73be6e132e9d6a23a348",
+      "dimensions": [
+        564,
+        749
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "BobHair",
+      "filename": "24.jpg",
+      "source": "image/BobHair/24.jpg",
+      "sha256": "30b6c2520665d603657ee57448a4049efde4e1a5ac4d6b2983ae227125a071d2",
+      "dimensions": [
+        440,
+        587
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Eyes obscured by fringe"
+    },
+    {
+      "class": "BobHair",
+      "filename": "25.jpg",
+      "source": "image/BobHair/25.jpg",
+      "sha256": "526c1e86483d3e208d3819b0a08464fbf83c7b4ac428a2bd291cebcee27f5fd5",
+      "dimensions": [
+        906,
+        1276
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Highly retouched portrait; less representative of source photographs"
+    },
+    {
+      "class": "BobHair",
+      "filename": "26.jpg",
+      "source": "image/BobHair/26.jpg",
+      "sha256": "59c08021fa6e8729408a2bc584c94b133ba75376dafe352852d1c1900e57b580",
+      "dimensions": [
+        300,
+        450
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "BobHair",
+      "filename": "27.PNG",
+      "source": "image/BobHair/27.PNG",
+      "sha256": "a0241214b1dd6c0e18fb7d522825170b1b48396ade06bf2193f59a71105a73ae",
+      "dimensions": [
+        731,
+        488
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Dark face and low contrast; identity review more difficult"
+    },
+    {
+      "class": "BobHair",
+      "filename": "28.jpg",
+      "source": "image/BobHair/28.jpg",
+      "sha256": "1c6db6e66f574037a95f8309cbbbc92a6716b11fc8941aba4a86a99c21682ef8",
+      "dimensions": [
+        701,
+        837
+      ],
+      "decision": "SELECT",
+      "split": "val",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "BobHair",
+      "filename": "29.jpg",
+      "source": "image/BobHair/29.jpg",
+      "sha256": "bb7e3c16b73e67ec278ab60f59e327e45963dd7b79aa71d32365ce6f31373d9b",
+      "dimensions": [
+        706,
+        725
+      ],
+      "decision": "SELECT",
+      "split": "val",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "BobHair",
+      "filename": "3.jpg",
+      "source": "image/BobHair/3.jpg",
+      "sha256": "c1aad29a98119a1bff7c31dd7db9625f81a819ee362d6e3c5632ee0e314f7c8b",
+      "dimensions": [
+        330,
+        351
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Visible source watermark across lower portrait"
+    },
+    {
+      "class": "BobHair",
+      "filename": "30.png",
+      "source": "image/BobHair/30.png",
+      "sha256": "6ee70de08cfc1d5d6d685a9209d5b45c60fbf31d7350b5286f193eec4d09caad",
+      "dimensions": [
+        404,
+        562
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "BobHair",
+      "filename": "4.jpg",
+      "source": "image/BobHair/4.jpg",
+      "sha256": "1dcde392459bbb86913a1767c194bf9aa82ea5e6dfed6ea3d8317d0356dd6b42",
+      "dimensions": [
+        450,
+        599
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "BobHair",
+      "filename": "5.jpg",
+      "source": "image/BobHair/5.jpg",
+      "sha256": "d6ab0779737672c2216b722403b919b2fa1d111dc8fa1e8a1f369d8b60b53ee2",
+      "dimensions": [
+        736,
+        739
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Profile angle and hand partially occludes portrait"
+    },
+    {
+      "class": "BobHair",
+      "filename": "6.jpg",
+      "source": "image/BobHair/6.jpg",
+      "sha256": "9cca93d633bc66488eed724a31539434fbcfd008e3e57170024ddaede120bf77",
+      "dimensions": [
+        433,
+        650
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Side/back view; face not sufficiently visible"
+    },
+    {
+      "class": "BobHair",
+      "filename": "7.jpg",
+      "source": "image/BobHair/7.jpg",
+      "sha256": "af86202a4035ceeb39288c07c238476e286770cde8da467d2d1df2fa60a2c0f7",
+      "dimensions": [
+        500,
+        430
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Strong side angle"
+    },
+    {
+      "class": "BobHair",
+      "filename": "8.jpg",
+      "source": "image/BobHair/8.jpg",
+      "sha256": "c4b656d639ce6eb29be1d38eb6be730dec04cafbfc184212710fed1d78c37d06",
+      "dimensions": [
+        550,
+        690
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Repeated subject also shown in candidate 14.jpg"
+    },
+    {
+      "class": "BobHair",
+      "filename": "9.jpg",
+      "source": "image/BobHair/9.jpg",
+      "sha256": "83c9eec4b896cdd671216c99d1b69556cd3cd55bc44d07cc234e3bda50516490",
+      "dimensions": [
+        736,
+        736
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Rear view; face not visible"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "1.jpg",
+      "source": "image/LayeredHair/1.jpg",
+      "sha256": "270aeedea366b1078d48f85f8750a19d01cfab7bba74eea613b5ec439876a13f",
+      "dimensions": [
+        640,
+        640
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Strong profile view"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "10.jpg",
+      "source": "image/LayeredHair/10.jpg",
+      "sha256": "67583a99138bfd7ac6234d49097b319f03e14a05589e7a904975b284e6da7cf5",
+      "dimensions": [
+        500,
+        700
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "11.jpg",
+      "source": "image/LayeredHair/11.jpg",
+      "sha256": "8674cccc095c92c135b489f39d5f2ca750b30a1b193c785b0309f533671faf92",
+      "dimensions": [
+        500,
+        700
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "12.jpg",
+      "source": "image/LayeredHair/12.jpg",
+      "sha256": "615b5fcd2ddcdc4b5a6d7c9ca88ca40f1d77c061d7fb554825c23e0b51b423a2",
+      "dimensions": [
+        424,
+        540
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "13.jpg",
+      "source": "image/LayeredHair/13.jpg",
+      "sha256": "0df0ec9348f2237146ef182aa2423f8677cff83a62b07d1d62c0c557fd7ada14",
+      "dimensions": [
+        990,
+        1024
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Shorter hairstyle; layers less visually distinct"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "14.jpg",
+      "source": "image/LayeredHair/14.jpg",
+      "sha256": "4f649164d2811d0ddfc34d6a52e7a5f862cd21d8eb4845537ccabe551c36984e",
+      "dimensions": [
+        511,
+        676
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "15.png",
+      "source": "image/LayeredHair/15.png",
+      "sha256": "e8e402ebcffef1100c93c247bd45fab0a67ad2885e96195ca82873c803bc3eef",
+      "dimensions": [
+        740,
+        1006
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "16.jpeg",
+      "source": "image/LayeredHair/16.jpeg",
+      "sha256": "ba3dbded9b4807a0c9124395129b8502c3f030470f06b891f1b24e88dea700f5",
+      "dimensions": [
+        420,
+        629
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Distant full-body framing; small face and hair"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "17.jpg",
+      "source": "image/LayeredHair/17.jpg",
+      "sha256": "6c68fb31fafa44fae09f06991be5a75994309e3c604dfb893cdafbaabccddc40",
+      "dimensions": [
+        700,
+        525
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Portrait includes another person/partial figure"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "18.jpg",
+      "source": "image/LayeredHair/18.jpg",
+      "sha256": "f840c1ff097f62741668f7844e394c090715732d56fdba12acef245ee285fdaf",
+      "dimensions": [
+        600,
+        800
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "19.jpg",
+      "source": "image/LayeredHair/19.jpg",
+      "sha256": "634736ed2d8809822742c87c188f30dfb064891089b19b1c3f3fa7c472e0cbaf",
+      "dimensions": [
+        576,
+        830
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "2.jpg",
+      "source": "image/LayeredHair/2.jpg",
+      "sha256": "de129a0b45a643e01ef8b6151616c54358c0cebef5df36b0945397842284abb6",
+      "dimensions": [
+        500,
+        565
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "20.jpg",
+      "source": "image/LayeredHair/20.jpg",
+      "sha256": "712d1097827b5c1ad72329419348ae1d6c04b8dced1a7434a38947209b7a85d2",
+      "dimensions": [
+        252,
+        336
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Face partly covered by hair and strong profile pose"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "21.jpg",
+      "source": "image/LayeredHair/21.jpg",
+      "sha256": "336bcda0b7502e4e3ade7be05892c6374b8c5a8e2fe4d84e6b335f3267d5623e",
+      "dimensions": [
+        500,
+        552
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Dark source and face partly obscured"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "22.jpg",
+      "source": "image/LayeredHair/22.jpg",
+      "sha256": "db5cd6f76016cb103ceb1fb63103ec0598f7c87171dce988790a5683d264cebe",
+      "dimensions": [
+        600,
+        891
+      ],
+      "decision": "SELECT",
+      "split": "val",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "23.jpg",
+      "source": "image/LayeredHair/23.jpg",
+      "sha256": "c0979892bc3e6e750c5c95755f729aac0cf575c6182e59a0ad1455ce554307a5",
+      "dimensions": [
+        500,
+        695
+      ],
+      "decision": "SELECT",
+      "split": "val",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "24.jpg",
+      "source": "image/LayeredHair/24.jpg",
+      "sha256": "a89e6a7c12728339d356a6bea3c289a59e41213bb87cc3a0928e5d784d7301ab",
+      "dimensions": [
+        437,
+        581
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "25.jpg",
+      "source": "image/LayeredHair/25.jpg",
+      "sha256": "a6a02e601ceab74a6aab9c47d04d0131e870fa64fb50863c02dcc85dce1d7a61",
+      "dimensions": [
+        481,
+        643
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "26.jpg",
+      "source": "image/LayeredHair/26.jpg",
+      "sha256": "cb3df4e8db93bf116a6de22e969f4bccde1ba3d7da28d8db1d6ddae2fd14be8b",
+      "dimensions": [
+        600,
+        500
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Shorter hairstyle; layers less visually distinct"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "27.jpg",
+      "source": "image/LayeredHair/27.jpg",
+      "sha256": "cec04dd6c804a6d2d82884a51053f2cea3c581e80e871f8c2fa71b113c94509e",
+      "dimensions": [
+        460,
+        733
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "28.jpg",
+      "source": "image/LayeredHair/28.jpg",
+      "sha256": "9aa6a7a6bfeb2764cb2e8141a19ad09f6847eaf7d3532a35122cda5202e579b8",
+      "dimensions": [
+        516,
+        751
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "29.jpg",
+      "source": "image/LayeredHair/29.jpg",
+      "sha256": "405e4c02b3f1fa14173f29f6178668bfb7926bc1ead9057ecb4d01a109ba707f",
+      "dimensions": [
+        736,
+        920
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Back view; face not visible"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "3.jpg",
+      "source": "image/LayeredHair/3.jpg",
+      "sha256": "03614e4b1aa43c53d55584658cd66bb0168f248a173d8f4450259c1595178b6f",
+      "dimensions": [
+        500,
+        498
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "30.jpg",
+      "source": "image/LayeredHair/30.jpg",
+      "sha256": "ad0446537fc7f47f0fb1478ce86c5a9bc2cd7e4c8cdea5297e818a0a20334714",
+      "dimensions": [
+        600,
+        1000
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "4.jpg",
+      "source": "image/LayeredHair/4.jpg",
+      "sha256": "ee0babd63bb9fc8725c1b1d461e9b128f994f77f728325762c5b60085d383c7e",
+      "dimensions": [
+        701,
+        1024
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "5.jpg",
+      "source": "image/LayeredHair/5.jpg",
+      "sha256": "9d890bb1099ecff3d226864b95cd18362e41099179c1c3d9fdcdcbab3b79641e",
+      "dimensions": [
+        736,
+        900
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Rear view; face not visible"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "6.jpg",
+      "source": "image/LayeredHair/6.jpg",
+      "sha256": "ea0e14e7bf1e424a14b44307db13f199700e2f853bf60de7a1b1170427f8ada1",
+      "dimensions": [
+        500,
+        594
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Strong side angle"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "7.jpg",
+      "source": "image/LayeredHair/7.jpg",
+      "sha256": "e91cd68f7fb42a30447499d43de2ef9680a7ea2db8e0ecc899ef9a18de5c8c08",
+      "dimensions": [
+        315,
+        424
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "8.jpg",
+      "source": "image/LayeredHair/8.jpg",
+      "sha256": "d8481c081c6c357410a8f2c90b97cd8e8224aad984e1d7f4ed0e5aaa97216dc1",
+      "dimensions": [
+        410,
+        554
+      ],
+      "decision": "REJECT_FROM_V1",
+      "split": null,
+      "reason": "Valid reserve candidate; lower relative fit or variety than the chosen ten"
+    },
+    {
+      "class": "LayeredHair",
+      "filename": "9.jpg",
+      "source": "image/LayeredHair/9.jpg",
+      "sha256": "08d296bb0bf3ff991cee00c57417dbb49ec05a7f58a08da3e6288cbf774a58b0",
+      "dimensions": [
+        500,
+        698
+      ],
+      "decision": "SELECT",
+      "split": "train",
+      "reason": "Selected for visible, representative hairstyle and identity variety"
+    }
+  ]
+}

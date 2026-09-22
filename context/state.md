@@ -12,7 +12,7 @@ As of 2026-09-22. Source: repository inspection, Supervisor's CODEX HANDOFF 002,
 | Fresh Base plus adapter loading | VERIFIED | The BF16-trained adapter loaded into a fresh FLUX.2 Klein Base pipeline. This retry did not run adapter inference. |
 | Current blocker | NEEDS VERIFICATION | Longer-run stability, schedule fit, and Base-trained adapter compatibility with distilled Klein remain unverified. NaN loss is resolved in the BF16 smoke test. |
 | Current experiment | VERIFIED / YELLOW | [EXP-001](../docs/experiments/EXP-001.md): free-GPU feasibility, 3/3 and 20/20 finite BF16 losses, checkpoint serialization, and fresh Base adapter load verified; training-time risk remains. |
-| Dataset | NOT STARTED | No source, license, images, or split verified. |
+| Dataset | IN PROGRESS | DATA-001 pinned the source revision and card-declared Apache-2.0 license; all three exact folders contain 30 usable original photos each. Ten per class are provisionally selected with an 8/2 identity-group split. No FLUX counterparts or directional pairs have been generated or accepted. See [DATA-001](../docs/data/DATA-001.md). |
 | Training | VERIFIED SMOKE | FP16 failed with NaN loss. BF16 produced 20/20 finite losses, with observed optimizer steps and checkpoint serialization; no real hairstyle training occurred. |
 | Real hairstyle model quality | UNKNOWN | No real hairstyle LoRA has been trained or evaluated. |
 | Base-trained adapter on distilled Klein | NEEDS VERIFICATION | No compatibility run has been performed. |
@@ -20,6 +20,6 @@ As of 2026-09-22. Source: repository inspection, Supervisor's CODEX HANDOFF 002,
 | Generation engine | VERIFIED / MOCK | FastAPI delegates to `MockEngine` through `GenerationEngine`; the result is the normalized source image and is labeled as a development preview. |
 | Real model integration | NOT STARTED | No FLUX weights or real LoRA are loaded by the local application. |
 | Deployment | NOT STARTED | The application runs locally; no external service is deployed. |
-| Next approved task | NONE | The Supervisor asked to stop after System MVP. No further numerical-stability experiment is authorized absent a new real-training failure. |
+| Next approved task | DATA-001 IN PROGRESS | Continue only the approved paired-data construction. Await Kaggle pilot generation and explicit visual QA; do not start real LoRA training. |
 
 Highest-priority verification gaps: FLUX.2 Klein edit-LoRA compatibility, memory, and speed on T4; Base-trained adapter loading on distilled Klein; suitable licensed paired data; plain-Klein refinement with portrait plus draft; ZeroGPU eligibility and runtime. The approximately three-day deadline makes these early feasibility gates important. Detailed next build sequence is in [scope](../docs/scope/roadmap.md).

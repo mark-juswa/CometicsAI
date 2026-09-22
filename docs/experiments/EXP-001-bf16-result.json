@@ -1,0 +1,162 @@
+{
+  "experiment": "EXP-001",
+  "test": "BF16 numerical stability",
+  "classification": "FINITE TRAINING VERIFIED",
+  "bf16_executed": true,
+  "first_3_steps": {
+    "losses": [
+      {
+        "step": 1,
+        "raw": "7.396e-03",
+        "finite": true
+      },
+      {
+        "step": 2,
+        "raw": "7.976e-03",
+        "finite": true
+      },
+      {
+        "step": 3,
+        "raw": "7.069e-03",
+        "finite": true
+      }
+    ],
+    "seconds_per_step": 30.93,
+    "peak_vram_mib": 13531
+  },
+  "twenty_steps": {
+    "completed": true,
+    "losses": [
+      {
+        "step": 1,
+        "raw": "8.103e-03",
+        "finite": true
+      },
+      {
+        "step": 2,
+        "raw": "1.051e-02",
+        "finite": true
+      },
+      {
+        "step": 3,
+        "raw": "8.254e-03",
+        "finite": true
+      },
+      {
+        "step": 4,
+        "raw": "7.089e-03",
+        "finite": true
+      },
+      {
+        "step": 5,
+        "raw": "7.244e-03",
+        "finite": true
+      },
+      {
+        "step": 6,
+        "raw": "1.580e-02",
+        "finite": true
+      },
+      {
+        "step": 7,
+        "raw": "2.974e-02",
+        "finite": true
+      },
+      {
+        "step": 8,
+        "raw": "2.625e-01",
+        "finite": true
+      },
+      {
+        "step": 9,
+        "raw": "7.602e-03",
+        "finite": true
+      },
+      {
+        "step": 10,
+        "raw": "7.326e-03",
+        "finite": true
+      },
+      {
+        "step": 11,
+        "raw": "7.117e-03",
+        "finite": true
+      },
+      {
+        "step": 12,
+        "raw": "7.176e-03",
+        "finite": true
+      },
+      {
+        "step": 13,
+        "raw": "2.138e-02",
+        "finite": true
+      },
+      {
+        "step": 14,
+        "raw": "1.143e-02",
+        "finite": true
+      },
+      {
+        "step": 15,
+        "raw": "6.453e-03",
+        "finite": true
+      },
+      {
+        "step": 16,
+        "raw": "3.208e-02",
+        "finite": true
+      },
+      {
+        "step": 17,
+        "raw": "1.003e-02",
+        "finite": true
+      },
+      {
+        "step": 18,
+        "raw": "2.473e-02",
+        "finite": true
+      },
+      {
+        "step": 19,
+        "raw": "5.932e-03",
+        "finite": true
+      },
+      {
+        "step": 20,
+        "raw": "8.635e-03",
+        "finite": true
+      }
+    ],
+    "seconds_per_step": 32.808075,
+    "peak_vram_mib": 13531
+  },
+  "checkpoint": {
+    "path": "/kaggle/working/exp001/training_bf16_20step/exp001_tiny_edit/exp001_tiny_edit.safetensors",
+    "bytes": 46223600
+  },
+  "fresh_adapter_reload": {
+    "succeeded": true,
+    "base_load": {
+      "model": "black-forest-labs/FLUX.2-klein-base-4B",
+      "load_seconds": 165.2771669299998,
+      "dtype": "torch.float16",
+      "strategy": "Diffusers enable_model_cpu_offload on cuda:0",
+      "whole_gpu_peak_mib": 3,
+      "memory_after_load": {
+        "utc": "2026-09-22T11:00:39.900782+00:00",
+        "cpu": {
+          "process_rss_bytes": 17498136576,
+          "system_available_bytes": 14949486592,
+          "system_used_bytes": 18231250944
+        },
+        "gpu0": {
+          "allocated_bytes": 0,
+          "reserved_bytes": 0,
+          "peak_allocated_bytes": 0,
+          "peak_reserved_bytes": 0
+        }
+      }
+    }
+  }
+}

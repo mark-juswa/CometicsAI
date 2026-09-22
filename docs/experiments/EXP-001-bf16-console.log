@@ -1,0 +1,2216 @@
+SECTION A: ENVIRONMENT AUDIT
+$ nvidia-smi -q
+                              : 254 MiB
+    Conf Compute Protected Memory Usage
+        Total                                          : 0 MiB
+        Used                                           : 0 MiB
+        Free                                           : 0 MiB
+    Compute Mode                                       : Default
+    Utilization
+        GPU                                            : 0 %
+        Memory                                         : 0 %
+        Encoder                                        : 0 %
+        Decoder                                        : 0 %
+        JPEG                                           : 0 %
+        OFA                                            : 0 %
+    Encoder Stats
+        Active Sessions                                : 0
+        Average FPS                                    : 0
+        Average Latency                                : 0
+    FBC Stats
+        Active Sessions                                : 0
+        Average FPS                                    : 0
+        Average Latency                                : 0
+    DRAM Encryption Mode
+        Current                                        : N/A
+        Pending                                        : N/A
+    ECC Mode
+        Current                                        : Enabled
+        Pending                                        : Enabled
+    ECC Errors
+        Volatile
+            SRAM Correctable                           : 0
+            SRAM Uncorrectable                         : 0
+            DRAM Correctable                           : 0
+            DRAM Uncorrectable                         : 0
+        Aggregate
+            SRAM Correctable                           : 0
+            SRAM Uncorrectable                         : 0
+            DRAM Correctable                           : 8616
+            DRAM Uncorrectable                         : 0
+    Retired Pages
+        Single Bit ECC                                 : 1
+        Double Bit ECC                                 : 0
+        Pending Page Blacklist                         : No
+    Remapped Rows                                      : N/A
+    Temperature
+        GPU Current Temp                               : 37 C
+        GPU T.Limit Temp                               : N/A
+        GPU Shutdown Temp                              : 96 C
+        GPU Slowdown Temp                              : 93 C
+        GPU Max Operating Temp                         : 85 C
+        GPU Target Temperature                         : N/A
+        Memory Current Temp                            : N/A
+        Memory Max Operating Temp                      : N/A
+    GPU Power Readings
+        Average Power Draw                             : N/A
+        Instantaneous Power Draw                       : 13.40 W
+        Current Power Limit                            : 70.00 W
+        Requested Power Limit                          : 70.00 W
+        Default Power Limit                            : 70.00 W
+        Min Power Limit                                : 60.00 W
+        Max Power Limit                                : 70.00 W
+    GPU Memory Power Readings 
+        Average Power Draw                             : N/A
+        Instantaneous Power Draw                       : N/A
+    Module Power Readings
+        Average Power Draw                             : N/A
+        Instantaneous Power Draw                       : N/A
+        Current Power Limit                            : N/A
+        Requested Power Limit                          : N/A
+        Default Power Limit                            : N/A
+        Min Power Limit                                : N/A
+        Max Power Limit                                : N/A
+    Power Smoothing                                    : N/A
+    Workload Power Profiles
+        Requested Profiles                             : N/A
+        Enforced Profiles                              : N/A
+    Clocks
+        Graphics                                       : 300 MHz
+        SM                                             : 300 MHz
+        Memory                                         : 405 MHz
+        Video                                          : 540 MHz
+    Applications Clocks
+        Graphics                                       : 585 MHz
+        Memory                                         : 5001 MHz
+    Default Applications Clocks
+        Graphics                                       : 585 MHz
+        Memory                                         : 5001 MHz
+    Deferred Clocks
+        Memory                                         : N/A
+    Max Clocks
+        Graphics                                       : 1590 MHz
+        SM                                             : 1590 MHz
+        Memory                                         : 5001 MHz
+        Video                                          : 1470 MHz
+    Max Customer Boost Clocks
+        Graphics                                       : 1590 MHz
+    Clock Policy
+        Auto Boost                                     : N/A
+        Auto Boost Default                             : N/A
+    Fabric
+        State                                          : N/A
+        Status                                         : N/A
+        CliqueId                                       : N/A
+        ClusterUUID                                    : N/A
+        Health
+            Summary                                    : N/A
+            Bandwidth                                  : N/A
+            Route Recovery in progress                 : N/A
+            Route Unhealthy                            : N/A
+            Access Timeout Recovery                    : N/A
+            Incorrect Configuration                    : N/A
+            Partition Assigned                         : N/A
+    Processes                                          : None
+    Capabilities
+        EGM                                            : disabled
+
+
+exit=0 elapsed_s=0.4
+$ df -hT
+Filesystem       Type     Size  Used Avail Use% Mounted on
+overlay          overlay  7.9T  6.9T  1.1T  88% /
+tmpfs            tmpfs     64M     0   64M   0% /dev
+shm              tmpfs     14G     0   14G   0% /dev/shm
+/dev/sda1        ext4     122G  3.7G  119G   3% /opt/bin
+/dev/loop1       ext4      20G  280K   20G   1% /kaggle/lib
+/dev/mapper/snap ext4     7.9T  6.9T  1.1T  88% /etc/hosts
+tmpfs            tmpfs     16G     0   16G   0% /proc/acpi
+tmpfs            tmpfs     16G     0   16G   0% /proc/scsi
+tmpfs            tmpfs     16G     0   16G   0% /sys/firmware
+
+exit=0 elapsed_s=0.0
+{
+  "utc": "2026-09-22T10:37:32.207421+00:00",
+  "python": "3.12.13 (main, Mar  4 2026, 09:23:07) [GCC 11.4.0]",
+  "python_executable": "/usr/bin/python3",
+  "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+  "torch": "2.10.0+cu128",
+  "torch_cuda_runtime": "12.8",
+  "cuda_available": true,
+  "gpu_count": 2,
+  "gpus": [
+    {
+      "index": 0,
+      "name": "Tesla T4",
+      "vram_bytes": 15636037632,
+      "capability": [
+        7,
+        5
+      ],
+      "native_bf16": false,
+      "torch_bf16_supported": true
+    },
+    {
+      "index": 1,
+      "name": "Tesla T4",
+      "vram_bytes": 15636037632,
+      "capability": [
+        7,
+        5
+      ],
+      "native_bf16": false,
+      "torch_bf16_supported": null
+    }
+  ],
+  "system_ram_bytes": 33659383808,
+  "disks": [
+    {
+      "path": "/",
+      "exists": true,
+      "total_bytes": 8656922775552,
+      "free_bytes": 1100138774528,
+      "device_id": 54
+    },
+    {
+      "path": "/tmp",
+      "exists": true,
+      "total_bytes": 8656922775552,
+      "free_bytes": 1100138774528,
+      "device_id": 54
+    },
+    {
+      "path": "/kaggle/temp",
+      "exists": false
+    },
+    {
+      "path": "/kaggle/working",
+      "exists": true,
+      "total_bytes": 20957446144,
+      "free_bytes": 20940382208,
+      "device_id": 1793
+    }
+  ],
+  "mounts": [
+    {
+      "device": "overlay",
+      "mountpoint": "/",
+      "fstype": "overlay",
+      "opts": "rw,relatime,lowerdir=l/CMWK7CM23QY7KTS3JWT6TMKPLH:l/NXKROP7SXMZPQN5ZTVSEHBRF4D:l/KOP4RUWYJY2TGW6ODULBKW2PKO:l/4FO7N4FV5YS65NR4CMYRELNVWS:l/NXH4HSWIKVACPCOY4LYWQAGG5B:l/IPJQXYJO4RV64GPTLO32EOM2AS:l/444YS2OGLZDJ66JT2SPCLF3H2W:l/DHUM3LP3IMTO4QBGLVKYTA6RTE:l/XODJFXEQVE65NBCXS7EGFI5XZW:l/VYK44NBLBNQXAISNQBP53TD24H:l/K7M2SFFDOAJF5ANQNOQTGTLG5N:l/BVBNUFSKOJVRZFXHA2VMBL5PFS:l/QSIMAUX5WMOOEKGD4VPIA6SYWC:l/TMTDA6TSOGFUZQZ3ALMKGGAVYE:l/AEH4EXTEYTZ7WANPPCG5TXS3Y2:l/YHBPSMMHJKOGDOM5KSUGF2WIL6:l/3FM4DEV7QRMSC3ZQ37K6TOVWD3:l/LE6COEZ573TWNVX3HRCQX6EBRD:l/JTV6PWGA5LAV3DVYKFINAXZFML:l/VWPXYTZNQSZQQ7KWQLCAAUGLC3:l/HD5AMTYC4FOLY6RDMYT7VZLLFT:l/QSX6NTGHQBODW7D64D6KLR6GNJ:l/4LQGWXQIBMTUUDJNQWBPUXRSBZ:l/KHCQH4OBVFURTJ5C7EULTF6H6P:l/KN6GS5EYMRJVRCPFQZHW5SHU3F:l/MWF2OISGZUDTTW4GO3Z43YQ6F5:l/KRN4D7TY3VYQMAVYNFMJMZUOFO:l/O4COEP24KDJVJUKEFFHZXFTNNM:l/YQOX6CBT4STWP4SYXSBSA7LEIF:l/DOWUGH4Q7QN3LM3SOXGSOT5YTD:l/ORMRJOOVFPFFNVXKIIAU64ZGJ5:l/6P2PSVPU4HGX56WPPGEMJBYJ55:l/Z3G4FGCWHTCNJKGJS2RXYCYRC4:l/6WZS5TEE2QFZKDBUFTWCSKUSIE:l/6G2HL7DXM252LUVW2WXXZ5WEY5:l/KIODYIAEFUEZSRFZOORO4LWRLN:l/FZJXL7RCFV4LYC5T6KSFQKLBTA:l/64DVPAFAHOHBTWCE5UHOBPHPX3:l/A6NAJ4E6AAGRXZMJAG4H7SCYOF:l/V7DFQ4SQYFBR7QUGMR5WSLII47:l/DYNT4GURSWD63TPD67HG7SFRNH:l/X26FJNWQTFH5ID4S5DFSTQWYO6:l/KISUW32LVWMPKTPDVFEW4FL3TI:l/5W6MA7JUK364BNVN7HG3YMHNS7:l/RHKWLMR2NEBVFOMSSPGIIIBU7Y:l/DOXNUZO7CQ2SATXVMYYZ5K4D3X:l/P2PF37UEI4V5N3SOD32UNWXQAS:l/NXD3R7UOEIAW6SY4ER6AB3YX6Q:l/EP2DC7KYTZNFMQD5ME7VIFKITT:l/LMDYEB3EDFMQD3CAIYLCTIURPP:l/FAFFCOQ4L4RBR67XNRS4RIIHV2:l/OFBZYBRGB2S35H26644LOO4DDJ:l/WOBVWGX5T35MKZDXBGCII45QE2:l/UTJUCH7Q5ZPN2QEGVIY3ZUZVMB:l/UQMD3IMUGP5V35V42H3C6SSDWX:l/67ZEEIMICZ3PTF37BRDXDVOAOO:l/UWAQH6NTK7P4WAPJLA4OMXVAEY:l/M3LGRM2GO3WAQ22TWDFCWCKZVW:l/YKQMO2HGOX4QBMOMMPIOFI3MDL:l/S4XGR55B67O2XZO6V7DI5ATLNE:l/CH3RA6TUG55OZ6GICHUM7PADMU:l/CQURUQK3MOAQLUSTZTGIDLEF35:l/U4JBJT3H7MAGOJ4JFNAGJ52MOX:l/EIMHH2LQO2JH5CTLCLAURHELW3:l/AKO4LOL2ONRZF2PSQGB5XGRSCF:l/SXZPN3TV7PAOU3GHUYBFMTNEK2:l/OYAWIJABACAAVSJY5Y2XLS7NMD:l/FMDLJEKFGEVYX4STY5CI4HITWI:l/V7POGKPTWXWVET47CF7SYXDEBV:l/6ZTVMPQLODFIPXZV3PON3LWO5H:l/55KBBC5UFZD3UYJ64XXZHOCBW3:l/JBQVR4623USDPRDCEOBCIFPGPO:l/HUSBAQH4FHPOIWFWWHXHDMYRVO:l/Q6TVAI77OTGS7UVK6BQP3WC5JX:l/EI5XYJMO7K7J7MP3R4CBE6YZZ3:l/U7CHBYX3467WQ6L4RWLTKNDSZZ:l/CYCOT7QXBFONRYSJVEPGUNUI2I:l/3TEUEJWJKEKVZU65H2MAGSKYLV:l/LP7KXEFI3O6VBNSEHNE4WL5SFZ:l/75YJHQBPPYN7NJXHVR5IVREG7Z:l/Q5QASFH3L2NEJDH4AYMOV7IC4S:l/TYGQ67EDA4GX2HPEG37J2LYVK3:l/HDRR5MZVR3AB6WTMFU2Z6HXATB:l/VHHQD7PIDXIKSJXOBRDPQMYNG4:l/AJQI7LF2GR3SFXERR6GKYQRF7X:l/5GLH6FK2NS4EAKSDJMYV3IEPTJ:l/5OLTAQPTPNZ2ZDW7KMDH6KJM2Q:l/RAJWW73M4LFQCES2FAKTBDTACF:l/DF2YLTL6ETHF5FGF2YZLCVBCVJ:l/ARMCNS6YNNDX3AZI7PSXZJ63UQ,upperdir=837914d9a9cc0d6714e018f4060b859f02ae10063e1835ffc72e429d2c3cdf89/diff,workdir=837914d9a9cc0d6714e018f4060b859f02ae10063e1835ffc72e429d2c3cdf89/work",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "proc",
+      "mountpoint": "/proc",
+      "fstype": "proc",
+      "opts": "rw,nosuid,nodev,noexec,relatime",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "tmpfs",
+      "mountpoint": "/dev",
+      "fstype": "tmpfs",
+      "opts": "rw,nosuid,size=65536k,mode=755",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "devpts",
+      "mountpoint": "/dev/pts",
+      "fstype": "devpts",
+      "opts": "rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "sysfs",
+      "mountpoint": "/sys",
+      "fstype": "sysfs",
+      "opts": "ro,nosuid,nodev,noexec,relatime",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "cgroup",
+      "mountpoint": "/sys/fs/cgroup",
+      "fstype": "cgroup2",
+      "opts": "ro,nosuid,nodev,noexec,relatime,nsdelegate,memory_recursiveprot",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "mqueue",
+      "mountpoint": "/dev/mqueue",
+      "fstype": "mqueue",
+      "opts": "rw,nosuid,nodev,noexec,relatime",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "shm",
+      "mountpoint": "/dev/shm",
+      "fstype": "tmpfs",
+      "opts": "rw,nosuid,nodev,noexec,relatime,size=14680064k",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "/dev/sda1",
+      "mountpoint": "/opt/bin",
+      "fstype": "ext4",
+      "opts": "ro,nosuid,nodev,relatime,commit=30",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "/dev/loop1",
+      "mountpoint": "/kaggle/lib",
+      "fstype": "ext4",
+      "opts": "ro,relatime",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "/dev/loop1",
+      "mountpoint": "/kaggle/input",
+      "fstype": "ext4",
+      "opts": "ro,relatime",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "/dev/loop1",
+      "mountpoint": "/kaggle/working",
+      "fstype": "ext4",
+      "opts": "rw,relatime",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "/dev/mapper/snap",
+      "mountpoint": "/etc/resolv.conf",
+      "fstype": "ext4",
+      "opts": "rw,relatime",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "/dev/mapper/snap",
+      "mountpoint": "/etc/hostname",
+      "fstype": "ext4",
+      "opts": "rw,relatime",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "/dev/mapper/snap",
+      "mountpoint": "/etc/hosts",
+      "fstype": "ext4",
+      "opts": "rw,relatime",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "/dev/loop1",
+      "mountpoint": "/etc/secrets/kaggle",
+      "fstype": "ext4",
+      "opts": "ro,relatime",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "/dev/sda1",
+      "mountpoint": "/usr/local/nvidia/lib64",
+      "fstype": "ext4",
+      "opts": "ro,nosuid,nodev,relatime,commit=30",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "/dev/sda1",
+      "mountpoint": "/usr/local/cuda-12.8/targets/x86_64-linux/lib/stubs",
+      "fstype": "ext4",
+      "opts": "ro,relatime,commit=30",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "proc",
+      "mountpoint": "/proc/bus",
+      "fstype": "proc",
+      "opts": "ro,nosuid,nodev,noexec,relatime",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "proc",
+      "mountpoint": "/proc/fs",
+      "fstype": "proc",
+      "opts": "ro,nosuid,nodev,noexec,relatime",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "proc",
+      "mountpoint": "/proc/irq",
+      "fstype": "proc",
+      "opts": "ro,nosuid,nodev,noexec,relatime",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "proc",
+      "mountpoint": "/proc/sys",
+      "fstype": "proc",
+      "opts": "ro,nosuid,nodev,noexec,relatime",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "proc",
+      "mountpoint": "/proc/sysrq-trigger",
+      "fstype": "proc",
+      "opts": "ro,nosuid,nodev,noexec,relatime",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "tmpfs",
+      "mountpoint": "/proc/acpi",
+      "fstype": "tmpfs",
+      "opts": "ro,relatime",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "tmpfs",
+      "mountpoint": "/proc/kcore",
+      "fstype": "tmpfs",
+      "opts": "rw,nosuid,size=65536k,mode=755",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "tmpfs",
+      "mountpoint": "/proc/keys",
+      "fstype": "tmpfs",
+      "opts": "rw,nosuid,size=65536k,mode=755",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "tmpfs",
+      "mountpoint": "/proc/timer_list",
+      "fstype": "tmpfs",
+      "opts": "rw,nosuid,size=65536k,mode=755",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "tmpfs",
+      "mountpoint": "/proc/scsi",
+      "fstype": "tmpfs",
+      "opts": "ro,relatime",
+      "maxfile": 255,
+      "maxpath": 4096
+    },
+    {
+      "device": "tmpfs",
+      "mountpoint": "/sys/firmware",
+      "fstype": "tmpfs",
+      "opts": "ro,relatime",
+      "maxfile": 255,
+      "maxpath": 4096
+    }
+  ],
+  "nvidia_smi_exit": 0,
+  "df_exit": 0,
+  "packages_before": {
+    "torch": "2.10.0+cu128",
+    "diffusers": "0.37.1",
+    "transformers": "5.0.0",
+    "accelerate": "1.13.0",
+    "peft": "0.19.1",
+    "huggingface-hub": "1.11.0",
+    "pillow": "11.3.0",
+    "bitsandbytes": null
+  }
+}
+Selected precision for cuda:0: float16; capability=[7, 5]
+MODEL ACCESS AND STORAGE PREFLIGHT
+SYNTHETIC DATASET: 3 deterministic paired edits
+TRAINER INSTALL AND VERSION CAPTURE
+$ git rev-parse HEAD
+a8dfcf7d7e2b38ccc7b2fb68ece9c6358e61e7a7
+
+exit=0 elapsed_s=0.0
+$ /usr/bin/python3 -m pip install --constraint /kaggle/working/exp001/kaggle_torch_constraints.txt -r /tmp/exp001-ai-toolkit/requirements.txt
+hcodec-0.10.0+cu128:
+      Successfully uninstalled torchcodec-0.10.0+cu128
+  Attempting uninstall: safetensors
+    Found existing installation: safetensors 0.7.0
+    Uninstalling safetensors-0.7.0:
+      Successfully uninstalled safetensors-0.7.0
+  Attempting uninstall: numpy
+    Found existing installation: numpy 2.0.2
+    Uninstalling numpy-2.0.2:
+      Successfully uninstalled numpy-2.0.2
+  Attempting uninstall: hf-xet
+    Found existing installation: hf-xet 1.4.3
+    Uninstalling hf-xet-1.4.3:
+      Successfully uninstalled hf-xet-1.4.3
+  Attempting uninstall: click
+    Found existing installation: click 8.3.3
+    Uninstalling click-8.3.3:
+      Successfully uninstalled click-8.3.3
+  Attempting uninstall: tifffile
+    Found existing installation: tifffile 2026.4.11
+    Uninstalling tifffile-2026.4.11:
+      Successfully uninstalled tifffile-2026.4.11
+  Attempting uninstall: scipy
+    Found existing installation: scipy 1.16.3
+    Uninstalling scipy-1.16.3:
+      Successfully uninstalled scipy-1.16.3
+  Attempting uninstall: opencv-python-headless
+    Found existing installation: opencv-python-headless 4.13.0.92
+    Uninstalling opencv-python-headless-4.13.0.92:
+      Successfully uninstalled opencv-python-headless-4.13.0.92
+  Attempting uninstall: opencv-python
+    Found existing installation: opencv-python 4.13.0.92
+    Uninstalling opencv-python-4.13.0.92:
+      Successfully uninstalled opencv-python-4.13.0.92
+  Attempting uninstall: matplotlib
+    Found existing installation: matplotlib 3.10.0
+    Uninstalling matplotlib-3.10.0:
+      Successfully uninstalled matplotlib-3.10.0
+  Attempting uninstall: huggingface_hub
+    Found existing installation: huggingface_hub 1.11.0
+    Uninstalling huggingface_hub-1.11.0:
+      Successfully uninstalled huggingface_hub-1.11.0
+  Attempting uninstall: albucore
+    Found existing installation: albucore 0.0.24
+    Uninstalling albucore-0.0.24:
+      Successfully uninstalled albucore-0.0.24
+  Attempting uninstall: diffusers
+    Found existing installation: diffusers 0.37.1
+    Uninstalling diffusers-0.37.1:
+      Successfully uninstalled diffusers-0.37.1
+  Attempting uninstall: albumentations
+    Found existing installation: albumentations 2.0.8
+    Uninstalling albumentations-2.0.8:
+      Successfully uninstalled albumentations-2.0.8
+  Attempting uninstall: transformers
+    Found existing installation: transformers 5.0.0
+    Uninstalling transformers-5.0.0:
+      Successfully uninstalled transformers-5.0.0
+  Attempting uninstall: timm
+    Found existing installation: timm 1.0.26
+    Uninstalling timm-1.0.26:
+      Successfully uninstalled timm-1.0.26
+  Attempting uninstall: peft
+    Found existing installation: peft 0.19.1
+    Uninstalling peft-0.19.1:
+      Successfully uninstalled peft-0.19.1
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+bigframes 2.39.0 requires google-cloud-bigquery-storage<3.0.0,>=2.30.0, which is not installed.
+google-adk 1.29.0 requires google-cloud-bigquery-storage>=2.0.0, which is not installed.
+kaggle-environments 1.29.3 requires numpy>=2.0, but you have numpy 1.26.4 which is incompatible.
+ydata-profiling 4.18.4 requires matplotlib<=3.10,>=3.5, but you have matplotlib 3.10.1 which is incompatible.
+mne 1.12.1 requires scipy>=1.13, but you have scipy 1.12.0 which is incompatible.
+cesium 0.12.4 requires numpy<3.0,>=2.0, but you have numpy 1.26.4 which is incompatible.
+google-colab 1.0.0 requires jupyter-server==2.14.0, but you have jupyter-server 2.12.5 which is incompatible.
+google-colab 1.0.0 requires pandas==2.2.2, but you have pandas 2.3.3 which is incompatible.
+dopamine-rl 4.1.2 requires gym<=0.25.2, but you have gym 0.26.2 which is incompatible.
+jaxlib 0.7.2 requires numpy>=2.0, but you have numpy 1.26.4 which is incompatible.
+jaxlib 0.7.2 requires scipy>=1.13, but you have scipy 1.12.0 which is incompatible.
+cupy-cuda12x 14.0.1 requires numpy<2.6,>=2.0, but you have numpy 1.26.4 which is incompatible.
+moviepy 1.0.3 requires decorator<5.0,>=4.0.2, but you have decorator 5.3.1 which is incompatible.
+tsfresh 0.21.1 requires scipy>=1.14.0; python_version >= "3.10", but you have scipy 1.12.0 which is incompatible.
+tobler 0.14.0 requires numpy>=2.0, but you have numpy 1.26.4 which is incompatible.
+tobler 0.14.0 requires scipy>=1.13, but you have scipy 1.12.0 which is incompatible.
+cuml-cu12 26.2.0 requires scipy>=1.13.0, but you have scipy 1.12.0 which is incompatible.
+jax 0.7.2 requires numpy>=2.0, but you have numpy 1.26.4 which is incompatible.
+jax 0.7.2 requires scipy>=1.13, but you have scipy 1.12.0 which is incompatible.
+rasterio 1.5.0 requires numpy>=2, but you have numpy 1.26.4 which is incompatible.
+pytensor 2.38.2 requires numpy>=2.0, but you have numpy 1.26.4 which is incompatible.
+xarray-einstats 0.10.0 requires numpy>=2.0, but you have numpy 1.26.4 which is incompatible.
+xarray-einstats 0.10.0 requires scipy>=1.13, but you have scipy 1.12.0 which is incompatible.
+opencv-contrib-python 4.13.0.92 requires numpy>=2; python_version >= "3.9", but you have numpy 1.26.4 which is incompatible.
+shap 0.51.0 requires numpy>=2, but you have numpy 1.26.4 which is incompatible.
+access 1.1.10.post3 requires scipy>=1.14.1, but you have scipy 1.12.0 which is incompatible.
+Successfully installed albucore-0.0.16 albumentations-1.4.15 av-16.0.1 bitsandbytes-0.50.2 click-8.5.0 controlnet_aux-0.0.10 diffusers-0.39.0.dev0 eval-type-backport-0.4.0 flatten_json-0.1.14 ftfy-6.3.1 hf-xet-1.6.0 hf_transfer-0.1.9 huggingface_hub-1.23.0 invisible-watermark-0.2.0 lpips-0.1.4 lycoris-lora-1.8.3 matplotlib-3.10.1 mutagen-1.47.0 numpy-1.26.4 open_clip_torch-3.3.0 opencv-python-4.11.0.86 opencv-python-headless-4.11.0.86 optimum-quanto-0.2.4 oyaml-1.0 peft-0.18.1 prodigyopt-1.1.2 pytorch-wavelets-1.3.0 pytorch_fid-0.3.0 safetensors-0.9.0rc0 scipy-1.12.0 tifffile-2026.3.3 timm-1.0.22 torchcodec-0.9.1 transformers-5.5.3
+
+exit=0 elapsed_s=118.1
+$ /usr/bin/python3 -c import json, torch; print(json.dumps({'torch': torch.__version__, 'torch_cuda_runtime': torch.version.cuda, 'cuda_available': torch.cuda.is_available(), 'gpu0': torch.cuda.get_device_name(0) if torch.cuda.is_available() else None}))
+{"torch": "2.10.0+cu128", "torch_cuda_runtime": "12.8", "cuda_available": true, "gpu0": "Tesla T4"}
+
+exit=0 elapsed_s=2.4
+RESULT: {
+  "experiment": "EXP-001",
+  "started_utc": "2026-09-22T10:37:29.542965+00:00",
+  "status": "PREPARED",
+  "environment": "/kaggle/working/exp001/environment.json",
+  "precision": "float16",
+  "finished_utc": "2026-09-22T10:39:33.381053+00:00"
+}
+STAGE 3: TINY EDIT LORA TRAINING
+$ /usr/bin/python3 run.py /kaggle/working/exp001/train_config_bf16_3step.yaml
+Flax classes are deprecated and will be removed in Diffusers v0.40.0. We recommend migrating to PyTorch classes or pinning your version of Diffusers.
+Flax classes are deprecated and will be removed in Diffusers v0.40.0. We recommend migrating to PyTorch classes or pinning your version of Diffusers.
+Running 1 job
+{
+    "type": "diffusion_trainer",
+    "training_folder": "/kaggle/working/exp001/training_bf16_3step",
+    "device": "cuda:0",
+    "performance_log_every": 5,
+    "network": {
+        "type": "lora",
+        "linear": 16,
+        "linear_alpha": 16,
+        "conv": 8,
+        "conv_alpha": 8
+    },
+    "save": {
+        "dtype": "float16",
+        "save_every": 3,
+        "max_step_saves_to_keep": 1
+    },
+    "datasets": [
+        {
+            "folder_path": "/kaggle/working/exp001/synthetic_pairs/target",
+            "control_path": "/kaggle/working/exp001/synthetic_pairs/reference",
+            "caption_ext": "txt",
+            "resolution": [
+                512
+            ]
+        }
+    ],
+    "train": {
+        "batch_size": 1,
+        "steps": 3,
+        "lr": 0.0001,
+        "optimizer": "adamw8bit",
+        "noise_scheduler": "flowmatch",
+        "gradient_checkpointing": true,
+        "dtype": "bf16",
+        "train_unet": true,
+        "train_text_encoder": false,
+        "timestep_type": "weighted",
+        "content_or_style": "balanced"
+    },
+    "model": {
+        "arch": "flux2_klein_4b",
+        "name_or_path": "black-forest-labs/FLUX.2-klein-base-4B",
+        "quantize": true,
+        "low_vram": true
+    }
+}
+
+#############################################
+# Running job: exp001_tiny_edit
+#############################################
+
+
+Running  1 process
+Loading Flux2 model
+Loading transformer
+
+
+flux-2-klein-base-4b.safetensors: reconstructing file:   0%|          |  0.00B / 7.75GB            
+flux-2-klein-base-4b.safetensors: downloading bytes:           |  0.00B            
+flux-2-klein-base-4b.safetensors: downloading bytes:           | 2.30MB            
+flux-2-klein-base-4b.safetensors: downloading bytes:           | 29.4MB,  227kB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:   0%|          |  548kB / 7.75GB            
+flux-2-klein-base-4b.safetensors: downloading bytes:           | 51.8MB, 2.90MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes:           | 75.5MB, 5.07MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▏         | 98.4MB, 7.34MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▏         |  135MB, 10.8MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▏         |  160MB, 12.9MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:   0%|          | 1.48MB / 7.75GB, 53.8kB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▎         |  202MB, 16.6MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▎         |  245MB, 20.6MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▎         |  280MB, 24.2MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▍         |  301MB, 25.5MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▍         |  346MB, 28.8MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▍         |  381MB, 31.0MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▌         |  417MB, 35.3MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:   0%|          | 32.4MB / 7.75GB,  140kB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▌         |  446MB, 36.7MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▌         |  484MB, 40.3MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:   1%|          | 56.9MB / 7.75GB, 3.02MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▋         |  510MB, 41.9MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▋         |  540MB, 44.6MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▋         |  563MB, 45.8MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:   2%|▏         |  116MB / 7.75GB, 5.24MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▊         |  600MB, 48.7MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▊         |  627MB, 50.8MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▊         |  668MB, 52.4MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▉         |  693MB, 54.4MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▉         |  715MB, 56.1MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ▉         |  747MB, 57.7MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █         |  778MB, 60.3MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █         |  810MB, 62.3MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █         |  837MB, 63.4MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █         |  865MB, 65.9MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █▏        |  908MB, 67.4MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █▏        |  929MB, 69.2MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █▏        |  961MB, 71.4MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █▎        |  994MB, 72.6MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █▎        | 1.04GB, 74.5MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █▍        | 1.07GB, 76.1MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █▍        | 1.10GB, 78.3MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █▍        | 1.14GB, 81.0MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █▌        | 1.18GB, 83.7MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █▌        | 1.20GB, 84.3MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █▋        | 1.26GB, 86.6MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █▋        | 1.29GB, 89.2MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █▋        | 1.33GB, 90.9MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █▊        | 1.36GB, 93.8MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █▊        | 1.39GB, 95.1MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █▊        | 1.43GB, 95.6MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █▉        | 1.46GB, 98.1MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █▉        | 1.51GB,  100MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██        | 1.56GB,  102MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██        | 1.60GB,  104MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██        | 1.63GB,  106MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:   2%|▏         |  149MB / 7.75GB, 10.5MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:   3%|▎         |  258MB / 7.75GB, 9.47MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██▏       | 1.67GB,  108MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:   5%|▍         |  355MB / 7.75GB, 18.5MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██▏       | 1.71GB,  109MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:   6%|▋         |  485MB / 7.75GB, 26.5MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:   8%|▊         |  627MB / 7.75GB, 37.1MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██▎       | 1.75GB,  112MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██▎       | 1.80GB,  113MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██▎       | 1.83GB,  115MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██▍       | 1.89GB,  117MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██▌       | 1.94GB,  120MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██▌       | 1.98GB,  122MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  10%|█         |  781MB / 7.75GB, 52.8MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██▌       | 2.00GB,  123MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  12%|█▏        |  918MB / 7.75GB, 57.4MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██▋       | 2.04GB,  125MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  13%|█▎        | 1.03GB / 7.75GB, 68.2MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  15%|█▍        | 1.14GB / 7.75GB, 76.5MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██▋       | 2.09GB,  127MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  16%|█▌        | 1.26GB / 7.75GB, 85.1MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██▋       | 2.12GB,  128MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██▊       | 2.20GB,  131MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██▉       | 2.24GB,  134MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██▉       | 2.27GB,  136MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███       | 2.34GB,  139MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███       | 2.40GB,  142MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███▏      | 2.43GB,  144MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███▏      | 2.49GB,  147MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███▎      | 2.54GB,  147MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███▎      | 2.59GB,  150MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███▍      | 2.63GB,  152MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███▍      | 2.70GB,  155MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███▌      | 2.75GB,  157MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███▋      | 2.82GB,  161MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███▋      | 2.89GB,  164MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███▊      | 2.96GB,  167MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███▉      | 3.01GB,  169MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███▉      | 3.05GB,  171MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████      | 3.10GB,  173MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████      | 3.14GB,  174MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████      | 3.18GB,  176MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████▏     | 3.25GB,  179MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████▏     | 3.29GB,  180MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████▎     | 3.34GB,  182MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████▎     | 3.38GB,  184MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████▍     | 3.47GB,  188MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████▌     | 3.55GB,  191MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  19%|█▊        | 1.45GB / 7.75GB, 74.9MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  20%|█▉        | 1.53GB / 7.75GB, 81.6MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████▋     | 3.63GB,  195MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  21%|██        | 1.62GB / 7.75GB, 87.2MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████▋     | 3.67GB,  196MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  22%|██▏       | 1.73GB / 7.75GB, 93.3MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  24%|██▍       | 1.85GB / 7.75GB,  102MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████▊     | 3.74GB,  199MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  25%|██▌       | 1.97GB / 7.75GB,  110MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  27%|██▋       | 2.08GB / 7.75GB,  119MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████▉     | 3.81GB,  201MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  29%|██▊       | 2.22GB / 7.75GB,  126MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████▉     | 3.86GB,  202MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  30%|███       | 2.36GB / 7.75GB,  143MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █████     | 3.93GB,  204MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █████▏    | 3.99GB,  206MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █████▏    | 4.03GB,  207MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █████▎    | 4.08GB,  209MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █████▎    | 4.13GB,  210MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █████▍    | 4.22GB,  214MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █████▌    | 4.30GB,  217MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █████▋    | 4.37GB,  220MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █████▋    | 4.41GB,  221MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █████▋    | 4.45GB,  222MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  33%|███▎      | 2.53GB / 7.75GB,  137MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  34%|███▍      | 2.65GB / 7.75GB,  141MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █████▊    | 4.52GB,  225MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █████▉    | 4.57GB,  226MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  36%|███▌      | 2.80GB / 7.75GB,  153MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: █████▉    | 4.62GB,  228MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████    | 4.67GB,  228MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████    | 4.71GB,  228MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████    | 4.74GB,  229MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████▏   | 4.78GB,  230MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  38%|███▊      | 2.94GB / 7.75GB,  163MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  39%|███▉      | 3.04GB / 7.75GB,  160MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████▏   | 4.84GB,  232MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  41%|████      | 3.15GB / 7.75GB,  167MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  42%|████▏     | 3.24GB / 7.75GB,  174MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████▎   | 4.88GB,  231MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  43%|████▎     | 3.34GB / 7.75GB,  179MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████▎   | 4.94GB,  232MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  45%|████▍     | 3.45GB / 7.75GB,  187MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████▍   | 4.99GB,  232MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  46%|████▌     | 3.56GB / 7.75GB,  193MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████▌   | 5.04GB,  232MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  48%|████▊     | 3.71GB / 7.75GB,  199MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████▌   | 5.09GB,  232MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  49%|████▉     | 3.79GB / 7.75GB,  207MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  50%|████▉     | 3.86GB / 7.75GB,  207MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████▋   | 5.14GB,  232MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  51%|█████▏    | 3.98GB / 7.75GB,  213MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████▋   | 5.19GB,  232MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████▋   | 5.21GB,  233MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████▊   | 5.24GB,  233MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  53%|█████▎    | 4.10GB / 7.75GB,  217MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████▊   | 5.27GB,  233MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████▊   | 5.31GB,  234MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  54%|█████▎    | 4.15GB / 7.75GB,  222MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████▉   | 5.35GB,  234MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████▉   | 5.39GB,  235MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███████   | 5.43GB,  236MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███████   | 5.50GB,  238MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███████▏  | 5.53GB,  239MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███████▏  | 5.57GB,  240MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███████▏  | 5.61GB,  240MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███████▎  | 5.67GB,  242MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███████▎  | 5.71GB,  243MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███████▍  | 5.78GB,  243MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███████▌  | 5.83GB,  245MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███████▌  | 5.87GB,  247MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███████▋  | 5.92GB,  248MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███████▋  | 6.00GB,  251MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███████▊  | 6.05GB,  252MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███████▊  | 6.10GB,  254MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ███████▉  | 6.14GB,  255MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  55%|█████▍    | 4.23GB / 7.75GB,  189MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████████  | 6.22GB,  258MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  56%|█████▌    | 4.31GB / 7.75GB,  192MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  57%|█████▋    | 4.42GB / 7.75GB,  196MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████████  | 6.30GB,  260MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  59%|█████▊    | 4.53GB / 7.75GB,  203MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████████▏ | 6.38GB,  261MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  60%|██████    | 4.68GB / 7.75GB,  212MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████████▎ | 6.46GB,  264MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  62%|██████▏   | 4.82GB / 7.75GB,  220MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  64%|██████▎   | 4.93GB / 7.75GB,  225MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████████▍ | 6.54GB,  266MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████████▍ | 6.58GB,  267MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  66%|██████▌   | 5.09GB / 7.75GB,  235MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████████▌ | 6.62GB,  268MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████████▌ | 6.67GB,  269MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  68%|██████▊   | 5.27GB / 7.75GB,  243MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  70%|██████▉   | 5.40GB / 7.75GB,  249MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████████▋ | 6.72GB,  270MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  72%|███████▏  | 5.58GB / 7.75GB,  143MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  74%|███████▍  | 5.73GB / 7.75GB,  153MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  75%|███████▌  | 5.84GB / 7.75GB,  163MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  77%|███████▋  | 5.98GB / 7.75GB,  169MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  79%|███████▉  | 6.14GB / 7.75GB,  178MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  83%|████████▎ | 6.41GB / 7.75GB,  195MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  86%|████████▌ | 6.66GB / 7.75GB,  211MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  89%|████████▉ | 6.89GB / 7.75GB,  226MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  91%|█████████ | 7.04GB / 7.75GB,  233MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  93%|█████████▎| 7.18GB / 7.75GB,  242MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  94%|█████████▍| 7.31GB / 7.75GB,  256MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  96%|█████████▌| 7.44GB / 7.75GB,  256MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  97%|█████████▋| 7.55GB / 7.75GB,  259MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file:  99%|█████████▉| 7.66GB / 7.75GB,  261MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file: 100%|█████████▉| 7.72GB / 7.75GB,  262MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ████████▋ | 6.75GB,  142MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████████| 6.75GB,  142MB/s  
+flux-2-klein-base-4b.safetensors: downloading bytes: ██████████| 6.75GB,  142MB/s  
+
+flux-2-klein-base-4b.safetensors: reconstructing file: 100%|██████████| 7.75GB / 7.75GB,  263MB/s  
+Quantizing (qfloat8)
+ - quantizing 25 blocks
+
+  0%|          | 0/25 [00:00<?, ?it/s]
+  4%|▍         | 1/25 [00:00<00:19,  1.23it/s]
+  8%|▊         | 2/25 [00:01<00:12,  1.79it/s]
+ 12%|█▏        | 3/25 [00:01<00:10,  2.09it/s]
+ 16%|█▌        | 4/25 [00:01<00:09,  2.27it/s]
+ 20%|██        | 5/25 [00:02<00:08,  2.35it/s]
+ 24%|██▍       | 6/25 [00:02<00:06,  2.85it/s]
+ 28%|██▊       | 7/25 [00:02<00:05,  3.29it/s]
+ 32%|███▏      | 8/25 [00:02<00:04,  3.67it/s]
+ 36%|███▌      | 9/25 [00:03<00:04,  3.98it/s]
+ 40%|████      | 10/25 [00:03<00:03,  4.22it/s]
+ 44%|████▍     | 11/25 [00:03<00:03,  4.33it/s]
+ 48%|████▊     | 12/25 [00:03<00:02,  4.46it/s]
+ 52%|█████▏    | 13/25 [00:04<00:02,  4.56it/s]
+ 56%|█████▌    | 14/25 [00:04<00:02,  4.65it/s]
+ 60%|██████    | 15/25 [00:04<00:02,  4.73it/s]
+ 64%|██████▍   | 16/25 [00:04<00:01,  4.77it/s]
+ 68%|██████▊   | 17/25 [00:04<00:01,  4.79it/s]
+ 72%|███████▏  | 18/25 [00:05<00:01,  4.81it/s]
+ 76%|███████▌  | 19/25 [00:05<00:01,  4.81it/s]
+ 80%|████████  | 20/25 [00:05<00:01,  4.83it/s]
+ 84%|████████▍ | 21/25 [00:05<00:00,  4.84it/s]
+ 88%|████████▊ | 22/25 [00:05<00:00,  4.85it/s]
+ 92%|█████████▏| 23/25 [00:06<00:00,  4.86it/s]
+ 96%|█████████▌| 24/25 [00:06<00:00,  4.90it/s]
+100%|██████████| 25/25 [00:06<00:00,  4.92it/s]
+100%|██████████| 25/25 [00:06<00:00,  3.86it/s]
+ - quantizing extras
+Loading Qwen3
+
+config.json:   0%|          | 0.00/726 [00:00<?, ?B/s]
+config.json: 100%|██████████| 726/726 [00:00<00:00, 2.10MB/s]
+
+model.safetensors.index.json:   0%|          | 0.00/32.8k [00:00<?, ?B/s]
+model.safetensors.index.json: 100%|██████████| 32.8k/32.8k [00:00<00:00, 41.6MB/s]
+
+Downloading bytes:           |  0.00B            
+
+Reconstructing (incomplete total...): |          |  0.00B /  0.00B            
+
+
+Fetching 3 files:   0%|          | 0/3 [00:00<?, ?it/s]
+
+Reconstructing (incomplete total...):   0%|          |  0.00B / 4.06GB            
+
+Reconstructing (incomplete total...):   0%|          |  0.00B / 4.06GB            
+
+Reconstructing (incomplete total...):   0%|          |  0.00B / 8.04GB            
+Downloading bytes:           | 2.82MB            
+Downloading bytes:           | 14.6MB,   ???B/s  
+Downloading bytes:           | 33.5MB, 1.45MB/s  
+Downloading bytes:           | 66.8MB,  587kB/s  
+Downloading bytes: ▏         |  117MB, 1.96MB/s  
+Downloading bytes: ▏         |  173MB, 3.71MB/s  
+Downloading bytes: ▎         |  229MB, 5.50MB/s  
+Downloading bytes: ▎         |  283MB, 3.90MB/s  
+Downloading bytes: ▍         |  338MB, 3.91MB/s  
+Downloading bytes: ▍         |  368MB, 18.6MB/s  
+Downloading bytes: ▌         |  461MB, 3.94MB/s  
+Downloading bytes: ▋         |  520MB, 3.95MB/s  
+Downloading bytes: ▋         |  589MB, 24.9MB/s  
+Downloading bytes: ▊         |  687MB, 3.95MB/s  
+Downloading bytes: ▉         |  747MB, 3.96MB/s  
+Downloading bytes: ▉         |  760MB, 35.7MB/s  
+
+Reconstructing (incomplete total...):   0%|          | 39.5kB / 8.04GB            
+Downloading bytes: █         |  859MB, 3.97MB/s  
+Downloading bytes: █▏        |  923MB, 46.7MB/s  
+Downloading bytes: █▎        | 1.02GB, 4.04MB/s  
+Downloading bytes: █▎        | 1.08GB, 4.09MB/s  
+Downloading bytes: █▍        | 1.15GB, 35.8MB/s  
+Downloading bytes: █▌        | 1.21GB, 4.25MB/s  
+Downloading bytes: █▌        | 1.26GB, 4.30MB/s  
+Downloading bytes: █▋        | 1.35GB, 4.36MB/s  
+Downloading bytes: █▊        | 1.41GB, 77.0MB/s  
+Downloading bytes: █▊        | 1.51GB, 4.49MB/s  
+Downloading bytes: █▉        | 1.61GB, 4.57MB/s  
+Downloading bytes: ██        | 1.66GB, 91.3MB/s  
+Downloading bytes: ██▏       | 1.72GB, 4.77MB/s  
+Downloading bytes: ██▏       | 1.78GB, 5.00MB/s  
+Downloading bytes: ██▎       | 1.83GB, 4.96MB/s  
+Downloading bytes: ██▎       | 1.84GB, 98.5MB/s  
+Downloading bytes: ██▎       | 1.89GB, 4.92MB/s  
+Downloading bytes: ██▎       | 1.90GB,  101MB/s  
+Downloading bytes: ██▍       | 1.93GB, 42.5MB/s  
+Downloading bytes: ██▍       | 1.97GB, 4.95MB/s  
+Downloading bytes: ██▍       | 1.98GB,  103MB/s  
+Downloading bytes: ██▌       | 2.03GB, 4.92MB/s  
+Downloading bytes: ██▌       | 2.07GB, 4.94MB/s  
+Downloading bytes: ██▋       | 2.12GB, 4.96MB/s  
+Downloading bytes: ██▋       | 2.17GB, 4.96MB/s  
+Downloading bytes: ██▊       | 2.22GB, 4.98MB/s  
+
+Reconstructing (incomplete total...):   1%|          | 50.0MB / 8.04GB, 3.76kB/s  
+Downloading bytes: ██▊       | 2.27GB, 5.00MB/s  
+Downloading bytes: ██▉       | 2.34GB, 49.5MB/s  
+Downloading bytes: ██▉       | 2.40GB, 50.9MB/s  
+Downloading bytes: ███       | 2.47GB, 5.06MB/s  
+Downloading bytes: ███▏      | 2.53GB, 5.08MB/s  
+Downloading bytes: ███▏      | 2.58GB, 5.09MB/s  
+Downloading bytes: ███▎      | 2.62GB, 56.7MB/s  
+Downloading bytes: ███▎      | 2.70GB, 5.12MB/s  
+Downloading bytes: ███▍      | 2.75GB, 5.12MB/s  
+Downloading bytes: ███▌      | 2.83GB, 62.8MB/s  
+Downloading bytes: ███▋      | 2.92GB, 5.14MB/s  
+Downloading bytes: ███▋      | 2.94GB, 66.4MB/s  
+Downloading bytes: ███▊      | 3.02GB, 5.16MB/s  
+Downloading bytes: ███▊      | 3.08GB, 5.16MB/s  
+Downloading bytes: ███▊      | 3.10GB,  137MB/s  
+Downloading bytes: ███▉      | 3.18GB, 5.19MB/s  
+Downloading bytes: ████      | 3.24GB, 5.19MB/s  
+Downloading bytes: ████      | 3.30GB, 5.20MB/s  
+Downloading bytes: ████▏     | 3.38GB,  141MB/s  
+Downloading bytes: ████▎     | 3.45GB, 5.24MB/s  
+
+Reconstructing (incomplete total...):   1%|▏         |  117MB / 8.04GB, 4.40MB/s  
+Downloading bytes: ████▍     | 3.53GB,  142MB/s  
+Downloading bytes: ████▍     | 3.61GB,  142MB/s  
+
+Reconstructing (incomplete total...):   3%|▎         |  216MB / 8.04GB, 5.65MB/s  
+Downloading bytes: ████▌     | 3.67GB,  141MB/s  
+
+Reconstructing (incomplete total...):   5%|▌         |  418MB / 8.04GB, 8.40MB/s  
+Downloading bytes: ████▋     | 3.72GB, 94.1MB/s  
+Downloading bytes: ████▋     | 3.78GB, 96.7MB/s  
+Downloading bytes: ████▊     | 3.83GB, 99.3MB/s  
+Downloading bytes: ████▊     | 3.89GB,  102MB/s  
+Downloading bytes: ████▉     | 3.96GB,  141MB/s  
+Downloading bytes: █████     | 4.02GB,  108MB/s  
+
+Reconstructing (incomplete total...):   7%|▋         |  552MB / 8.04GB, 22.3MB/s  
+Downloading bytes: █████     | 4.09GB,  140MB/s  
+
+Reconstructing (incomplete total...):   8%|▊         |  619MB / 8.04GB, 32.0MB/s  
+Downloading bytes: █████▏    | 4.15GB,  113MB/s  
+Downloading bytes: █████▏    | 4.20GB,  115MB/s  
+Downloading bytes: █████▎    | 4.25GB,  118MB/s  
+Downloading bytes: █████▎    | 4.31GB,  120MB/s  
+Downloading bytes: █████▍    | 4.39GB,  123MB/s  
+Downloading bytes: █████▌    | 4.46GB,  128MB/s  
+Downloading bytes: █████▋    | 4.55GB,  137MB/s  
+Downloading bytes: █████▋    | 4.61GB,  135MB/s  
+Downloading bytes: █████▊    | 4.69GB,  136MB/s  
+Downloading bytes: █████▉    | 4.76GB,  135MB/s  
+Downloading bytes: █████▉    | 4.82GB,  135MB/s  
+
+Reconstructing (incomplete total...):  13%|█▎        | 1.02GB / 8.04GB, 37.3MB/s  
+Downloading bytes: ██████    | 4.86GB,  143MB/s  
+Downloading bytes: ██████    | 4.92GB,  145MB/s  
+Downloading bytes: ██████▏   | 4.98GB,  147MB/s  
+Downloading bytes: ██████▎   | 5.03GB,  148MB/s  
+Downloading bytes: ██████▎   | 5.06GB,  136MB/s  
+Downloading bytes: ██████▍   | 5.14GB,  151MB/s  
+Downloading bytes: ██████▍   | 5.19GB,  153MB/s  
+Downloading bytes: ██████▌   | 5.25GB,  154MB/s  
+Downloading bytes: ██████▌   | 5.31GB,  155MB/s  
+Downloading bytes: ██████▋   | 5.38GB,  158MB/s  
+Downloading bytes: ██████▊   | 5.47GB,  141MB/s  
+Downloading bytes: ██████▉   | 5.55GB,  161MB/s  
+Downloading bytes: ██████▉   | 5.63GB,  143MB/s  
+Downloading bytes: ███████   | 5.70GB,  164MB/s  
+Downloading bytes: ███████▏  | 5.77GB,  163MB/s  
+Downloading bytes: ███████▏  | 5.83GB,  163MB/s  
+Downloading bytes: ███████▎  | 5.89GB,  162MB/s  
+Downloading bytes: ███████▎  | 5.93GB,  145MB/s  
+Downloading bytes: ███████▍  | 5.97GB,  162MB/s  
+Downloading bytes: ███████▍  | 6.01GB,  145MB/s  
+Downloading bytes: ███████▌  | 6.05GB,  161MB/s  
+Downloading bytes: ███████▌  | 6.09GB,  145MB/s  
+Downloading bytes: ███████▌  | 6.13GB,  160MB/s  
+Downloading bytes: ███████▋  | 6.16GB,  159MB/s  
+Downloading bytes: ███████▋  | 6.20GB,  143MB/s  
+Downloading bytes: ███████▋  | 6.23GB,  159MB/s  
+Downloading bytes: ███████▊  | 6.26GB,  141MB/s  
+Downloading bytes: ███████▊  | 6.28GB,  157MB/s  
+Downloading bytes: ███████▊  | 6.30GB,  140MB/s  
+Downloading bytes: ███████▊  | 6.32GB,  155MB/s  
+Downloading bytes: ███████▉  | 6.35GB,  154MB/s  
+Downloading bytes: ███████▉  | 6.36GB,  137MB/s  
+Downloading bytes: ███████▉  | 6.38GB,  151MB/s  
+Downloading bytes: ███████▉  | 6.39GB,  135MB/s  
+Downloading bytes: ███████▉  | 6.41GB,  149MB/s  
+Downloading bytes: ███████▉  | 6.42GB,  133MB/s  
+Downloading bytes: ████████  | 6.44GB,  147MB/s  
+Downloading bytes: ████████  | 6.45GB,  131MB/s  
+Downloading bytes: ████████  | 6.47GB,  145MB/s  
+Downloading bytes: ████████  | 6.49GB,  129MB/s  
+Downloading bytes: ████████  | 6.50GB,  142MB/s  
+Downloading bytes: ████████  | 6.51GB,  127MB/s  
+Downloading bytes: ████████  | 6.52GB,  126MB/s  
+Downloading bytes: ████████  | 6.54GB,  140MB/s  
+Downloading bytes: ████████▏ | 6.55GB,  125MB/s  
+Downloading bytes: ████████▏ | 6.56GB,  137MB/s  
+Downloading bytes: ████████▏ | 6.57GB,  123MB/s  
+Downloading bytes: ████████▏ | 6.58GB,  135MB/s  
+Downloading bytes: ████████▏ | 6.59GB,  121MB/s  
+Downloading bytes: ████████▏ | 6.60GB,  132MB/s  
+Downloading bytes: ████████▏ | 6.61GB,  119MB/s  
+Downloading bytes: ████████▏ | 6.62GB,  130MB/s  
+Downloading bytes: ████████▏ | 6.63GB,  117MB/s  
+Downloading bytes: ████████▎ | 6.64GB,  128MB/s  
+Downloading bytes: ████████▎ | 6.65GB,  115MB/s  
+Downloading bytes: ████████▎ | 6.66GB,  125MB/s  
+Downloading bytes: ████████▎ | 6.67GB,  113MB/s  
+Downloading bytes: ████████▎ | 6.68GB,  123MB/s  
+Downloading bytes: ████████▎ | 6.69GB,  112MB/s  
+Downloading bytes: ████████▎ | 6.70GB,  121MB/s  
+Downloading bytes: ████████▎ | 6.70GB,  110MB/s  
+Downloading bytes: ████████▎ | 6.71GB,  119MB/s  
+Downloading bytes: ████████▎ | 6.72GB,  108MB/s  
+Downloading bytes: ████████▎ | 6.73GB,  107MB/s  
+Downloading bytes: ████████▎ | 6.73GB,  116MB/s  
+Downloading bytes: ████████▍ | 6.74GB,  106MB/s  
+Downloading bytes: ████████▍ | 6.75GB,  114MB/s  
+Downloading bytes: ████████▍ | 6.75GB,  104MB/s  
+Downloading bytes: ████████▍ | 6.76GB,  112MB/s  
+Downloading bytes: ████████▍ | 6.77GB,  102MB/s  
+
+Reconstructing (incomplete total...):  13%|█▎        | 1.02GB / 8.04GB, 65.6MB/s  
+Downloading bytes: ████████▍ | 6.77GB,  109MB/s  
+Downloading bytes: ████████▍ | 6.78GB,  108MB/s  
+Downloading bytes: ████████▍ | 6.78GB, 99.4MB/s  
+Downloading bytes: ████████▍ | 6.79GB,  106MB/s  
+Downloading bytes: ████████▍ | 6.79GB,  104MB/s  
+Downloading bytes: ████████▍ | 6.80GB,  103MB/s  
+Downloading bytes: ████████▍ | 6.80GB,  101MB/s  
+Downloading bytes: ████████▍ | 6.80GB, 99.7MB/s  
+Downloading bytes: ████████▍ | 6.81GB, 93.0MB/s  
+Downloading bytes: ████████▍ | 6.81GB, 97.6MB/s  
+Downloading bytes: ████████▍ | 6.81GB, 91.2MB/s  
+Downloading bytes: ████████▍ | 6.82GB, 94.8MB/s  
+Downloading bytes: ████████▍ | 6.82GB, 94.1MB/s  
+Downloading bytes: ████████▍ | 6.82GB, 92.8MB/s  
+Downloading bytes: ████████▍ | 6.82GB, 91.5MB/s  
+Downloading bytes: ████████▍ | 6.83GB, 90.8MB/s  
+Downloading bytes: ████████▍ | 6.83GB, 85.6MB/s  
+Downloading bytes: ████████▍ | 6.83GB, 88.9MB/s  
+Downloading bytes: ████████▍ | 6.83GB, 83.3MB/s  
+Downloading bytes: ████████▍ | 6.83GB, 85.7MB/s  
+Downloading bytes: ████████▍ | 6.83GB, 85.1MB/s  
+Downloading bytes: ████████▍ | 6.84GB, 83.9MB/s  
+Downloading bytes: ████████▍ | 6.84GB, 83.3MB/s  
+Downloading bytes: ████████▌ | 6.84GB, 78.6MB/s  
+Downloading bytes: ████████▌ | 6.84GB, 78.1MB/s  
+Downloading bytes: ████████▌ | 6.84GB, 73.9MB/s  
+Downloading bytes: ████████▌ | 6.84GB, 72.3MB/s  
+Downloading bytes: ████████▌ | 6.84GB, 74.9MB/s  
+Downloading bytes: ████████▌ | 6.84GB, 70.8MB/s  
+Downloading bytes: ████████▌ | 6.85GB, 70.3MB/s  
+Downloading bytes: ████████▌ | 6.85GB, 71.3MB/s  
+Downloading bytes: ████████▌ | 6.85GB, 67.4MB/s  
+Downloading bytes: ████████▌ | 6.85GB, 69.3MB/s  
+Downloading bytes: ████████▌ | 6.85GB, 68.8MB/s  
+Downloading bytes: ████████▌ | 6.85GB, 67.9MB/s  
+
+Reconstructing (incomplete total...):  18%|█▊        | 1.44GB / 8.04GB, 65.6MB/s  
+Downloading bytes: ████████▌ | 6.85GB, 67.4MB/s  
+Downloading bytes: ████████▌ | 6.85GB, 66.9MB/s  
+Downloading bytes: ████████▌ | 6.85GB, 66.0MB/s  
+Downloading bytes: ████████▌ | 6.86GB, 65.1MB/s  
+Downloading bytes: ████████▌ | 6.86GB, 61.6MB/s  
+Downloading bytes: ████████▌ | 6.86GB, 60.7MB/s  
+Downloading bytes: ████████▌ | 6.86GB, 63.0MB/s  
+Downloading bytes: ████████▌ | 6.86GB, 62.1MB/s  
+Downloading bytes: ████████▌ | 6.86GB, 61.2MB/s  
+Downloading bytes: ████████▌ | 6.86GB, 60.8MB/s  
+Downloading bytes: ████████▌ | 6.86GB, 57.4MB/s  
+Downloading bytes: ████████▌ | 6.86GB, 60.0MB/s  
+Downloading bytes: ████████▌ | 6.86GB, 58.8MB/s  
+Downloading bytes: ████████▌ | 6.86GB, 55.0MB/s  
+Downloading bytes: ████████▌ | 6.86GB, 54.6MB/s  
+Downloading bytes: ████████▌ | 6.86GB, 54.2MB/s  
+Downloading bytes: ████████▌ | 6.87GB, 53.9MB/s  
+Downloading bytes: ████████▌ | 6.87GB, 55.5MB/s  
+Downloading bytes: ████████▌ | 6.87GB, 52.4MB/s  
+Downloading bytes: ████████▌ | 6.87GB, 52.1MB/s  
+Downloading bytes: ████████▌ | 6.87GB, 51.4MB/s  
+Downloading bytes: ████████▌ | 6.87GB, 51.0MB/s  
+Downloading bytes: ████████▌ | 6.87GB, 50.7MB/s  
+Downloading bytes: ████████▌ | 6.87GB, 50.4MB/s  
+Downloading bytes: ████████▌ | 6.87GB, 49.4MB/s  
+Downloading bytes: ████████▌ | 6.87GB, 51.2MB/s  
+Downloading bytes: ████████▌ | 6.88GB, 50.9MB/s  
+Downloading bytes: ████████▌ | 6.88GB, 48.0MB/s  
+Downloading bytes: ████████▌ | 6.88GB, 47.7MB/s  
+Downloading bytes: ████████▌ | 6.88GB, 49.3MB/s  
+Downloading bytes: ████████▌ | 6.88GB, 45.7MB/s  
+Downloading bytes: ████████▌ | 6.88GB, 47.7MB/s  
+Downloading bytes: ████████▌ | 6.88GB, 44.5MB/s  
+Downloading bytes: ████████▌ | 6.88GB, 44.0MB/s  
+Downloading bytes: ████████▌ | 6.89GB, 43.0MB/s  
+Downloading bytes: ████████▌ | 6.89GB, 44.8MB/s  
+Downloading bytes: ████████▌ | 6.89GB, 42.2MB/s  
+Downloading bytes: ████████▌ | 6.89GB, 41.9MB/s  
+Downloading bytes: ████████▌ | 6.89GB, 43.6MB/s  
+Downloading bytes: ████████▌ | 6.89GB, 43.4MB/s  
+Downloading bytes: ████████▌ | 6.89GB, 40.3MB/s  
+Downloading bytes: ████████▌ | 6.89GB, 40.0MB/s  
+Downloading bytes: ████████▌ | 6.89GB, 39.7MB/s  
+Downloading bytes: ████████▌ | 6.89GB, 39.5MB/s  
+Downloading bytes: ████████▌ | 6.89GB, 39.2MB/s  
+Downloading bytes: ████████▌ | 6.90GB, 40.9MB/s  
+Downloading bytes: ████████▌ | 6.90GB, 38.4MB/s  
+Downloading bytes: ████████▌ | 6.90GB, 38.2MB/s  
+Downloading bytes: ████████▌ | 6.90GB, 37.1MB/s  
+Downloading bytes: ████████▌ | 6.90GB, 36.1MB/s  
+Downloading bytes: ████████▌ | 6.90GB, 35.9MB/s  
+Downloading bytes: ████████▌ | 6.90GB, 37.3MB/s  
+Downloading bytes: ████████▌ | 6.90GB, 36.8MB/s  
+Downloading bytes: ████████▌ | 6.90GB, 36.6MB/s  
+Downloading bytes: ████████▌ | 6.90GB, 36.3MB/s  
+Downloading bytes: ████████▌ | 6.91GB, 34.1MB/s  
+Downloading bytes: ████████▌ | 6.91GB, 35.7MB/s  
+Downloading bytes: ████████▌ | 6.91GB, 35.4MB/s  
+Downloading bytes: ████████▌ | 6.91GB, 33.2MB/s  
+Downloading bytes: ████████▌ | 6.91GB, 34.8MB/s  
+Downloading bytes: ████████▌ | 6.91GB, 34.6MB/s  
+Downloading bytes: ████████▌ | 6.91GB, 31.8MB/s  
+Downloading bytes: ████████▌ | 6.91GB, 31.4MB/s  
+Downloading bytes: ████████▌ | 6.91GB, 32.9MB/s  
+Downloading bytes: ████████▌ | 6.91GB, 32.6MB/s  
+Downloading bytes: ████████▌ | 6.92GB, 30.2MB/s  
+Downloading bytes: ████████▌ | 6.92GB, 29.8MB/s  
+Downloading bytes: ████████▌ | 6.92GB, 31.3MB/s  
+Downloading bytes: ████████▌ | 6.92GB, 31.2MB/s  
+Downloading bytes: ████████▌ | 6.92GB, 28.8MB/s  
+Downloading bytes: ████████▌ | 6.92GB, 28.7MB/s  
+Downloading bytes: ████████▌ | 6.92GB, 28.5MB/s  
+Downloading bytes: ████████▌ | 6.92GB, 29.7MB/s  
+Downloading bytes: ████████▌ | 6.92GB, 27.7MB/s  
+Downloading bytes: ████████▌ | 6.92GB, 29.1MB/s  
+Downloading bytes: ████████▌ | 6.92GB, 27.0MB/s  
+Downloading bytes: ████████▌ | 6.92GB, 28.4MB/s  
+
+Reconstructing (incomplete total...):  18%|█▊        | 1.44GB / 8.04GB, 31.0MB/s  
+Downloading bytes: ████████▌ | 6.92GB, 26.5MB/s  
+Downloading bytes: ████████▌ | 6.92GB, 27.9MB/s  
+Downloading bytes: ████████▌ | 6.93GB, 26.0MB/s  
+Downloading bytes: ████████▌ | 6.93GB, 27.3MB/s  
+Downloading bytes: ████████▌ | 6.93GB, 26.9MB/s  
+Downloading bytes: ████████▌ | 6.93GB, 26.6MB/s  
+Downloading bytes: ████████▌ | 6.93GB, 26.2MB/s  
+Downloading bytes: ████████▌ | 6.93GB, 24.5MB/s  
+Downloading bytes: ████████▌ | 6.93GB, 24.4MB/s  
+Downloading bytes: ████████▌ | 6.93GB, 24.2MB/s  
+Downloading bytes: ████████▌ | 6.93GB, 25.3MB/s  
+Downloading bytes: ████████▌ | 6.93GB, 25.2MB/s  
+Downloading bytes: ████████▌ | 6.93GB, 23.5MB/s  
+Downloading bytes: ████████▌ | 6.93GB, 24.7MB/s  
+
+Reconstructing (incomplete total...):  25%|██▍       | 2.00GB / 8.04GB, 31.0MB/s  
+Downloading bytes: ████████▌ | 6.94GB, 24.2MB/s  
+
+Reconstructing (incomplete total...):  32%|███▏      | 2.58GB / 8.04GB, 50.0MB/s  
+Downloading bytes: ████████▌ | 6.94GB, 22.0MB/s  
+Downloading bytes: ████████▌ | 6.94GB, 21.8MB/s  
+
+Reconstructing (incomplete total...):  38%|███▊      | 3.04GB / 8.04GB, 88.9MB/s  
+Downloading bytes: ████████▌ | 6.94GB, 21.5MB/s  
+Downloading bytes: ████████▌ | 6.94GB, 21.4MB/s  
+
+Reconstructing (incomplete total...):  45%|████▍     | 3.62GB / 8.04GB,  119MB/s  
+Downloading bytes: ████████▌ | 6.94GB, 21.1MB/s  
+Downloading bytes: ████████▋ | 6.94GB, 20.8MB/s  
+
+Reconstructing (incomplete total...):  51%|█████     | 4.12GB / 8.04GB,  155MB/s  
+Downloading bytes: ████████▋ | 6.94GB, 21.9MB/s  
+Downloading bytes: ████████▋ | 6.94GB, 21.4MB/s  
+Downloading bytes: ████████▋ | 6.94GB, 21.1MB/s  
+Downloading bytes: ████████▋ | 6.94GB, 19.6MB/s  
+
+Reconstructing (incomplete total...):  55%|█████▌    | 4.43GB / 8.04GB,  186MB/s  
+Downloading bytes: ████████▋ | 6.94GB, 21.0MB/s  
+Downloading bytes: ████████▋ | 6.94GB, 20.8MB/s  
+Downloading bytes: ████████▋ | 6.94GB, 19.3MB/s  
+Downloading bytes: ████████▋ | 6.94GB, 20.6MB/s  
+Downloading bytes: ████████▋ | 6.95GB, 19.1MB/s  
+Downloading bytes: ████████▋ | 6.95GB, 18.8MB/s  
+Downloading bytes: ████████▋ | 6.95GB, 20.3MB/s  
+Downloading bytes: ████████▋ | 6.95GB, 18.4MB/s  
+Downloading bytes: ████████▋ | 6.95GB, 20.0MB/s  
+Downloading bytes: ████████▋ | 6.95GB, 17.9MB/s  
+Downloading bytes: ████████▋ | 6.95GB, 19.5MB/s  
+Downloading bytes: ████████▋ | 6.95GB, 18.9MB/s  
+Downloading bytes: ████████▋ | 6.95GB, 18.7MB/s  
+Downloading bytes: ████████▋ | 6.95GB, 17.8MB/s  
+Downloading bytes: ████████▋ | 6.95GB, 16.2MB/s  
+Downloading bytes: ████████▋ | 6.95GB, 17.5MB/s  
+Downloading bytes: ████████▋ | 6.95GB, 17.4MB/s  
+Downloading bytes: ████████▋ | 6.95GB, 17.1MB/s  
+Downloading bytes: ████████▋ | 6.95GB, 15.2MB/s  
+Downloading bytes: ████████▋ | 6.95GB, 16.5MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 16.2MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 16.1MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 15.8MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 15.8MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 14.0MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 15.5MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 13.5MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 14.9MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 14.8MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 14.3MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 14.0MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 13.9MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 13.7MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 13.5MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 13.4MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 13.3MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 13.2MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 13.1MB/s  
+Downloading bytes: ████████▋ | 6.96GB, 12.8MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 12.7MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 12.5MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 12.3MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 10.5MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 10.5MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 12.1MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 12.0MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 11.8MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 9.84MB/s  
+
+Reconstructing (incomplete total...):  55%|█████▌    | 4.43GB / 8.04GB,  198MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 10.1MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 9.94MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 9.88MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 9.77MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 9.64MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 9.59MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 7.93MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 9.26MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 9.15MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 7.67MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 7.58MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 7.54MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 8.83MB/s  
+Downloading bytes: ████████▋ | 6.97GB, 8.78MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 7.21MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 7.16MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 7.09MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 8.32MB/s  
+
+Reconstructing (incomplete total...):  62%|██████▏   | 4.96GB / 8.04GB,  198MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 8.16MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 8.06MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 8.04MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 7.92MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 7.45MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 6.83MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 6.78MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 6.75MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 6.46MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 6.18MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 5.85MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 5.65MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 5.61MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 5.38MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 5.39MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 5.35MB/s  
+Downloading bytes: ████████▋ | 6.98GB, 5.01MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 4.75MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 4.73MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 4.70MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 4.70MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 4.59MB/s  
+
+Reconstructing (incomplete total...):  68%|██████▊   | 5.44GB / 8.04GB,  103MB/s  
+
+Reconstructing (incomplete total...):  75%|███████▍  | 6.02GB / 8.04GB, 34.5MB/s  
+
+Reconstructing (incomplete total...):  82%|████████▏ | 6.58GB / 8.04GB, 73.6MB/s  
+
+Reconstructing (incomplete total...):  87%|████████▋ | 7.04GB / 8.04GB,  111MB/s  
+
+Reconstructing (incomplete total...):  90%|████████▉ | 7.24GB / 8.04GB,  140MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 3.81MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 3.82MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 3.77MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 3.67MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 3.63MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 3.62MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 3.58MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 3.48MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 3.44MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 3.33MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 3.26MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 3.24MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 3.02MB/s  
+Downloading bytes: ████████▋ | 6.99GB, 2.98MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 2.69MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 2.59MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 2.60MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 2.53MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 2.50MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 2.42MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 2.39MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 2.40MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 2.43MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 2.42MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 2.37MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 2.25MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 2.19MB/s  
+
+Reconstructing (incomplete total...):  90%|████████▉ | 7.24GB / 8.04GB,  152MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 2.11MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 2.04MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 2.02MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 1.99MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 1.97MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 1.97MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 1.79MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 1.77MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 1.68MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 1.67MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 1.66MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 1.63MB/s  
+Downloading bytes: ████████▋ | 7.00GB, 1.62MB/s  
+Downloading bytes: ████████▋ | 7.01GB, 1.61MB/s  
+Downloading bytes: ████████▋ | 7.01GB, 1.64MB/s  
+Downloading bytes: ████████▋ | 7.01GB, 1.57MB/s  
+Downloading bytes: ████████▋ | 7.01GB, 1.55MB/s  
+Downloading bytes: ████████▋ | 7.01GB, 1.57MB/s  
+Downloading bytes: ████████▋ | 7.01GB, 1.57MB/s  
+Downloading bytes: ████████▋ | 7.01GB, 1.56MB/s  
+Downloading bytes: ████████▋ | 7.01GB, 1.52MB/s  
+Downloading bytes: ████████▋ | 7.01GB, 1.50MB/s  
+Downloading bytes: ████████▋ | 7.01GB, 1.50MB/s  
+
+Reconstructing (incomplete total...):  97%|█████████▋| 7.82GB / 8.04GB,  152MB/s  
+
+Reconstructing (incomplete total...): 100%|██████████| 8.04GB / 8.04GB, 69.1MB/s  
+
+
+Fetching 3 files:  33%|███▎      | 1/3 [01:37<03:14, 97.39s/it]
+Fetching 3 files: 100%|██████████| 3/3 [01:37<00:00, 32.46s/it]
+
+Downloading bytes: ██████████| 7.01GB, 1.50MB/s  
+Download complete: : ██████████| 7.01GB, 1.50MB/s  
+
+Reconstruction complete: 100%|██████████| 8.04GB / 8.04GB, 84.4MB/s               
+Download complete: : ██████████| 7.01GB, 1.50MB/s  
+
+Reconstruction complete: 100%|██████████| 8.04GB / 8.04GB, 84.4MB/s  
+
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]
+Loading weights:  64%|██████▍   | 254/398 [00:00<00:00, 2525.47it/s]
+Loading weights: 100%|██████████| 398/398 [00:00<00:00, 2413.76it/s]
+
+generation_config.json:   0%|          | 0.00/239 [00:00<?, ?B/s]
+generation_config.json: 100%|██████████| 239/239 [00:00<00:00, 1.01MB/s]
+Quantizing (qfloat8)
+ - quantizing 36 blocks
+
+  0%|          | 0/36 [00:00<?, ?it/s]
+  3%|▎         | 1/36 [00:00<00:06,  5.05it/s]
+  6%|▌         | 2/36 [00:00<00:06,  5.64it/s]
+  8%|▊         | 3/36 [00:00<00:05,  5.85it/s]
+ 11%|█         | 4/36 [00:00<00:05,  5.87it/s]
+ 14%|█▍        | 5/36 [00:00<00:05,  5.85it/s]
+ 17%|█▋        | 6/36 [00:01<00:05,  5.85it/s]
+ 19%|█▉        | 7/36 [00:01<00:04,  5.81it/s]
+ 22%|██▏       | 8/36 [00:01<00:04,  5.87it/s]
+ 25%|██▌       | 9/36 [00:01<00:04,  5.83it/s]
+ 28%|██▊       | 10/36 [00:01<00:04,  5.76it/s]
+ 31%|███       | 11/36 [00:01<00:04,  5.74it/s]
+ 33%|███▎      | 12/36 [00:02<00:04,  5.74it/s]
+ 36%|███▌      | 13/36 [00:02<00:04,  5.74it/s]
+ 39%|███▉      | 14/36 [00:02<00:03,  5.72it/s]
+ 42%|████▏     | 15/36 [00:02<00:03,  5.72it/s]
+ 44%|████▍     | 16/36 [00:03<00:05,  3.34it/s]
+ 47%|████▋     | 17/36 [00:03<00:05,  3.41it/s]
+ 50%|█████     | 18/36 [00:03<00:05,  3.45it/s]
+ 53%|█████▎    | 19/36 [00:03<00:04,  3.89it/s]
+ 56%|█████▌    | 20/36 [00:04<00:03,  4.36it/s]
+ 58%|█████▊    | 21/36 [00:04<00:03,  4.76it/s]
+ 61%|██████    | 22/36 [00:04<00:02,  5.02it/s]
+ 64%|██████▍   | 23/36 [00:04<00:02,  5.33it/s]
+ 67%|██████▋   | 24/36 [00:04<00:02,  5.49it/s]
+ 69%|██████▉   | 25/36 [00:04<00:01,  5.63it/s]
+ 72%|███████▏  | 26/36 [00:05<00:01,  5.73it/s]
+ 75%|███████▌  | 27/36 [00:05<00:01,  5.79it/s]
+ 78%|███████▊  | 28/36 [00:05<00:01,  5.85it/s]
+ 81%|████████  | 29/36 [00:05<00:01,  5.92it/s]
+ 83%|████████▎ | 30/36 [00:05<00:01,  5.92it/s]
+ 86%|████████▌ | 31/36 [00:05<00:00,  5.97it/s]
+ 89%|████████▉ | 32/36 [00:06<00:00,  5.89it/s]
+ 92%|█████████▏| 33/36 [00:06<00:00,  5.98it/s]
+ 94%|█████████▍| 34/36 [00:06<00:00,  5.94it/s]
+ 97%|█████████▋| 35/36 [00:06<00:00,  5.93it/s]
+100%|██████████| 36/36 [00:07<00:00,  3.27it/s]
+100%|██████████| 36/36 [00:07<00:00,  4.97it/s]
+ - quantizing extras
+
+tokenizer_config.json:   0%|          | 0.00/9.73k [00:00<?, ?B/s]
+tokenizer_config.json: 100%|██████████| 9.73k/9.73k [00:00<00:00, 15.1MB/s]
+
+vocab.json:   0%|          | 0.00/2.78M [00:00<?, ?B/s]
+vocab.json: 100%|██████████| 2.78M/2.78M [00:00<00:00, 47.1MB/s]
+
+merges.txt:   0%|          | 0.00/1.67M [00:00<?, ?B/s]
+merges.txt: 100%|██████████| 1.67M/1.67M [00:00<00:00, 101MB/s]
+
+
+tokenizer.json: reconstructing file:   0%|          |  0.00B / 11.4MB            
+tokenizer.json: downloading bytes:           |  0.00B            
+tokenizer.json: downloading bytes: ▍         |  449kB            
+
+tokenizer.json: reconstructing file: 100%|██████████| 11.4MB / 11.4MB            
+tokenizer.json: downloading bytes: ██████████| 3.40MB,  337kB/s  
+tokenizer.json: downloading bytes: ██████████| 3.40MB,  337kB/s  
+
+tokenizer.json: reconstructing file: 100%|██████████| 11.4MB / 11.4MB, 1.13MB/s  
+Loading VAE
+
+
+ae.safetensors: reconstructing file:   0%|          |  0.00B /  336MB            
+ae.safetensors: downloading bytes:           |  0.00B            
+ae.safetensors: downloading bytes:           | 3.94MB            
+ae.safetensors: downloading bytes: ▊         | 29.3MB,   ???B/s  
+ae.safetensors: downloading bytes: ██▎       | 77.6MB, 2.90MB/s  
+ae.safetensors: downloading bytes: ███▋      |  122MB, 7.65MB/s  
+ae.safetensors: downloading bytes: ████▉     |  167MB, 12.0MB/s  
+ae.safetensors: downloading bytes: ██████▎   |  211MB, 16.2MB/s  
+ae.safetensors: downloading bytes: ███████▋  |  260MB, 20.4MB/s  
+ae.safetensors: downloading bytes: █████████▍|  316MB, 27.9MB/s  
+
+ae.safetensors: reconstructing file: 100%|██████████|  336MB /  336MB            
+ae.safetensors: downloading bytes: ██████████|  317MB, 29.5MB/s  
+ae.safetensors: downloading bytes: ██████████|  317MB, 29.5MB/s  
+
+ae.safetensors: reconstructing file: 100%|██████████|  336MB /  336MB, 32.4MB/s  
+Making pipe
+Preparing Model
+Model Loaded
+create LoRA network. base dim (rank): 16, alpha: 16
+neuron dropout: p=None, rank dropout: p=None, module dropout: p=None
+apply LoRA to Conv2d with kernel size (3,3). dim (rank): 8, alpha: 8
+create LoRA for Text Encoder: 0 modules.
+create LoRA for U-Net: 80 modules.
+enable LoRA for U-Net
+Dataset: /kaggle/working/exp001/synthetic_pairs/target
+  -  Preprocessing image dimensions
+
+  0%|          | 0/3 [00:00<?, ?it/s]
+ 33%|███▎      | 1/3 [00:00<00:00,  9.29it/s]
+100%|██████████| 3/3 [00:00<00:00, 26.10it/s]
+  -  Found 3 images
+Bucket sizes for /kaggle/working/exp001/synthetic_pairs/target:
+512x512: 3 files
+1 buckets made
+Generating baseline samples before training
+
+Generating Samples: 0it [00:00, ?it/s]
+Generating Samples: 0it [00:00, ?it/s]
+
+
+exp001_tiny_edit:   0%|          | 0/3 [00:00<?, ?it/s]
+exp001_tiny_edit:   0%|          | 0/3 [00:29<?, ?it/s, lr: 1.0e-04 loss: 7.396e-03]
+exp001_tiny_edit:  33%|███▎      | 1/3 [00:29<00:59, 29.72s/it, lr: 1.0e-04 loss: 7.396e-03]
+exp001_tiny_edit:  33%|███▎      | 1/3 [01:00<00:59, 29.72s/it, lr: 1.0e-04 loss: 7.976e-03]
+exp001_tiny_edit:  67%|██████▋   | 2/3 [01:00<00:30, 30.16s/it, lr: 1.0e-04 loss: 7.976e-03]
+exp001_tiny_edit:  67%|██████▋   | 2/3 [01:32<00:30, 30.16s/it, lr: 1.0e-04 loss: 7.069e-03]
+exp001_tiny_edit: 100%|██████████| 3/3 [01:32<00:00, 32.06s/it, lr: 1.0e-04 loss: 7.069e-03]
+exp001_tiny_edit: 100%|██████████| 3/3 [01:32<00:00, 30.93s/it, lr: 1.0e-04 loss: 7.069e-03]
+Saved checkpoint to /kaggle/working/exp001/training_bf16_3step/exp001_tiny_edit/exp001_tiny_edit.safetensors
+Saved optimizer to /kaggle/working/exp001/training_bf16_3step/exp001_tiny_edit/optimizer.pt
+
+Generating Samples: 0it [00:00, ?it/s]
+Generating Samples: 0it [00:00, ?it/s]
+
+
+STAGE 3: TINY EDIT LORA TRAINING
+$ /usr/bin/python3 run.py /kaggle/working/exp001/train_config_bf16_20step.yaml
+Flax classes are deprecated and will be removed in Diffusers v0.40.0. We recommend migrating to PyTorch classes or pinning your version of Diffusers.
+Flax classes are deprecated and will be removed in Diffusers v0.40.0. We recommend migrating to PyTorch classes or pinning your version of Diffusers.
+Running 1 job
+{
+    "type": "diffusion_trainer",
+    "training_folder": "/kaggle/working/exp001/training_bf16_20step",
+    "device": "cuda:0",
+    "performance_log_every": 5,
+    "network": {
+        "type": "lora",
+        "linear": 16,
+        "linear_alpha": 16,
+        "conv": 8,
+        "conv_alpha": 8
+    },
+    "save": {
+        "dtype": "float16",
+        "save_every": 20,
+        "max_step_saves_to_keep": 1
+    },
+    "datasets": [
+        {
+            "folder_path": "/kaggle/working/exp001/synthetic_pairs/target",
+            "control_path": "/kaggle/working/exp001/synthetic_pairs/reference",
+            "caption_ext": "txt",
+            "resolution": [
+                512
+            ]
+        }
+    ],
+    "train": {
+        "batch_size": 1,
+        "steps": 20,
+        "lr": 0.0001,
+        "optimizer": "adamw8bit",
+        "noise_scheduler": "flowmatch",
+        "gradient_checkpointing": true,
+        "dtype": "bf16",
+        "train_unet": true,
+        "train_text_encoder": false,
+        "timestep_type": "weighted",
+        "content_or_style": "balanced"
+    },
+    "model": {
+        "arch": "flux2_klein_4b",
+        "name_or_path": "black-forest-labs/FLUX.2-klein-base-4B",
+        "quantize": true,
+        "low_vram": true
+    }
+}
+
+#############################################
+# Running job: exp001_tiny_edit
+#############################################
+
+
+Running  1 process
+Loading Flux2 model
+Loading transformer
+Quantizing (qfloat8)
+ - quantizing 25 blocks
+
+  0%|          | 0/25 [00:00<?, ?it/s]
+  4%|▍         | 1/25 [00:02<00:57,  2.40s/it]
+  8%|▊         | 2/25 [00:04<00:51,  2.23s/it]
+ 12%|█▏        | 3/25 [00:06<00:47,  2.18s/it]
+ 16%|█▌        | 4/25 [00:08<00:45,  2.15s/it]
+ 20%|██        | 5/25 [00:10<00:42,  2.13s/it]
+ 24%|██▍       | 6/25 [00:11<00:33,  1.75s/it]
+ 28%|██▊       | 7/25 [00:12<00:27,  1.51s/it]
+ 32%|███▏      | 8/25 [00:14<00:25,  1.52s/it]
+ 36%|███▌      | 9/25 [00:15<00:24,  1.53s/it]
+ 40%|████      | 10/25 [00:16<00:16,  1.12s/it]
+ 44%|████▍     | 11/25 [00:16<00:11,  1.20it/s]
+ 48%|████▊     | 12/25 [00:16<00:08,  1.57it/s]
+ 52%|█████▏    | 13/25 [00:16<00:06,  1.99it/s]
+ 56%|█████▌    | 14/25 [00:16<00:04,  2.45it/s]
+ 60%|██████    | 15/25 [00:17<00:03,  2.92it/s]
+ 64%|██████▍   | 16/25 [00:18<00:04,  1.84it/s]
+ 68%|██████▊   | 17/25 [00:19<00:05,  1.46it/s]
+ 72%|███████▏  | 18/25 [00:20<00:05,  1.27it/s]
+ 76%|███████▌  | 19/25 [00:21<00:05,  1.16it/s]
+ 80%|████████  | 20/25 [00:22<00:04,  1.10it/s]
+ 84%|████████▍ | 21/25 [00:23<00:03,  1.06it/s]
+ 88%|████████▊ | 22/25 [00:24<00:02,  1.04it/s]
+ 92%|█████████▏| 23/25 [00:25<00:02,  1.10s/it]
+ 96%|█████████▌| 24/25 [00:27<00:01,  1.27s/it]
+100%|██████████| 25/25 [00:29<00:00,  1.43s/it]
+100%|██████████| 25/25 [00:29<00:00,  1.16s/it]
+ - quantizing extras
+Loading Qwen3
+
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]
+Loading weights:  53%|█████▎    | 210/398 [00:00<00:00, 2089.86it/s]
+Loading weights: 100%|██████████| 398/398 [00:00<00:00, 1167.24it/s]
+Quantizing (qfloat8)
+ - quantizing 36 blocks
+
+  0%|          | 0/36 [00:00<?, ?it/s]
+  3%|▎         | 1/36 [00:00<00:07,  4.38it/s]
+  6%|▌         | 2/36 [00:00<00:08,  4.04it/s]
+  8%|▊         | 3/36 [00:00<00:07,  4.14it/s]
+ 11%|█         | 4/36 [00:00<00:07,  4.06it/s]
+ 14%|█▍        | 5/36 [00:01<00:07,  3.88it/s]
+ 17%|█▋        | 6/36 [00:01<00:07,  3.93it/s]
+ 19%|█▉        | 7/36 [00:01<00:08,  3.23it/s]
+ 22%|██▏       | 8/36 [00:02<00:11,  2.35it/s]
+ 25%|██▌       | 9/36 [00:03<00:14,  1.80it/s]
+ 28%|██▊       | 10/36 [00:04<00:16,  1.57it/s]
+ 31%|███       | 11/36 [00:04<00:13,  1.92it/s]
+ 33%|███▎      | 12/36 [00:04<00:10,  2.29it/s]
+ 36%|███▌      | 13/36 [00:05<00:08,  2.59it/s]
+ 39%|███▉      | 14/36 [00:05<00:07,  2.92it/s]
+ 42%|████▏     | 15/36 [00:05<00:06,  3.22it/s]
+ 44%|████▍     | 16/36 [00:05<00:05,  3.38it/s]
+ 47%|████▋     | 17/36 [00:06<00:05,  3.48it/s]
+ 50%|█████     | 18/36 [00:06<00:04,  3.97it/s]
+ 53%|█████▎    | 19/36 [00:06<00:06,  2.43it/s]
+ 56%|█████▌    | 20/36 [00:07<00:08,  1.86it/s]
+ 58%|█████▊    | 21/36 [00:08<00:09,  1.60it/s]
+ 61%|██████    | 22/36 [00:09<00:09,  1.46it/s]
+ 64%|██████▍   | 23/36 [00:10<00:09,  1.38it/s]
+ 67%|██████▋   | 24/36 [00:11<00:09,  1.32it/s]
+ 69%|██████▉   | 25/36 [00:11<00:08,  1.29it/s]
+ 72%|███████▏  | 26/36 [00:12<00:07,  1.27it/s]
+ 75%|███████▌  | 27/36 [00:13<00:07,  1.25it/s]
+ 78%|███████▊  | 28/36 [00:14<00:06,  1.23it/s]
+ 81%|████████  | 29/36 [00:15<00:05,  1.22it/s]
+ 83%|████████▎ | 30/36 [00:16<00:04,  1.21it/s]
+ 86%|████████▌ | 31/36 [00:16<00:04,  1.21it/s]
+ 89%|████████▉ | 32/36 [00:17<00:03,  1.21it/s]
+ 92%|█████████▏| 33/36 [00:18<00:02,  1.21it/s]
+ 94%|█████████▍| 34/36 [00:19<00:01,  1.20it/s]
+ 97%|█████████▋| 35/36 [00:20<00:00,  1.21it/s]
+100%|██████████| 36/36 [00:21<00:00,  1.19it/s]
+100%|██████████| 36/36 [00:21<00:00,  1.70it/s]
+ - quantizing extras
+Loading VAE
+Making pipe
+Preparing Model
+Model Loaded
+create LoRA network. base dim (rank): 16, alpha: 16
+neuron dropout: p=None, rank dropout: p=None, module dropout: p=None
+apply LoRA to Conv2d with kernel size (3,3). dim (rank): 8, alpha: 8
+create LoRA for Text Encoder: 0 modules.
+create LoRA for U-Net: 80 modules.
+enable LoRA for U-Net
+Dataset: /kaggle/working/exp001/synthetic_pairs/target
+  -  Preprocessing image dimensions
+
+  0%|          | 0/3 [00:00<?, ?it/s]
+100%|██████████| 3/3 [00:00<00:00, 4981.36it/s]
+  -  Found 3 images
+Bucket sizes for /kaggle/working/exp001/synthetic_pairs/target:
+512x512: 3 files
+1 buckets made
+Generating baseline samples before training
+
+Generating Samples: 0it [00:00, ?it/s]
+Generating Samples: 0it [00:00, ?it/s]
+
+
+exp001_tiny_edit:   0%|          | 0/20 [00:00<?, ?it/s]
+exp001_tiny_edit:   0%|          | 0/20 [00:33<?, ?it/s, lr: 1.0e-04 loss: 8.103e-03]
+exp001_tiny_edit:   5%|▌         | 1/20 [00:33<10:29, 33.13s/it, lr: 1.0e-04 loss: 8.103e-03]
+exp001_tiny_edit:   5%|▌         | 1/20 [01:07<10:29, 33.13s/it, lr: 1.0e-04 loss: 1.051e-02]
+exp001_tiny_edit:  10%|█         | 2/20 [01:07<10:09, 33.86s/it, lr: 1.0e-04 loss: 1.051e-02]
+exp001_tiny_edit:  10%|█         | 2/20 [01:39<10:09, 33.86s/it, lr: 1.0e-04 loss: 8.254e-03]
+exp001_tiny_edit:  15%|█▌        | 3/20 [01:39<09:15, 32.69s/it, lr: 1.0e-04 loss: 8.254e-03]
+exp001_tiny_edit:  15%|█▌        | 3/20 [02:12<09:15, 32.69s/it, lr: 1.0e-04 loss: 7.089e-03]
+exp001_tiny_edit:  20%|██        | 4/20 [02:12<08:46, 32.94s/it, lr: 1.0e-04 loss: 7.089e-03]
+exp001_tiny_edit:  20%|██        | 4/20 [02:45<08:46, 32.94s/it, lr: 1.0e-04 loss: 7.244e-03]
+exp001_tiny_edit:  25%|██▌       | 5/20 [02:45<08:12, 32.85s/it, lr: 1.0e-04 loss: 7.244e-03]
+exp001_tiny_edit:  25%|██▌       | 5/20 [03:17<08:12, 32.85s/it, lr: 1.0e-04 loss: 1.580e-02]
+exp001_tiny_edit:  30%|███       | 6/20 [03:17<07:38, 32.73s/it, lr: 1.0e-04 loss: 1.580e-02]
+exp001_tiny_edit:  30%|███       | 6/20 [03:50<07:38, 32.73s/it, lr: 1.0e-04 loss: 2.974e-02]
+exp001_tiny_edit:  35%|███▌      | 7/20 [03:50<07:07, 32.86s/it, lr: 1.0e-04 loss: 2.974e-02]
+exp001_tiny_edit:  35%|███▌      | 7/20 [04:23<07:07, 32.86s/it, lr: 1.0e-04 loss: 2.625e-01]
+exp001_tiny_edit:  40%|████      | 8/20 [04:23<06:35, 32.93s/it, lr: 1.0e-04 loss: 2.625e-01]
+exp001_tiny_edit:  40%|████      | 8/20 [04:56<06:35, 32.93s/it, lr: 1.0e-04 loss: 7.602e-03]
+exp001_tiny_edit:  45%|████▌     | 9/20 [04:56<06:01, 32.88s/it, lr: 1.0e-04 loss: 7.602e-03]
+exp001_tiny_edit:  45%|████▌     | 9/20 [05:29<06:01, 32.88s/it, lr: 1.0e-04 loss: 7.326e-03]
+exp001_tiny_edit:  50%|█████     | 10/20 [05:29<05:28, 32.82s/it, lr: 1.0e-04 loss: 7.326e-03]
+exp001_tiny_edit:  50%|█████     | 10/20 [06:02<05:28, 32.82s/it, lr: 1.0e-04 loss: 7.117e-03]
+exp001_tiny_edit:  55%|█████▌    | 11/20 [06:02<04:54, 32.72s/it, lr: 1.0e-04 loss: 7.117e-03]
+exp001_tiny_edit:  55%|█████▌    | 11/20 [06:34<04:54, 32.72s/it, lr: 1.0e-04 loss: 7.176e-03]
+exp001_tiny_edit:  60%|██████    | 12/20 [06:34<04:21, 32.65s/it, lr: 1.0e-04 loss: 7.176e-03]
+exp001_tiny_edit:  60%|██████    | 12/20 [07:07<04:21, 32.65s/it, lr: 1.0e-04 loss: 2.138e-02]
+exp001_tiny_edit:  65%|██████▌   | 13/20 [07:07<03:48, 32.60s/it, lr: 1.0e-04 loss: 2.138e-02]
+exp001_tiny_edit:  65%|██████▌   | 13/20 [07:39<03:48, 32.60s/it, lr: 1.0e-04 loss: 1.143e-02]
+exp001_tiny_edit:  70%|███████   | 14/20 [07:39<03:15, 32.59s/it, lr: 1.0e-04 loss: 1.143e-02]
+exp001_tiny_edit:  70%|███████   | 14/20 [08:12<03:15, 32.59s/it, lr: 1.0e-04 loss: 6.453e-03]
+exp001_tiny_edit:  75%|███████▌  | 15/20 [08:12<02:43, 32.62s/it, lr: 1.0e-04 loss: 6.453e-03]
+exp001_tiny_edit:  75%|███████▌  | 15/20 [08:45<02:43, 32.62s/it, lr: 1.0e-04 loss: 3.208e-02]
+exp001_tiny_edit:  80%|████████  | 16/20 [08:45<02:10, 32.73s/it, lr: 1.0e-04 loss: 3.208e-02]
+exp001_tiny_edit:  80%|████████  | 16/20 [09:18<02:10, 32.73s/it, lr: 1.0e-04 loss: 1.003e-02]
+exp001_tiny_edit:  85%|████████▌ | 17/20 [09:18<01:38, 32.84s/it, lr: 1.0e-04 loss: 1.003e-02]
+exp001_tiny_edit:  85%|████████▌ | 17/20 [09:51<01:38, 32.84s/it, lr: 1.0e-04 loss: 2.473e-02]
+exp001_tiny_edit:  90%|█████████ | 18/20 [09:51<01:05, 32.92s/it, lr: 1.0e-04 loss: 2.473e-02]
+exp001_tiny_edit:  90%|█████████ | 18/20 [10:24<01:05, 32.92s/it, lr: 1.0e-04 loss: 5.932e-03]
+exp001_tiny_edit:  95%|█████████▌| 19/20 [10:24<00:32, 32.98s/it, lr: 1.0e-04 loss: 5.932e-03]
+exp001_tiny_edit:  95%|█████████▌| 19/20 [10:57<00:32, 32.98s/it, lr: 1.0e-04 loss: 8.635e-03]
+exp001_tiny_edit: 100%|██████████| 20/20 [10:57<00:00, 32.94s/it, lr: 1.0e-04 loss: 8.635e-03]
+exp001_tiny_edit: 100%|██████████| 20/20 [10:57<00:00, 32.86s/it, lr: 1.0e-04 loss: 8.635e-03]
+
+Timer 'exp001_tiny_edit Timer':
+ - 32.9272s avg - train_loop, num = 6
+ - 18.4055s avg - backward, num = 6
+ - 10.4107s avg - predict_unet, num = 6
+ - 1.8584s avg - encode_prompt, num = 6
+ - 1.7074s avg - optimizer_step, num = 6
+ - 0.1501s avg - preprocess_batch, num = 6
+ - 0.1396s avg - prepare_latents, num = 6
+ - 0.0220s avg - calculate_loss, num = 6
+ - 0.0108s avg - get_batch, num = 6
+ - 0.0058s avg - prepare_timesteps_indices, num = 6
+ - 0.0037s avg - prepare_noise, num = 6
+ - 0.0024s avg - batch_cleanup, num = 6
+ - 0.0004s avg - convert_timestep_indices_to_timesteps, num = 6
+ - 0.0004s avg - make_noisy_latents, num = 6
+ - 0.0014s avg - reset_batch, num = 1
+ - 0.0001s avg - prepare_scheduler, num = 6
+ - 0.0001s avg - grad_setup, num = 6
+ - 0.0001s avg - scheduler_step, num = 6
+ - 0.0000s avg - prepare_prompt, num = 6
+ - 0.0000s avg - condition_noisy_latents, num = 6
+ - 0.0000s avg - commit_logger, num = 5
+
+
+Timer 'exp001_tiny_edit Timer':
+ - 32.8375s avg - train_loop, num = 5
+ - 18.3786s avg - backward, num = 5
+ - 10.4128s avg - predict_unet, num = 5
+ - 2.0331s avg - optimizer_step, num = 5
+ - 1.9796s avg - encode_prompt, num = 5
+ - 0.0192s avg - get_batch, num = 5
+ - 0.0088s avg - preprocess_batch, num = 5
+ - 0.0081s avg - prepare_latents, num = 5
+ - 0.0025s avg - batch_cleanup, num = 5
+ - 0.0007s avg - calculate_loss, num = 5
+ - 0.0012s avg - reset_batch, num = 2
+ - 0.0002s avg - make_noisy_latents, num = 5
+ - 0.0001s avg - prepare_noise, num = 5
+ - 0.0001s avg - prepare_scheduler, num = 5
+ - 0.0001s avg - convert_timestep_indices_to_timesteps, num = 5
+ - 0.0001s avg - scheduler_step, num = 5
+ - 0.0000s avg - prepare_timesteps_indices, num = 5
+ - 0.0000s avg - grad_setup, num = 5
+ - 0.0000s avg - prepare_prompt, num = 5
+ - 0.0000s avg - condition_noisy_latents, num = 5
+ - 0.0000s avg - commit_logger, num = 5
+
+
+Timer 'exp001_tiny_edit Timer':
+ - 32.6357s avg - train_loop, num = 5
+ - 18.2726s avg - backward, num = 5
+ - 10.3434s avg - predict_unet, num = 5
+ - 2.0204s avg - optimizer_step, num = 5
+ - 1.9653s avg - encode_prompt, num = 5
+ - 0.0192s avg - get_batch, num = 5
+ - 0.0089s avg - preprocess_batch, num = 5
+ - 0.0083s avg - prepare_latents, num = 5
+ - 0.0025s avg - batch_cleanup, num = 5
+ - 0.0007s avg - calculate_loss, num = 5
+ - 0.0012s avg - reset_batch, num = 2
+ - 0.0002s avg - make_noisy_latents, num = 5
+ - 0.0001s avg - prepare_noise, num = 5
+ - 0.0001s avg - prepare_scheduler, num = 5
+ - 0.0001s avg - scheduler_step, num = 5
+ - 0.0000s avg - prepare_timesteps_indices, num = 5
+ - 0.0000s avg - convert_timestep_indices_to_timesteps, num = 5
+ - 0.0000s avg - grad_setup, num = 5
+ - 0.0000s avg - prepare_prompt, num = 5
+ - 0.0000s avg - condition_noisy_latents, num = 5
+ - 0.0000s avg - commit_logger, num = 5
+
+Saved checkpoint to /kaggle/working/exp001/training_bf16_20step/exp001_tiny_edit/exp001_tiny_edit.safetensors
+Saved optimizer to /kaggle/working/exp001/training_bf16_20step/exp001_tiny_edit/optimizer.pt
+
+Generating Samples: 0it [00:00, ?it/s]
+Generating Samples: 0it [00:00, ?it/s]
+
+
+Flax classes are deprecated and will be removed in Diffusers v0.40.0. We recommend migrating to PyTorch classes or pinning your version of Diffusers.
+Flax classes are deprecated and will be removed in Diffusers v0.40.0. We recommend migrating to PyTorch classes or pinning your version of Diffusers.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING:huggingface_hub.utils._http:Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 17 files: 100%|██████████| 17/17 [01:43<00:00,  6.11s/it]
+Loading pipeline components...:  20%|██        | 1/5 [00:21<01:26, 21.73s/it]
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]
+Loading weights:   0%|          | 1/398 [00:15<1:39:48, 15.08s/it]
+Loading weights:  29%|██▊       | 114/398 [00:15<00:26, 10.65it/s]
+Loading weights:  52%|█████▏    | 207/398 [00:21<00:15, 12.26it/s]
+Loading weights:  62%|██████▏   | 246/398 [00:26<00:13, 10.88it/s]
+Loading weights:  67%|██████▋   | 268/398 [00:28<00:11, 11.27it/s]
+Loading weights:  71%|███████   | 282/398 [00:29<00:09, 11.80it/s]
+Loading weights:  73%|███████▎  | 292/398 [00:29<00:08, 11.79it/s]
+Loading weights:  75%|███████▌  | 300/398 [00:30<00:08, 11.74it/s]
+Loading weights:  78%|███████▊  | 311/398 [00:31<00:07, 11.92it/s]
+Loading weights:  81%|████████  | 322/398 [00:32<00:06, 12.31it/s]
+Loading weights:  83%|████████▎ | 331/398 [00:32<00:04, 14.80it/s]
+Loading weights:  84%|████████▍ | 336/398 [00:33<00:04, 12.79it/s]
+Loading weights:  86%|████████▋ | 344/398 [00:33<00:04, 12.26it/s]
+Loading weights:  88%|████████▊ | 352/398 [00:33<00:02, 15.59it/s]
+Loading weights:  90%|████████▉ | 357/398 [00:34<00:03, 12.30it/s]
+Loading weights:  92%|█████████▏| 366/398 [00:35<00:02, 12.42it/s]
+Loading weights:  95%|█████████▍| 377/398 [00:36<00:01, 12.62it/s]
+Loading weights: 100%|██████████| 398/398 [00:37<00:00, 10.73it/s]
+Loading pipeline components...: 100%|██████████| 5/5 [01:00<00:00, 12.19s/it]
+Loaded black-forest-labs/FLUX.2-klein-base-4B with CPU offload in 165.3s
+{
+  "experiment": "EXP-001",
+  "test": "BF16 numerical stability",
+  "classification": "FINITE TRAINING VERIFIED",
+  "bf16_executed": true,
+  "first_3_steps": {
+    "losses": [
+      {
+        "step": 1,
+        "raw": "7.396e-03",
+        "finite": true
+      },
+      {
+        "step": 2,
+        "raw": "7.976e-03",
+        "finite": true
+      },
+      {
+        "step": 3,
+        "raw": "7.069e-03",
+        "finite": true
+      }
+    ],
+    "seconds_per_step": 30.93,
+    "peak_vram_mib": 13531
+  },
+  "twenty_steps": {
+    "completed": true,
+    "losses": [
+      {
+        "step": 1,
+        "raw": "8.103e-03",
+        "finite": true
+      },
+      {
+        "step": 2,
+        "raw": "1.051e-02",
+        "finite": true
+      },
+      {
+        "step": 3,
+        "raw": "8.254e-03",
+        "finite": true
+      },
+      {
+        "step": 4,
+        "raw": "7.089e-03",
+        "finite": true
+      },
+      {
+        "step": 5,
+        "raw": "7.244e-03",
+        "finite": true
+      },
+      {
+        "step": 6,
+        "raw": "1.580e-02",
+        "finite": true
+      },
+      {
+        "step": 7,
+        "raw": "2.974e-02",
+        "finite": true
+      },
+      {
+        "step": 8,
+        "raw": "2.625e-01",
+        "finite": true
+      },
+      {
+        "step": 9,
+        "raw": "7.602e-03",
+        "finite": true
+      },
+      {
+        "step": 10,
+        "raw": "7.326e-03",
+        "finite": true
+      },
+      {
+        "step": 11,
+        "raw": "7.117e-03",
+        "finite": true
+      },
+      {
+        "step": 12,
+        "raw": "7.176e-03",
+        "finite": true
+      },
+      {
+        "step": 13,
+        "raw": "2.138e-02",
+        "finite": true
+      },
+      {
+        "step": 14,
+        "raw": "1.143e-02",
+        "finite": true
+      },
+      {
+        "step": 15,
+        "raw": "6.453e-03",
+        "finite": true
+      },
+      {
+        "step": 16,
+        "raw": "3.208e-02",
+        "finite": true
+      },
+      {
+        "step": 17,
+        "raw": "1.003e-02",
+        "finite": true
+      },
+      {
+        "step": 18,
+        "raw": "2.473e-02",
+        "finite": true
+      },
+      {
+        "step": 19,
+        "raw": "5.932e-03",
+        "finite": true
+      },
+      {
+        "step": 20,
+        "raw": "8.635e-03",
+        "finite": true
+      }
+    ],
+    "seconds_per_step": 32.808075,
+    "peak_vram_mib": 13531
+  },
+  "checkpoint": {
+    "path": "/kaggle/working/exp001/training_bf16_20step/exp001_tiny_edit/exp001_tiny_edit.safetensors",
+    "bytes": 46223600
+  },
+  "fresh_adapter_reload": {
+    "succeeded": true,
+    "base_load": {
+      "model": "black-forest-labs/FLUX.2-klein-base-4B",
+      "load_seconds": 165.2771669299998,
+      "dtype": "torch.float16",
+      "strategy": "Diffusers enable_model_cpu_offload on cuda:0",
+      "whole_gpu_peak_mib": 3,
+      "memory_after_load": {
+        "utc": "2026-09-22T11:00:39.900782+00:00",
+        "cpu": {
+          "process_rss_bytes": 17498136576,
+          "system_available_bytes": 14949486592,
+          "system_used_bytes": 18231250944
+        },
+        "gpu0": {
+          "allocated_bytes": 0,
+          "reserved_bytes": 0,
+          "peak_allocated_bytes": 0,
+          "peak_reserved_bytes": 0
+        }
+      }
+    }
+  }
+}
+
+FINAL BF16 RESULT
+{
+  "experiment": "EXP-001",
+  "test": "BF16 numerical stability",
+  "classification": "FINITE TRAINING VERIFIED",
+  "bf16_executed": true,
+  "first_3_steps": {
+    "losses": [
+      {
+        "step": 1,
+        "raw": "7.396e-03",
+        "finite": true
+      },
+      {
+        "step": 2,
+        "raw": "7.976e-03",
+        "finite": true
+      },
+      {
+        "step": 3,
+        "raw": "7.069e-03",
+        "finite": true
+      }
+    ],
+    "seconds_per_step": 30.93,
+    "peak_vram_mib": 13531
+  },
+  "twenty_steps": {
+    "completed": true,
+    "losses": [
+      {
+        "step": 1,
+        "raw": "8.103e-03",
+        "finite": true
+      },
+      {
+        "step": 2,
+        "raw": "1.051e-02",
+        "finite": true
+      },
+      {
+        "step": 3,
+        "raw": "8.254e-03",
+        "finite": true
+      },
+      {
+        "step": 4,
+        "raw": "7.089e-03",
+        "finite": true
+      },
+      {
+        "step": 5,
+        "raw": "7.244e-03",
+        "finite": true
+      },
+      {
+        "step": 6,
+        "raw": "1.580e-02",
+        "finite": true
+      },
+      {
+        "step": 7,
+        "raw": "2.974e-02",
+        "finite": true
+      },
+      {
+        "step": 8,
+        "raw": "2.625e-01",
+        "finite": true
+      },
+      {
+        "step": 9,
+        "raw": "7.602e-03",
+        "finite": true
+      },
+      {
+        "step": 10,
+        "raw": "7.326e-03",
+        "finite": true
+      },
+      {
+        "step": 11,
+        "raw": "7.117e-03",
+        "finite": true
+      },
+      {
+        "step": 12,
+        "raw": "7.176e-03",
+        "finite": true
+      },
+      {
+        "step": 13,
+        "raw": "2.138e-02",
+        "finite": true
+      },
+      {
+        "step": 14,
+        "raw": "1.143e-02",
+        "finite": true
+      },
+      {
+        "step": 15,
+        "raw": "6.453e-03",
+        "finite": true
+      },
+      {
+        "step": 16,
+        "raw": "3.208e-02",
+        "finite": true
+      },
+      {
+        "step": 17,
+        "raw": "1.003e-02",
+        "finite": true
+      },
+      {
+        "step": 18,
+        "raw": "2.473e-02",
+        "finite": true
+      },
+      {
+        "step": 19,
+        "raw": "5.932e-03",
+        "finite": true
+      },
+      {
+        "step": 20,
+        "raw": "8.635e-03",
+        "finite": true
+      }
+    ],
+    "seconds_per_step": 32.808075,
+    "peak_vram_mib": 13531
+  },
+  "checkpoint": {
+    "path": "/kaggle/working/exp001/training_bf16_20step/exp001_tiny_edit/exp001_tiny_edit.safetensors",
+    "bytes": 46223600
+  },
+  "fresh_adapter_reload": {
+    "succeeded": true,
+    "base_load": {
+      "model": "black-forest-labs/FLUX.2-klein-base-4B",
+      "load_seconds": 165.2771669299998,
+      "dtype": "torch.float16",
+      "strategy": "Diffusers enable_model_cpu_offload on cuda:0",
+      "whole_gpu_peak_mib": 3,
+      "memory_after_load": {
+        "utc": "2026-09-22T11:00:39.900782+00:00",
+        "cpu": {
+          "process_rss_bytes": 17498136576,
+          "system_available_bytes": 14949486592,
+          "system_used_bytes": 18231250944
+        },
+        "gpu0": {
+          "allocated_bytes": 0,
+          "reserved_bytes": 0,
+          "peak_allocated_bytes": 0,
+          "peak_reserved_bytes": 0
+        }
+      }
+    }
+  }
+}

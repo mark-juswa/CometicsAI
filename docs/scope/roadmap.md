@@ -5,7 +5,7 @@ Source: Supervisor's CODEX HANDOFF 001. This is planning scope, not implementati
 | Sequence | Slice | Progress | Gate |
 | --- | --- | --- | --- |
 | 1 | Persistent context and generic workflow skills | DONE | Repository context and installed files verified. |
-| 2 | FLUX.2 Klein free-GPU feasibility smoke test | BLOCKED | FP16 produced NaN loss. The BF16 probe stopped before training because prior-session metadata was absent, so BF16 remains unmeasured. See [experiment record](../experiments/EXP-001.md). |
+| 2 | FLUX.2 Klein free-GPU feasibility smoke test | IN PROGRESS | BF16 completed 20 finite-loss steps and the adapter loaded into a fresh Base pipeline. Measured 32.808 seconds/step creates schedule risk; distilled compatibility is untested. See [experiment record](../experiments/EXP-001.md). |
 | 3 | Licensed paired-data preparation | NOT STARTED | Source/license, provenance, quality, and held-out split verified. |
 | 4 | Train custom hairstyle Edit-LoRA and compare with BASE | NOT STARTED | Reproducible experiment evidence shows whether custom weights contribute. |
 | 5 | Test pretrained refinement and HYBRID comparison | NOT STARTED | Confirm draft is preserved and quality effect is measured. |

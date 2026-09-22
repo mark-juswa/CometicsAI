@@ -10,4 +10,4 @@ The Supervisor is the final decision-maker and approves major architecture chang
 
 Constraints: approximately three days of development, target monetary cost $0, and a Ryzen 5 5600G machine with integrated graphics and no suitable local CUDA GPU. Local work may cover repository, web, scripts, documentation, and light preprocessing. Heavy FLUX training or inference cannot be assumed locally. Priorities, in order: working custom generation; evidence of its contribution; working end-to-end prototype; visual quality; UI polish.
 
-Current task boundary: context and skills setup only. Application scaffolding, dataset generation/downloads, model downloads, training, GPU experiments, and deployment are outside this assignment. The exact calendar deadline is UNKNOWN.
+Current task boundary: the Supervisor authorized System MVP work after EXP-001 established technical free-GPU feasibility. The System MVP acceptance criteria have not yet been recorded. The real hairstyle dataset and LoRA remain NOT STARTED; deployment scope awaits the System MVP brief. The exact calendar deadline is UNKNOWN.

@@ -9,6 +9,8 @@ Approved conceptual path:
 3. Plain pretrained FLUX.2 Klein 4B, without the project LoRA, receives the original portrait and custom draft for refinement.
 4. The final output should improve realism, hair integration, identity preservation, and consistency while retaining the custom transformation.
 
+[EXP-001](../docs/experiments/EXP-001.md) verifies Base image editing, finite BF16 Edit-LoRA smoke training on free Kaggle T4, checkpoint serialization, and fresh Base adapter loading. It does not verify a real hairstyle LoRA, Base-trained adapter compatibility with distilled Klein, or refinement. The architecture remains CONFIRMED; these implementation claims have distinct evidence statuses.
+
 The refinement stage must not intentionally bypass the custom stage. The project-trained LoRA must participate directly in pixel generation. Exact model identifiers, framework, interface, two-image capability, memory needs, and output quality are NEEDS VERIFICATION.
 
 Intended free deployment direction: Next.js frontend, likely Vercel Hobby; Gradio inference on a Hugging Face Space, using ZeroGPU only if actually available. These are targets, not deployed or eligibility facts. No endpoint, package layout, or runtime is established. Training targets a free Kaggle GPU session; actual GPU, limits, and viability require session evidence. The local machine handles ordinary development, not presumed heavy FLUX workloads.

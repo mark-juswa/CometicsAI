@@ -5,7 +5,7 @@ Source for all entries: Supervisor's CODEX HANDOFF 001. Decision dates before th
 | Decision | Status | Evidence | Rationale and authority |
 | --- | --- | --- | --- |
 | Project-trained hairstyle Edit-LoRA on FLUX.2 Klein 4B generates a draft, then plain pretrained FLUX.2 Klein refines it | CONFIRMED | NEEDS VERIFICATION | Supervisor-approved active $0 direction; custom model must directly generate pixels. |
-| Free Kaggle GPU as training target | CONFIRMED | NEEDS VERIFICATION | Supervisor's $0 constraint; actual hardware and limits uninspected. |
+| Free Kaggle GPU as training target | CONFIRMED | VERIFIED for EXP-001 smoke test | Supervisor's $0 constraint; one Kaggle T4 completed 20 finite-loss BF16 Edit-LoRA steps. Training-time risk remains. |
 | Roughly six styles and 60 train plus 12 validation pairs | PROPOSED | NEEDS VERIFICATION | Preliminary dataset scale, not inspected data. |
 | Synthetic source paired with real hairstyle target | PROPOSED | NEEDS VERIFICATION | Possible way to obtain paired edits under deadline. |
 | Next.js/Vercel Hobby frontend and Gradio/Hugging Face Space with ZeroGPU if eligible | PROPOSED | NEEDS VERIFICATION | Free deployment direction; access and compatibility unproven. |

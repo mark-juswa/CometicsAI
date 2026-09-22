@@ -9,6 +9,7 @@ Source for all entries: Supervisor's CODEX HANDOFF 001. Decision dates before th
 | Roughly six styles and 60 train plus 12 validation pairs | PROPOSED | NEEDS VERIFICATION | Preliminary dataset scale, not inspected data. |
 | Synthetic source paired with real hairstyle target | PROPOSED | NEEDS VERIFICATION | Possible way to obtain paired edits under deadline. |
 | Next.js/Vercel Hobby frontend and Gradio/Hugging Face Space with ZeroGPU if eligible | PROPOSED | NEEDS VERIFICATION | Free deployment direction; access and compatibility unproven. |
+| Local System MVP using Next.js, TypeScript, Tailwind CSS, FastAPI, and a replaceable MockEngine | CONFIRMED | VERIFIED local MVP | Supervisor-approved System MVP; frontend does not know about FLUX, and the API delegates generation to the engine boundary. No deployment or real model integration is implied. |
 | SDXL Inpainting + trained LoRA + BiSeNet parsing + adaptive mask + IP-Adapter | DEPRECATED | UNKNOWN | Superseded by the more direct FLUX editing direction with fewer critical components. |
 | FLUX.2 Klein + trained LoRA, paid FLUX.2 Pro API refinement, RunPod GPU | DEPRECATED | UNKNOWN | Superseded when Supervisor selected the $0 direction. |
 

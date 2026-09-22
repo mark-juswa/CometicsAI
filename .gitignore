@@ -9,6 +9,7 @@ kaggle.json
 *secrets*.json
 
 # Python and notebooks
+.tmp/
 __pycache__/
 *.py[cod]
 .pytest_cache/

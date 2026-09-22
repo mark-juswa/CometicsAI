@@ -1,6 +1,6 @@
 # Engineering facts
 
-As inspected 2026-09-21. Evidence status: VERIFIED for observed filesystem and tool output; all unbuilt application details UNKNOWN.
+As inspected 2026-09-22. Evidence status: VERIFIED for observed filesystem and supplied runtime output; all unbuilt application details UNKNOWN.
 
 Before context setup, `F:\HAIR` contained no files. EXP-001 setup initialized local Git on `main` and committed the accepted context baseline as `78c8c64e20fdfe19c956a62cc044f9b095590a07`, including `.gitignore`. `origin` is the Supervisor-supplied `https://github.com/mark-juswa/CometicsAI.git`; the baseline and prepared harness commits were pushed to `origin/main`.
 
@@ -14,6 +14,8 @@ The Supervisor's later EXP-001 audit reported a working Kaggle allocation with t
 
 A subsequent harness launch ran `/usr/bin/python3` and observed `torch 2.10.0+cpu`, no CUDA devices, and no `nvidia-smi`; it stopped before dependency installation or model download. This conflicts with the earlier notebook-kernel audit and does not establish that the T4 allocation or FLUX model failed. The next discriminating run uses the active notebook kernel's `sys.executable` and stops again if that interpreter also lacks CUDA.
 
-The kernel-bound discriminating retry used `sys.executable == /usr/bin/python3` and again observed Torch `2.10.0+cpu`, `torch.version.cuda == None`, and `torch.cuda.is_available() == false`. It stopped before launching the harness. EXP-001 therefore has no model-load, inference, training, checkpoint, memory, or timing measurements. The observed execution environment cannot currently run the authorized GPU experiment; this is an environment failure, not evidence that FLUX.2 Klein itself is incompatible with T4.
+The kernel-bound discriminating retry used `sys.executable == /usr/bin/python3` and again observed Torch `2.10.0+cpu`, `torch.version.cuda == None`, and `torch.cuda.is_available() == false`. That attempt stopped before launching the harness and produced no model or training measurements. It was later superseded by the successful CUDA-enabled launch recorded below.
 
 A later Supervisor-run Kaggle attempt superseded that temporary CPU-runtime observation: CUDA on T4 worked, FLUX.2 Klein Base loaded, a 512×512 Base edit completed, the paired dataset was detected, and LoRA modules initialized. Training then stopped before optimizer steps because AI Toolkit's generic `ddpm` config path called a dynamic `FlowMatchEulerDiscreteScheduler.set_timesteps` without the required `mu`. The pinned toolkit's FLUX route is selected by `train.noise_scheduler: "flowmatch"`; its custom `set_train_timesteps` derives resolution-dependent shifting from the batch latents.
+
+The corrected flow-matching retry reached 20/20 loop steps with a measured median 2.007 seconds per step and 10,779 MiB whole-GPU peak. The progress display printed `loss: 0.000e+00`, while AI Toolkit emitted `loss is nan` once per step; the loss was therefore non-finite and the training result is invalid. AI Toolkit still saved `exp001_tiny_edit.safetensors` at 46,223,600 bytes. A fresh Base pipeline loaded in 80.545 seconds, loaded that adapter, and completed one 512×512 edit inference in 64.962 seconds with peak allocated/reserved memory of 8,705,465,856/8,965,324,800 bytes. Serialization and loader compatibility are VERIFIED; meaningful parameter learning is not.

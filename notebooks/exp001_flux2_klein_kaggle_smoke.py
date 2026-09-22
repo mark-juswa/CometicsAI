@@ -410,9 +410,14 @@ def run_training() -> dict:
     logs = (OUT / "train.log").read_text(encoding="utf-8", errors="replace")
     progress = [int(x) for x in re.findall(r"\b(\d+)/" + str(STEPS) + r"\b", logs)]
     loss_lines = [line for line in logs.splitlines() if re.search(r"\bloss\b", line, re.I)]
+    nonfinite_loss_lines = [line for line in loss_lines if re.search(
+        r"(?:loss\s+is|loss\s*:)\s*[+-]?(?:nan|inf)", line, re.I
+    )]
     result = {"command": " ".join(cmd), "exit_code": proc.returncode, "wall_s_including_load": elapsed,
               "configured_steps": STEPS, "highest_step_seen": max(progress, default=None),
               "loss_line_count": len(loss_lines), "last_loss_lines": loss_lines[-5:],
+              "nonfinite_loss_line_count": len(nonfinite_loss_lines),
+              "last_nonfinite_loss_lines": nonfinite_loss_lines[-5:],
               "whole_gpu_peak_mib": sampler.peak_mib}
     write_json(OUT / "training_result.json", result)
     if proc.returncode:
@@ -436,6 +441,8 @@ def run_training() -> dict:
     # Retain an all-in wall-time figure separately; it is not the requested projection.
     result["wall_seconds_per_configured_step_including_load"] = elapsed / STEPS
     write_json(OUT / "training_result.json", result)
+    if nonfinite_loss_lines:
+        raise RuntimeError("STOP: trainer produced non-finite loss; preserve train.log and do not treat the checkpoint as valid training")
     return result
 
 

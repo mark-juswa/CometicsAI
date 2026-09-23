@@ -63,12 +63,11 @@ def main():
                         or entry.get("attempt") not in (1, 2) or not str(entry.get("notes", "")).strip()):
                     raise RuntimeError(f"STOP: explicit ACCEPT, attempt 1/2, and review notes required for {key}; got {entry}")
                 if args.generation_format == "v2":
-                    if entry["attempt"] != 1:
-                        raise RuntimeError(f"STOP: V2 retry metadata is not implemented for {key}")
                     folder = args.generation_dir / key
                     original = folder / "source.png"
-                    generated = folder / "result.png"
-                    metadata_path = folder / "generation.json"
+                    suffix = "_r2" if entry["attempt"] == 2 else ""
+                    generated = folder / f"result{suffix}.png"
+                    metadata_path = folder / f"generation{suffix}.json"
                 else:
                     original = args.generation_dir / "original" / f"{key}.png"
                     generated = args.generation_dir / "generated" / f"{key}{'_r2' if entry['attempt'] == 2 else ''}.png"

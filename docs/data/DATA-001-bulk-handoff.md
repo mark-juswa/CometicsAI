@@ -57,7 +57,18 @@ subprocess.run([
 ], check=True)
 ```
 
-Review all 30 identity groups for hairstyle correctness, identity, facial features, hair color, jewelry, clothing, background, and mask quality. Save a 30-key `/kaggle/working/data001/all_reviews.json` with each actual `ACCEPT`, `REGENERATE`, or `REJECT` decision and notes. Current V2 finalization supports accepted **attempt 1** only. A failed output blocks finalization; a controlled attempt-2 path must be separately prepared and reviewed if needed.
+Review all 30 identity groups for hairstyle correctness, identity, facial features, hair color, jewelry, clothing, background, and mask quality. Save a 30-key `/kaggle/working/data001/all_reviews.json` with each actual `ACCEPT`, `REGENERATE`, or `REJECT` decision, attempt, and notes. A failed output blocks finalization. For a **non-pilot** identity marked `REGENERATE` on attempt 1, the Supervisor may run one seed-only retry after inspection, replacing `SAMPLE_ID` with the exact key:
+
+```python
+subprocess.run([
+    sys.executable, f"{repo}/notebooks/data001_bulk_v2_kaggle.py",
+    "--retry", "SAMPLE_ID",
+    "--reviews", "/kaggle/working/data001/all_reviews.json",
+    "--approval", "/kaggle/working/data001/pilot_v2_approval.json",
+], check=True)
+```
+
+The retry uses the same source, mask, prompt, model, steps, guidance, and strength, changing only seed 1977 → 1978. It saves `result_r2.png` and `generation_r2.json` without replacing attempt 1. Review attempt 2 and update that identity's entry to `{"status":"ACCEPT","attempt":2,"notes":"<actual finding>"}` only if it passes. A second failure remains REJECT and prevents finalization; selecting a reserve identity would require a separate documented change to the approved selection.
 
 ## Gate 3: finalize only 30 accepted identity groups
 

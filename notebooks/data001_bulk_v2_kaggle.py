@@ -39,13 +39,13 @@ def jobs_from_selection():
     return jobs
 
 
-def require_approval(path, reviews, output):
+def require_approval(path, reviews, output, pilot_only=True):
     approval = json.loads(path.read_text(encoding="utf-8"))
     if (approval.get("decision") != "APPROVE_V2_BULK" or approval.get("pilot_sample_ids") != list(v2.IDS)
             or not approval.get("reviewer") or not approval.get("approved_utc")):
         raise RuntimeError("STOP: separate named V2 pilot approval is required")
-    if set(reviews) != set(v2.IDS):
-        raise RuntimeError("STOP: pilot review manifest must name exactly the three pilot identities")
+    if (pilot_only and set(reviews) != set(v2.IDS)) or not set(v2.IDS).issubset(reviews):
+        raise RuntimeError("STOP: review manifest must contain all three approved pilot identities")
     for sample in v2.IDS:
         review = reviews[sample]
         if review.get("status") != "ACCEPT" or review.get("attempt") != 1 or not str(review.get("notes", "")).strip():
@@ -69,21 +69,81 @@ def prompt_for(target):
             "Only alter what is necessary for the hairstyle transformation.")
 
 
+def retry_one(job, reviews, approval, out):
+    """One reviewed seed-only retry; never replaces attempt 1."""
+    require_approval(approval, reviews, out, pilot_only=False)
+    sample = job["sample_id"]
+    review = reviews.get(sample, {})
+    if (review.get("status") != "REGENERATE" or review.get("attempt") != 1
+            or not str(review.get("notes", "")).strip()):
+        raise RuntimeError(f"STOP: {sample} needs explicit REGENERATE for attempt 1 with notes")
+    folder = out / sample
+    first_meta = json.loads((folder / "generation.json").read_text(encoding="utf-8"))
+    if (first_meta.get("sample_id") != sample or first_meta.get("attempt") != 1
+            or first_meta.get("output_sha256") != v2.sha(folder / "result.png")
+            or first_meta.get("source_sha256") != v2.sha(folder / "source.png")
+            or first_meta.get("final_mask_sha256") != v2.sha(folder / "editable_mask.png")):
+        raise RuntimeError(f"STOP: attempt-1 provenance mismatch for {sample}")
+    dest = folder / "result_r2.png"
+    meta_dest = folder / "generation_r2.json"
+    if dest.exists() or meta_dest.exists():
+        raise RuntimeError(f"STOP: attempt 2 already exists for {sample}")
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    os.environ["HF_HOME"] = "/tmp/hf-cache"
+    os.environ["HF_HUB_CACHE"] = "/tmp/hf-cache/hub"
+    import torch
+    import diffusers
+    from PIL import Image
+    if not torch.cuda.is_available():
+        raise RuntimeError(f"STOP: {sys.executable} has no CUDA")
+    cls = getattr(diffusers, "Flux2KleinInpaintPipeline", None)
+    if cls is None or "mask_image" not in inspect.signature(cls.__call__).parameters:
+        raise RuntimeError("STOP: installed Klein inpaint API unavailable")
+    pipe = cls.from_pretrained(v2.MODEL, revision=v2.MODEL_REV, torch_dtype=torch.float16,
+                               cache_dir=os.environ["HF_HUB_CACHE"])
+    pipe.enable_model_cpu_offload(gpu_id=0)
+    with Image.open(folder / "source.png") as im:
+        source = im.convert("RGB")
+    with Image.open(folder / "editable_mask.png") as im:
+        mask = im.convert("L")
+    torch.cuda.reset_peak_memory_stats(0)
+    start = time.monotonic()
+    result = pipe(prompt=first_meta["prompt"], image=source, mask_image=mask, width=v2.SIZE, height=v2.SIZE,
+                  strength=v2.STRENGTH, num_inference_steps=v2.STEPS, guidance_scale=v2.GUIDANCE,
+                  generator=torch.Generator(device="cuda").manual_seed(v2.SEED + 1)).images[0]
+    Image.composite(result.convert("RGB"), source, mask).save(dest)
+    v2.save_json(meta_dest, {**first_meta, "attempt": 2, "seed": v2.SEED + 1,
+                             "retry_change": {"field": "seed", "from": v2.SEED, "to": v2.SEED + 1},
+                             "output_path": str(dest), "output_sha256": v2.sha(dest),
+                             "runtime_seconds": time.monotonic() - start,
+                             "peak_gpu_allocated_bytes": torch.cuda.max_memory_allocated(0),
+                             "generated_utc": datetime.now(timezone.utc).isoformat(), "review_status": "PENDING"})
+    print(f"RETRY STOP: {sample} attempt 2 generated; human review required", flush=True)
+
+
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("--plan", action="store_true", help="Print remaining jobs; no model or data download")
-    p.add_argument("--execute", action="store_true", help="Actually generate the remaining 27 after approval")
+    mode = p.add_mutually_exclusive_group()
+    mode.add_argument("--plan", action="store_true", help="Print remaining jobs; no model or data download")
+    mode.add_argument("--execute", action="store_true", help="Actually generate the remaining 27 after approval")
+    mode.add_argument("--retry", metavar="SAMPLE_ID", help="One seed-only retry after explicit REGENERATE review")
     p.add_argument("--reviews", type=Path)
     p.add_argument("--approval", type=Path)
     args = p.parse_args()
     jobs = jobs_from_selection()
-    if not args.execute:
+    if not args.execute and not args.retry:
         print(json.dumps({"count": len(jobs), "jobs": jobs}, indent=2))
         return
     if not args.reviews or not args.approval:
-        raise RuntimeError("STOP: --execute requires --reviews and --approval")
+        raise RuntimeError("STOP: generation requires --reviews and --approval")
     out = v2.OUT
     reviews = json.loads(args.reviews.read_text(encoding="utf-8"))
+    if args.retry:
+        selected = [job for job in jobs if job["sample_id"] == args.retry]
+        if len(selected) != 1:
+            raise RuntimeError("STOP: retry must name one of the 27 selected non-pilot identities")
+        retry_one(selected[0], reviews, args.approval, out)
+        return
     require_approval(args.approval, reviews, out)
     if any((out / job["sample_id"]).exists() for job in jobs):
         raise RuntimeError("STOP: a remaining-job folder already exists; inspect before rerunning")

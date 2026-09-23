@@ -1,8 +1,9 @@
-"""TRAIN-001 handoff: validate DATA-001, write BF16 config, run only on --execute.
+"""TRAIN-001 handoff: validate DATA-001 and run the first 250 BF16 steps.
 
 No installation or model download occurs during --prepare. Evaluation requires
 an existing checkpoint and never trains. Designed for the Supervisor's Kaggle
-CUDA interpreter and the EXP-001-pinned AI Toolkit checkout.
+CUDA interpreter and the EXP-001-pinned AI Toolkit checkout. Checkpoint and
+optimizer state are retained for a later, separately reviewed continuation.
 """
 
 import argparse
@@ -86,7 +87,7 @@ def validate_dataset(dataset):
 
 def config_text(dataset, out, steps):
     # EXP-001 BF16-confirmed configuration; only duration/save interval differ.
-    checkpoint_interval = 125 if steps == 250 else 250
+    checkpoint_interval = 125
     return f'''job: "extension"
 config:
   name: "train001_{steps}step"
@@ -171,7 +172,6 @@ def run_training(out, toolkit, steps):
             for line in proc.stdout:
                 log.write(line)
                 log.flush()
-                print(line, end="", flush=True)
                 if re.search(r"(?:loss\s+is|loss\s*:)\s*[+-]?(?:nan|inf)\b", line, re.I):
                     stop_reason = "non-finite training loss"
                     proc.terminate()
@@ -183,18 +183,31 @@ def run_training(out, toolkit, steps):
             except subprocess.TimeoutExpired:
                 proc.kill()
                 code = proc.wait()
+    checkpoints = sorted((out / "checkpoints").rglob("*.safetensors"))
+    optimizer_states = sorted((out / "checkpoints").rglob("optimizer.pt"))
+    saved_checkpoint_lines = re.findall(r"Saved checkpoint to (.+\.safetensors)",
+                                       (out / "train.log").read_text(encoding="utf-8", errors="replace"))
+    saved_optimizer_lines = re.findall(r"Saved optimizer to (.+optimizer\.pt)",
+                                      (out / "train.log").read_text(encoding="utf-8", errors="replace"))
+    success = (stop_reason is None and code == 0
+               and max((row["step"] for row in loss_rows), default=None) == steps
+               and bool(checkpoints) and bool(optimizer_states)
+               and bool(saved_checkpoint_lines) and bool(saved_optimizer_lines))
     summary = {"exit_code": code, "elapsed_seconds_including_load": time.monotonic() - start,
                "whole_gpu_peak_mib_observed": sampler.peak_mib, "stop_reason": stop_reason,
-               "highest_loss_step": max((row["step"] for row in loss_rows), default=None), "losses": loss_rows}
+               "highest_loss_step": max((row["step"] for row in loss_rows), default=None), "losses": loss_rows,
+               "checkpoints": [{"path": str(path), "bytes": path.stat().st_size} for path in checkpoints],
+               "optimizer_states": [{"path": str(path), "bytes": path.stat().st_size} for path in optimizer_states],
+               "saved_checkpoint_log_count": len(saved_checkpoint_lines),
+               "saved_optimizer_log_count": len(saved_optimizer_lines),
+               "success": success}
     if len(loss_rows) >= 10:
         recent = sorted({row["step"]: row for row in loss_rows}.values(), key=lambda x: x["step"])[-10:]
         summary["seconds_per_step_recent"] = ((recent[-1]["elapsed_s"] - recent[0]["elapsed_s"])
                                                / (recent[-1]["step"] - recent[0]["step"]))
     save_json(out / "training_summary.json", summary)
-    if stop_reason or code != 0 or summary["highest_loss_step"] != steps:
-        raise RuntimeError("STOP: training failed or did not log the final step; inspect train.log")
-    if not list((out / "checkpoints").rglob("*.safetensors")):
-        raise RuntimeError("STOP: no .safetensors checkpoint found")
+    if not success:
+        raise RuntimeError("STOP: training did not finish with finite step evidence, checkpoint, and optimizer state; inspect train.log and training_summary.json")
     return summary
 
 
@@ -260,7 +273,7 @@ def main():
     p.add_argument("--dataset", type=Path, required=True)
     p.add_argument("--out", type=Path, required=True)
     p.add_argument("--toolkit", type=Path, default=Path("/tmp/exp001-ai-toolkit"))
-    p.add_argument("--steps", type=int, choices=(250, 500), required=True)
+    p.add_argument("--steps", type=int, choices=(250,), required=True)
     p.add_argument("--checkpoint", type=Path)
     args = p.parse_args()
     if args.phase == "evaluate" and not args.checkpoint:
@@ -291,7 +304,7 @@ def main():
         if not summary_path.exists():
             raise RuntimeError("STOP: successful training summary required before evaluation")
         summary = json.loads(summary_path.read_text(encoding="utf-8"))
-        if summary.get("exit_code") != 0 or summary.get("highest_loss_step") != args.steps or summary.get("stop_reason"):
+        if not summary.get("success") or summary.get("highest_loss_step") != args.steps:
             raise RuntimeError("STOP: training summary does not verify completed finite run")
         preflight_runtime(args.toolkit)
         evaluate(args.dataset, args.out, args.checkpoint)

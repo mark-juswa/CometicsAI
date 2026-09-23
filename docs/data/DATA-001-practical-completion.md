@@ -38,8 +38,8 @@ if not complete(out):
                     archives.append(candidate)
         except Exception:
             pass
-    assert len(folders) + len(archives) == 1, (
-        f"Attach exactly one full data001_v1_unreviewed upload; found folders={folders}, archives={archives}")
+    assert (len(folders) == 1 or (not folders and len(archives) == 1)), (
+        f"Attach one full data001_v1_unreviewed upload; found folders={folders}, archives={archives}")
     if folders:
         shutil.copytree(folders[0], out, dirs_exist_ok=True)
     else:

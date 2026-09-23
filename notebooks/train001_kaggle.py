@@ -185,14 +185,19 @@ def run_training(out, toolkit, steps):
                 code = proc.wait()
     checkpoints = sorted((out / "checkpoints").rglob("*.safetensors"))
     optimizer_states = sorted((out / "checkpoints").rglob("optimizer.pt"))
-    saved_checkpoint_lines = re.findall(r"Saved checkpoint to (.+\.safetensors)",
-                                       (out / "train.log").read_text(encoding="utf-8", errors="replace"))
-    saved_optimizer_lines = re.findall(r"Saved optimizer to (.+optimizer\.pt)",
-                                      (out / "train.log").read_text(encoding="utf-8", errors="replace"))
+    train_text = (out / "train.log").read_text(encoding="utf-8", errors="replace")
+    saved_checkpoint_lines = re.findall(r"Saved checkpoint to (.+\.safetensors)", train_text)
+    saved_optimizer_lines = re.findall(r"Saved optimizer to (.+optimizer\.pt)", train_text)
+    final_progress = max((match.start() for match in re.finditer(rf"\b{steps}/{steps}\b", train_text)),
+                         default=-1)
+    final_save_logged = (final_progress >= 0
+                         and train_text.rfind("Saved checkpoint to ") > final_progress
+                         and train_text.rfind("Saved optimizer to ") > final_progress)
     success = (stop_reason is None and code == 0
                and max((row["step"] for row in loss_rows), default=None) == steps
                and bool(checkpoints) and bool(optimizer_states)
-               and bool(saved_checkpoint_lines) and bool(saved_optimizer_lines))
+               and bool(saved_checkpoint_lines) and bool(saved_optimizer_lines)
+               and final_save_logged)
     summary = {"exit_code": code, "elapsed_seconds_including_load": time.monotonic() - start,
                "whole_gpu_peak_mib_observed": sampler.peak_mib, "stop_reason": stop_reason,
                "highest_loss_step": max((row["step"] for row in loss_rows), default=None), "losses": loss_rows,
@@ -200,6 +205,7 @@ def run_training(out, toolkit, steps):
                "optimizer_states": [{"path": str(path), "bytes": path.stat().st_size} for path in optimizer_states],
                "saved_checkpoint_log_count": len(saved_checkpoint_lines),
                "saved_optimizer_log_count": len(saved_optimizer_lines),
+               "final_save_logged_after_last_step": final_save_logged,
                "success": success}
     if len(loss_rows) >= 10:
         recent = sorted({row["step"]: row for row in loss_rows}.values(), key=lambda x: x["step"])[-10:]

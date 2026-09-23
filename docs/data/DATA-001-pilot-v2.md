@@ -16,13 +16,23 @@ Masks may still cover nearby background, and a parser can misclassify hair, clot
 
 ## Run and review
 
-Use the same CUDA-enabled Kaggle environment as V1, with the repository at `/kaggle/working/CometicsAI` and V1 artifacts at `/kaggle/working/data001`. Run:
+Use the same CUDA-enabled Kaggle environment as V1, with the repository at `/kaggle/working/CometicsAI` and V1 artifacts at `/kaggle/working/data001`. Run from a Kaggle notebook cell so `sys.executable` matches the GPU-enabled kernel:
 
-```bash
-cd /kaggle/working/CometicsAI
-git pull --ff-only
-mkdir -p /kaggle/working/data001/pilot_v2_masked
-/usr/bin/python3 notebooks/data001_pilot_v2_masked_kaggle.py 2>&1 | tee /kaggle/working/data001/pilot_v2_masked/run.log
+```python
+import pathlib, subprocess, sys
+repo = "/kaggle/working/CometicsAI"
+subprocess.run(["git", "-C", repo, "pull", "--ff-only"], check=True)
+subprocess.run([sys.executable, "-c", "import torch; assert torch.cuda.is_available()"], check=True)
+out = pathlib.Path("/kaggle/working/data001/pilot_v2_masked")
+out.mkdir(parents=True, exist_ok=True)
+with (out / "run.log").open("w", encoding="utf-8") as log:
+    proc = subprocess.Popen([sys.executable, f"{repo}/notebooks/data001_pilot_v2_masked_kaggle.py"],
+                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    for line in proc.stdout:
+        log.write(line)
+        log.flush()
+        print(line, end="")
+    assert proc.wait() == 0, "V2 pilot stopped; preserve run.log and error.txt"
 ```
 
 If the previous Kaggle working directory is unavailable, upload the Supervisor's V1 `data001_pilot.zip` to Kaggle and pass `--v1-zip /path/to/data001_pilot.zip`; the runner verifies V1 image hashes before use. Use the CUDA Python interpreter from EXP-001, not a CPU-only interpreter. The runner reuses `/tmp/hf-cache` and writes only review artifacts under `/kaggle/working/data001/pilot_v2_masked/`.

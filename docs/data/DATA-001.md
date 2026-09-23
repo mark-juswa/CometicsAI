@@ -63,23 +63,27 @@ The Supervisor ran the committed default runner in Kaggle on 2026-09-23. The sup
 | `BobHair_1` | `LayeredHair` | 64.0 s | `/kaggle/working/data001/generated/BobHair_1.png` |
 | `LayeredHair_4` | `CrewCut` | 63.3 s | `/kaggle/working/data001/generated/LayeredHair_4.png` |
 
-The runner reported `/kaggle/working/data001/generation_review_sheet.jpg`. The log shows no generation exception; it includes non-fatal Flax deprecation, unauthenticated Hugging Face rate-limit, and dependency-resolution warnings during preparation. The console alone did not include generated pixels, sidecars, model revision, or image-specific GPU-memory measurements; these were checked after the Supervisor supplied the pilot ZIP. **No official ACCEPT/REGENERATE/REJECT review has been recorded.**
+The runner reported `/kaggle/working/data001/generation_review_sheet.jpg`. The log shows no generation exception; it includes non-fatal Flax deprecation, unauthenticated Hugging Face rate-limit, and dependency-resolution warnings during preparation. The console alone did not include generated pixels, sidecars, model revision, or image-specific GPU-memory measurements; these were checked after the Supervisor supplied the pilot ZIP. The later V1 finalization evidence below supersedes the pilot's initial review state.
 
-The Supervisor then supplied `data001_pilot.zip` with the three original/generated images, sidecars, review sheet, plan, and environment report. [Pilot visual review](DATA-001-pilot-review.md) verified hashes and provenance and found one candidate suitable, two unsuitable under the original strict threshold because of hair-color and identity/accessory/clothing drift. The Supervisor later superseded that stop rule for Dataset V1 with a practical threshold and authorized the remaining global-edit generations. No official review statuses or final pairs have followed yet.
+The Supervisor then supplied `data001_pilot.zip` with the three original/generated images, sidecars, review sheet, plan, and environment report. [Pilot visual review](DATA-001-pilot-review.md) verified hashes and provenance and found one candidate suitable, two unsuitable under the original strict threshold because of hair-color and identity/accessory/clothing drift. The Supervisor later superseded that stop rule for Dataset V1 with a practical threshold and authorized the remaining global-edit generations.
 
 The later [masked Pilot V2](DATA-001-pilot-v2.md) and its [masked bulk handoff](DATA-001-bulk-handoff.md) remain unexecuted optional fallback material. They do **not** gate the current V1/global method. The active path is the [V1 bulk handoff](DATA-001-v1-bulk-handoff.md): generate the remaining 27, review all 30 with the practical threshold, retry only clear failures once, and finalize only after 30 explicit ACCEPT decisions.
 
-## Current counts and pending evidence
+## V1 finalizer result reported by Supervisor
 
-| Item | Measured now | Final target |
-| --- | ---: | ---: |
-| Original source candidates | 30/class | — |
-| Provisionally selected originals | 10/class, 30 total | 30 accepted |
-| Excluded original candidates | 20/class, 60 total | replacements if required |
-| FLUX generated counterparts | 3 pilot outputs, unreviewed | 30 accepted |
-| Regenerations | 0 | at most one per failed candidate |
-| Explicit generated ACCEPT / REJECT | 0 / 0; Codex visual findings are recorded, official review pending | 30 / 0 |
-| Directional training / validation pairs | 0 / 0 | 48 / 12 |
-| Final identity-generation and directional contact sheets | none | both required |
+The Supervisor completed all 30 V1/global generations, recorded 28 first-attempt ACCEPT reviews, then ran one bounded retry each for `LayeredHair_4` and `LayeredHair_9`; both retry processes exited 0. After the review manifest contained 30 explicit ACCEPT decisions, the finalizer produced `/kaggle/working/data001_final.zip` and reported:
 
-**The source dataset contains source photographs and sketches, not paired hairstyle edits.** The intended training pairs will be project-created by editing the selected originals with pretrained FLUX.2 Klein Base, visually filtering outputs, and expanding accepted identity groups bidirectionally. The custom hairstyle LoRA has not been trained, and identity preservation has not yet been demonstrated for these photographs.
+| QA field | Reported result |
+| --- | --- |
+| Source revision | `45de974926fe64551fc2d0b80973335e20ca10e2` |
+| Identity groups | 24 train, 6 validation |
+| Directional pairs | 48 train, 12 validation; 60 total |
+| Target classes | 16 per class train, 4 per class validation |
+| Image/caption alignment | PASS |
+| Image decoding, RGB, dimensions | PASS |
+| Unexpected duplicate SHA-256 groups | None |
+| Split leakage | NONE |
+
+The finalizer created `contact_sheets/identity_generation.jpg` and `contact_sheets/all_pairs.jpg`. Its `visual_qa` field expressly says that manual final-sheet inspection remains required. The final archive is reported by the Supervisor but has not been received in this workspace. The actual real hairstyle LoRA has not been trained or evaluated.
+
+**The source dataset contains source photographs and sketches, not paired hairstyle edits.** The project created the paired edits by editing selected originals with pretrained FLUX.2 Klein Base, reviewing outputs, and expanding accepted identity groups bidirectionally. The custom hairstyle LoRA has not been trained; its hairstyle quality is UNKNOWN.

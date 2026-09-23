@@ -38,6 +38,13 @@ def save_json(path, value):
     path.write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
 
 
+def copy_evidence(source, dest):
+    if dest.exists() and sha(dest) != sha(source):
+        raise RuntimeError(f"STOP: existing evidence differs; refusing overwrite: {dest}")
+    if not dest.exists():
+        shutil.copy2(source, dest)
+
+
 def source_files(args):
     if args.v1_zip:
         base = OUT / "v1_input"
@@ -186,6 +193,8 @@ def main():
     for sample, source_class, target_class, source, v1 in jobs:
         folder = OUT / sample
         folder.mkdir(parents=True, exist_ok=True)
+        copy_evidence(source, folder / "source.png")
+        copy_evidence(v1, folder / "v1_result.png")
         with Image.open(source) as img:
             image = img.convert("RGB")
         if image.size != (SIZE, SIZE):

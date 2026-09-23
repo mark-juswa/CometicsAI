@@ -27,7 +27,7 @@ mkdir -p /kaggle/working/data001/pilot_v2_masked
 
 If the previous Kaggle working directory is unavailable, upload the Supervisor's V1 `data001_pilot.zip` to Kaggle and pass `--v1-zip /path/to/data001_pilot.zip`; the runner verifies V1 image hashes before use. Use the CUDA Python interpreter from EXP-001, not a CPU-only interpreter. The runner reuses `/tmp/hf-cache` and writes only review artifacts under `/kaggle/working/data001/pilot_v2_masked/`.
 
-For each sample it writes `semantic_labels.png`, `raw_hair_mask.png`, `editable_mask.png`, `mask_metrics.json`, `result.png`, and `generation.json`. It also writes `environment.json` and `v1_v2_comparison.jpg`. Metadata records exact hashes, revisions, prompt, settings, runtime, and peak allocated GPU memory. The comparison is `V1 RESULT | SOURCE | MASK | V2 RESULT` for all three. Review decisions remain pending; no pair builder or training runs.
+For each sample it preserves `source.png` and `v1_result.png`, and writes `semantic_labels.png`, `raw_hair_mask.png`, `editable_mask.png`, `mask_metrics.json`, `result.png`, and `generation.json`. It also writes `environment.json` and `v1_v2_comparison.jpg`. Metadata records exact hashes, revisions, prompt, settings, runtime, and peak allocated GPU memory. The comparison is `V1 RESULT | SOURCE | MASK | V2 RESULT` for all three. Review decisions remain pending; no pair builder or training runs.
 
 After the pilot stops, package its small review artifacts for the Project Lead:
 

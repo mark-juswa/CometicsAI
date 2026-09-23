@@ -69,6 +69,8 @@ The runner reported `/kaggle/working/data001/generation_review_sheet.jpg`. The l
 
 The Supervisor then supplied `data001_pilot.zip` with the three original/generated images, sidecars, review sheet, plan, and environment report. [Pilot visual review](DATA-001-pilot-review.md) verified hashes and provenance and found one candidate suitable, two unsuitable because of hair-color drift and identity/accessory/clothing drift. Per the approved 0–1-of-3 rule, the pilot is stopped for methodology review. The Project Lead/Supervisor has not entered official review statuses. No retry, full generation, or pair finalization followed.
 
+The Supervisor subsequently authorized a [masked Pilot V2](DATA-001-pilot-v2.md) for those **same three TRAIN identities only**. A separate runner now checks the installed `Flux2KleinInpaintPipeline`, parses source hair/face, constructs a constrained edit mask, and prepares V1/source/mask/V2 comparison evidence. It has not yet executed on Kaggle; no V2 mask, generated result, or preservation outcome is claimed. The remaining 27 and final pair construction remain closed pending pilot review.
+
 ## Current counts and pending evidence
 
 | Item | Measured now | Final target |

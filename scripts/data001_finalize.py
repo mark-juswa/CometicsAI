@@ -47,6 +47,7 @@ def sheet(rows, path, size=(280, 280)):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--generation-dir", type=Path, required=True)
+    parser.add_argument("--generation-format", choices=("v1", "v2"), default="v1")
     parser.add_argument("--reviews", type=Path, required=True)
     parser.add_argument("--output", type=Path, default=ROOT / "data/dataset_v1/final")
     args = parser.parse_args()
@@ -61,9 +62,18 @@ def main():
                 if (not isinstance(entry, dict) or entry.get("status") != "ACCEPT"
                         or entry.get("attempt") not in (1, 2) or not str(entry.get("notes", "")).strip()):
                     raise RuntimeError(f"STOP: explicit ACCEPT, attempt 1/2, and review notes required for {key}; got {entry}")
-                original = args.generation_dir / "original" / f"{key}.png"
-                generated = args.generation_dir / "generated" / f"{key}{'_r2' if entry['attempt'] == 2 else ''}.png"
-                metadata = json.loads(generated.with_suffix(".json").read_text(encoding="utf-8"))
+                if args.generation_format == "v2":
+                    if entry["attempt"] != 1:
+                        raise RuntimeError(f"STOP: V2 retry metadata is not implemented for {key}")
+                    folder = args.generation_dir / key
+                    original = folder / "source.png"
+                    generated = folder / "result.png"
+                    metadata_path = folder / "generation.json"
+                else:
+                    original = args.generation_dir / "original" / f"{key}.png"
+                    generated = args.generation_dir / "generated" / f"{key}{'_r2' if entry['attempt'] == 2 else ''}.png"
+                    metadata_path = generated.with_suffix(".json")
+                metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
                 expected = {"sample_id": key, "source_class": original_style,
                             "requested_class": alternate_style, "source_filename": filename,
                             "split": split, "attempt": entry["attempt"], "model": MODEL,
@@ -79,6 +89,26 @@ def main():
                     raise RuntimeError(f"STOP: original SHA256 differs from generation metadata for {key}")
                 if metadata.get("output_sha256") != hashlib.sha256(generated.read_bytes()).hexdigest():
                     raise RuntimeError(f"STOP: generated SHA256 differs from generation metadata for {key}")
+                if args.generation_format == "v2":
+                    if (metadata.get("method") != "pilot_v2_masked" or metadata.get("parser_model") != "jonathandinu/face-parsing"
+                            or not metadata.get("parser_revision") or metadata.get("pipeline") != "Flux2KleinInpaintPipeline"
+                            or metadata.get("outside_mask_pixel_policy") != "copy exact source RGB"):
+                        raise RuntimeError(f"STOP: V2 generation provenance incomplete for {key}")
+                    for name, field in (("semantic_labels.png", "semantic_sha256"),
+                                        ("raw_hair_mask.png", "raw_mask_sha256"),
+                                        ("editable_mask.png", "final_mask_sha256")):
+                        mask_path = folder / name
+                        if metadata.get(field) != hashlib.sha256(mask_path.read_bytes()).hexdigest():
+                            raise RuntimeError(f"STOP: V2 mask hash mismatch for {key}: {name}")
+                        with Image.open(mask_path) as mask_image:
+                            if mask_image.mode != "L" or mask_image.size != (512, 512):
+                                raise RuntimeError(f"STOP: invalid V2 mask {mask_path}")
+                    with Image.open(original) as src, Image.open(generated) as gen, Image.open(folder / "editable_mask.png") as mask:
+                        src_px, gen_px, mask_px = src.convert("RGB").load(), gen.convert("RGB").load(), mask.load()
+                        for y in range(512):
+                            for x in range(512):
+                                if mask_px[x, y] == 0 and src_px[x, y] != gen_px[x, y]:
+                                    raise RuntimeError(f"STOP: V2 changed protected pixel in {key} at {(x, y)}")
                 for path in (original, generated):
                     with Image.open(path) as image:
                         image.verify()

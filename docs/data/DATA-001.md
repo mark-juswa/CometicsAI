@@ -71,6 +71,8 @@ The Supervisor then supplied `data001_pilot.zip` with the three original/generat
 
 The Supervisor subsequently authorized a [masked Pilot V2](DATA-001-pilot-v2.md) for those **same three TRAIN identities only**. A separate runner now checks the installed `Flux2KleinInpaintPipeline`, parses source hair/face, constructs a constrained edit mask, and prepares V1/source/mask/V2 comparison evidence. It has not yet executed on Kaggle; no V2 mask, generated result, or preservation outcome is claimed. The remaining 27 and final pair construction remain closed pending pilot review.
 
+A guarded [bulk-generation/finalization handoff](DATA-001-bulk-handoff.md) is prepared for use **only if** the V2 pilot receives three explicit ACCEPT reviews and named approval. Its code can plan the remaining 27 without generating, and V2 finalization requires 30 accepted groups and mask provenance. This preparation is not pilot approval or evidence that the final dataset exists.
+
 ## Current counts and pending evidence
 
 | Item | Measured now | Final target |

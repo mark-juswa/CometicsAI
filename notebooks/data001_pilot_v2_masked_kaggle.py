@@ -231,6 +231,11 @@ def main():
             result.save(folder / "result.png")
             save_json(folder / "generation.json", {
                 "sample_id": sample, "source_class": source_class, "requested_class": target_class, "split": "train",
+                "source_filename": next(name for name in json.loads(SELECTION.read_text(encoding="utf-8"))["styles"][source_class]["train"] if Path(name).stem == sample.rsplit("_", 1)[1]),
+                "source_revision": json.loads(SELECTION.read_text(encoding="utf-8"))["source_revision"],
+                "source_archive_path": "FaceSketches-HairStyle40/image/" + source_class + "/" + next(
+                    name for name in json.loads(SELECTION.read_text(encoding="utf-8"))["styles"][source_class]["train"]
+                    if Path(name).stem == sample.rsplit("_", 1)[1]),
                 "method": "pilot_v2_masked", "attempt": 1, "source_path": str(source), "v1_path": str(v1),
                 "source_sha256": sha(source), "v1_sha256": sha(v1), "output_path": str(folder / "result.png"),
                 "output_sha256": sha(folder / "result.png"), "semantic_sha256": sha(folder / "semantic_labels.png"),

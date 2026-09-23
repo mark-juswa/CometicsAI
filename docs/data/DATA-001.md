@@ -1,6 +1,6 @@
 # DATA-001 — Real hairstyle paired dataset V1
 
-**Status: IN PROGRESS. Source inspection and selection complete; the three-image TRAIN pilot is planned and awaiting the Supervisor's Kaggle GPU session. FLUX counterpart generation and visual acceptance have not occurred. No real LoRA training has begun.**
+**Status: IN PROGRESS. Source inspection and selection complete; the three-image TRAIN pilot generated its three counterparts on the Supervisor's Kaggle T4 on 2026-09-23. Visual acceptance is pending because the images and JSON sidecars have not yet been provided for review. No real LoRA training has begun.**
 
 ## Source and license evidence
 
@@ -55,6 +55,18 @@ The finalizer requires 30 explicit ACCEPT decisions with notes, matches original
 
 Local implementation checks on 2026-09-23: Python compilation passed; the committed pilot plan matched the code planner; `--all` without approval and `--retry` without REGENERATE review both stopped before CUDA/model access. A separate **synthetic file-contract fixture** exercised the finalizer with 30 distinct RGB originals/counterparts and yielded 24/6 identity groups, 48/12 directional pairs, and the expected 16/4 per-style target counts. Corrupting one generated SHA256 in that fixture made finalization stop before writing an output dataset. These fixture images were not FLUX outputs or human-approved training examples.
 
+## Three-image TRAIN pilot execution
+
+The Supervisor ran the committed default runner in Kaggle on 2026-09-23. The supplied [full console log](DATA-001-pilot-console.log) records a CUDA-enabled Tesla T4 session, PyTorch `2.10.0+cu128`, Diffusers installed through the pinned EXP-001 preparation, a fresh Base pipeline load with FP16 and CPU offload on GPU 0, and exactly three 20-step image edits. The process exited with code 0 and printed the following completed outputs:
+
+| Sample ID | Requested style | Console runtime | Generated path |
+| --- | --- | ---: | --- |
+| `CrewCut_1` | `BobHair` | 62.1 s | `/kaggle/working/data001/generated/CrewCut_1.png` |
+| `BobHair_1` | `LayeredHair` | 64.0 s | `/kaggle/working/data001/generated/BobHair_1.png` |
+| `LayeredHair_4` | `CrewCut` | 63.3 s | `/kaggle/working/data001/generated/LayeredHair_4.png` |
+
+The runner reported `/kaggle/working/data001/generation_review_sheet.jpg`. The log shows no generation exception; it includes non-fatal Flax deprecation, unauthenticated Hugging Face rate-limit, and dependency-resolution warnings during preparation. The console output does not include the generated pixels, JSON sidecars, actual model revision, or image-specific GPU-memory measurements. The files have been requested from the Supervisor. **No ACCEPT/REGENERATE/REJECT review has been recorded, and `--all` remains closed.**
+
 ## Current counts and pending evidence
 
 | Item | Measured now | Final target |
@@ -62,9 +74,9 @@ Local implementation checks on 2026-09-23: Python compilation passed; the commit
 | Original source candidates | 30/class | — |
 | Provisionally selected originals | 10/class, 30 total | 30 accepted |
 | Excluded original candidates | 20/class, 60 total | replacements if required |
-| FLUX generated counterparts | 0 | 30 accepted |
+| FLUX generated counterparts | 3 pilot outputs, unreviewed | 30 accepted |
 | Regenerations | 0 | at most one per failed candidate |
-| Explicit generated ACCEPT / REJECT | 0 / 0 | 30 / 0 |
+| Explicit generated ACCEPT / REJECT | 0 / 0; three pending visual review | 30 / 0 |
 | Directional training / validation pairs | 0 / 0 | 48 / 12 |
 | Final identity-generation and directional contact sheets | none | both required |
 

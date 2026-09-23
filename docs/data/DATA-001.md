@@ -1,6 +1,6 @@
 # DATA-001 — Real hairstyle paired dataset V1
 
-**Status: IN PROGRESS. Source inspection and selection complete; the three-image TRAIN pilot generated its three counterparts on the Supervisor's Kaggle T4 on 2026-09-23. Visual acceptance is pending because the images and JSON sidecars have not yet been provided for review. No real LoRA training has begun.**
+**Status: IN PROGRESS, PILOT STOP.** Source inspection and selection are complete. The three-image TRAIN pilot generated its counterparts on the Supervisor's Kaggle T4 on 2026-09-23. The supplied ZIP passed file/provenance checks, but visual review found one potentially suitable image and two with material drift. No official acceptance, full generation, pair finalization, or real LoRA training has occurred.
 
 ## Source and license evidence
 
@@ -65,7 +65,9 @@ The Supervisor ran the committed default runner in Kaggle on 2026-09-23. The sup
 | `BobHair_1` | `LayeredHair` | 64.0 s | `/kaggle/working/data001/generated/BobHair_1.png` |
 | `LayeredHair_4` | `CrewCut` | 63.3 s | `/kaggle/working/data001/generated/LayeredHair_4.png` |
 
-The runner reported `/kaggle/working/data001/generation_review_sheet.jpg`. The log shows no generation exception; it includes non-fatal Flax deprecation, unauthenticated Hugging Face rate-limit, and dependency-resolution warnings during preparation. The console output does not include the generated pixels, JSON sidecars, actual model revision, or image-specific GPU-memory measurements. The files have been requested from the Supervisor. **No ACCEPT/REGENERATE/REJECT review has been recorded, and `--all` remains closed.**
+The runner reported `/kaggle/working/data001/generation_review_sheet.jpg`. The log shows no generation exception; it includes non-fatal Flax deprecation, unauthenticated Hugging Face rate-limit, and dependency-resolution warnings during preparation. The console alone did not include generated pixels, sidecars, model revision, or image-specific GPU-memory measurements; these were checked after the Supervisor supplied the pilot ZIP. **No official ACCEPT/REGENERATE/REJECT review has been recorded, and `--all` remains closed.**
+
+The Supervisor then supplied `data001_pilot.zip` with the three original/generated images, sidecars, review sheet, plan, and environment report. [Pilot visual review](DATA-001-pilot-review.md) verified hashes and provenance and found one candidate suitable, two unsuitable because of hair-color drift and identity/accessory/clothing drift. Per the approved 0–1-of-3 rule, the pilot is stopped for methodology review. The Project Lead/Supervisor has not entered official review statuses. No retry, full generation, or pair finalization followed.
 
 ## Current counts and pending evidence
 
@@ -76,7 +78,7 @@ The runner reported `/kaggle/working/data001/generation_review_sheet.jpg`. The l
 | Excluded original candidates | 20/class, 60 total | replacements if required |
 | FLUX generated counterparts | 3 pilot outputs, unreviewed | 30 accepted |
 | Regenerations | 0 | at most one per failed candidate |
-| Explicit generated ACCEPT / REJECT | 0 / 0; three pending visual review | 30 / 0 |
+| Explicit generated ACCEPT / REJECT | 0 / 0; Codex visual findings are recorded, official review pending | 30 / 0 |
 | Directional training / validation pairs | 0 / 0 | 48 / 12 |
 | Final identity-generation and directional contact sheets | none | both required |
 

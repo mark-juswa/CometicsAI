@@ -4,16 +4,58 @@ The Supervisor's received archive passed a read-only audit: 30 selected original
 
 The contact sheet suggests 28 attempt-1 outputs are usable under that standard. `LayeredHair_4` and `LayeredHair_9` show substantial facial/scene reconstruction and are proposed for the one allowed seed-only retry. This is a review recommendation, not an automatic acceptance. The Supervisor must inspect the full-resolution results and choose the statuses before running the decision cell.
 
-Run the following in the existing Kaggle GPU session, where `/kaggle/working/data001` and `/kaggle/working/CometicsAI` remain available. Pull the updated repository first:
+Kaggle resets `/kaggle/working` between sessions. In a fresh GPU session, upload the saved `data001_v1_unreviewed.zip` from the Supervisor's computer as a Kaggle Input. The upload may appear as an extracted dataset rather than a `.zip` file. Restore the repository and the exact 30-image archive before recording reviews. This cell refuses partial or ambiguous inputs; it does not regenerate images:
 
 ```python
 from pathlib import Path
-import json, subprocess, sys
+from pathlib import PurePosixPath
+from zipfile import ZipFile
+import json, shutil, subprocess, sys
 repo = Path("/kaggle/working/CometicsAI")
 out = Path("/kaggle/working/data001")
-subprocess.run(["git", "-C", str(repo), "pull", "--ff-only"], check=True)
-assert len(list((out / "generated").glob("*.png"))) == 30
-assert len(list((out / "generated").glob("*.json"))) == 30
+if repo.is_dir():
+    subprocess.run(["git", "-C", str(repo), "pull", "--ff-only"], check=True)
+else:
+    subprocess.run(["git", "clone", "https://github.com/mark-juswa/CometicsAI.git", str(repo)], check=True)
+
+def complete(folder):
+    return (folder.is_dir() and (folder / "reviews.json").is_file()
+            and len(list((folder / "original").glob("*.png"))) == 30
+            and len(list((folder / "generated").glob("*.png"))) == 30
+            and len(list((folder / "generated").glob("*.json"))) == 30)
+
+if not complete(out):
+    assert not out.exists() or not any(out.iterdir()), f"Partial output exists; inspect before restoring: {out}"
+    inputs = Path("/kaggle/input")
+    folders = [p.parent for p in inputs.rglob("reviews.json") if complete(p.parent)]
+    archives = []
+    for candidate in inputs.rglob("*.zip"):
+        try:
+            with ZipFile(candidate) as archive:
+                names = set(archive.namelist())
+                if ("data001/reviews.json" in names
+                        and sum(n.startswith("data001/generated/") and n.endswith(".png") for n in names) == 30):
+                    archives.append(candidate)
+        except Exception:
+            pass
+    assert len(folders) + len(archives) == 1, (
+        f"Attach exactly one full data001_v1_unreviewed upload; found folders={folders}, archives={archives}")
+    if folders:
+        shutil.copytree(folders[0], out, dirs_exist_ok=True)
+    else:
+        with ZipFile(archives[0]) as archive:
+            for member in archive.infolist():
+                parts = PurePosixPath(member.filename).parts
+                assert parts and parts[0] == "data001" and ".." not in parts
+                if member.is_dir():
+                    continue
+                target = out.joinpath(*parts[1:])
+                target.parent.mkdir(parents=True, exist_ok=True)
+                with archive.open(member) as source, target.open("wb") as destination:
+                    shutil.copyfileobj(source, destination)
+assert complete(out), "Restored archive is incomplete"
+print("Repository:", repo)
+print("Restored 30-image DATA-001 output:", out)
 ```
 
 After personally confirming the 28 practical accepts and the two retry decisions, record them explicitly. Stop and edit any proposed decision you disagree with before executing:

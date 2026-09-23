@@ -1,6 +1,6 @@
 # DATA-001 — Real hairstyle paired dataset V1
 
-**Status: IN PROGRESS. Source inspection and selection complete; FLUX counterpart generation and visual acceptance have not occurred. No real LoRA training has begun.**
+**Status: IN PROGRESS. Source inspection and selection complete; the three-image TRAIN pilot is planned and awaiting the Supervisor's Kaggle GPU session. FLUX counterpart generation and visual acceptance have not occurred. No real LoRA training has begun.**
 
 ## Source and license evidence
 
@@ -39,15 +39,21 @@ subprocess.run([sys.executable, f"{repo}/notebooks/exp001_flux2_klein_kaggle_smo
 subprocess.run([sys.executable, f"{repo}/notebooks/data001_generate_kaggle.py"], check=True)
 ```
 
-The default run makes **three pilot outputs, one per class**. Inspect the original and generated images side by side for identity, face, expression, pose, clothing, background, hairstyle, and artifacts before `--all`. `--all` generates the remaining 27 without overwriting the pilot. If one output fails visual QA, `--retry CrewCut/1.jpg` (for example) makes exactly one second attempt. A second failure remains REJECT; select a replacement real candidate if feasible, or stop under the DATA-001 minimum-count gate. No automatic quality acceptance or indefinite retry is permitted.
+The default run makes **three TRAIN pilot outputs, one per class**, writes `/kaggle/working/data001/pilot_plan.json`, and stops. The [committed pilot plan](DATA-001-pilot-plan.json) matches the code planner exactly: `CrewCut_1 → BobHair`, `BobHair_1 → LayeredHair`, and `LayeredHair_4 → CrewCut`. Each output has a JSON sidecar with model revision, source revision and hash, output hash, prompt, seed, attempt, timestamp, dimensions, runtime, and GPU memory. `/kaggle/working/data001/generation_review_sheet.jpg` shows originals beside generated counterparts. These images remain PENDING VISUAL QA.
 
-After all outputs have been reviewed, save an explicit 30-key review map with values like `{"CrewCut_1": {"status": "ACCEPT", "attempt": 1}}`; any missing, `REGENERATE`, or `REJECT` entry blocks [`data001_finalize.py`](../../scripts/data001_finalize.py). Then transfer the small `/kaggle/working/data001/original/` and `generated/` outputs and metadata to the local ignored `data/dataset_v1/kaggle/` folder and run:
+Inspect identity, facial features, expression, pose, clothing, background, requested hairstyle, and artifacts. Record an explicit review decision for each pilot item in a JSON review manifest; an ACCEPT entry must identify the chosen attempt and include a note. If exactly two pilot items are ACCEPT and the third is REGENERATE, one seed-only retry is allowed using `--retry CrewCut/1.jpg --reviews reviews.json` (replace the sample name as appropriate). The code refuses a retry without that review or after a second output. If zero or one pilot item is acceptable, stop and reconsider the generation method.
+
+The remaining 27 generations require a separate Supervisor/Project Lead approval after the pilot review. The `--all` option refuses to run without `--reviews reviews.json --pilot-approval pilot_approval.json`; that approval must name the reviewer, approval timestamp, exact three pilot IDs, and `decision: APPROVE_FULL_GENERATION`. The script verifies accepted pilot images and metadata before proceeding and does not overwrite existing pilot outputs. Once approved, validation identities use the same frozen generation policy. A validation retry requires the existing pilot approval and an explicit REGENERATE review. No automatic quality acceptance or indefinite retry is permitted.
+
+After all outputs have been reviewed, save an explicit 30-key review map with values like `{"CrewCut_1": {"status": "ACCEPT", "attempt": 1, "notes": "Hairstyle, identity, and background checked"}}`; any missing, `REGENERATE`, or `REJECT` entry blocks [`data001_finalize.py`](../../scripts/data001_finalize.py). Then transfer the small `/kaggle/working/data001/original/` and `generated/` outputs and metadata to the local ignored `data/dataset_v1/kaggle/` folder and run:
 
 ```text
 python scripts/data001_finalize.py --generation-dir data/dataset_v1/kaggle --reviews data/dataset_v1/reviews.json
 ```
 
-The finalizer requires 30 explicit ACCEPT decisions, matches original/generated metadata to the pinned selection, verifies image decoding and 512×512 RGB conversion, groups reverse directions in the same split, rejects unexpected SHA256 duplicate identities, writes 48 train + 12 validation direction pairs, and creates the manifest, QA report, and both mandatory contact sheets. Captions are in `target/<stem>.txt` and reference/target image filenames match the proven AI Toolkit `control_path` contract. It does not train a model.
+The finalizer requires 30 explicit ACCEPT decisions with notes, matches original/generated metadata and hashes to the pinned selection, verifies image decoding and 512×512 RGB mode, groups reverse directions in the same split, rejects unexpected SHA256 duplicate identities, calculates the required per-style distribution before copying, writes 48 train + 12 validation direction pairs, and creates the manifest, QA report, and both mandatory contact sheets. It preserves generation metadata and reviews in the final manifests. Captions are in `target/<stem>.txt` and reference/target image filenames match the proven AI Toolkit `control_path` contract. It does not train a model.
+
+Local implementation checks on 2026-09-23: Python compilation passed; the committed pilot plan matched the code planner; `--all` without approval and `--retry` without REGENERATE review both stopped before CUDA/model access. A separate **synthetic file-contract fixture** exercised the finalizer with 30 distinct RGB originals/counterparts and yielded 24/6 identity groups, 48/12 directional pairs, and the expected 16/4 per-style target counts. Corrupting one generated SHA256 in that fixture made finalization stop before writing an output dataset. These fixture images were not FLUX outputs or human-approved training examples.
 
 ## Current counts and pending evidence
 

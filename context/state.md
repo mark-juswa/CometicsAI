@@ -1,6 +1,6 @@
 # Current state
 
-As of 2026-09-22. Source: repository inspection, Supervisor's CODEX HANDOFF 002, and [EXP-001](../docs/experiments/EXP-001.md).
+As of 2026-09-23. Source: repository inspection, Supervisor's CODEX HANDOFF 002, [EXP-001](../docs/experiments/EXP-001.md), and [DATA-001](../docs/data/DATA-001.md).
 
 | Item | Status | Evidence / next check |
 | --- | --- | --- |
@@ -12,7 +12,7 @@ As of 2026-09-22. Source: repository inspection, Supervisor's CODEX HANDOFF 002,
 | Fresh Base plus adapter loading | VERIFIED | The BF16-trained adapter loaded into a fresh FLUX.2 Klein Base pipeline. This retry did not run adapter inference. |
 | Current blocker | NEEDS VERIFICATION | Longer-run stability, schedule fit, and Base-trained adapter compatibility with distilled Klein remain unverified. NaN loss is resolved in the BF16 smoke test. |
 | Current experiment | VERIFIED / YELLOW | [EXP-001](../docs/experiments/EXP-001.md): free-GPU feasibility, 3/3 and 20/20 finite BF16 losses, checkpoint serialization, and fresh Base adapter load verified; training-time risk remains. |
-| Dataset | IN PROGRESS | DATA-001 pinned the source revision and card-declared Apache-2.0 license; all three exact folders contain 30 usable original photos each. Ten per class are provisionally selected with an 8/2 identity-group split. No FLUX counterparts or directional pairs have been generated or accepted. See [DATA-001](../docs/data/DATA-001.md). |
+| Dataset | IN PROGRESS | DATA-001 pinned the source revision and card-declared Apache-2.0 license; all three exact folders contain 30 usable original photos each. Ten per class are provisionally selected with an 8/2 identity-group split. The deterministic three-image TRAIN pilot is prepared; no FLUX counterparts or directional pairs have been generated or accepted. See [DATA-001](../docs/data/DATA-001.md). |
 | Training | VERIFIED SMOKE | FP16 failed with NaN loss. BF16 produced 20/20 finite losses, with observed optimizer steps and checkpoint serialization; no real hairstyle training occurred. |
 | Real hairstyle model quality | UNKNOWN | No real hairstyle LoRA has been trained or evaluated. |
 | Base-trained adapter on distilled Klein | NEEDS VERIFICATION | No compatibility run has been performed. |

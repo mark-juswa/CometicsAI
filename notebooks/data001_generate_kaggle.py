@@ -2,11 +2,12 @@
 
 Run after the EXP-001 inference dependencies are available in this kernel.
 Default is one candidate per class (three outputs) for a visual pilot.
-Use --all only after reviewing that pilot; --retry STYLE/NAME once per failed output.
+Use --all only with recorded pilot approval; --retry STYLE/NAME requires a REGENERATE review.
 No result is automatically accepted and this script never starts training.
 """
 
 import argparse
+import hashlib
 from datetime import datetime, timezone
 from io import BytesIO
 import json
@@ -27,7 +28,8 @@ OUT = Path("/kaggle/working/data001")
 SCRATCH = Path("/tmp")  # Reuse EXP-001's ephemeral /tmp/hf-cache when present.
 SIZE, STEPS, GUIDANCE = 512, 20, 4.0
 SEED = 1977
-PHRASES = {"CrewCut": "a crew cut", "BobHair": "a bob hairstyle", "LayeredHair": "layered hair"}
+PHRASES = {"CrewCut": "a crew cut", "BobHair": "a bob hairstyle", "LayeredHair": "a layered hairstyle"}
+PILOT_STYLES = ("CrewCut", "BobHair", "LayeredHair")
 
 
 def save_json(path, data):
@@ -35,11 +37,104 @@ def save_json(path, data):
     path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
 
 
+def build_jobs(selection):
+    jobs = []
+    for style in PILOT_STYLES:
+        config = selection["styles"][style]
+        for split in ("train", "val"):
+            for name in config[split]:
+                sample_id = f"{style}_{Path(name).stem}"
+                jobs.append({"sample_id": sample_id, "source_class": style,
+                             "source_filename": name, "requested_class": config["alternate_style"],
+                             "split": split, "source_archive_path": f"FaceSketches-HairStyle40/image/{style}/{name}"})
+    return jobs
+
+
+def pilot_jobs(jobs):
+    pilot = [next(job for job in jobs if job["source_class"] == style and job["split"] == "train")
+             for style in PILOT_STYLES]
+    assert len({job["sample_id"] for job in pilot}) == 3
+    return pilot
+
+
+def make_plan(jobs, retry=False):
+    plan = []
+    for job in jobs:
+        attempt = 2 if retry else 1
+        prompt = (f"Change the person's hairstyle to {PHRASES[job['requested_class']]} while preserving their identity, "
+                  "facial features, expression, pose, clothing, lighting, framing, and background. Only change the hairstyle.")
+        plan.append({**job, "prompt": prompt, "seed": SEED + attempt - 1, "attempt": attempt,
+                     "source_path": (OUT / "original" / f"{job['sample_id']}.png").as_posix(),
+                     "output_path": (OUT / "generated" / f"{job['sample_id']}{'_r2' if retry else ''}.png").as_posix()})
+    return plan
+
+
+def require_review(path, sample_id, expected):
+    if not path or not path.is_file():
+        raise RuntimeError(f"STOP: a review manifest is required for {sample_id}")
+    reviews = json.loads(path.read_text(encoding="utf-8"))
+    review = reviews.get(sample_id)
+    if (not isinstance(review, dict) or review.get("status") != expected
+            or not str(review.get("notes", "")).strip()):
+        raise RuntimeError(f"STOP: {sample_id} needs an explicit {expected} review decision; got {review}")
+    return review
+
+
+def require_full_approval(approval_path, reviews_path, pilot):
+    if not approval_path or not approval_path.is_file():
+        raise RuntimeError("STOP: --all requires --pilot-approval after Supervisor/Project Lead review")
+    approval = json.loads(approval_path.read_text(encoding="utf-8"))
+    expected_ids = [job["sample_id"] for job in pilot]
+    if (approval.get("decision") != "APPROVE_FULL_GENERATION"
+            or approval.get("pilot_sample_ids") != expected_ids
+            or not approval.get("reviewer") or not approval.get("approved_utc")):
+        raise RuntimeError(f"STOP: pilot approval must name reviewer, approval time, and exact pilot IDs {expected_ids}")
+    for job in pilot:
+        review = require_review(reviews_path, job["sample_id"], "ACCEPT")
+        attempt = review.get("attempt")
+        if attempt not in (1, 2):
+            raise RuntimeError(f"STOP: accepted pilot attempt must be 1 or 2 for {job['sample_id']}")
+        suffix = "_r2" if attempt == 2 else ""
+        metadata = OUT / "generated" / f"{job['sample_id']}{suffix}.json"
+        image = metadata.with_suffix(".png")
+        if not metadata.is_file() or not image.is_file():
+            raise RuntimeError(f"STOP: accepted pilot artifacts missing for {job['sample_id']}")
+        evidence = json.loads(metadata.read_text(encoding="utf-8"))
+        if (evidence.get("sample_id") != job["sample_id"] or evidence.get("attempt") != attempt
+                or evidence.get("source_class") != job["source_class"]
+                or evidence.get("requested_class") != job["requested_class"]
+                or evidence.get("split") != "train" or evidence.get("model") != MODEL
+                or evidence.get("source_revision") != REVISION
+                or evidence.get("output_sha256") != hashlib.sha256(image.read_bytes()).hexdigest()):
+            raise RuntimeError(f"STOP: accepted pilot metadata mismatch for {job['sample_id']}")
+    return approval
+
+
+def render_review_sheet():
+    from PIL import Image, ImageDraw, ImageOps
+    metadata_files = sorted((OUT / "generated").glob("*.json"))
+    if not metadata_files:
+        return
+    sheet = Image.new("RGB", (510, len(metadata_files) * 290), "white")
+    draw = ImageDraw.Draw(sheet)
+    for index, metadata_file in enumerate(metadata_files):
+        meta = json.loads(metadata_file.read_text(encoding="utf-8"))
+        source, generated = Path(meta["source"]), Path(meta["output"])
+        with Image.open(source) as a, Image.open(generated) as b:
+            sheet.paste(ImageOps.contain(a.convert("RGB"), (245, 245)), (0, index * 290))
+            sheet.paste(ImageOps.contain(b.convert("RGB"), (245, 245)), (255, index * 290))
+        draw.text((0, index * 290 + 250), f"{meta['sample_id']}: {meta['source_class']} -> {meta['requested_class']}", fill="black")
+        draw.text((0, index * 290 + 267), f"{meta['split']} / attempt {meta['attempt']} / PENDING VISUAL QA", fill="black")
+    sheet.save(OUT / "generation_review_sheet.jpg", quality=90)
+
+
 def main():
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("--all", action="store_true", help="Generate the remaining 27 candidates after visual pilot review")
+    group.add_argument("--all", action="store_true", help="Generate the remaining 27 only after recorded pilot approval")
     group.add_argument("--retry", metavar="STYLE/FILENAME", help="One controlled second generation of a reviewed failure")
+    parser.add_argument("--reviews", type=Path, help="JSON with explicit ACCEPT/REGENERATE/REJECT decisions")
+    parser.add_argument("--pilot-approval", type=Path, help="Supervisor/Project Lead approval JSON for --all")
     args = parser.parse_args()
 
     if not SOURCE.exists():
@@ -52,6 +147,35 @@ def main():
     for style, config in selection["styles"].items():
         assert len(config["train"]) == 8 and len(config["val"]) == 2
         assert len(set(config["train"] + config["val"])) == 10
+    jobs = build_jobs(selection)
+    pilot = pilot_jobs(jobs)
+    if args.retry:
+        style, name = args.retry.split("/", 1)
+        jobs = [job for job in jobs if job["source_class"] == style and job["source_filename"] == name]
+        if len(jobs) != 1:
+            raise RuntimeError(f"STOP: retry item is not selected: {args.retry}")
+        require_review(args.reviews, jobs[0]["sample_id"], "REGENERATE")
+        if jobs[0]["split"] == "val" or jobs[0]["sample_id"] not in {p["sample_id"] for p in pilot}:
+            require_full_approval(args.pilot_approval, args.reviews, pilot)
+        else:
+            pilot_reviews = json.loads(args.reviews.read_text(encoding="utf-8"))
+            if sum(pilot_reviews.get(p["sample_id"], {}).get("status") == "ACCEPT" for p in pilot) != 2:
+                raise RuntimeError("STOP: a pilot retry requires exactly two accepted pilot outputs")
+    elif args.all:
+        require_full_approval(args.pilot_approval, args.reviews, pilot)
+        pilot_ids = {job["sample_id"] for job in pilot}
+        jobs = [job for job in jobs if job["sample_id"] not in pilot_ids]
+    else:
+        jobs = pilot
+    if not jobs:
+        raise RuntimeError("STOP: no jobs selected")
+    OUT.mkdir(parents=True, exist_ok=True)
+    plan = make_plan(jobs, retry=bool(args.retry))
+    plan_path = OUT / ("pilot_plan.json" if not args.all and not args.retry else
+                       "full_plan.json" if args.all else f"retry_plan_{jobs[0]['sample_id']}.json")
+    if plan_path.exists() and json.loads(plan_path.read_text(encoding="utf-8")) != plan:
+        raise RuntimeError(f"STOP: existing generation plan differs: {plan_path}")
+    save_json(plan_path, plan)
 
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     os.environ["HF_HOME"] = str(SCRATCH / "hf-cache")
@@ -59,7 +183,7 @@ def main():
     SCRATCH.mkdir(parents=True, exist_ok=True)
     OUT.mkdir(parents=True, exist_ok=True)
     import torch
-    from PIL import Image, ImageDraw, ImageOps
+    from PIL import Image, ImageOps
     from huggingface_hub import HfApi, hf_hub_download
     from diffusers import Flux2KleinPipeline
 
@@ -89,23 +213,10 @@ def main():
     })
     archive_path = hf_hub_download(REPO, "FaceSketches-HairStyle40.zip", repo_type="dataset", revision=REVISION, cache_dir=str(SCRATCH / "hf-cache/hub"))
 
-    jobs = [(style, name, config["alternate_style"], split)
-            for style, config in selection["styles"].items()
-            for split in ("train", "val") for name in config[split]]
-    if args.retry:
-        style, name = args.retry.split("/", 1)
-        jobs = [job for job in jobs if job[:2] == (style, name)]
-        if len(jobs) != 1:
-            raise RuntimeError(f"Retry item not selected: {args.retry}")
-    elif not args.all:
-        jobs = [next(job for job in jobs if job[0] == style) for style in PHRASES]
-    if not jobs:
-        raise RuntimeError("No jobs selected")
-
     prepared = []
     with ZipFile(archive_path) as archive:
-        for style, name, target, split in jobs:
-            member = f"FaceSketches-HairStyle40/image/{style}/{name}"
+        for job in plan:
+            member = job["source_archive_path"]
             with Image.open(BytesIO(archive.read(member))) as raw:
                 photo = ImageOps.exif_transpose(raw).convert("RGB")
                 if min(photo.size) < 256:
@@ -113,16 +224,21 @@ def main():
                 # Contain avoids cropping hair or face; the same square framing is used for the edit pair.
                 normalized = ImageOps.pad(photo, (SIZE, SIZE), method=Image.Resampling.LANCZOS,
                                            color=(245, 245, 245), centering=(0.5, 0.5))
-            key = f"{style}_{Path(name).stem}"
-            path = OUT / "original" / f"{key}.png"
+            path = Path(job["source_path"])
             path.parent.mkdir(parents=True, exist_ok=True)
-            normalized.save(path)
-            prepared.append((key, path, style, name, target, split))
+            if path.exists():
+                with Image.open(path) as existing:
+                    if existing.convert("RGB").tobytes() != normalized.tobytes():
+                        raise RuntimeError(f"STOP: existing normalized original differs: {path}")
+            else:
+                normalized.save(path)
+            prepared.append((job, path))
 
     pipe = Flux2KleinPipeline.from_pretrained(MODEL, torch_dtype=torch.float16, cache_dir=os.environ["HF_HUB_CACHE"])
     pipe.enable_model_cpu_offload(gpu_id=0)
     print("Base pipeline loaded with FP16 and CPU offload on GPU 0", flush=True)
-    for key, source, style, name, target, split in prepared:
+    for job, source in prepared:
+        key = job["sample_id"]
         primary = OUT / "generated" / f"{key}.png"
         retry = OUT / "generated" / f"{key}_r2.png"
         if args.retry:
@@ -134,9 +250,7 @@ def main():
                 print("Already generated:", primary, flush=True)
                 continue
             dest, attempt = primary, 1
-        prompt = (f"Change the person's hairstyle to {PHRASES[target]} while preserving their identity, "
-                  "face, expression, pose, clothing, lighting, framing, and background. Only change the hairstyle.")
-        seed = SEED + attempt - 1
+        prompt, seed = job["prompt"], job["seed"]
         torch.cuda.reset_peak_memory_stats(0)
         start = time.monotonic()
         try:
@@ -147,32 +261,27 @@ def main():
             dest.parent.mkdir(parents=True, exist_ok=True)
             result.save(dest)
             save_json(dest.with_suffix(".json"), {
-                "source_class": style, "source_filename": name, "requested_class": target,
-                "split": split, "source": str(source), "output": str(dest),
+                "sample_id": key, "source_archive_path": job["source_archive_path"],
+                "source_class": job["source_class"], "source_filename": job["source_filename"],
+                "requested_class": job["requested_class"], "split": job["split"],
+                "source": str(source), "source_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
+                "output": str(dest), "output_sha256": hashlib.sha256(dest.read_bytes()).hexdigest(),
+                "model": MODEL, "model_revision": model_info.sha, "source_revision": info.sha,
+                "generated_utc": datetime.now(timezone.utc).isoformat(),
                 "prompt": prompt, "seed": seed, "attempt": attempt,
+                "retry_change": {"field": "seed", "from": SEED, "to": seed} if attempt == 2 else None,
                 "steps": STEPS, "guidance": GUIDANCE, "width": SIZE, "height": SIZE,
                 "runtime_seconds": time.monotonic() - start,
                 "peak_gpu_allocated_bytes": torch.cuda.max_memory_allocated(0),
                 "qa_status": "PENDING_VISUAL_REVIEW",
             })
-            print(f"{key} -> {target}: {dest} ({time.monotonic() - start:.1f}s)", flush=True)
+            render_review_sheet()
+            print(f"{key} -> {job['requested_class']}: {dest} ({time.monotonic() - start:.1f}s)", flush=True)
         except Exception:
             import traceback
             (OUT / "generation_error.txt").write_text(traceback.format_exc(), encoding="utf-8")
             raise
-    metadata_files = sorted((OUT / "generated").glob("*.json"))
-    sheet = Image.new("RGB", (510, max(1, len(metadata_files)) * 290), "white")
-    draw = ImageDraw.Draw(sheet)
-    for index, metadata_file in enumerate(metadata_files):
-        meta = json.loads(metadata_file.read_text(encoding="utf-8"))
-        source = Path(meta["source"])
-        generated = Path(meta["output"])
-        with Image.open(source) as a, Image.open(generated) as b:
-            sheet.paste(ImageOps.contain(a.convert("RGB"), (245, 245)), (0, index * 290))
-            sheet.paste(ImageOps.contain(b.convert("RGB"), (245, 245)), (255, index * 290))
-        draw.text((0, index * 290 + 250), f"{meta['source_class']}/{meta['source_filename']} -> {meta['requested_class']}", fill="black")
-        draw.text((0, index * 290 + 267), f"{meta['split']} / attempt {meta['attempt']} / PENDING VISUAL QA", fill="black")
-    sheet.save(OUT / "generation_review_sheet.jpg", quality=90)
+    render_review_sheet()
     print("Generation finished. Review", OUT / "generation_review_sheet.jpg", "; no outputs accepted automatically.")
 
 

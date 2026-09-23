@@ -1,0 +1,41 @@
+[
+  {
+    "sample_id": "CrewCut_1",
+    "source_class": "CrewCut",
+    "source_filename": "1.jpg",
+    "requested_class": "BobHair",
+    "split": "train",
+    "source_archive_path": "FaceSketches-HairStyle40/image/CrewCut/1.jpg",
+    "prompt": "Change the person's hairstyle to a bob hairstyle while preserving their identity, facial features, expression, pose, clothing, lighting, framing, and background. Only change the hairstyle.",
+    "seed": 1977,
+    "attempt": 1,
+    "source_path": "/kaggle/working/data001/original/CrewCut_1.png",
+    "output_path": "/kaggle/working/data001/generated/CrewCut_1.png"
+  },
+  {
+    "sample_id": "BobHair_1",
+    "source_class": "BobHair",
+    "source_filename": "1.jpg",
+    "requested_class": "LayeredHair",
+    "split": "train",
+    "source_archive_path": "FaceSketches-HairStyle40/image/BobHair/1.jpg",
+    "prompt": "Change the person's hairstyle to a layered hairstyle while preserving their identity, facial features, expression, pose, clothing, lighting, framing, and background. Only change the hairstyle.",
+    "seed": 1977,
+    "attempt": 1,
+    "source_path": "/kaggle/working/data001/original/BobHair_1.png",
+    "output_path": "/kaggle/working/data001/generated/BobHair_1.png"
+  },
+  {
+    "sample_id": "LayeredHair_4",
+    "source_class": "LayeredHair",
+    "source_filename": "4.jpg",
+    "requested_class": "CrewCut",
+    "split": "train",
+    "source_archive_path": "FaceSketches-HairStyle40/image/LayeredHair/4.jpg",
+    "prompt": "Change the person's hairstyle to a crew cut while preserving their identity, facial features, expression, pose, clothing, lighting, framing, and background. Only change the hairstyle.",
+    "seed": 1977,
+    "attempt": 1,
+    "source_path": "/kaggle/working/data001/original/LayeredHair_4.png",
+    "output_path": "/kaggle/working/data001/generated/LayeredHair_4.png"
+  }
+]

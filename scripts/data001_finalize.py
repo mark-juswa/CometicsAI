@@ -2,7 +2,8 @@
 
 Example: python scripts/data001_finalize.py --generation-dir data/dataset_v1/kaggle \
     --reviews data/dataset_v1/reviews.json
-Reviews JSON maps each source key (e.g. CrewCut_1) to {"status":"ACCEPT","attempt":1}.
+Reviews JSON maps each source key (e.g. CrewCut_1) to
+{"status":"ACCEPT","attempt":1,"notes":"Identity, hairstyle, and background checked"}.
 Status REGENERATE or REJECT blocks finalization; no automated image review is claimed.
 """
 
@@ -18,12 +19,13 @@ from PIL import Image, ImageDraw, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
 SELECTION = json.loads((ROOT / "docs/data/DATA-001-selection.json").read_text(encoding="utf-8"))
-PHRASES = {"CrewCut": "a crew cut", "BobHair": "a bob hairstyle", "LayeredHair": "layered hair"}
+PHRASES = {"CrewCut": "a crew cut", "BobHair": "a bob hairstyle", "LayeredHair": "a layered hairstyle"}
+MODEL = "black-forest-labs/FLUX.2-klein-base-4B"
 
 
 def instruction(style):
     return (f"Change the person's hairstyle to {PHRASES[style]} while preserving their identity, "
-            "face, expression, pose, clothing, lighting, framing, and background.\n")
+            "facial features, expression, pose, clothing, lighting, framing, and background.\n")
 
 
 def sheet(rows, path, size=(280, 280)):
@@ -56,34 +58,72 @@ def main():
             for filename in config[split]:
                 key = f"{original_style}_{Path(filename).stem}"
                 entry = reviews.get(key)
-                if not isinstance(entry, dict) or entry.get("status") != "ACCEPT" or entry.get("attempt") not in (1, 2):
-                    raise RuntimeError(f"STOP: explicit ACCEPT and attempt 1/2 required for {key}; got {entry}")
+                if (not isinstance(entry, dict) or entry.get("status") != "ACCEPT"
+                        or entry.get("attempt") not in (1, 2) or not str(entry.get("notes", "")).strip()):
+                    raise RuntimeError(f"STOP: explicit ACCEPT, attempt 1/2, and review notes required for {key}; got {entry}")
                 original = args.generation_dir / "original" / f"{key}.png"
                 generated = args.generation_dir / "generated" / f"{key}{'_r2' if entry['attempt'] == 2 else ''}.png"
                 metadata = json.loads(generated.with_suffix(".json").read_text(encoding="utf-8"))
-                assert metadata["source_class"] == original_style and metadata["requested_class"] == alternate_style
-                assert metadata["source_filename"] == filename and metadata["split"] == split
-                assert metadata["attempt"] == entry["attempt"]
+                expected = {"sample_id": key, "source_class": original_style,
+                            "requested_class": alternate_style, "source_filename": filename,
+                            "split": split, "attempt": entry["attempt"], "model": MODEL,
+                            "source_revision": SELECTION["source_revision"],
+                            "source_archive_path": f"FaceSketches-HairStyle40/image/{original_style}/{filename}",
+                            "width": 512, "height": 512}
+                for field, value in expected.items():
+                    if metadata.get(field) != value:
+                        raise RuntimeError(f"STOP: {key} generation metadata {field}={metadata.get(field)!r}; expected {value!r}")
+                if not metadata.get("model_revision") or not metadata.get("generated_utc") or not metadata.get("prompt"):
+                    raise RuntimeError(f"STOP: incomplete generation provenance for {key}")
+                if metadata.get("source_sha256") != hashlib.sha256(original.read_bytes()).hexdigest():
+                    raise RuntimeError(f"STOP: original SHA256 differs from generation metadata for {key}")
+                if metadata.get("output_sha256") != hashlib.sha256(generated.read_bytes()).hexdigest():
+                    raise RuntimeError(f"STOP: generated SHA256 differs from generation metadata for {key}")
                 for path in (original, generated):
                     with Image.open(path) as image:
                         image.verify()
                     with Image.open(path) as image:
+                        if image.mode != "RGB":
+                            raise RuntimeError(f"STOP: expected RGB image, found {image.mode} in {path}")
                         rgb = image.convert("RGB")
-                        assert rgb.size == (512, 512), (path, rgb.size)
-                entries.append((key, original_style, alternate_style, split, original, generated, entry["attempt"]))
-    assert len(entries) == 30 and len(reviews) == 30, "Expected exactly 30 reviewed identity groups"
+                        if rgb.size != (512, 512):
+                            raise RuntimeError(f"STOP: invalid dimensions {rgb.size} in {path}")
+                entries.append((key, original_style, alternate_style, split, original, generated, entry, metadata))
+    if len(entries) != 30 or len(reviews) != 30:
+        raise RuntimeError("STOP: expected exactly 30 reviewed identity groups")
+
+    groups_by_split = defaultdict(set)
+    distribution = Counter()
+    seen_hashes = defaultdict(set)
+    for key, original_style, alternate_style, split, original, generated, _, _ in entries:
+        groups_by_split[split].add(key)
+        distribution[(split, original_style)] += 1
+        distribution[(split, alternate_style)] += 1
+        for role, path in (("original", original), ("generated", generated)):
+            seen_hashes[hashlib.sha256(path.read_bytes()).hexdigest()].add((key, role, split))
+    if groups_by_split["train"] & groups_by_split["val"]:
+        raise RuntimeError("STOP: source identity occurs in both train and validation")
+    if len(groups_by_split["train"]) != 24 or len(groups_by_split["val"]) != 6:
+        raise RuntimeError("STOP: train/validation identity counts differ from 24/6")
+    expected_distribution = Counter({(split, style): count
+                                     for split, count in (("train", 16), ("val", 4)) for style in PHRASES})
+    if distribution != expected_distribution:
+        raise RuntimeError(f"STOP: target class distribution mismatch: {distribution}")
+    unexpected_duplicates = [sorted(list(v)) for v in seen_hashes.values() if len(v) > 1]
+    if unexpected_duplicates:
+        raise RuntimeError(f"STOP: repeated original/generated SHA256 across identity groups or roles: {unexpected_duplicates}")
 
     # Perform all gates before copying. The final directory must be empty on entry.
     if args.output.exists() and any(args.output.iterdir()):
         raise RuntimeError(f"STOP: final output already exists; inspect it before replacing: {args.output}")
     manifest = []
     identity_rows, pair_rows = [], []
-    seen_hashes = defaultdict(set)
-    groups_by_split = defaultdict(set)
-    distribution = Counter()
-    for key, original_style, alternate_style, split, original, generated, attempt in entries:
-        groups_by_split[split].add(key)
+    for key, original_style, alternate_style, split, original, generated, review, metadata in entries:
+        attempt = review["attempt"]
         identity_rows.append((original, generated, f"{key} / {split} / {alternate_style} / ACCEPT r{attempt}"))
+        metadata_out = args.output / "manifests" / "generation" / f"{key}.json"
+        metadata_out.parent.mkdir(parents=True, exist_ok=True)
+        metadata_out.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
         for direction, reference, target, requested in (
             ("to_original", generated, original, original_style),
             ("to_alternate", original, generated, alternate_style),
@@ -97,29 +137,37 @@ def main():
             shutil.copyfile(target, target_out)
             target_out.with_suffix(".txt").write_text(instruction(requested), encoding="utf-8")
             pair_rows.append((ref_out, target_out, f"{stem} / {split} / {requested}"))
-            distribution[(split, requested)] += 1
             manifest.append({"identity_group": key, "split": split, "source_class": original_style,
                              "requested_style": requested, "direction": direction, "attempt": attempt,
+                             "selected_source": metadata["source_archive_path"],
+                             "selection_revision": SELECTION["source_revision"],
+                             "generation_metadata": str(metadata_out.relative_to(args.output)),
+                             "generation_model": metadata["model"],
+                             "generation_model_revision": metadata["model_revision"],
+                             "generation_prompt": metadata["prompt"],
+                             "generation_seed": metadata["seed"],
+                             "generation_output_sha256": metadata["output_sha256"],
+                             "review": review,
                              "reference": str(ref_out.relative_to(args.output)),
                              "target": str(target_out.relative_to(args.output)),
                              "caption": instruction(requested).strip()})
-        for role, path in (("original", original), ("generated", generated)):
-            seen_hashes[hashlib.sha256(path.read_bytes()).hexdigest()].add((key, role))
-    assert not (groups_by_split["train"] & groups_by_split["val"])
-    assert len(groups_by_split["train"]) == 24 and len(groups_by_split["val"]) == 6
-    assert len(manifest) == 60 and distribution == Counter({
-        (split, style): count for split, count in (("train", 16), ("val", 4)) for style in PHRASES})
-    unexpected_duplicates = [sorted(list(v)) for v in seen_hashes.values() if len(v) > 1]
-    assert not unexpected_duplicates, unexpected_duplicates
+    if len(manifest) != 60:
+        raise RuntimeError(f"STOP: built {len(manifest)} directional pairs instead of 60")
     for split, expected in (("train", 48), ("val", 12)):
         reference = sorted((args.output / split / "reference").glob("*.png"))
         target = sorted((args.output / split / "target").glob("*.png"))
         captions = sorted((args.output / split / "target").glob("*.txt"))
-        assert len(reference) == len(target) == len(captions) == expected
-        assert {p.stem for p in reference} == {p.stem for p in target} == {p.stem for p in captions}
+        if len(reference) != expected or len(target) != expected or len(captions) != expected:
+            raise RuntimeError(f"STOP: {split} file counts differ from {expected}")
+        if {p.stem for p in reference} != {p.stem for p in target} or {p.stem for p in target} != {p.stem for p in captions}:
+            raise RuntimeError(f"STOP: {split} reference/target/caption filenames do not align")
+        if any(not caption.read_text(encoding="utf-8").strip() for caption in captions):
+            raise RuntimeError(f"STOP: {split} has an empty caption")
     output_manifest = args.output / "manifests" / "pairs.json"
     output_manifest.parent.mkdir(parents=True, exist_ok=True)
     output_manifest.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    (args.output / "manifests" / "reviews.json").write_text(json.dumps(reviews, indent=2) + "\n", encoding="utf-8")
+    (args.output / "manifests" / "selection.json").write_text(json.dumps(SELECTION, indent=2) + "\n", encoding="utf-8")
     sheet(identity_rows, args.output / "contact_sheets" / "identity_generation.jpg")
     sheet(pair_rows, args.output / "contact_sheets" / "all_pairs.jpg")
     report = {"source": SELECTION["source_repository"], "revision": SELECTION["source_revision"],
@@ -129,7 +177,7 @@ def main():
               "target_class_distribution": {f"{k[0]}/{k[1]}": v for k, v in sorted(distribution.items())},
               "unexpected_duplicate_sha256_groups": unexpected_duplicates,
               "caption_reference_target_alignment": "PASS", "image_open_rgb_dimensions": "PASS",
-              "split_leakage": "NONE", "visual_qa": "30 explicit ACCEPT decisions in supplied reviews; manual sheet inspection still required"}
+              "split_leakage": "NONE", "visual_qa": "30 explicit ACCEPT decisions with notes in supplied reviews; manual sheet inspection still required"}
     (args.output / "reports").mkdir(exist_ok=True)
     (args.output / "reports" / "qa.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, indent=2))

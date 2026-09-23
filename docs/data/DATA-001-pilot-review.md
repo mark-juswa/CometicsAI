@@ -2,6 +2,8 @@
 
 **Status: PILOT STOP.** Codex inspected the Supervisor-supplied pilot ZIP on 2026-09-23. These are visual findings for the Project Lead/Supervisor; they are not an official ACCEPT review manifest or authorization for full generation. The accepted-counterpart count remains zero.
 
+**Later direction:** This document records the original strict review. The Supervisor subsequently approved a practical Dataset V1 review threshold and the V1/global remaining-27 generation path. See the [active handoff](DATA-001-v1-bulk-handoff.md). The findings here are historical evidence, not the current bulk-generation gate.
+
 ## Artifact integrity and provenance
 
 - Supplied archive: `D:/Downloads/data001_pilot.zip`; SHA256 `ef71eb19b52c2d0cf1ad21c8d5f30a36a118bf9319192dc78485e1ccc04d4485`.

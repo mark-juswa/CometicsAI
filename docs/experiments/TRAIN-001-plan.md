@@ -1,12 +1,12 @@
 # TRAIN-001 BF16 hairstyle Edit-LoRA handoff
 
-**Prepared, not executed.** Real hairstyle training requires DATA-001 `reports/qa.json`, 30 explicit ACCEPT reviews, 60 validated directional pairs, and human inspection of both final contact sheets. The three-image masked pilot and remaining generation are still pending. The EXP-001 T4 smoke test verified finite BF16 training for 20 steps at approximately 32.808 seconds/step and 13,531 MiB peak, not long-run stability or hairstyle quality.
+**Preliminary preparation, not execution-ready for the full 250→500 plan.** Real hairstyle training requires DATA-001 `reports/qa.json`, 30 explicit ACCEPT reviews, 60 validated directional pairs, and human inspection of both final contact sheets. The active DATA-001 path is V1/global generation of the remaining 27; masked V2 is optional. The EXP-001 T4 smoke test verified finite BF16 training for 20 steps at approximately 32.808 seconds/step and 13,531 MiB peak, not long-run stability or hairstyle quality. The Supervisor's later direction requires any 500-step continuation to resume the **same** 250-step run; this script's old separate 500-step configuration does not meet that requirement and must not be executed until resume support is prepared after DATA-001.
 
 ## Configuration and expected output
 
 [`train001_kaggle.py`](../../notebooks/train001_kaggle.py) revalidates the final dataset and writes `train_config.yaml` from the EXP-001-confirmed settings: `black-forest-labs/FLUX.2-klein-base-4B`, `flux2_klein_4b`, one GPU, 512 resolution, batch 1, BF16 training, FP16 checkpoint save, LoRA linear rank/alpha 16/16 and conv 8/8, `adamw8bit`, LR `1e-4`, `flowmatch`, weighted timesteps, gradient checkpointing, qfloat8 quantization, and `low_vram`. It pins AI Toolkit at `a8dfcf7d7e2b38ccc7b2fb68ece9c6358e61e7a7`. The train split uses `target/` captions with matching `reference/` control images. VAL is held out of training.
 
-The first planned run is **250 steps**, saving at 125 and 250; a **separate 500-step** configuration is available only after the first run is reviewed. These durations are planned checkpoints, not a claim that 250 steps yields quality or that the 500-step command resumes the 250-step weights. EXP-001 projects about 2.28 hours for 250 and 4.56 hours for 500 from the short smoke test, excluding setup, checkpoint, contention, and evaluation. Actual timing must be measured. Preserve `train_config.yaml`, `dataset_evidence.json`, `runtime.json`, `command.json`, `train.log`, `training_summary.json`, and `.safetensors` checkpoints under `/kaggle/working/train001_250/` (or `train001_500/`). Model/cache assets stay under `/tmp/hf-cache`.
+The first planned run is **250 steps**, saving at 125 and 250. A same-run continuation mechanism must be verified before proceeding toward 500. These durations are planned checkpoints, not a claim that 250 steps yields quality. EXP-001 projects about 2.28 hours for 250 and 4.56 hours for 500 from the short smoke test, excluding setup, checkpoint, contention, and evaluation. Actual timing must be measured. Preserve `train_config.yaml`, `dataset_evidence.json`, `runtime.json`, `command.json`, `train.log`, `training_summary.json`, and `.safetensors` checkpoints under `/kaggle/working/train001_250/`. Model/cache assets stay under `/tmp/hf-cache`.
 
 ## Supervisor Kaggle commands, after DATA-001 passes
 
@@ -48,7 +48,7 @@ subprocess.run(base + ["--phase", "evaluate", "--checkpoint", str(checkpoint)], 
 
 Evaluation creates `evaluation/reference_base_adapter_target.jpg`, 12 Base PNGs, 12 adapter PNGs, and `evaluation/metadata.json` with input, target, output hashes, seed, prompt, checkpoint hash, runtime, and GPU memory. Base and adapter use the same 12 held-out inputs, prompts, seed, and inference settings. These images require human review of hairstyle correctness and identity/scene preservation. The paired target is partly synthetic and is a comparison reference, not objective proof of model quality. No automatic quality verdict or app integration follows.
 
-If the Project Lead later authorizes a separate 500-step run, use the same three commands with `--out /kaggle/working/train001_500 --steps 500`. It starts fresh unless a documented resume mechanism is explicitly approved; do not assume continuation.
+Do not run the current `--steps 500` option. It would start a fresh run and does not satisfy the Supervisor's same-run continuation requirement. TRAIN-001 preparation will add and verify resume support after DATA-001 is finalized and the 250-step evaluation has been reviewed.
 
 Before ending the Kaggle session, download the output directory or package it:
 

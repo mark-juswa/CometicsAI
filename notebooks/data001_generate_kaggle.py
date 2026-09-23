@@ -2,7 +2,8 @@
 
 Run after the EXP-001 inference dependencies are available in this kernel.
 Default is one candidate per class (three outputs) for a visual pilot.
-Use --all only with recorded pilot approval; --retry STYLE/NAME requires a REGENERATE review.
+Use --all for the remaining selected 27 after the existing V1 pilot artifacts
+are restored. --retry STYLE/NAME requires an explicit REGENERATE review.
 No result is automatically accepted and this script never starts training.
 """
 
@@ -23,6 +24,7 @@ from zipfile import ZipFile
 REPO = "yikaiwang/FaceSketches-HairStyle40"
 REVISION = "45de974926fe64551fc2d0b80973335e20ca10e2"
 MODEL = "black-forest-labs/FLUX.2-klein-base-4B"
+MODEL_REVISION = "a3b4f4849157f664bdbc776fd7453c2783562f4d"
 SOURCE = Path(__file__).resolve().parents[1] / "docs/data/DATA-001-selection.json"
 OUT = Path("/kaggle/working/data001")
 SCRATCH = Path("/tmp")  # Reuse EXP-001's ephemeral /tmp/hf-cache when present.
@@ -75,39 +77,56 @@ def require_review(path, sample_id, expected):
     reviews = json.loads(path.read_text(encoding="utf-8"))
     review = reviews.get(sample_id)
     if (not isinstance(review, dict) or review.get("status") != expected
+            or review.get("attempt") != 1
             or not str(review.get("notes", "")).strip()):
-        raise RuntimeError(f"STOP: {sample_id} needs an explicit {expected} review decision; got {review}")
+        raise RuntimeError(f"STOP: {sample_id} needs an explicit {expected} review of attempt 1; got {review}")
     return review
 
 
-def require_full_approval(approval_path, reviews_path, pilot):
-    if not approval_path or not approval_path.is_file():
-        raise RuntimeError("STOP: --all requires --pilot-approval after Supervisor/Project Lead review")
-    approval = json.loads(approval_path.read_text(encoding="utf-8"))
-    expected_ids = [job["sample_id"] for job in pilot]
-    if (approval.get("decision") != "APPROVE_FULL_GENERATION"
-            or approval.get("pilot_sample_ids") != expected_ids
-            or not approval.get("reviewer") or not approval.get("approved_utc")):
-        raise RuntimeError(f"STOP: pilot approval must name reviewer, approval time, and exact pilot IDs {expected_ids}")
+def import_pilot_zip(path, pilot):
+    """Restore only the known V1 pilot files from the Supervisor's ZIP."""
+    if not path.is_file():
+        raise RuntimeError(f"STOP: pilot ZIP missing: {path}")
+    with ZipFile(path) as archive:
+        names = archive.namelist()
+        for job in pilot:
+            sample = job["sample_id"]
+            for relative in (f"original/{sample}.png", f"generated/{sample}.png",
+                             f"generated/{sample}.json"):
+                matches = [name for name in names if name == relative or name.endswith("/" + relative)]
+                if len(matches) != 1:
+                    raise RuntimeError(f"STOP: pilot ZIP must have exactly one {relative}; found {matches}")
+                dest = OUT / relative
+                payload = archive.read(matches[0])
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                if dest.exists() and dest.read_bytes() != payload:
+                    raise RuntimeError(f"STOP: existing pilot file differs: {dest}")
+                if not dest.exists():
+                    dest.write_bytes(payload)
+
+
+def verify_existing_pilot(pilot):
+    """Require the three V1 pilot artifacts, but leave quality to final review."""
+    planned = {job["sample_id"]: job for job in make_plan(pilot)}
     for job in pilot:
-        review = require_review(reviews_path, job["sample_id"], "ACCEPT")
-        attempt = review.get("attempt")
-        if attempt not in (1, 2):
-            raise RuntimeError(f"STOP: accepted pilot attempt must be 1 or 2 for {job['sample_id']}")
-        suffix = "_r2" if attempt == 2 else ""
-        metadata = OUT / "generated" / f"{job['sample_id']}{suffix}.json"
+        metadata = OUT / "generated" / f"{job['sample_id']}.json"
         image = metadata.with_suffix(".png")
-        if not metadata.is_file() or not image.is_file():
-            raise RuntimeError(f"STOP: accepted pilot artifacts missing for {job['sample_id']}")
+        source = OUT / "original" / f"{job['sample_id']}.png"
+        if not metadata.is_file() or not image.is_file() or not source.is_file():
+            raise RuntimeError(f"STOP: restore the V1 pilot image, metadata, and original for {job['sample_id']}")
         evidence = json.loads(metadata.read_text(encoding="utf-8"))
-        if (evidence.get("sample_id") != job["sample_id"] or evidence.get("attempt") != attempt
+        if (evidence.get("sample_id") != job["sample_id"] or evidence.get("attempt") != 1
                 or evidence.get("source_class") != job["source_class"]
+                or evidence.get("source_filename") != job["source_filename"]
                 or evidence.get("requested_class") != job["requested_class"]
                 or evidence.get("split") != "train" or evidence.get("model") != MODEL
+                or evidence.get("model_revision") != MODEL_REVISION
                 or evidence.get("source_revision") != REVISION
+                or evidence.get("prompt") != planned[job["sample_id"]]["prompt"]
+                or evidence.get("seed") != SEED
+                or evidence.get("source_sha256") != hashlib.sha256(source.read_bytes()).hexdigest()
                 or evidence.get("output_sha256") != hashlib.sha256(image.read_bytes()).hexdigest()):
-            raise RuntimeError(f"STOP: accepted pilot metadata mismatch for {job['sample_id']}")
-    return approval
+            raise RuntimeError(f"STOP: V1 pilot metadata/hash mismatch for {job['sample_id']}")
 
 
 def render_review_sheet():
@@ -131,11 +150,14 @@ def render_review_sheet():
 def main():
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("--all", action="store_true", help="Generate the remaining 27 only after recorded pilot approval")
+    group.add_argument("--all", action="store_true", help="Generate the remaining 27 selected identities using the V1 method")
+    group.add_argument("--plan-all", action="store_true", help="Print the remaining 27 jobs without downloading or generating")
     group.add_argument("--retry", metavar="STYLE/FILENAME", help="One controlled second generation of a reviewed failure")
     parser.add_argument("--reviews", type=Path, help="JSON with explicit ACCEPT/REGENERATE/REJECT decisions")
-    parser.add_argument("--pilot-approval", type=Path, help="Supervisor/Project Lead approval JSON for --all")
+    parser.add_argument("--pilot-zip", type=Path, help="Restore the three V1 pilot artifacts when Kaggle working storage was reset")
     args = parser.parse_args()
+    if args.pilot_zip and not args.all:
+        raise RuntimeError("STOP: --pilot-zip is only used with --all")
 
     if not SOURCE.exists():
         raise RuntimeError(f"Selection file missing: {SOURCE}. Upload or clone the repository with this script.")
@@ -149,22 +171,28 @@ def main():
         assert len(set(config["train"] + config["val"])) == 10
     jobs = build_jobs(selection)
     pilot = pilot_jobs(jobs)
+    pilot_ids = {job["sample_id"] for job in pilot}
+    if args.plan_all:
+        remaining = [job for job in jobs if job["sample_id"] not in pilot_ids]
+        assert len(remaining) == 27 and sum(job["split"] == "train" for job in remaining) == 21
+        print(json.dumps({"method": "v1_global", "count": len(remaining), "jobs": remaining}, indent=2))
+        return
     if args.retry:
+        if "/" not in args.retry:
+            raise RuntimeError("STOP: --retry must be STYLE/FILENAME, e.g. BobHair/2.jpg")
         style, name = args.retry.split("/", 1)
         jobs = [job for job in jobs if job["source_class"] == style and job["source_filename"] == name]
         if len(jobs) != 1:
             raise RuntimeError(f"STOP: retry item is not selected: {args.retry}")
         require_review(args.reviews, jobs[0]["sample_id"], "REGENERATE")
-        if jobs[0]["split"] == "val" or jobs[0]["sample_id"] not in {p["sample_id"] for p in pilot}:
-            require_full_approval(args.pilot_approval, args.reviews, pilot)
-        else:
-            pilot_reviews = json.loads(args.reviews.read_text(encoding="utf-8"))
-            if sum(pilot_reviews.get(p["sample_id"], {}).get("status") == "ACCEPT" for p in pilot) != 2:
-                raise RuntimeError("STOP: a pilot retry requires exactly two accepted pilot outputs")
     elif args.all:
-        require_full_approval(args.pilot_approval, args.reviews, pilot)
-        pilot_ids = {job["sample_id"] for job in pilot}
+        if args.pilot_zip:
+            import_pilot_zip(args.pilot_zip, pilot)
+        verify_existing_pilot(pilot)
         jobs = [job for job in jobs if job["sample_id"] not in pilot_ids]
+        if (len(jobs) != 27 or sum(job["split"] == "train" for job in jobs) != 21
+                or sum(job["split"] == "val" for job in jobs) != 6):
+            raise RuntimeError("STOP: V1 bulk plan must contain 21 TRAIN and six VAL identities")
     else:
         jobs = pilot
     if not jobs:
@@ -194,7 +222,9 @@ def main():
     info = api.dataset_info(REPO, revision=REVISION)
     if info.sha != REVISION or str(info.card_data.license) != "apache-2.0":
         raise RuntimeError(f"STOP: source revision/license changed: {info.sha}, {info.card_data.license}")
-    model_info = api.model_info(MODEL, files_metadata=True)
+    model_info = api.model_info(MODEL, revision=MODEL_REVISION, files_metadata=True)
+    if model_info.sha != MODEL_REVISION:
+        raise RuntimeError(f"STOP: FLUX Base revision changed: {model_info.sha}")
     model_bytes = sum(item.size or 0 for item in model_info.siblings or [])
     scratch_free = shutil.disk_usage(SCRATCH).free
     working_free = shutil.disk_usage(OUT).free
@@ -234,7 +264,8 @@ def main():
                 normalized.save(path)
             prepared.append((job, path))
 
-    pipe = Flux2KleinPipeline.from_pretrained(MODEL, torch_dtype=torch.float16, cache_dir=os.environ["HF_HUB_CACHE"])
+    pipe = Flux2KleinPipeline.from_pretrained(MODEL, revision=MODEL_REVISION,
+                                               torch_dtype=torch.float16, cache_dir=os.environ["HF_HUB_CACHE"])
     pipe.enable_model_cpu_offload(gpu_id=0)
     print("Base pipeline loaded with FP16 and CPU offload on GPU 0", flush=True)
     for job, source in prepared:
@@ -244,9 +275,25 @@ def main():
         if args.retry:
             if not primary.exists() or retry.exists():
                 raise RuntimeError(f"Retry requires exactly one previous output: {primary}")
+            prior = json.loads(primary.with_suffix(".json").read_text(encoding="utf-8"))
+            if (prior.get("sample_id") != key or prior.get("attempt") != 1
+                    or prior.get("model") != MODEL or prior.get("model_revision") != MODEL_REVISION
+                    or prior.get("source_revision") != REVISION or prior.get("split") != job["split"]
+                    or prior.get("prompt") != job["prompt"] or prior.get("seed") != SEED
+                    or prior.get("output_sha256") != hashlib.sha256(primary.read_bytes()).hexdigest()
+                    or prior.get("source_sha256") != hashlib.sha256(source.read_bytes()).hexdigest()):
+                raise RuntimeError(f"STOP: attempt-1 provenance mismatch for {key}")
             dest, attempt = retry, 2
         else:
             if primary.exists():
+                prior = json.loads(primary.with_suffix(".json").read_text(encoding="utf-8"))
+                if (prior.get("sample_id") != key or prior.get("attempt") != 1
+                        or prior.get("model") != MODEL or prior.get("model_revision") != MODEL_REVISION
+                        or prior.get("source_revision") != REVISION or prior.get("split") != job["split"]
+                        or prior.get("prompt") != job["prompt"] or prior.get("seed") != SEED
+                        or prior.get("output_sha256") != hashlib.sha256(primary.read_bytes()).hexdigest()
+                        or prior.get("source_sha256") != hashlib.sha256(source.read_bytes()).hexdigest()):
+                    raise RuntimeError(f"STOP: existing output lacks matching metadata: {primary}")
                 print("Already generated:", primary, flush=True)
                 continue
             dest, attempt = primary, 1

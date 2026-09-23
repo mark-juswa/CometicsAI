@@ -1,6 +1,6 @@
 # DATA-001 masked bulk generation and finalization handoff
 
-**Prepared only.** No long generation has run. The three-image V2 masked pilot remains pending Kaggle execution and Supervisor/Project Lead visual review. Every command below that uses `--execute` is conditional on that review. Do not use V1 pilot reviews as V2 approval.
+**Optional masked fallback, not the active DATA-001 path.** No V2 generation has run. The Supervisor's current direction uses the [V1/global handoff](DATA-001-v1-bulk-handoff.md) to generate the remaining 27. The V2 commands below remain conditional on a separate masked pilot review and must not block normal V1 generation.
 
 ## Gate 1: approve the V2 pilot
 

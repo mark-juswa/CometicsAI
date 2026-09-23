@@ -1,6 +1,6 @@
 # DATA-001 Pilot V2: masked hairstyle editing
 
-**Status: PREPARED, KAGGLE RUN PENDING.** The approved three-image pilot is `CrewCut_1 → BobHair`, `BobHair_1 → LayeredHair`, and `LayeredHair_4 → CrewCut`. Do not generate the other 27 or mark any result accepted before visual review.
+**Status: OPTIONAL FALLBACK, NOT THE ACTIVE DATA-001 PATH.** The prepared masked three-image pilot is `CrewCut_1 → BobHair`, `BobHair_1 → LayeredHair`, and `LayeredHair_4 → CrewCut`. The Supervisor's later critical-path direction uses the [V1/global bulk handoff](DATA-001-v1-bulk-handoff.md) for the remaining 27; this masked pilot does not block it. No masked V2 output has run or been accepted.
 
 ## Pinned components and API
 

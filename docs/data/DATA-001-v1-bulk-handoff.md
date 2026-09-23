@@ -27,13 +27,22 @@ subprocess.run([sys.executable, str(repo / "notebooks/exp001_flux2_klein_kaggle_
 
 The V1 pilot files must exist under `/kaggle/working/data001/original/` and `/kaggle/working/data001/generated/`. In a fresh session, upload the previously supplied `data001_pilot.zip` as a Kaggle input, then set `pilot_zip` in the next cell to its actual Kaggle path. The `--pilot-zip` option restores only the three expected pilot originals, outputs, and JSON sidecars and verifies their hashes. In the original session, omit `--pilot-zip`.
 
+The Supervisor's fresh-session attempt on 2026-09-23 confirmed `--plan-all` reports 27 jobs and `--all` stops with `STOP: restore the V1 pilot image, metadata, and original for CrewCut_1` when `pilot_zip = None`. This is the expected missing-input gate, not a model or CUDA failure. After uploading the ZIP, locate it and set `pilot_zip` explicitly:
+
+```python
+pilot_matches = list(pathlib.Path("/kaggle/input").rglob("data001_pilot.zip")) + list(pathlib.Path("/kaggle/working").rglob("data001_pilot.zip"))
+assert len(pilot_matches) == 1, f"Expected one uploaded pilot ZIP; found {pilot_matches}"
+pilot_zip = pilot_matches[0]
+print(pilot_zip)
+```
+
 ## 2. Run remaining generation
 
 ```python
 from datetime import datetime, timezone
 out = pathlib.Path("/kaggle/working/data001")
 out.mkdir(parents=True, exist_ok=True)
-pilot_zip = None  # Or pathlib.Path("/kaggle/input/<your-upload>/data001_pilot.zip") in a fresh session.
+pilot_zip = globals().get("pilot_zip")  # None in the original session; uploaded ZIP path in a fresh one.
 cmd = [sys.executable, str(repo / "notebooks/data001_generate_kaggle.py"), "--all"]
 if pilot_zip is not None:
     cmd += ["--pilot-zip", str(pilot_zip)]

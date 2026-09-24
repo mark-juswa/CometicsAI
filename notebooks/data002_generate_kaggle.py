@@ -150,6 +150,11 @@ def main() -> None:
     from PIL import Image, ImageOps
     from huggingface_hub import hf_hub_download
     from diffusers import Flux2KleinPipeline
+    from transformers import logging as transformers_logging
+
+    # The Kaggle notebook blocked inside tqdm's weight-loading output lock.
+    # Keep our own load heartbeat and per-image completion lines instead.
+    transformers_logging.disable_progress_bar()
 
     if not torch.cuda.is_available():
         raise RuntimeError(f"CUDA is unavailable in {sys.executable}; select Kaggle T4 GPU")

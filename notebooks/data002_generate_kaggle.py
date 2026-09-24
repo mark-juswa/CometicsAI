@@ -103,10 +103,10 @@ def review_sheets(output: Path, manifest: dict) -> list[str]:
     return contact_sheets(rows, output / "review_sheets", "generation_review") if rows else []
 
 
-def load_heartbeat(stop: Event, started: float) -> None:
+def load_heartbeat(stop: Event, started: float, trace_path: Path) -> None:
     while not stop.wait(60):
         print(f"Base load still active after {time.monotonic() - started:.0f}s "
-              f"(PID {os.getpid()}); traceback follows every 180s if stalled.", flush=True)
+              f"(PID {os.getpid()}); traceback: {trace_path}", flush=True)
 
 
 def main() -> None:
@@ -203,19 +203,24 @@ def main() -> None:
 
     print(f"Loading pinned Base for {len(prepared)} remaining generation jobs", flush=True)
     started = time.monotonic()
+    trace_path = args.output / "base_load_trace.log"
     stop_heartbeat = Event()
-    Thread(target=load_heartbeat, args=(stop_heartbeat, started), daemon=True).start()
-    faulthandler.dump_traceback_later(180, repeat=True, file=sys.stderr)
-    try:
-        pipe = Flux2KleinPipeline.from_pretrained(
-            manifest["base_model_id"], revision=manifest["base_model_revision"],
-            torch_dtype=torch.float16, cache_dir=str(CACHE / "hub"))
-        print(f"Base weights materialized after {time.monotonic() - started:.0f}s; "
-              "enabling CPU offload", flush=True)
-        pipe.enable_model_cpu_offload(gpu_id=0)
-    finally:
-        stop_heartbeat.set()
-        faulthandler.cancel_dump_traceback_later()
+    Thread(target=load_heartbeat, args=(stop_heartbeat, started, trace_path), daemon=True).start()
+    with trace_path.open("a", encoding="utf-8") as trace:
+        trace.write(f"Base load started {datetime.now(timezone.utc).isoformat()} "
+                    f"PID {os.getpid()}\n")
+        trace.flush()
+        faulthandler.dump_traceback_later(180, repeat=True, file=trace)
+        try:
+            pipe = Flux2KleinPipeline.from_pretrained(
+                manifest["base_model_id"], revision=manifest["base_model_revision"],
+                torch_dtype=torch.float16, cache_dir=str(CACHE / "hub"))
+            print(f"Base weights materialized after {time.monotonic() - started:.0f}s; "
+                  "enabling CPU offload", flush=True)
+            pipe.enable_model_cpu_offload(gpu_id=0)
+        finally:
+            stop_heartbeat.set()
+            faulthandler.cancel_dump_traceback_later()
     print("Base ready with FP16 + CPU offload on cuda:0", flush=True)
     for index, (sample, original, folder, attempt) in enumerate(prepared):
         key = sample["sample_id"]

@@ -2,6 +2,7 @@
 
 import base64
 import os
+from pathlib import Path
 import warnings
 from io import BytesIO
 from typing import Annotated
@@ -9,14 +10,17 @@ from typing import Annotated
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image, ImageOps, UnidentifiedImageError
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from dotenv import load_dotenv
 
 from app.generation.base import GenerationEngine
 from app.generation.mock import MockEngine
-from app.styles import STYLE_BY_ID, STYLES, Style
+from app.generation.remote_flux import RemoteFluxEngine, RemoteGenerationError, from_environment
+from app.styles import STYLE_BY_ID, STYLES, REAL_STYLE_BY_ID, REAL_STYLES, Style
 
 
 MAX_FILE_BYTES = 8 * 1024 * 1024
+load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 MAX_IMAGE_PIXELS = 16_777_216
 MIN_DIMENSION = 64
 MAX_DIMENSION = 4096
@@ -25,10 +29,12 @@ Image.MAX_IMAGE_PIXELS = MAX_IMAGE_PIXELS
 
 
 def configured_engine() -> GenerationEngine:
-    mode = os.getenv("GENERATOR_MODE", "mock").strip().lower()
+    mode = os.getenv("GENERATION_ENGINE", os.getenv("GENERATOR_MODE", "mock")).strip().lower()
     if mode == "mock":
         return MockEngine()
-    raise RuntimeError(f"Unsupported GENERATOR_MODE: {mode}. This MVP supports mock only.")
+    if mode == "remote_flux":
+        return from_environment()
+    raise RuntimeError(f"Unsupported GENERATION_ENGINE: {mode}.")
 
 
 engine = configured_engine()
@@ -63,6 +69,7 @@ class GenerateResponse(BaseModel):
     generator: str
     style: StyleResponse
     image: ImageResponse
+    metadata: dict = Field(default_factory=dict)
 
 
 def style_response(style: Style) -> StyleResponse:
@@ -110,7 +117,8 @@ async def health() -> dict[str, str]:
 
 @app.get("/styles", response_model=list[StyleResponse])
 async def styles() -> list[StyleResponse]:
-    return [style_response(style) for style in STYLES]
+    catalog = REAL_STYLES if isinstance(engine, RemoteFluxEngine) else STYLES
+    return [style_response(style) for style in catalog]
 
 
 @app.post("/generate", response_model=GenerateResponse)
@@ -118,13 +126,16 @@ async def generate(
     image: Annotated[UploadFile, File()],
     style_id: Annotated[str, Form()],
 ) -> GenerateResponse:
-    style = STYLE_BY_ID.get(style_id)
+    catalog = REAL_STYLE_BY_ID if isinstance(engine, RemoteFluxEngine) else STYLE_BY_ID
+    style = catalog.get(style_id)
     if style is None:
         raise HTTPException(status_code=400, detail="Please choose a valid hairstyle.")
 
     portrait = await validated_image(image)
     try:
         generated = await engine.generate(portrait, style)
+    except RemoteGenerationError as exc:
+        raise HTTPException(status_code=502, detail=str(exc)) from None
     except Exception:
         raise HTTPException(status_code=500, detail="Generation failed. Please try again.") from None
     encoded = base64.b64encode(generated.content).decode("ascii")
@@ -138,4 +149,5 @@ async def generate(
             width=generated.width,
             height=generated.height,
         ),
+        metadata=generated.metadata,
     )

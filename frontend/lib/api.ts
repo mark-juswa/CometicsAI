@@ -6,7 +6,9 @@ export type GenerateResponse = {
   generator: string;
   style: Style;
   image: { data_url: string; content_type: string; width: number; height: number };
+  metadata?: { runtime_seconds?: number; seed?: number; steps?: number; guidance?: number };
 };
+export type HealthResponse = { status: string; generator: string };
 
 async function responseError(response: Response): Promise<Error> {
   try {
@@ -23,6 +25,12 @@ export async function getStyles(): Promise<Style[]> {
   const response = await fetch(`${API_BASE_URL}/styles`, { cache: "no-store" });
   if (!response.ok) throw await responseError(response);
   return (await response.json()) as Style[];
+}
+
+export async function getHealth(): Promise<HealthResponse> {
+  const response = await fetch(`${API_BASE_URL}/health`, { cache: "no-store" });
+  if (!response.ok) throw await responseError(response);
+  return (await response.json()) as HealthResponse;
 }
 
 export async function generatePortrait(file: File, styleId: string): Promise<GenerateResponse> {

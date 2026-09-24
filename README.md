@@ -1,8 +1,8 @@
-# HAIR CAPSTONE System MVP
+# HAIR CAPSTONE
 
-This is a local, CPU friendly development preview. You can upload a portrait, choose a prototype hairstyle, and generate a result through the FastAPI backend. The active `MockEngine` returns the normalized portrait unchanged. It does not perform AI hairstyle editing. No upload is stored permanently.
+The local application supports a CPU friendly `MockEngine` development preview and a `RemoteFluxEngine` that forwards portraits to a temporary Kaggle GPU server. The remote service loads FLUX.2 Klein Base 4B and our TRAIN-001 250-step conditional hairstyle LoRA. No upload is stored permanently by either server. The real model is experimental and can distort facial details.
 
-The real hairstyle dataset, hairstyle LoRA, FLUX integration, refinement, and deployment have not started.
+The 250-step training run and held-out evaluation are documented in [TRAIN-001](docs/experiments/TRAIN-001.md). For the one-time checkpoint upload and fresh Kaggle session setup, follow the [real-model demo guide](docs/guides/kaggle-real-model-demo.md). A live Kaggle tunnel and full application request remain to be verified by the Supervisor.
 
 ## Run locally on Windows
 
@@ -26,17 +26,17 @@ Copy-Item .env.example .env.local
 npm run dev
 ```
 
-Open [http://127.0.0.1:3000](http://127.0.0.1:3000). The backend listens at `http://127.0.0.1:8000`. If you change the backend address, edit `frontend/.env.local` and restart Next.js. `GENERATOR_MODE` defaults to `mock`. `FRONTEND_ORIGINS` defaults to both `localhost:3000` and `127.0.0.1:3000`; set it as a comma separated environment variable if your frontend uses another origin.
+Open [http://127.0.0.1:3000](http://127.0.0.1:3000). The backend listens at `http://127.0.0.1:8000`. If you change the backend address, edit `frontend/.env.local` and restart Next.js. `GENERATION_ENGINE` defaults to `mock`. For real mode, copy `backend/.env.example` to `backend/.env` and set `GENERATION_ENGINE=remote_flux`, the current `FLUX_REMOTE_URL`, and `FLUX_REMOTE_API_KEY`. The backend reads this file at startup. `FRONTEND_ORIGINS` defaults to both `localhost:3000` and `127.0.0.1:3000`.
 
 ## API contract
 
 | Route | Purpose |
 | --- | --- |
-| `GET /health` | Returns `{"status":"ok","generator":"mock"}`. |
-| `GET /styles` | Returns six centralized prototype hairstyle definitions. |
+| `GET /health` | Returns local API status and the configured generator. |
+| `GET /styles` | Returns six prototype styles in mock mode or the three trained style IDs in remote mode. |
 | `POST /generate` | Accepts multipart fields `image` and `style_id`; returns status, generator, chosen style, and an image data URL with MIME type and dimensions. |
 
-The API accepts JPG and PNG files up to 8 MB. Each image dimension must be 64 to 4096 pixels, with no more than 16,777,216 total pixels. It checks the decoded format, corrects EXIF orientation, and converts to RGB. The generator interface in `backend/app/generation/base.py` accepts the validated image and selected style and returns image bytes. A future FLUX engine can implement that same interface without changing the frontend request or response shape.
+The API accepts JPG and PNG files up to 8 MB. Each image dimension must be 64 to 4096 pixels, with no more than 16,777,216 total pixels. It checks the decoded format, corrects EXIF orientation, and converts to RGB. The generator interface in `backend/app/generation/base.py` accepts the validated image and selected style and returns image bytes. `RemoteFluxEngine` implements that interface without loading FLUX on the local PC.
 
 ## Verify
 
@@ -55,4 +55,4 @@ npm run build
 npm run test:e2e
 ```
 
-The browser tests use the locally installed Microsoft Edge and a synthetic portrait in `frontend/e2e/fixtures/`. They cover upload validation, style selection, loading, generation, changing styles, reset, and backend failure messages.
+The browser tests use the locally installed Microsoft Edge and a synthetic portrait in `frontend/e2e/fixtures/`. They cover the mock flow and a remote-mode flow with mocked GPU API responses. They do not run the real FLUX model.

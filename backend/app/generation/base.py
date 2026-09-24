@@ -1,6 +1,6 @@
 """Stable generation boundary for the mock and a future real engine."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Protocol
 
 from PIL import Image
@@ -14,6 +14,7 @@ class GeneratedImage:
     content_type: str
     width: int
     height: int
+    metadata: dict = field(default_factory=dict)
 
 
 class GenerationEngine(Protocol):

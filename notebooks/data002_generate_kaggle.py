@@ -7,6 +7,7 @@ one seed-only retry; there is no third attempt.
 
 import argparse
 from datetime import datetime, timezone
+import faulthandler
 import hashlib
 from io import BytesIO
 import json
@@ -15,6 +16,7 @@ from pathlib import Path
 import shutil
 import sys
 import time
+from threading import Event, Thread
 from zipfile import ZipFile
 
 
@@ -99,6 +101,12 @@ def review_sheets(output: Path, manifest: dict) -> list[str]:
                 rows.append((original, result, f"{sample['sample_id']} | {sample['split']} | "
                              f"{sample['source_style']} -> {sample['target_style']} | attempt {attempt}"))
     return contact_sheets(rows, output / "review_sheets", "generation_review") if rows else []
+
+
+def load_heartbeat(stop: Event, started: float) -> None:
+    while not stop.wait(60):
+        print(f"Base load still active after {time.monotonic() - started:.0f}s "
+              f"(PID {os.getpid()}); traceback follows every 180s if stalled.", flush=True)
 
 
 def main() -> None:
@@ -194,10 +202,20 @@ def main() -> None:
         return
 
     print(f"Loading pinned Base for {len(prepared)} remaining generation jobs", flush=True)
-    pipe = Flux2KleinPipeline.from_pretrained(
-        manifest["base_model_id"], revision=manifest["base_model_revision"],
-        torch_dtype=torch.float16, cache_dir=str(CACHE / "hub"))
-    pipe.enable_model_cpu_offload(gpu_id=0)
+    started = time.monotonic()
+    stop_heartbeat = Event()
+    Thread(target=load_heartbeat, args=(stop_heartbeat, started), daemon=True).start()
+    faulthandler.dump_traceback_later(180, repeat=True, file=sys.stderr)
+    try:
+        pipe = Flux2KleinPipeline.from_pretrained(
+            manifest["base_model_id"], revision=manifest["base_model_revision"],
+            torch_dtype=torch.float16, cache_dir=str(CACHE / "hub"))
+        print(f"Base weights materialized after {time.monotonic() - started:.0f}s; "
+              "enabling CPU offload", flush=True)
+        pipe.enable_model_cpu_offload(gpu_id=0)
+    finally:
+        stop_heartbeat.set()
+        faulthandler.cancel_dump_traceback_later()
     print("Base ready with FP16 + CPU offload on cuda:0", flush=True)
     for index, (sample, original, folder, attempt) in enumerate(prepared):
         key = sample["sample_id"]

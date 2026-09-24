@@ -1,6 +1,6 @@
 # DATA-002 Base load stall
 
-Status: **root surface localized; output change not yet verified on Kaggle**.
+Status: **not resolved; notebook output backpressure is the current testable hypothesis**.
 
 The Supervisor ran `notebooks/data002_generate_kaggle.py --all` against frozen manifest SHA-256 `25a3200c9a79be85ce19f690ba81f564d57d55d86d36e6383b0cacd1188ec5ab` on a Kaggle Tesla T4 with PyTorch `2.10.0+cu128`. The source archive was available. The runner reported `Loading pinned Base for 120 remaining generation jobs`, then remained there for more than 16 minutes. The last visible Transformers progress item was approximately 155/398 weight tensors. There were zero completed generated images. Earlier DATA-001 runs loaded the same pinned FLUX.2 Klein Base revision successfully, so this is not evidence of a model incompatibility.
 
@@ -25,4 +25,17 @@ tqdm monitor thread: tqdm/utils.py:196 inner
   -> tqdm/_monitor.py:84 run
 ```
 
-This localizes the pause to progress output during weight materialization. The trace does not establish whether the ultimate cause is notebook output backpressure or an internal tqdm lock cycle. The runner now calls Transformers `logging.disable_progress_bar()` before `from_pretrained`, which is the documented API for suppressing its loading progress display. The runner's own 60-second heartbeat and per-image completion lines remain, as do the pinned model, cache, FP16, CPU offload, and all generation settings. Kaggle must verify this single change before considering further remedies.
+This localized the first pause to progress output during weight materialization. The runner then called Transformers `logging.disable_progress_bar()` before `from_pretrained`, leaving the pinned model, cache, FP16, CPU offload, and all generation settings unchanged.
+
+The Supervisor's next trace file was append-only. Its earlier tqdm frames belong to the previous process. The new process began at `2026-09-24T08:39:28Z`, PID 313. Two consecutive 180-second samples from that process place its main thread at `warnings.py:_showwarnmsg_impl`, called by Diffusers deprecation handling at `pipeline_utils.py:793` during `from_pretrained`. No generated image was reported. Suppressing the Transformers progress bar did not resolve the stall; the blocked point moved to a different stderr writer.
+
+```text
+main thread: warnings.py:30 _showwarnmsg_impl
+  -> warnings.py:115 _showwarnmsg
+  -> diffusers/utils/deprecation_utils.py:98 deprecate
+  -> diffusers/utils/deprecation_utils.py:23 _resolve_dtype
+  -> diffusers/pipelines/pipeline_utils.py:793 from_pretrained
+  -> notebooks/data002_generate_kaggle.py:220 main
+```
+
+The shared factor is live child-process output inherited by the Kaggle notebook. This supports, but does not prove, notebook output backpressure. The next single-variable test is to launch the same runner with stdout and stderr redirected to a file. Do not change the model, dtype, dependencies, or generation settings for this test. Inspect the log and generated-image count after a bounded wait. If a fresh trace still shows a stationary stack after output redirection, preserve it and stop rather than repeating the bulk run.

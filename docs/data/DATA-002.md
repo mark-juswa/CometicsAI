@@ -72,19 +72,53 @@ Confirm the plan without GPU generation:
 subprocess.run([sys.executable, str(repo / "notebooks/data002_generate_kaggle.py"), "--plan"], check=True)
 ```
 
-**Only after the Project Lead approves this exact manifest**, launch the resumable Supervisor-run bulk job:
+**Only after the Project Lead approves this exact manifest**, launch the resumable Supervisor-run bulk job. The direct `subprocess.run` launcher inherited Kaggle notebook output and repeatedly stalled while the loader wrote progress or warning text. First interrupt that cell and confirm no old generation process remains. Then redirect both child output streams to a file:
 
 ```python
-subprocess.run([
-    sys.executable, "-u", str(repo / "notebooks/data002_generate_kaggle.py"),
-    "--all",
+import psutil
+
+runner = str(repo / "notebooks/data002_generate_kaggle.py")
+active = []
+for process in psutil.process_iter(["pid", "cmdline"]):
+    try:
+        if runner in (process.info["cmdline"] or []):
+            active.append(process.info["pid"])
+    except (psutil.NoSuchProcess, psutil.AccessDenied):
+        pass
+assert not active, f"An earlier generation process still runs: {active}"
+
+output = Path("/kaggle/working/data002")
+output.mkdir(parents=True, exist_ok=True)
+log_path = output / "generation_run.log"
+command = [
+    sys.executable, "-u", runner, "--all",
     "--approved-manifest-sha256", "25a3200c9a79be85ce19f690ba81f564d57d55d86d36e6383b0cacd1188ec5ab",
-], check=True)
+]
+with log_path.open("a", encoding="utf-8") as log:
+    generation_process = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT)
+(output / "generation.pid").write_text(str(generation_process.pid), encoding="utf-8")
+print("Started PID:", generation_process.pid, "Log:", log_path)
+```
+
+Check progress from a separate cell. This only reads files and process state:
+
+```python
+from pathlib import Path
+import psutil
+
+output = Path("/kaggle/working/data002")
+pid = int((output / "generation.pid").read_text())
+print("Exit code (None means running):",
+      generation_process.poll() if "generation_process" in globals() else "unknown after kernel restart")
+print("PID present:", psutil.pid_exists(pid))
+log_path = output / "generation_run.log"
+print("\n".join(log_path.read_text(errors="replace").splitlines()[-20:]))
+print("Completed images:", len(list((output / "generated").glob("*/generated.png"))))
 ```
 
 The runner uses FLUX.2 Klein Base revision `a3b4f4849157f664bdbc776fd7453c2783562f4d`, FP16 inference, CPU offload on one GPU, 512×512, 20 steps, guidance 4.0, seed 1977. It downloads the pinned source ZIP and Base into `/tmp/data002-hf-cache`, verifies the source ZIP/member hashes, loads Base once, and writes `/kaggle/working/data002/generated/<sample_id>/original.png`, `generated.png`, and `generated.json`. It skips only completed results whose sidecar and hashes verify. Review sheets are written under `/kaggle/working/data002/review_sheets/`. Results remain **PENDING_VISUAL_REVIEW**, never accepted automatically. The manifest hash in `/kaggle/working/data002/manifest.sha256` prevents mixing runs. On a new Kaggle session, restore the entire `data002` output directory before rerunning `--all` to resume.
 During Base loading, the runner prints a heartbeat every 60 seconds and writes a Python stack trace every 180 seconds to `/kaggle/working/data002/base_load_trace.log`. This was added after the Supervisor reported repeated long Base-load stalls with zero generated images; Kaggle did not show the timed tracebacks sent to notebook stderr. If loading stalls again, interrupt once and preserve the trace file before another attempt; repeating the run without a diagnosis wastes the Kaggle session.
-The Supervisor's saved trace subsequently showed both the Transformers weight loader and tqdm monitor blocked in `tqdm.std.fp_write` while the weight display remained at about 155/398. The runner now calls the documented Transformers `logging.disable_progress_bar()` before model loading. This changes only library progress output; the Base revision, precision, offload, prompts, and generation settings are unchanged. The next Kaggle attempt is needed to verify that loading completes.
+The Supervisor's first saved trace showed both the Transformers weight loader and tqdm monitor blocked in `tqdm.std.fp_write` while the weight display remained at about 155/398. Disabling Transformers progress bars moved the next stall to Python warning output inside Diffusers. Both attempts inherited notebook output. The log-file launch above is the next bounded test; it changes no model or generation parameter. See [stall evidence](../experiments/DATA-002-base-load-stall.md).
 
 ## Human review, bounded retry, and later finalization
 

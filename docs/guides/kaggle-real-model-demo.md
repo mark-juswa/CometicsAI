@@ -17,11 +17,11 @@ In Kaggle, create one **private Dataset**, upload the two files in `F:\HAIR\arti
 
 Create a random shared key locally, for example `python -c "import secrets; print(secrets.token_urlsafe(32))"`. Save it as a Kaggle Secret named `HAIRCAPSTONE_API_KEY` and enable that Secret for the notebook. Keep the same value for the local backend `.env`. Do not put it in the notebook, Git, or a screenshot. The Base model is public; `HF_TOKEN` is optional and only needed if Hub access/rate limits require it. If used, put it in Kaggle Secrets too.
 
-The current code commit is local while this machine's GitHub DNS is unavailable. A small ignored code archive, `F:\HAIR\artifacts\haircapstone_runtime_code.zip`, is provided as a second Kaggle Input until `git push origin main` succeeds. Upload that ZIP as a Kaggle Dataset and attach it to the notebook. Kaggle may expose either the ZIP or its extracted files; the cell handles both. It prefers this code Input when present. Once GitHub contains this commit, the code Input is optional and the cell clones/pulls the repository instead. Never attach more than one code archive.
+The runtime code is pushed to `https://github.com/mark-juswa/CometicsAI.git`. The normal setup cell clones or pulls it. An ignored source-code archive, `F:\HAIR\artifacts\haircapstone_runtime_code.zip`, is available if GitHub cannot be reached from a future Kaggle session. Upload it as a second Kaggle Input only for that fallback. Kaggle may expose either the ZIP or its extracted files; the cell handles both and prefers the code Input when present. Never attach more than one code archive.
 
 ## Each fresh Kaggle GPU session
 
-1. Open a Python notebook, select a T4 GPU, enable Internet, and attach your private adapter Dataset as an Input. Until GitHub is updated, also attach the source-code ZIP as a second Input. Make sure `HAIRCAPSTONE_API_KEY` is enabled in Kaggle Secrets.
+1. Open a Python notebook, select a T4 GPU, enable Internet, and attach your private adapter Dataset as an Input. The source-code ZIP is optional if GitHub access fails. Make sure `HAIRCAPSTONE_API_KEY` is enabled in Kaggle Secrets.
 2. Use the single code cell below, or import and run [`haircapstone_inference_kaggle.ipynb`](../../notebooks/haircapstone_inference_kaggle.ipynb). The cell uses the notebook kernel's `sys.executable`; it does not call a system Python that may lack CUDA.
 3. Wait for `HAIR CAPSTONE GPU SERVER READY`. Copy only the printed `FLUX_REMOTE_URL` into the local backend `.env`. Keep the Kaggle session running while using the demo.
 

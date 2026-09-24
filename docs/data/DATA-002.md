@@ -12,7 +12,7 @@ All selected images were decoded locally and inspected in the [Philippine-priori
 | --- | ---: | ---: | ---: | ---: | ---: |
 | `CurtainedHair` — Curtain Hair | 10 | 2 | 2 | 14 | 16 |
 | `undercutSidepart` — Side-Part Undercut | 10 | 2 | 3 | 15 | 15 |
-| `SpikyHair` — Spiky Hair | 10 | 2 | 4 | 16 | 14 |
+| `Perm` — Perm-Style Curls | 10 | 2 | 4 | 16 | 15 |
 | `UndercutPompadour` — Pompadour Undercut | 10 | 2 | 4 | 16 | 14 |
 | `PonyTail` — Ponytail | 10 | 2 | 4 | 16 | 14 |
 | `PixieCut` — Pixie Cut | 10 | 2 | 4 | 16 | 14 |
@@ -21,22 +21,22 @@ All selected images were decoded locally and inspected in the [Philippine-priori
 | `shag` — Shag Hair | 10 | 2 | 2 | 14 | 16 |
 | `Bun` — Bun | 10 | 2 | 4 | 16 | 14 |
 
-Each selected source folder contains 30 raw photographs. Screened usable means selected plus reserve, based on visible hairstyle, face visibility, image quality, and apparent identity separation. The final gate replaced `Fauxhawk` with `SpikyHair`: many Fauxhawk photos show generic spikes or quiffs rather than a clear central strip, while the selected SpikyHair photos visibly show upright spikes. The 12 selected SpikyHair portraits are male-leaning to reduce overlap with `PixieCut`; four reserves remain. `Perm` overlaps `WaveHair` and the chemical process is not visible in a photograph; `CombOver` mixes side parts with baldness-covering combovers, wigs, and parody; `UndercutCurly` often lacks visibly short sides; `UndercutLong` has clear examples but several hidden undercuts and profile views. `Crop` does not truthfully depict men's Textured Crop. `CurtainedHair` and `shag` have only two screened reserves and remain lower-confidence labels. All **120 chosen source files** have unique SHA-256 values. A simple difference-hash check found no near duplicates within its narrow threshold; manual identity review remains the stronger evidence.
+Nine selected source folders contain 30 raw photographs each; `Perm` contains 31. Screened usable means selected plus reserve, based on visible hairstyle, face visibility, image quality, and apparent identity separation. At the Supervisor's request, the final selection uses `Perm` instead of `SpikyHair`. The selected `Perm` photographs show defined curls or ringlets, while the frozen `WaveHair` selection shows softer, looser waves. The photos do not establish whether the curls were chemically permed, so the visual concept and future user-facing label are **Perm-Style Curls**, not a claim about a treatment. The nine other identity selections are unchanged. `CurtainedHair` and `shag` have only two screened reserves and remain lower-confidence labels. All **120 chosen source files** have unique SHA-256 values. A simple difference-hash check found no near duplicates within its narrow threshold; manual identity review remains the stronger evidence.
 
 Final gate comparison of the original-photo sheets (raw file counts are not usable-identity counts):
 
 | Folder | Raw photos | Visual decision |
 | --- | ---: | --- |
 | `Fauxhawk` | 30 | Some clear central peaks, but many quiffs, ordinary spikes, children, and repeat celebrities weaken the truthful label. Prior screening had 12 selected and 3 reserves. |
-| `SpikyHair` | 30 | Clearly upright spikes can support 10 train, 2 validation, and 4 reserves after excluding pixie-like cuts and apparent repeats; a truthful and familiar Spiky Hair label. Selected. |
-| `Perm` | 31 | Many usable curly portraits, but a perm process is not visible, and a Curly Hair label would overlap `WaveHair`. |
+| `SpikyHair` | 30 | Clear upright spikes and 12 previously selected identities, but superseded by the Supervisor's choice of defined curls. No counterpart was generated. |
+| `Perm` | 31 | Twelve selected portraits and four reserves show defined curls/ringlets that differ from the softer `WaveHair` selection. Selected as Perm-Style Curls; chemical treatment is unknown. |
 | `UndercutLong` | 30 | Some clear long hair with shaved sides, but others hide the shaved side or show profile/rear views; a more niche catalog option. |
 | `UndercutCurly` | 30 | Several curly cuts lack visibly short sides; a strict 12-identity undercut selection is uncertain. |
 | `CombOver` | 29 | Mixes modern side parts, baldness-covering combovers, wigs, and parody, with apparent repeats; no consistent truthful label separate from `undercutSidepart`. |
 
 ## Pairing and calculated budget
 
-Every source style has **two** target neighbors. The graph is two edge-disjoint directed cycles, defined once in `scripts/data002_freeze_manifest.py` and materialized as an explicit `target_style` on each sample in the manifest. Generation and finalization consume the manifest; they do not recalculate the graph. Cycle A is `CurtainedHair → undercutSidepart → UndercutPompadour → SpikyHair → PixieCut → ShoulderLenHair → WaveHair → shag → Bun → PonyTail → CurtainedHair`. Cycle B is `CurtainedHair → SpikyHair → undercutSidepart → PonyTail → Bun → ShoulderLenHair → shag → WaveHair → PixieCut → UndercutPompadour → CurtainedHair`. Selected examples alternate between the two edges, including one validation identity for each edge.
+Every source style has **two** target neighbors. The graph is two edge-disjoint directed cycles, defined once in `scripts/data002_freeze_manifest.py` and materialized as an explicit `target_style` on each sample in the manifest. Generation and finalization consume the manifest; they do not recalculate the graph. Cycle A is `CurtainedHair → undercutSidepart → UndercutPompadour → Perm → PixieCut → ShoulderLenHair → WaveHair → shag → Bun → PonyTail → CurtainedHair`. Cycle B is `CurtainedHair → Perm → undercutSidepart → PonyTail → Bun → ShoulderLenHair → shag → WaveHair → PixieCut → UndercutPompadour → CurtainedHair`. Selected examples alternate between the two edges, including one validation identity for each edge.
 
 The manifest planner calculates **100 train + 20 validation identities**, **120 first-attempt generation jobs**, and, if every counterpart passes review, **200 train + 40 validation directional pairs**. Each target style receives **20 train + 4 validation pairs** from its own originals and incoming edits. Both directions of an identity remain in the same split. These are exact counts for the revised manifest, conditional on all 120 outputs passing human review. If a rejected case has no acceptable bounded retry/reserve replacement, the finalizer refuses to silently drop it.
 
@@ -78,7 +78,7 @@ subprocess.run([sys.executable, str(repo / "notebooks/data002_generate_kaggle.py
 subprocess.run([
     sys.executable, "-u", str(repo / "notebooks/data002_generate_kaggle.py"),
     "--all",
-    "--approved-manifest-sha256", "80772b55df3c48c0a195bf6b4cc5b83c02be36ff43d084e393d903eec4288718",
+    "--approved-manifest-sha256", "25a3200c9a79be85ce19f690ba81f564d57d55d86d36e6383b0cacd1188ec5ab",
 ], check=True)
 ```
 
@@ -108,7 +108,7 @@ subprocess.run([
     sys.executable, "-u", str(repo / "notebooks/data002_generate_kaggle.py"),
     "--retry", sample_id,
     "--reviews", "/kaggle/working/data002/reviews.json",
-    "--approved-manifest-sha256", "80772b55df3c48c0a195bf6b4cc5b83c02be36ff43d084e393d903eec4288718",
+    "--approved-manifest-sha256", "25a3200c9a79be85ce19f690ba81f564d57d55d86d36e6383b0cacd1188ec5ab",
 ], check=True)
 ```
 

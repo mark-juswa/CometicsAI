@@ -28,7 +28,7 @@ BASE_REVISION = "a3b4f4849157f664bdbc776fd7453c2783562f4d"
 STYLE_DEFINITIONS = {
     "CurtainedHair": ("curtain_hair", "a curtain hairstyle with a center part"),
     "undercutSidepart": ("side_part_undercut", "a side-part undercut"),
-    "SpikyHair": ("spiky_hair", "a spiky hairstyle"),
+    "Perm": ("perm_curls", "defined curls in a perm-style hairstyle"),
     "UndercutPompadour": ("pompadour_undercut", "a pompadour undercut"),
     "PonyTail": ("ponytail", "a ponytail"),
     "PixieCut": ("pixie_cut", "a pixie cut"),
@@ -42,9 +42,9 @@ STYLE_DEFINITIONS = {
 # and two target relationships, with both modest and stronger edits.
 PAIR_CYCLES = (
     ("CurtainedHair", "undercutSidepart", "UndercutPompadour",
-     "SpikyHair", "PixieCut", "ShoulderLenHair", "WaveHair",
+     "Perm", "PixieCut", "ShoulderLenHair", "WaveHair",
      "shag", "Bun", "PonyTail"),
-    ("CurtainedHair", "SpikyHair", "undercutSidepart", "PonyTail",
+    ("CurtainedHair", "Perm", "undercutSidepart", "PonyTail",
      "Bun", "ShoulderLenHair", "shag", "WaveHair", "PixieCut",
      "UndercutPompadour"),
 )

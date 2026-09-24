@@ -14,11 +14,11 @@
       "reserve": ["7.jpg", "8.jpg", "27.jpg"],
       "rejection_notes": "Excluded collages, extreme profiles, ambiguous high pompadours, repeated celebrity portraits, and 5.jpg, which exactly duplicates UndercutPompadour/4.jpg."
     },
-    "SpikyHair": {
-      "train": ["1.jpeg", "11.jpg", "17.jpg", "18.jpg", "19.jpg", "2.jpeg", "21.jpg", "22.jpg", "7.jpg", "27.jpg"],
-      "val": ["9.jpg", "14.jpg"],
-      "reserve": ["3.jpg", "5.jpg", "6.jpg", "28.jpg"],
-      "rejection_notes": "Selected male-leaning portraits with visibly spiked or textured upright hair to reduce overlap with PixieCut. Excluded female short pixies, a child portrait, multi-person frame, weak plain-short styles, and apparent repeats: 20.jpg closely resembles selected 9.jpg, while 15.jpg exactly duplicates PixieCut/27.jpg (a reserve). Profile-heavy 3.jpg and 6.jpg remain reserves requiring another review before substitution."
+    "Perm": {
+      "train": ["10.jpg", "11.jpg", "13.jpg", "15.jpg", "16.jpg", "17.jpg", "18.jpg", "22.jpg", "23.jpg", "25.jpg"],
+      "val": ["27.jpg", "9.jpg"],
+      "reserve": ["26.jpg", "3.png", "8.jpg", "28.jpg"],
+      "rejection_notes": "Selected visibly defined curls or ringlets rather than the loose waves selected for WaveHair. Excluded a product box (1.JPG), apparent mannequin or wig display (12.jpg), weakly wavy or near-straight hair, tiny/obscured faces, and repeat-looking celebrity portraits. A photo cannot establish whether curls were chemically permed; the intended visual label is perm-style curls. Reserves require another human check before substitution."
     },
     "UndercutPompadour": {
       "train": ["1.jpg", "11.jpg", "12.jpg", "14.jpg", "15.jpg", "16.jpg", "17.jpg", "18.jpg", "2.jpg", "20.jpg"],
@@ -65,8 +65,8 @@
   },
   "not_selected_classes": {
     "Fauxhawk": "Final class gate replaced it with SpikyHair: many source photos resemble generic spikes, quiffs, or pompadours rather than a clearly bounded central fauxhawk strip; repeated celebrity portraits further reduce distinct choices.",
-    "Perm": "Many images depict curly or wavy hair, but a chemical perm cannot be verified visually, and the class overlaps WaveHair.",
-    "UndercutLong": "Some clear shaved-side long styles, but several images hide the undercut, use rear/side views, or repeat celebrity identities; the option is more niche than SpikyHair for this catalog.",
+    "SpikyHair": "Final Supervisor preference replaced this with the visually distinct Perm folder. Its selected source portraits and prior review remain in Git history; no SpikyHair counterpart was generated.",
+    "UndercutLong": "Some clear shaved-side long styles, but several images hide the undercut, use rear/side views, or repeat celebrity identities; this is a niche option in the current catalog.",
     "CombOver": "Mixes modern side parts with baldness-covering combovers, wigs, parody images, and repeats; a truthful single label would overlap undercutSidepart or misdescribe photos.",
     "Crop": "The 30 source photographs are overwhelmingly women's pixie/short crops, not clear men's textured crops. Labeling these Textured Crop would create false supervision and overlap PixieCut.",
     "MedLenHair": "The photos overlap heavily with ShoulderLenHair and WaveHair; the source folder has no consistent, visibly separable medium-length target. MedLenHair/15.jpg exactly duplicates ShoulderLenHair/19.jpg.",

@@ -1,6 +1,6 @@
 # TRAIN-001 — first conditional hairstyle Edit-LoRA
 
-Source: Supervisor's Kaggle console excerpt and `training_summary.json` fields reported on 2026-09-23. The full training artifact ZIP remains on the Supervisor's machine/Kaggle; it has not been inspected in this workspace. Configuration and execution procedure: [TRAIN-001 plan](TRAIN-001-plan.md).
+Source: Supervisor's Kaggle console excerpt and `training_summary.json` fields reported on 2026-09-23, plus the supplied held-out comparison sheet and local evaluation ZIP. Configuration and execution procedure: [TRAIN-001 plan](TRAIN-001-plan.md).
 
 The Supervisor trained one BF16 conditional Edit-LoRA for `CrewCut`, `BobHair`, and `LayeredHair` on the 48 DATA-001 training directions using FLUX.2 Klein Base 4B and the pinned AI Toolkit workflow. The process exited 0, reached 250/250 steps, and `training_summary.json` passed the runner's `success is True` and `highest_loss_step == 250` assertions. The final console loss was `2.749e-01`; late examples include `2.460e-01`, `3.372e-01`, `5.878e-01`, and `3.102e-01`. These are finite loss observations, not a quality evaluation.
 
@@ -22,4 +22,4 @@ Codex inspected the full-resolution 12-row sheet and the six validation identity
 
 The smallest discriminating follow-up is an **image-only preservation probe** on the already generated 12 adapter outputs. [`train001_preservation_probe.py`](../../scripts/train001_preservation_probe.py) reuses the existing pinned face parser and DATA-001 mask construction, then copies the original source pixels outside the editable hair region. It runs no FLUX inference or training and does not change the dataset, reviews, or checkpoint. Its output sheet compares `source | global adapter | mask | hair-only composite | target`. Human review must decide whether the composite keeps identity while still delivering the requested hairstyle. A failed parser/mask or visible seam is a stop signal, not permission for random tuning.
 
-The final DATA-001 contact sheets still need a reported manual check. Do not start 500 steps or app integration from execution success alone.
+The final DATA-001 archive was subsequently downloaded and both contact sheets inspected. Some accepted generated counterparts show material identity or clothing drift despite passing automated QA; see [DATA-001](../data/DATA-001.md). Do not start 500 steps or app integration from execution success alone.

@@ -1,33 +1,33 @@
-# DATA-002 frozen selection and GPU handoff
+# DATA-002 Philippine hairstyle reassessment and GPU handoff
 
-Status: **frozen for Project Lead review**. No FLUX counterpart, final edit pair, or TRAIN-002 checkpoint exists. The live registry continues to enable only TRAIN-001.
+Status: **revised selection frozen for Project Lead review**. No FLUX counterpart, final edit pair, or TRAIN-002 checkpoint exists. The live registry continues to enable only TRAIN-001. The previous technical shortlist and hash are preserved in [DATA-002-technical-shortlist](DATA-002-technical-shortlist/); its approval hash is superseded.
 
 ## Source and selection
 
 The original photographic source is `yikaiwang/FaceSketches-HairStyle40`, revision `45de974926fe64551fc2d0b80973335e20ca10e2`. The dataset card declares Apache-2.0; rights in individual celebrity and stock portraits have not been separately verified. Use the `image/` photographs, never the sketches. The source ZIP SHA-256, each selected member path and raw-byte SHA-256, source dimensions, split, target class, and status are frozen in [DATA-002-manifest.json](DATA-002-manifest.json). Its SHA-256 is in [DATA-002-manifest.sha256](DATA-002-manifest.sha256).
 
-All selected images were decoded locally and inspected in the [selection contact sheets](DATA-002-selection-sheets/). The [curation record](DATA-002-curation.json) names every selected train/validation and reserve file and summarizes rejection reasons. The [machine-readable selection report](DATA-002-selection-report.json) lists reserves, rejected files, counts, target balance, and image-hash checks. These sheets supplement exact hashes for identity review; neither hashes nor thumbnails can prove that celebrity identities are unique.
+All selected images were decoded locally and inspected in the [Philippine-priority selection contact sheets](DATA-002-ph-selection-sheets/). The [requested-class audit](DATA-002-ph-audit/) and [replacement audit](DATA-002-ph-alternatives/) show the source photographs. The [curation record](DATA-002-curation.json) names every selected train/validation and reserve file and summarizes rejection reasons. The [machine-readable selection report](DATA-002-selection-report.json) lists reserves, rejected files, counts, target balance, and image-hash checks. These sheets supplement exact hashes for identity review; neither hashes nor thumbnails can prove that celebrity identities are unique. Hairstyle relevance to Philippine users is a product hypothesis; the source portraits are not a representative Filipino-identity sample.
 
-| Source class | Train identities | Validation identities | Reserves | Excluded from V2 selection |
-| --- | ---: | ---: | ---: | ---: |
-| Afro | 10 | 2 | 4 | 14 |
-| BowlCut | 10 | 2 | 4 | 14 |
-| Bun | 10 | 2 | 4 | 14 |
-| CornRows | 10 | 2 | 4 | 14 |
-| DreadLocks | 10 | 2 | 4 | 14 |
-| HiTopFade | 10 | 2 | 4 | 14 |
-| PixieCut | 10 | 2 | 4 | 14 |
-| PonyTail | 10 | 2 | 4 | 14 |
-| SpikyHair | 10 | 2 | 4 | 14 |
-| WaistLenHair | 10 | 2 | 4 | 14 |
+| Source class and proposed display style | Train identities | Validation identities | Reserves | Screened usable | Excluded |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `CurtainedHair` — Curtain Hair | 10 | 2 | 2 | 14 | 16 |
+| `undercutSidepart` — Side-Part Undercut | 10 | 2 | 3 | 15 | 15 |
+| `Fauxhawk` — Fauxhawk | 10 | 2 | 3 | 15 | 15 |
+| `UndercutPompadour` — Pompadour Undercut | 10 | 2 | 4 | 16 | 14 |
+| `PonyTail` — Ponytail | 10 | 2 | 4 | 16 | 14 |
+| `PixieCut` — Pixie Cut | 10 | 2 | 4 | 16 | 14 |
+| `ShoulderLenHair` — Shoulder-Length Hair | 10 | 2 | 4 | 16 | 14 |
+| `WaveHair` — Wavy Hair | 10 | 2 | 4 | 16 | 14 |
+| `shag` — Shag Hair | 10 | 2 | 2 | 14 | 16 |
+| `Bun` — Bun | 10 | 2 | 4 | 16 | 14 |
 
-`CurtainedHair` and `HimeCut` were replaced after visual inspection: the former had repeated/soft examples and ambiguous center-part membership; the latter often showed only bangs rather than clear hime side locks. `SpikyHair` and `WaistLenHair` offered clearer usable candidates. The other audited alternatives are recorded in the curation file. `PixieCut/27.jpg` is byte-identical to `SpikyHair/15.jpg`, so only the latter was selected; we also avoided several apparent celebrity repeats across train/validation. All **120 chosen source files** have unique SHA-256 values. A simple image difference-hash check found no near duplicates within its narrow threshold; manual identity review remains the stronger evidence.
+Each requested source folder contains 30 raw photographs. Screened usable means selected plus reserve, based on image quality, visible hairstyle, face visibility, and apparent identity separation. `Crop` was replaced by `Fauxhawk`: its source images mostly depict women's pixie crops, not men's textured crops. `UndercutSlickback` was replaced by `PonyTail`: the source images mostly resemble side parts or pompadours, and one file is truncated. `MedLenHair` was replaced by `Bun`: it overlaps `ShoulderLenHair` and contains an exact cross-folder duplicate. `UndercutCurly` was also inspected but was often not a visible undercut. **Fauxhawk must not be advertised as Textured Crop.** `CurtainedHair` and `shag` have only two screened reserves and remain lower-confidence labels. All **120 chosen source files** have unique SHA-256 values. A simple image difference-hash check found no near duplicates within its narrow threshold; manual identity review remains the stronger evidence.
 
 ## Pairing and calculated budget
 
-Every source style has **two** target neighbors. The graph is two edge-disjoint directed cycles, defined once in `scripts/data002_freeze_manifest.py` and materialized as an explicit `target_style` on each sample in the manifest. Generation and finalization consume the manifest; they do not recalculate the graph. The first cycle follows `BowlCut → PixieCut → Bun → PonyTail → WaistLenHair → DreadLocks → CornRows → Afro → HiTopFade → SpikyHair → BowlCut`. The second follows `BowlCut → Afro → CornRows → DreadLocks → WaistLenHair → PonyTail → Bun → PixieCut → SpikyHair → HiTopFade → BowlCut`. Selected examples alternate between the two edges, including one validation identity for each edge.
+Every source style has **two** target neighbors. The graph is two edge-disjoint directed cycles, defined once in `scripts/data002_freeze_manifest.py` and materialized as an explicit `target_style` on each sample in the manifest. Generation and finalization consume the manifest; they do not recalculate the graph. Cycle A is `CurtainedHair → undercutSidepart → UndercutPompadour → Fauxhawk → PixieCut → ShoulderLenHair → WaveHair → shag → Bun → PonyTail → CurtainedHair`. Cycle B is `CurtainedHair → Fauxhawk → undercutSidepart → PonyTail → Bun → ShoulderLenHair → shag → WaveHair → PixieCut → UndercutPompadour → CurtainedHair`. Selected examples alternate between the two edges, including one validation identity for each edge.
 
-The manifest planner calculates **100 train + 20 validation identities**, **120 first-attempt generation jobs**, and, if every counterpart passes review, **200 train + 40 validation directional pairs**. Each target style receives **20 train + 4 validation pairs** from its own originals and incoming edits. Both directions of an identity remain in the same split. These are exact counts for the frozen manifest, conditional on all 120 outputs passing human review. If a rejected case has no acceptable bounded retry/reserve replacement, the finalizer refuses to silently drop it.
+The manifest planner calculates **100 train + 20 validation identities**, **120 first-attempt generation jobs**, and, if every counterpart passes review, **200 train + 40 validation directional pairs**. Each target style receives **20 train + 4 validation pairs** from its own originals and incoming edits. Both directions of an identity remain in the same split. These are exact counts for the revised manifest, conditional on all 120 outputs passing human review. If a rejected case has no acceptable bounded retry/reserve replacement, the finalizer refuses to silently drop it.
 
 `DATA-002-manifest.json` is the source of truth for sample IDs, source paths/hashes, selected status, split, target, prompts via style definitions, generation policy, planning counts, and pair construction. Each `sample_id` also serves as its one-photo `identity_group_id`. The original ZIP and FLUX Base revision are pinned. TRAIN-001 registry and adapter remain untouched.
 
@@ -67,7 +67,7 @@ subprocess.run([sys.executable, str(repo / "notebooks/data002_generate_kaggle.py
 subprocess.run([
     sys.executable, "-u", str(repo / "notebooks/data002_generate_kaggle.py"),
     "--all",
-    "--approved-manifest-sha256", "901169bf4b8e0e6340708e487cd2a0d4177c5da43b98d6a8e965dc3c59d908d6",
+    "--approved-manifest-sha256", "8ee456a102544cbc6f616bbc833fced0037a61f5c5e5301a052bc9f3d1562b9e",
 ], check=True)
 ```
 
@@ -97,7 +97,7 @@ subprocess.run([
     sys.executable, "-u", str(repo / "notebooks/data002_generate_kaggle.py"),
     "--retry", sample_id,
     "--reviews", "/kaggle/working/data002/reviews.json",
-    "--approved-manifest-sha256", "901169bf4b8e0e6340708e487cd2a0d4177c5da43b98d6a8e965dc3c59d908d6",
+    "--approved-manifest-sha256", "8ee456a102544cbc6f616bbc833fced0037a61f5c5e5301a052bc9f3d1562b9e",
 ], check=True)
 ```
 

@@ -1,155 +1,126 @@
 {
   "status": "FROZEN_FOR_PROJECT_LEAD_REVIEW",
-  "manifest_sha256": "901169bf4b8e0e6340708e487cd2a0d4177c5da43b98d6a8e965dc3c59d908d6",
+  "manifest_sha256": "8ee456a102544cbc6f616bbc833fced0037a61f5c5e5301a052bc9f3d1562b9e",
   "source_archive_sha256": "46ce34e9de676b5fabee03dee5b52d815133c5d8bd73dceaaebada297c8f6d13",
   "selected_classes": [
-    "Afro",
-    "BowlCut",
-    "Bun",
-    "CornRows",
-    "DreadLocks",
-    "HiTopFade",
-    "PixieCut",
+    "CurtainedHair",
+    "undercutSidepart",
+    "Fauxhawk",
+    "UndercutPompadour",
     "PonyTail",
-    "SpikyHair",
-    "WaistLenHair"
+    "PixieCut",
+    "ShoulderLenHair",
+    "WaveHair",
+    "shag",
+    "Bun"
   ],
   "candidate_decisions": {
-    "Afro": {
+    "CurtainedHair": {
       "selected_train": 10,
       "selected_val": 2,
-      "reserve": 4,
-      "rejected": 14,
+      "reserve": 2,
+      "rejected": 16,
       "reserve_files": [
-        "1.jpg",
-        "5.jpg",
-        "9.jpg",
-        "15.jpg"
+        "17.jpg",
+        "20.jpg"
       ],
       "rejected_files": [
         "10.jpg",
-        "18.jpg",
+        "14.jpg",
+        "16.jpg",
         "19.jpg",
         "2.jpg",
-        "20.jpg",
-        "21.jpg",
-        "23.jpg",
+        "23.png",
+        "24.png",
         "25.jpg",
-        "28.jpg",
-        "29.jpg",
+        "26.jpg",
+        "28.PNG",
         "3.jpg",
         "30.jpg",
-        "4.jpg",
-        "8.jpg"
+        "6.jpg",
+        "7.jpg",
+        "8.jpg",
+        "9.jpg"
       ],
-      "rejection_notes": "Obscured faces, sunglasses, distant subjects, or repeated image (21.jpg duplicates 5.jpg)."
+      "rejection_notes": "Other photographs are soft, too small, side-swept rather than center-parted, or repeat a celebrity identity (notably several Leonardo DiCaprio images). The larger sheet showed 23.png as a straight fringe and 19.jpg as a short side part, so neither is selected. This is a lower-confidence class because some fringes blur into a generic side part."
     },
-    "BowlCut": {
+    "undercutSidepart": {
+      "selected_train": 10,
+      "selected_val": 2,
+      "reserve": 3,
+      "rejected": 15,
+      "reserve_files": [
+        "7.jpg",
+        "8.jpg",
+        "27.jpg"
+      ],
+      "rejected_files": [
+        "1.jpg",
+        "1.png",
+        "12.jpg",
+        "15.jpg",
+        "18.jpg",
+        "20.jpg",
+        "22.jpg",
+        "23.jpg",
+        "24.jpg",
+        "25.jpg",
+        "26.jpg",
+        "29.jpg",
+        "4.jpg",
+        "5.jpg",
+        "6.jpg"
+      ],
+      "rejection_notes": "Excluded collages, extreme profiles, ambiguous high pompadours, repeated celebrity portraits, and 5.jpg, which exactly duplicates UndercutPompadour/4.jpg."
+    },
+    "Fauxhawk": {
+      "selected_train": 10,
+      "selected_val": 2,
+      "reserve": 3,
+      "rejected": 15,
+      "reserve_files": [
+        "3.jpg",
+        "24.jpg",
+        "25.jpg"
+      ],
+      "rejected_files": [
+        "11.jpg",
+        "12.jpg",
+        "14.jpg",
+        "15.jpg",
+        "16.jpg",
+        "18.jpg",
+        "20.jpg",
+        "21.jpg",
+        "22.jpg",
+        "23.jpg",
+        "26.jpg",
+        "29.jpg",
+        "30.jpg",
+        "4.jpg",
+        "9.jpg"
+      ],
+      "rejection_notes": "Excluded child portraits, collages (including selected-on-first-pass 15.jpg), repeated Beckham portraits, and plain short hair without a raised central strip. 16.jpg is below the 256 px short-side threshold. 9.jpg may repeat the apparent identity of selected 1.jpg, so it is excluded from validation. The remaining fauxhawks are more distinguishable from the side-part and pompadour classes than the source Slickback folder."
+    },
+    "UndercutPompadour": {
       "selected_train": 10,
       "selected_val": 2,
       "reserve": 4,
       "rejected": 14,
       "reserve_files": [
-        "1.jpg",
-        "6.jpg",
-        "9.jpg",
+        "23.jpg",
+        "25.jpg",
+        "26.jpg",
         "28.jpg"
       ],
       "rejected_files": [
+        "1.png",
         "10.jpg",
-        "14.jpg",
-        "18.jpg",
+        "13.jpg",
         "19.jpg",
-        "20.jpg",
         "21.jpg",
         "22.jpg",
-        "23.jpg",
-        "24.jpg",
         "29.jpg",
-        "3.jpg",
-        "30.jpg",
-        "4.jpg",
-        "7.jpg"
-      ],
-      "rejection_notes": "Rear/profile framing or cuts that look closer to pixie, crew, or an unrelated short style."
-    },
-    "Bun": {
-      "selected_train": 10,
-      "selected_val": 2,
-      "reserve": 4,
-      "rejected": 14,
-      "reserve_files": [
-        "18.jpg",
-        "26.jpg",
-        "9.jpg",
-        "6.jpg"
-      ],
-      "rejected_files": [
-        "1.jpg",
-        "11.jpg",
-        "15.jpg",
-        "16.jpg",
-        "19.jpg",
-        "2.jpg",
-        "20.jpg",
-        "22.jpg",
-        "24.jpg",
-        "3.jpg",
-        "30.jpg",
-        "4.jpg",
-        "7.jpg",
-        "8.jpg"
-      ],
-      "rejection_notes": "Collages/product images, hair bun not visible, severe profile, small face, or a portrait visually very similar to another selected stock model (22.jpg)."
-    },
-    "CornRows": {
-      "selected_train": 10,
-      "selected_val": 2,
-      "reserve": 4,
-      "rejected": 14,
-      "reserve_files": [
-        "26.png",
-        "6.jpg",
-        "10.jpg",
-        "29.jpg"
-      ],
-      "rejected_files": [
-        "1.jpg",
-        "14.jpg",
-        "16.jpg",
-        "17.jpg",
-        "19.jpg",
-        "2.jpg",
-        "20.jpg",
-        "24.jpg",
-        "27.jpg",
-        "28.jpg",
-        "30.jpg",
-        "4.jpg",
-        "8.jpg",
-        "9.jpg"
-      ],
-      "rejection_notes": "Several images show generic long braids without a visible cornrow pattern; some are collages or head-down views. 27.jpg and 28.jpg may repeat the identity in selected 25.jpg, so neither is used for validation."
-    },
-    "DreadLocks": {
-      "selected_train": 10,
-      "selected_val": 2,
-      "reserve": 4,
-      "rejected": 14,
-      "reserve_files": [
-        "19.jpg",
-        "25.jpg",
-        "26.jpg",
-        "23.jpg"
-      ],
-      "rejected_files": [
-        "11.jpg",
-        "15.jpg",
-        "17.jpg",
-        "2.jpg",
-        "21.jpg",
-        "24.jpg",
-        "27.jpg",
         "3.jpg",
         "4.jpg",
         "5.jpg",
@@ -158,65 +129,7 @@
         "8.jpg",
         "9.jpg"
       ],
-      "rejection_notes": "Back/side views, face occlusion, hats, or styles that resemble braids or loose curls rather than locks (24.jpg)."
-    },
-    "HiTopFade": {
-      "selected_train": 10,
-      "selected_val": 2,
-      "reserve": 4,
-      "rejected": 14,
-      "reserve_files": [
-        "10.jpg",
-        "29.jpg",
-        "4.jpg",
-        "8.jpg"
-      ],
-      "rejected_files": [
-        "1.jpg",
-        "11.jpg",
-        "17.jpg",
-        "19.jpg",
-        "20.jpg",
-        "21.jpg",
-        "23.jpg",
-        "24.jpg",
-        "25.jpg",
-        "26.jpg",
-        "27.jpg",
-        "30.jpg",
-        "5.jpg",
-        "7.jpg"
-      ],
-      "rejection_notes": "Many images are extreme profile, distant, or show a low fade without a clear high top."
-    },
-    "PixieCut": {
-      "selected_train": 10,
-      "selected_val": 2,
-      "reserve": 4,
-      "rejected": 14,
-      "reserve_files": [
-        "26.jpg",
-        "21.jpg",
-        "25.jpg",
-        "3.jpg"
-      ],
-      "rejected_files": [
-        "12.jpg",
-        "16.jpg",
-        "18.jpg",
-        "20.jpg",
-        "24.jpg",
-        "27.jpg",
-        "29.jpg",
-        "30.jpg",
-        "4.jpg",
-        "5.jpg",
-        "6.jpg",
-        "7.jpg",
-        "8.jpg",
-        "9.jpg"
-      ],
-      "rejection_notes": "Repeated celebrity identities, side/rear views, or short bobs that blur the pixie label. 27.jpg duplicates SpikyHair/15.jpg byte-for-byte."
+      "rejection_notes": "Removed weak side or rear views, poorly framed examples, near-plain short hair, and 4.jpg, which exactly duplicates undercutSidepart/5.jpg. Distinguish height/volume from the side-part and slick-back classes during review."
     },
     "PonyTail": {
       "selected_train": 10,
@@ -245,65 +158,152 @@
         "7.jpg",
         "9.jpg"
       ],
-      "rejection_notes": "Illustrations/collages, loose hair where the ponytail is not visible, or braids mislabelled as a ponytail. 26.jpg repeats the same celebrity as selected 25.jpg."
+      "rejection_notes": "Preserved the previous inspected selection. Illustrations/collages, loose hair with no visible tail, and braids mislabeled as a ponytail are excluded. 26.jpg repeats the same celebrity as selected 25.jpg."
     },
-    "SpikyHair": {
+    "PixieCut": {
       "selected_train": 10,
       "selected_val": 2,
       "reserve": 4,
       "rejected": 14,
       "reserve_files": [
-        "2.jpeg",
-        "5.jpg",
-        "6.jpg",
-        "9.jpg"
+        "26.jpg",
+        "21.jpg",
+        "25.jpg",
+        "27.jpg"
       ],
       "rejected_files": [
-        "1.jpg",
-        "13.jpg",
+        "12.jpg",
         "16.jpg",
         "18.jpg",
+        "20.jpg",
+        "23.jpg",
+        "24.jpg",
+        "29.jpg",
+        "30.jpg",
+        "4.jpg",
+        "5.jpg",
+        "6.jpg",
+        "7.jpg",
+        "8.jpg",
+        "9.jpg"
+      ],
+      "rejection_notes": "Repeated celebrity identities, side/rear views, or short bobs blur the label. The larger sheet showed 23.jpg as a bob, so it was replaced in validation. 27.jpg duplicates SpikyHair/15.jpg, but SpikyHair is not in this selection; keep only as a reserve."
+    },
+    "ShoulderLenHair": {
+      "selected_train": 10,
+      "selected_val": 2,
+      "reserve": 4,
+      "rejected": 14,
+      "reserve_files": [
+        "14.jpg",
+        "17.jpg",
+        "23.jpg",
+        "27.jpg"
+      ],
+      "rejected_files": [
+        "11.jpg",
         "2.jpg",
+        "20.jpg",
         "21.jpg",
-        "22.jpg",
+        "24.jpg",
         "25.jpg",
-        "26.JPG",
+        "29.jpg",
+        "3.jpg",
+        "4.jpg",
+        "5.jpg",
+        "6.jpg",
+        "7.jpg",
+        "8.jpg",
+        "9.jpg"
+      ],
+      "rejection_notes": "Excluded drawings, severely covered faces, full-body photos with small hair area, and long hair well below the shoulders. 19.jpg is exactly duplicated in MedLenHair/15.jpg; MedLenHair is not selected."
+    },
+    "WaveHair": {
+      "selected_train": 10,
+      "selected_val": 2,
+      "reserve": 4,
+      "rejected": 14,
+      "reserve_files": [
+        "2.JPG",
+        "22.jpg",
+        "29.jpg",
+        "6.jpg"
+      ],
+      "rejected_files": [
+        "1.png",
+        "10.jpg",
+        "16.jpg",
+        "18.jpg",
+        "19.jpg",
+        "23.jpg",
+        "26.jpg",
         "28.jpg",
         "3.jpg",
         "4.jpg",
+        "5.jpg",
         "7.jpg",
-        "8.jpg"
+        "8.jpg",
+        "9.jpg"
       ],
-      "rejection_notes": "Some images show ordinary short hair or pixie cuts with little visible spiking; collages and side-only views excluded."
+      "rejection_notes": "Excluded collage/product images, severe occlusion, tiny faces, and straight hair without a visible wave. Length varies; the target concept is wave texture rather than length."
     },
-    "WaistLenHair": {
+    "shag": {
       "selected_train": 10,
       "selected_val": 2,
-      "reserve": 4,
-      "rejected": 14,
+      "reserve": 2,
+      "rejected": 16,
       "reserve_files": [
-        "22.jpg",
-        "8.jpg",
-        "9.jpg",
-        "29.jpg"
+        "2.jpg",
+        "5.jpg"
       ],
       "rejected_files": [
+        "1.jpeg",
         "1.jpg",
-        "1.png",
-        "13.jpg",
-        "14.jpg",
         "16.jpg",
         "17.jpg",
         "18.jpg",
         "19.jpg",
-        "2.jpg",
+        "20.jpg",
         "23.jpg",
+        "24.jpg",
         "26.jpg",
+        "27.jpg",
         "28.jpg",
-        "5.jpg",
+        "4.jpg",
+        "6.jpg",
+        "8.jpg",
+        "9.jpg"
+      ],
+      "rejection_notes": "20.jpg is truncated, 1.jpg is a rear view without a face, and repeated Lisa Rinna/Meg Ryan portraits, generic long layers, and weak/obscured frames were excluded. Shag remains a lower-confidence label because it overlaps some layered and wavy looks; review should verify visible piecey layers/fringe."
+    },
+    "Bun": {
+      "selected_train": 10,
+      "selected_val": 2,
+      "reserve": 4,
+      "rejected": 14,
+      "reserve_files": [
+        "18.jpg",
+        "26.jpg",
+        "9.jpg",
         "6.jpg"
       ],
-      "rejection_notes": "Back views, collages, heavy hats, very small faces, framing that hides the hair length, or celebrity identity repeated in another class (19.jpg versus PonyTail/25.jpg)."
+      "rejected_files": [
+        "1.jpg",
+        "11.jpg",
+        "15.jpg",
+        "16.jpg",
+        "19.jpg",
+        "2.jpg",
+        "20.jpg",
+        "22.jpg",
+        "24.jpg",
+        "3.jpg",
+        "30.jpg",
+        "4.jpg",
+        "7.jpg",
+        "8.jpg"
+      ],
+      "rejection_notes": "Preserved the previous inspected selection. Collages/product images, bun not visible, severe profile, small face, and a portrait visually very similar to another selected stock model (22.jpg) are excluded."
     }
   },
   "identity_counts": {
@@ -316,26 +316,26 @@
     "val": 40
   },
   "target_distribution": {
-    "train/afro": 20,
-    "train/bowl_cut": 20,
     "train/bun": 20,
-    "train/cornrows": 20,
-    "train/dreadlocks": 20,
-    "train/hi_top_fade": 20,
+    "train/curtain_hair": 20,
+    "train/fauxhawk": 20,
     "train/pixie_cut": 20,
+    "train/pompadour_undercut": 20,
     "train/ponytail": 20,
-    "train/spiky_hair": 20,
-    "train/waist_length_hair": 20,
-    "val/afro": 4,
-    "val/bowl_cut": 4,
+    "train/shag_hair": 20,
+    "train/shoulder_length_hair": 20,
+    "train/side_part_undercut": 20,
+    "train/wavy_hair": 20,
     "val/bun": 4,
-    "val/cornrows": 4,
-    "val/dreadlocks": 4,
-    "val/hi_top_fade": 4,
+    "val/curtain_hair": 4,
+    "val/fauxhawk": 4,
     "val/pixie_cut": 4,
+    "val/pompadour_undercut": 4,
     "val/ponytail": 4,
-    "val/spiky_hair": 4,
-    "val/waist_length_hair": 4
+    "val/shag_hair": 4,
+    "val/shoulder_length_hair": 4,
+    "val/side_part_undercut": 4,
+    "val/wavy_hair": 4
   },
   "near_image_hash_matches_for_review": [],
   "identity_uniqueness": "Manual contact-sheet screening plus exact source SHA-256; semantic identity duplicates cannot be ruled out automatically"

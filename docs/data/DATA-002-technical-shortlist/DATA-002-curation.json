@@ -1,0 +1,76 @@
+{
+  "status": "FROZEN_FOR_PROJECT_LEAD_REVIEW",
+  "selection_basis": "Manual review of the original-photograph contact sheets; visible face and representative hairstyle, adequate source resolution, distinct apparent identities, and limited occlusion. Reserves require the same checks before substitution.",
+  "classes": {
+    "Afro": {
+      "train": ["11.jpg", "12.jpg", "13.jpg", "14.jpg", "16.jpg", "17.jpg", "22.jpg", "24.jpg", "26.jpg", "27.jpg"],
+      "val": ["6.jpg", "7.jpg"],
+      "reserve": ["1.jpg", "5.jpg", "9.jpg", "15.jpg"],
+      "rejection_notes": "Obscured faces, sunglasses, distant subjects, or repeated image (21.jpg duplicates 5.jpg)."
+    },
+    "BowlCut": {
+      "train": ["11.jpg", "12.jpg", "13.jpg", "15.jpg", "16.jpg", "17.jpg", "2.jpg", "25.jpg", "26.jpg", "27.jpg"],
+      "val": ["5.jpg", "8.jpg"],
+      "reserve": ["1.jpg", "6.jpg", "9.jpg", "28.jpg"],
+      "rejection_notes": "Rear/profile framing or cuts that look closer to pixie, crew, or an unrelated short style."
+    },
+    "Bun": {
+      "train": ["10.jpg", "12.jpg", "13.jpg", "14.jpg", "17.jpg", "21.jpg", "28.jpg", "23.jpg", "25.jpg", "27.jpg"],
+      "val": ["5.jpg", "29.jpg"],
+      "reserve": ["18.jpg", "26.jpg", "9.jpg", "6.jpg"],
+      "rejection_notes": "Collages/product images, hair bun not visible, severe profile, small face, or a portrait visually very similar to another selected stock model (22.jpg)."
+    },
+    "CornRows": {
+      "train": ["11.jpg", "12.jpg", "13.jpg", "15.jpg", "25.jpg", "18.jpg", "21.jpg", "22.jpg", "23.jpg", "7.jpg"],
+      "val": ["5.jpg", "3.jpg"],
+      "reserve": ["26.png", "6.jpg", "10.jpg", "29.jpg"],
+      "rejection_notes": "Several images show generic long braids without a visible cornrow pattern; some are collages or head-down views. 27.jpg and 28.jpg may repeat the identity in selected 25.jpg, so neither is used for validation."
+    },
+    "DreadLocks": {
+      "train": ["1.jpg", "10.jpg", "12.jpg", "13.jpg", "14.jpg", "16.jpg", "18.jpg", "20.jpg", "22.jpg", "28.jpg"],
+      "val": ["29.jpg", "30.jpg"],
+      "reserve": ["19.jpg", "25.jpg", "26.jpg", "23.jpg"],
+      "rejection_notes": "Back/side views, face occlusion, hats, or styles that resemble braids or loose curls rather than locks (24.jpg)."
+    },
+    "HiTopFade": {
+      "train": ["3.jpg", "12.jpg", "13.jpg", "14.jpg", "15.jpg", "16.jpg", "18.jpg", "2.jpg", "28.jpg", "6.jpg"],
+      "val": ["22.jpg", "9.jpg"],
+      "reserve": ["10.jpg", "29.jpg", "4.jpg", "8.jpg"],
+      "rejection_notes": "Many images are extreme profile, distant, or show a low fade without a clear high top."
+    },
+    "PixieCut": {
+      "train": ["1.jpg", "10.jpg", "11.jpg", "2.jpg", "13.jpg", "14.jpg", "15.jpg", "17.jpg", "19.jpg", "22.jpg"],
+      "val": ["23.jpg", "28.jpg"],
+      "reserve": ["26.jpg", "21.jpg", "25.jpg", "3.jpg"],
+      "rejection_notes": "Repeated celebrity identities, side/rear views, or short bobs that blur the pixie label. 27.jpg duplicates SpikyHair/15.jpg byte-for-byte."
+    },
+    "PonyTail": {
+      "train": ["1.jpg", "12.jpg", "16.jpg", "17.jpg", "18.jpg", "19.jpg", "2.jpg", "25.jpg", "3.jpg", "4.jpg"],
+      "val": ["5.jpg", "6.jpg"],
+      "reserve": ["15.jpg", "3.png", "8.jpg", "24.jpg"],
+      "rejection_notes": "Illustrations/collages, loose hair where the ponytail is not visible, or braids mislabelled as a ponytail. 26.jpg repeats the same celebrity as selected 25.jpg."
+    },
+    "SpikyHair": {
+      "train": ["1.jpeg", "10.jpg", "11.jpg", "12.jpg", "14.jpg", "15.jpg", "17.jpg", "19.jpg", "20.jpg", "23.jpg"],
+      "val": ["24.jpg", "27.jpg"],
+      "reserve": ["2.jpeg", "5.jpg", "6.jpg", "9.jpg"],
+      "rejection_notes": "Some images show ordinary short hair or pixie cuts with little visible spiking; collages and side-only views excluded."
+    },
+    "WaistLenHair": {
+      "train": ["10.jpg", "11.jpg", "12.jpg", "15.jpg", "7.jpg", "20.jpg", "21.jpg", "24.jpg", "25.jpg", "27.jpg"],
+      "val": ["3.jpg", "4.jpg"],
+      "reserve": ["22.jpg", "8.jpg", "9.jpg", "29.jpg"],
+      "rejection_notes": "Back views, collages, heavy hats, very small faces, framing that hides the hair length, or celebrity identity repeated in another class (19.jpg versus PonyTail/25.jpg)."
+    }
+  },
+  "not_selected_classes": {
+    "CurtainedHair": "Repeated celebrity/domain examples, soft small portraits, and ambiguous center-part membership.",
+    "HimeCut": "Many photographs show blunt bangs or long hair without clearly distinct hime side locks; only 25 meet the size threshold.",
+    "FrenchTwist": "Many profile or rear views obscure identity and frontal hairstyle evidence.",
+    "Mohawk": "Clear label in some cases, but many source examples are extreme side views or novelty colors; SpikyHair offers more usable frontal variety.",
+    "Perm": "Variable curl patterns overlap Afro or Ringlet; less consistent as a distinct label.",
+    "Ringlet": "Overlaps Perm and has duplicate/illustrative examples.",
+    "Mullet": "Several costume/wig examples and unclear face/hair framing.",
+    "shag": "Overlaps the existing layered style and includes repeated identities plus one truncated file."
+  }
+}

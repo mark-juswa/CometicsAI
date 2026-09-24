@@ -21,30 +21,32 @@ ARCHIVE = ROOT / "data/source/FaceSketches-HairStyle40.zip"
 CURATION = ROOT / "docs/data/DATA-002-curation.json"
 MANIFEST = ROOT / "docs/data/DATA-002-manifest.json"
 HASH_FILE = ROOT / "docs/data/DATA-002-manifest.sha256"
-SHEETS = ROOT / "docs/data/DATA-002-selection-sheets"
+SHEETS = ROOT / "docs/data/DATA-002-ph-selection-sheets"
 SOURCE_REVISION = "45de974926fe64551fc2d0b80973335e20ca10e2"
 BASE_REVISION = "a3b4f4849157f664bdbc776fd7453c2783562f4d"
 
 STYLE_DEFINITIONS = {
-    "Afro": ("afro", "an afro hairstyle"),
-    "BowlCut": ("bowl_cut", "a bowl cut"),
-    "Bun": ("bun", "a hair bun"),
-    "CornRows": ("cornrows", "cornrows"),
-    "DreadLocks": ("dreadlocks", "dreadlocks"),
-    "HiTopFade": ("hi_top_fade", "a high-top fade"),
-    "PixieCut": ("pixie_cut", "a pixie cut"),
+    "CurtainedHair": ("curtain_hair", "a curtain hairstyle with a center part"),
+    "undercutSidepart": ("side_part_undercut", "a side-part undercut"),
+    "Fauxhawk": ("fauxhawk", "a fauxhawk haircut"),
+    "UndercutPompadour": ("pompadour_undercut", "a pompadour undercut"),
     "PonyTail": ("ponytail", "a ponytail"),
-    "SpikyHair": ("spiky_hair", "spiky hair"),
-    "WaistLenHair": ("waist_length_hair", "waist-length hair"),
+    "PixieCut": ("pixie_cut", "a pixie cut"),
+    "ShoulderLenHair": ("shoulder_length_hair", "shoulder-length hair"),
+    "WaveHair": ("wavy_hair", "soft wavy hair"),
+    "shag": ("shag_hair", "a shag haircut"),
+    "Bun": ("bun", "a hair bun"),
 }
 
 # Two edge-disjoint directed cycles: every class has two source relationships
 # and two target relationships, with both modest and stronger edits.
 PAIR_CYCLES = (
-    ("BowlCut", "PixieCut", "Bun", "PonyTail", "WaistLenHair",
-     "DreadLocks", "CornRows", "Afro", "HiTopFade", "SpikyHair"),
-    ("BowlCut", "Afro", "CornRows", "DreadLocks", "WaistLenHair",
-     "PonyTail", "Bun", "PixieCut", "SpikyHair", "HiTopFade"),
+    ("CurtainedHair", "undercutSidepart", "UndercutPompadour",
+     "Fauxhawk", "PixieCut", "ShoulderLenHair", "WaveHair",
+     "shag", "Bun", "PonyTail"),
+    ("CurtainedHair", "Fauxhawk", "undercutSidepart", "PonyTail",
+     "Bun", "ShoulderLenHair", "shag", "WaveHair", "PixieCut",
+     "UndercutPompadour"),
 )
 
 

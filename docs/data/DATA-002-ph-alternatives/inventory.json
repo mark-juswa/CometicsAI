@@ -1,0 +1,1354 @@
+{
+  "source_archive": "F:\\HAIR\\data\\source\\FaceSketches-HairStyle40.zip",
+  "source_revision": "45de974926fe64551fc2d0b80973335e20ca10e2",
+  "class_counts": {
+    "CombOver": 29,
+    "Fauxhawk": 30,
+    "MopTop": 30,
+    "RazorCut": 30,
+    "UndercutCurly": 30
+  },
+  "candidates": [
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/1.jpg",
+      "filename": "1.jpg",
+      "width": 831,
+      "height": 1000,
+      "short_side": 831,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/10.jpg",
+      "filename": "10.jpg",
+      "width": 553,
+      "height": 742,
+      "short_side": 553,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/11.jpg",
+      "filename": "11.jpg",
+      "width": 2104,
+      "height": 2855,
+      "short_side": 2104,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/12.jpg",
+      "filename": "12.jpg",
+      "width": 737,
+      "height": 1000,
+      "short_side": 737,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/13.jpg",
+      "filename": "13.jpg",
+      "width": 600,
+      "height": 800,
+      "short_side": 600,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/14.jpg",
+      "filename": "14.jpg",
+      "width": 396,
+      "height": 594,
+      "short_side": 396,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/15.jpg",
+      "filename": "15.jpg",
+      "width": 476,
+      "height": 594,
+      "short_side": 476,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/16.jpg",
+      "filename": "16.jpg",
+      "width": 394,
+      "height": 594,
+      "short_side": 394,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/17.jpg",
+      "filename": "17.jpg",
+      "width": 500,
+      "height": 661,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/18.jpg",
+      "filename": "18.jpg",
+      "width": 500,
+      "height": 663,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/19.jpg",
+      "filename": "19.jpg",
+      "width": 500,
+      "height": 626,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/2.jpg",
+      "filename": "2.jpg",
+      "width": 600,
+      "height": 480,
+      "short_side": 480,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/20.jpg",
+      "filename": "20.jpg",
+      "width": 480,
+      "height": 600,
+      "short_side": 480,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/21.jpg",
+      "filename": "21.jpg",
+      "width": 685,
+      "height": 1024,
+      "short_side": 685,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/22.jpg",
+      "filename": "22.jpg",
+      "width": 520,
+      "height": 520,
+      "short_side": 520,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/23.jpg",
+      "filename": "23.jpg",
+      "width": 1813,
+      "height": 2345,
+      "short_side": 1813,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/24.jpg",
+      "filename": "24.jpg",
+      "width": 464,
+      "height": 669,
+      "short_side": 464,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/25.jpg",
+      "filename": "25.jpg",
+      "width": 390,
+      "height": 542,
+      "short_side": 390,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/26.jpg",
+      "filename": "26.jpg",
+      "width": 826,
+      "height": 1100,
+      "short_side": 826,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/27.jpg",
+      "filename": "27.jpg",
+      "width": 500,
+      "height": 671,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/28.jpg",
+      "filename": "28.jpg",
+      "width": 500,
+      "height": 606,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/29.jpg",
+      "filename": "29.jpg",
+      "width": 400,
+      "height": 600,
+      "short_side": 400,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/3.jpg",
+      "filename": "3.jpg",
+      "width": 200,
+      "height": 240,
+      "short_side": 200,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/30.jpg",
+      "filename": "30.jpg",
+      "width": 381,
+      "height": 594,
+      "short_side": 381,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/4.jpg",
+      "filename": "4.jpg",
+      "width": 500,
+      "height": 680,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/5.jpg",
+      "filename": "5.jpg",
+      "width": 360,
+      "height": 480,
+      "short_side": 360,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/6.jpg",
+      "filename": "6.jpg",
+      "width": 543,
+      "height": 720,
+      "short_side": 543,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/7.jpg",
+      "filename": "7.jpg",
+      "width": 236,
+      "height": 325,
+      "short_side": 236,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/8.jpg",
+      "filename": "8.jpg",
+      "width": 796,
+      "height": 1020,
+      "short_side": 796,
+      "decode_error": null
+    },
+    {
+      "class": "RazorCut",
+      "member": "FaceSketches-HairStyle40/image/RazorCut/9.jpg",
+      "filename": "9.jpg",
+      "width": 500,
+      "height": 598,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/1.jpg",
+      "filename": "1.jpg",
+      "width": 500,
+      "height": 500,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/10.jpg",
+      "filename": "10.jpg",
+      "width": 361,
+      "height": 352,
+      "short_side": 352,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/11.jpg",
+      "filename": "11.jpg",
+      "width": 800,
+      "height": 500,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/12.jpg",
+      "filename": "12.jpg",
+      "width": 800,
+      "height": 500,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/13.jpg",
+      "filename": "13.jpg",
+      "width": 500,
+      "height": 750,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/14.jpg",
+      "filename": "14.jpg",
+      "width": 550,
+      "height": 592,
+      "short_side": 550,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/15.jpg",
+      "filename": "15.jpg",
+      "width": 1316,
+      "height": 1044,
+      "short_side": 1044,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/16.jpg",
+      "filename": "16.jpg",
+      "width": 252,
+      "height": 352,
+      "short_side": 252,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/17.jpg",
+      "filename": "17.jpg",
+      "width": 640,
+      "height": 640,
+      "short_side": 640,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/18.jpg",
+      "filename": "18.jpg",
+      "width": 500,
+      "height": 699,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/19.jpg",
+      "filename": "19.jpg",
+      "width": 500,
+      "height": 500,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/2.jpg",
+      "filename": "2.jpg",
+      "width": 500,
+      "height": 500,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/20.jpg",
+      "filename": "20.jpg",
+      "width": 570,
+      "height": 714,
+      "short_side": 570,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/21.jpg",
+      "filename": "21.jpg",
+      "width": 346,
+      "height": 480,
+      "short_side": 346,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/22.jpg",
+      "filename": "22.jpg",
+      "width": 318,
+      "height": 450,
+      "short_side": 318,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/23.jpg",
+      "filename": "23.jpg",
+      "width": 520,
+      "height": 728,
+      "short_side": 520,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/24.jpg",
+      "filename": "24.jpg",
+      "width": 337,
+      "height": 507,
+      "short_side": 337,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/25.jpg",
+      "filename": "25.jpg",
+      "width": 337,
+      "height": 509,
+      "short_side": 337,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/26.jpg",
+      "filename": "26.jpg",
+      "width": 414,
+      "height": 414,
+      "short_side": 414,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/27.jpg",
+      "filename": "27.jpg",
+      "width": 464,
+      "height": 599,
+      "short_side": 464,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/28.jpg",
+      "filename": "28.jpg",
+      "width": 500,
+      "height": 537,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/29.jpg",
+      "filename": "29.jpg",
+      "width": 957,
+      "height": 1300,
+      "short_side": 957,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/3.jpg",
+      "filename": "3.jpg",
+      "width": 500,
+      "height": 498,
+      "short_side": 498,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/30.jpg",
+      "filename": "30.jpg",
+      "width": 297,
+      "height": 400,
+      "short_side": 297,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/4.jpg",
+      "filename": "4.jpg",
+      "width": 800,
+      "height": 500,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/5.jpg",
+      "filename": "5.jpg",
+      "width": 500,
+      "height": 750,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/6.jpg",
+      "filename": "6.jpg",
+      "width": 500,
+      "height": 625,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/7.jpg",
+      "filename": "7.jpg",
+      "width": 500,
+      "height": 500,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/8.jpg",
+      "filename": "8.jpg",
+      "width": 500,
+      "height": 500,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "Fauxhawk",
+      "member": "FaceSketches-HairStyle40/image/Fauxhawk/9.jpg",
+      "filename": "9.jpg",
+      "width": 691,
+      "height": 693,
+      "short_side": 691,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/1.JPG",
+      "filename": "1.JPG",
+      "width": 565,
+      "height": 800,
+      "short_side": 565,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/10.jpg",
+      "filename": "10.jpg",
+      "width": 750,
+      "height": 750,
+      "short_side": 750,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/11.jpg",
+      "filename": "11.jpg",
+      "width": 750,
+      "height": 575,
+      "short_side": 575,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/12.JPG",
+      "filename": "12.JPG",
+      "width": 489,
+      "height": 634,
+      "short_side": 489,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/13.jpg",
+      "filename": "13.jpg",
+      "width": 306,
+      "height": 396,
+      "short_side": 306,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/14.jpg",
+      "filename": "14.jpg",
+      "width": 500,
+      "height": 700,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/15.jpg",
+      "filename": "15.jpg",
+      "width": 650,
+      "height": 650,
+      "short_side": 650,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/16.jpg",
+      "filename": "16.jpg",
+      "width": 363,
+      "height": 363,
+      "short_side": 363,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/17.jpg",
+      "filename": "17.jpg",
+      "width": 500,
+      "height": 501,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/18.jpg",
+      "filename": "18.jpg",
+      "width": 500,
+      "height": 320,
+      "short_side": 320,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/19.jpg",
+      "filename": "19.jpg",
+      "width": 500,
+      "height": 500,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/2.jpg",
+      "filename": "2.jpg",
+      "width": 675,
+      "height": 889,
+      "short_side": 675,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/20.jpg",
+      "filename": "20.jpg",
+      "width": 386,
+      "height": 480,
+      "short_side": 386,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/21.jpg",
+      "filename": "21.jpg",
+      "width": 500,
+      "height": 900,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/22.jpg",
+      "filename": "22.jpg",
+      "width": 450,
+      "height": 740,
+      "short_side": 450,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/23.jpg",
+      "filename": "23.jpg",
+      "width": 882,
+      "height": 1024,
+      "short_side": 882,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/24.jpg",
+      "filename": "24.jpg",
+      "width": 565,
+      "height": 800,
+      "short_side": 565,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/25.jpg",
+      "filename": "25.jpg",
+      "width": 900,
+      "height": 900,
+      "short_side": 900,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/26.jpg",
+      "filename": "26.jpg",
+      "width": 1159,
+      "height": 1739,
+      "short_side": 1159,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/27.jpg",
+      "filename": "27.jpg",
+      "width": 400,
+      "height": 400,
+      "short_side": 400,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/28.jpg",
+      "filename": "28.jpg",
+      "width": 600,
+      "height": 539,
+      "short_side": 539,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/29.jpg",
+      "filename": "29.jpg",
+      "width": 500,
+      "height": 595,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/3.jpg",
+      "filename": "3.jpg",
+      "width": 500,
+      "height": 532,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/30.jpg",
+      "filename": "30.jpg",
+      "width": 500,
+      "height": 500,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/4.jpg",
+      "filename": "4.jpg",
+      "width": 500,
+      "height": 750,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/5.jpg",
+      "filename": "5.jpg",
+      "width": 200,
+      "height": 300,
+      "short_side": 200,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/6.jpg",
+      "filename": "6.jpg",
+      "width": 640,
+      "height": 640,
+      "short_side": 640,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/7.jpg",
+      "filename": "7.jpg",
+      "width": 480,
+      "height": 519,
+      "short_side": 480,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/8.jpg",
+      "filename": "8.jpg",
+      "width": 488,
+      "height": 468,
+      "short_side": 468,
+      "decode_error": null
+    },
+    {
+      "class": "UndercutCurly",
+      "member": "FaceSketches-HairStyle40/image/UndercutCurly/9.JPG",
+      "filename": "9.JPG",
+      "width": 481,
+      "height": 638,
+      "short_side": 481,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/1.jpg",
+      "filename": "1.jpg",
+      "width": 564,
+      "height": 564,
+      "short_side": 564,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/10.jpg",
+      "filename": "10.jpg",
+      "width": 373,
+      "height": 507,
+      "short_side": 373,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/11.jpg",
+      "filename": "11.jpg",
+      "width": 884,
+      "height": 1091,
+      "short_side": 884,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/12.jpg",
+      "filename": "12.jpg",
+      "width": 900,
+      "height": 900,
+      "short_side": 900,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/13.jpg",
+      "filename": "13.jpg",
+      "width": 750,
+      "height": 938,
+      "short_side": 750,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/14.jpg",
+      "filename": "14.jpg",
+      "width": 600,
+      "height": 840,
+      "short_side": 600,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/15.jpg",
+      "filename": "15.jpg",
+      "width": 620,
+      "height": 900,
+      "short_side": 620,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/16.jpg",
+      "filename": "16.jpg",
+      "width": 580,
+      "height": 800,
+      "short_side": 580,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/17.jpg",
+      "filename": "17.jpg",
+      "width": 2000,
+      "height": 1333,
+      "short_side": 1333,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/18.jpg",
+      "filename": "18.jpg",
+      "width": 736,
+      "height": 1106,
+      "short_side": 736,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/19.jpg",
+      "filename": "19.jpg",
+      "width": 500,
+      "height": 500,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/2.jpg",
+      "filename": "2.jpg",
+      "width": 500,
+      "height": 750,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/20.jpg",
+      "filename": "20.jpg",
+      "width": 500,
+      "height": 409,
+      "short_side": 409,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/22.jpg",
+      "filename": "22.jpg",
+      "width": 583,
+      "height": 740,
+      "short_side": 583,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/23.jpg",
+      "filename": "23.jpg",
+      "width": 500,
+      "height": 500,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/24.jpg",
+      "filename": "24.jpg",
+      "width": 528,
+      "height": 738,
+      "short_side": 528,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/25.jpg",
+      "filename": "25.jpg",
+      "width": 233,
+      "height": 300,
+      "short_side": 233,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/26.jpg",
+      "filename": "26.jpg",
+      "width": 2098,
+      "height": 2098,
+      "short_side": 2098,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/27.jpg",
+      "filename": "27.jpg",
+      "width": 500,
+      "height": 409,
+      "short_side": 409,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/28.jpg",
+      "filename": "28.jpg",
+      "width": 620,
+      "height": 776,
+      "short_side": 620,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/29.jpg",
+      "filename": "29.jpg",
+      "width": 500,
+      "height": 500,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/3.jpg",
+      "filename": "3.jpg",
+      "width": 500,
+      "height": 500,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/30.jpg",
+      "filename": "30.jpg",
+      "width": 421,
+      "height": 263,
+      "short_side": 263,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/4.jpg",
+      "filename": "4.jpg",
+      "width": 500,
+      "height": 500,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/5.jpg",
+      "filename": "5.jpg",
+      "width": 260,
+      "height": 311,
+      "short_side": 260,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/6.jpg",
+      "filename": "6.jpg",
+      "width": 550,
+      "height": 700,
+      "short_side": 550,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/7.jpg",
+      "filename": "7.jpg",
+      "width": 1024,
+      "height": 1224,
+      "short_side": 1024,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/8.jpg",
+      "filename": "8.jpg",
+      "width": 500,
+      "height": 584,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "CombOver",
+      "member": "FaceSketches-HairStyle40/image/CombOver/9.jpg",
+      "filename": "9.jpg",
+      "width": 500,
+      "height": 500,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/1.jpg",
+      "filename": "1.jpg",
+      "width": 500,
+      "height": 750,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/1.png",
+      "filename": "1.png",
+      "width": 450,
+      "height": 280,
+      "short_side": 280,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/10.jpg",
+      "filename": "10.jpg",
+      "width": 325,
+      "height": 295,
+      "short_side": 295,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/11.jpg",
+      "filename": "11.jpg",
+      "width": 762,
+      "height": 574,
+      "short_side": 574,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/12.jpg",
+      "filename": "12.jpg",
+      "width": 375,
+      "height": 500,
+      "short_side": 375,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/13.jpg",
+      "filename": "13.jpg",
+      "width": 530,
+      "height": 594,
+      "short_side": 530,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/14.jpg",
+      "filename": "14.jpg",
+      "width": 394,
+      "height": 594,
+      "short_side": 394,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/15.jpg",
+      "filename": "15.jpg",
+      "width": 0,
+      "height": 0,
+      "short_side": 0,
+      "decode_error": "OSError: image file is truncated (12 bytes not processed)"
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/16.jpg",
+      "filename": "16.jpg",
+      "width": 500,
+      "height": 618,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/17.jpg",
+      "filename": "17.jpg",
+      "width": 500,
+      "height": 651,
+      "short_side": 500,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/18.jpg",
+      "filename": "18.jpg",
+      "width": 400,
+      "height": 600,
+      "short_side": 400,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/19.jpg",
+      "filename": "19.jpg",
+      "width": 640,
+      "height": 826,
+      "short_side": 640,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/2.jpg",
+      "filename": "2.jpg",
+      "width": 300,
+      "height": 241,
+      "short_side": 241,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/20.jpg",
+      "filename": "20.jpg",
+      "width": 600,
+      "height": 800,
+      "short_side": 600,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/21.jpg",
+      "filename": "21.jpg",
+      "width": 421,
+      "height": 594,
+      "short_side": 421,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/22.jpg",
+      "filename": "22.jpg",
+      "width": 462,
+      "height": 473,
+      "short_side": 462,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/23.jpg",
+      "filename": "23.jpg",
+      "width": 411,
+      "height": 594,
+      "short_side": 411,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/24.jpg",
+      "filename": "24.jpg",
+      "width": 306,
+      "height": 478,
+      "short_side": 306,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/25.jpg",
+      "filename": "25.jpg",
+      "width": 594,
+      "height": 395,
+      "short_side": 395,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/26.jpg",
+      "filename": "26.jpg",
+      "width": 586,
+      "height": 587,
+      "short_side": 586,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/27.jpg",
+      "filename": "27.jpg",
+      "width": 768,
+      "height": 1002,
+      "short_side": 768,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/28.jpg",
+      "filename": "28.jpg",
+      "width": 273,
+      "height": 400,
+      "short_side": 273,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/29.jpg",
+      "filename": "29.jpg",
+      "width": 450,
+      "height": 675,
+      "short_side": 450,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/3.jpg",
+      "filename": "3.jpg",
+      "width": 207,
+      "height": 300,
+      "short_side": 207,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/4.jpg",
+      "filename": "4.jpg",
+      "width": 395,
+      "height": 594,
+      "short_side": 395,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/5.jpg",
+      "filename": "5.jpg",
+      "width": 411,
+      "height": 594,
+      "short_side": 411,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/6.jpg",
+      "filename": "6.jpg",
+      "width": 403,
+      "height": 594,
+      "short_side": 403,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/7.jpg",
+      "filename": "7.jpg",
+      "width": 1024,
+      "height": 1024,
+      "short_side": 1024,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/8.jpg",
+      "filename": "8.jpg",
+      "width": 230,
+      "height": 300,
+      "short_side": 230,
+      "decode_error": null
+    },
+    {
+      "class": "MopTop",
+      "member": "FaceSketches-HairStyle40/image/MopTop/9.jpg",
+      "filename": "9.jpg",
+      "width": 260,
+      "height": 251,
+      "short_side": 251,
+      "decode_error": null
+    }
+  ]
+}

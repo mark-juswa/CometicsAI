@@ -12,9 +12,8 @@ from PIL import Image, ImageDraw, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CLASSES = (
-    "Afro", "BowlCut", "Bun", "CornRows", "CurtainedHair", "DreadLocks",
-    "FrenchTwist", "HimeCut", "HiTopFade", "Mohawk", "Mullet", "Perm",
-    "PixieCut", "PonyTail", "Ringlet", "SpikyHair", "WaistLenHair", "shag",
+    "CurtainedHair", "undercutSidepart", "Fauxhawk", "UndercutPompadour",
+    "PonyTail", "PixieCut", "ShoulderLenHair", "WaveHair", "shag", "Bun",
 )
 
 

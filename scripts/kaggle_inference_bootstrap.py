@@ -53,8 +53,8 @@ def kaggle_secret(name: str) -> str:
 
 
 def audit_environment() -> tuple[dict, str]:
-    if not (ROOT / "backend/app/styles.py").is_file() or not (ROOT / ".git").is_dir():
-        raise RuntimeError("Repository checkout is incomplete. Run the notebook clone cell first.")
+    if not (ROOT / "backend/app/styles.py").is_file() or not REQUIREMENTS.is_file():
+        raise RuntimeError("Project source is incomplete. Restore the code Input or clone the repository first.")
     import torch
     if not torch.cuda.is_available():
         raise RuntimeError("CUDA is unavailable. Select a Kaggle GPU accelerator, start a new session, and rerun.")

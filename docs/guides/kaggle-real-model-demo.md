@@ -17,24 +17,42 @@ In Kaggle, create one **private Dataset**, upload the two files in `F:\HAIR\arti
 
 Create a random shared key locally, for example `python -c "import secrets; print(secrets.token_urlsafe(32))"`. Save it as a Kaggle Secret named `HAIRCAPSTONE_API_KEY` and enable that Secret for the notebook. Keep the same value for the local backend `.env`. Do not put it in the notebook, Git, or a screenshot. The Base model is public; `HF_TOKEN` is optional and only needed if Hub access/rate limits require it. If used, put it in Kaggle Secrets too.
 
+The current code commit is local while this machine's GitHub DNS is unavailable. A small ignored code archive, `F:\HAIR\artifacts\haircapstone_runtime_code.zip`, is provided as a second Kaggle Input until `git push origin main` succeeds. Upload that ZIP as a Kaggle Dataset and attach it to the notebook. Kaggle may expose either the ZIP or its extracted files; the cell handles both. It prefers this code Input when present. Once GitHub contains this commit, the code Input is optional and the cell clones/pulls the repository instead. Never attach more than one code archive.
+
 ## Each fresh Kaggle GPU session
 
-1. Open a Python notebook, select a T4 GPU, enable Internet, and attach your private adapter Dataset as an Input. Make sure `HAIRCAPSTONE_API_KEY` is enabled in Kaggle Secrets.
+1. Open a Python notebook, select a T4 GPU, enable Internet, and attach your private adapter Dataset as an Input. Until GitHub is updated, also attach the source-code ZIP as a second Input. Make sure `HAIRCAPSTONE_API_KEY` is enabled in Kaggle Secrets.
 2. Use the single code cell below, or import and run [`haircapstone_inference_kaggle.ipynb`](../../notebooks/haircapstone_inference_kaggle.ipynb). The cell uses the notebook kernel's `sys.executable`; it does not call a system Python that may lack CUDA.
 3. Wait for `HAIR CAPSTONE GPU SERVER READY`. Copy only the printed `FLUX_REMOTE_URL` into the local backend `.env`. Keep the Kaggle session running while using the demo.
 
 ```python
 from pathlib import Path
-import subprocess, sys
+from zipfile import ZipFile
+import shutil, subprocess, sys
 
 repo = Path('/kaggle/working/CometicsAI')
 url = 'https://github.com/mark-juswa/CometicsAI.git'
-if (repo / '.git').is_dir():
+inputs = Path('/kaggle/input')
+code_dirs = sorted({p.parent.parent for p in inputs.rglob('kaggle_inference_bootstrap.py') if (p.parent.parent / 'backend/app/styles.py').is_file()})
+code_zips = sorted(inputs.rglob('haircapstone_runtime_code.zip'))
+if len(code_dirs) > 1 or (not code_dirs and len(code_zips) > 1):
+    raise RuntimeError('Attach only one HAIR CAPSTONE source-code Input')
+if code_dirs:
+    shutil.copytree(code_dirs[0], repo, dirs_exist_ok=True)
+elif code_zips:
+    repo.mkdir(parents=True, exist_ok=True)
+    with ZipFile(code_zips[0]) as source:
+        if any(not (repo / name).resolve().is_relative_to(repo.resolve()) for name in source.namelist()):
+            raise RuntimeError('Unsafe path in code archive')
+        source.extractall(repo)
+elif (repo / '.git').is_dir():
     subprocess.run(['git', '-C', str(repo), 'pull', '--ff-only'], check=True)
 elif repo.exists() and any(repo.iterdir()):
     raise RuntimeError(f'{repo} exists but is not the project checkout')
 else:
     subprocess.run(['git', 'clone', '--depth', '1', url, str(repo)], check=True)
+if not (repo / 'scripts/kaggle_inference_bootstrap.py').is_file():
+    raise RuntimeError('Project source lacks the current inference bootstrap; attach the code ZIP Input')
 subprocess.run([sys.executable, '-u', str(repo / 'scripts/kaggle_inference_bootstrap.py')], check=True)
 ```
 

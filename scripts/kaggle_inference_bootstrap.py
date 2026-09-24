@@ -116,7 +116,8 @@ def dependencies(torch_version: str, cuda_version: str) -> None:
                                      "--upgrade-strategy", "only-if-needed", "--constraint", str(constraints),
                                      "-r", str(REQUIREMENTS)], stdout=log, stderr=subprocess.STDOUT)
         if result.returncode:
-            raise RuntimeError("Inference dependency installation failed. See dependency_install.log; Torch was constrained to its original build.")
+            tail = "\n".join((OUT / "dependency_install.log").read_text(encoding="utf-8", errors="replace").splitlines()[-20:])
+            raise RuntimeError(f"Inference dependency installation failed. See dependency_install.log; Torch was constrained to its original build.\n{tail}")
     else:
         print("Inference dependencies already satisfy constraints; skipping pip.", flush=True)
     print("Checking FLUX.2 Klein imports (see dependency_check.log if this stalls).", flush=True)

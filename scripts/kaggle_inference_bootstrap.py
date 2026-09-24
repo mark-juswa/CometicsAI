@@ -97,6 +97,7 @@ def audit_environment() -> tuple[dict, str]:
 
 def dependencies(torch_version: str, cuda_version: str) -> None:
     from packaging.requirements import Requirement
+    from packaging.version import Version
     requirements = [Requirement(line.strip()) for line in REQUIREMENTS.read_text(encoding="utf-8").splitlines()
                     if line.strip() and not line.lstrip().startswith("#")]
     missing = []
@@ -120,6 +121,21 @@ def dependencies(torch_version: str, cuda_version: str) -> None:
             raise RuntimeError(f"Inference dependency installation failed. See dependency_install.log; Torch was constrained to its original build.\n{tail}")
     else:
         print("Inference dependencies already satisfy constraints; skipping pip.", flush=True)
+    try:
+        torchao_version = importlib.metadata.version("torchao")
+    except importlib.metadata.PackageNotFoundError:
+        torchao_version = None
+    if torchao_version and Version(torchao_version) < Version("0.16.0"):
+        print(f"Removing optional torchao {torchao_version}: PEFT requires >=0.16.0 when torchao is installed.", flush=True)
+        with (OUT / "torchao_remove.log").open("w", encoding="utf-8") as log:
+            removed = subprocess.run([sys.executable, "-m", "pip", "uninstall", "-y", "torchao"],
+                                     stdout=log, stderr=subprocess.STDOUT)
+        if removed.returncode:
+            raise RuntimeError("Could not remove incompatible optional torchao. See torchao_remove.log.")
+        absent = subprocess.run([sys.executable, "-c", "import importlib.util; assert importlib.util.find_spec('torchao') is None"],
+                                capture_output=True, text=True)
+        if absent.returncode:
+            raise RuntimeError("torchao is still importable after removal. See torchao_remove.log; restart the Kaggle session.")
     print("Checking FLUX.2 Klein imports (see dependency_check.log if this stalls).", flush=True)
     try:
         check = subprocess.run([sys.executable, "-c", "import json,torch; from diffusers import Flux2KleinPipeline; "

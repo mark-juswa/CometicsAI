@@ -9,6 +9,7 @@ from PIL import Image, ImageOps, UnidentifiedImageError
 
 from app.generation.base import GeneratedImage
 from app.styles import Style
+from app.styles import REAL_STYLE_BY_ID
 
 
 class RemoteGenerationError(Exception):
@@ -26,7 +27,7 @@ class RemoteFluxEngine:
             raise RuntimeError("Remote FLUX needs an HTTPS FLUX_REMOTE_URL and FLUX_REMOTE_API_KEY.")
 
     async def generate(self, image: Image.Image, style: Style) -> GeneratedImage:
-        if style.id not in {"crew_cut", "bob_hair", "layered_hair"}:
+        if style.id not in REAL_STYLE_BY_ID:
             raise RemoteGenerationError("This hairstyle is not supported by the trained adapter.")
         buffer = BytesIO()
         normalized = ImageOps.pad(image, (512, 512), method=Image.Resampling.LANCZOS,

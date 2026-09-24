@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "base_model_id": "black-forest-labs/FLUX.2-klein-base-4B",
+  "base_model_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+  "adapters": {
+    "train001": {
+      "experiment": "TRAIN-001",
+      "dataset_version": "DATA-001",
+      "training_steps": 250,
+      "checkpoint_sha256": "7e3991f8a4e502573d3e82e9ac34c89fdf3f0b66fb337abb026a5b4c9ad080ff",
+      "status": "enabled"
+    }
+  },
+  "styles": [
+    {
+      "style_id": "crew_cut",
+      "display_name": "Crew Cut",
+      "description": "A short, close hairstyle.",
+      "prompt": "Change the person's hairstyle to a crew cut while preserving their identity, facial features, expression, pose, clothing, lighting, framing, and background.",
+      "adapter_id": "train001",
+      "training_label": "CrewCut",
+      "support_status": "experimental"
+    },
+    {
+      "style_id": "bob_hair",
+      "display_name": "Bob Hair",
+      "description": "A bob hairstyle.",
+      "prompt": "Change the person's hairstyle to a bob hairstyle while preserving their identity, facial features, expression, pose, clothing, lighting, framing, and background.",
+      "adapter_id": "train001",
+      "training_label": "BobHair",
+      "support_status": "experimental"
+    },
+    {
+      "style_id": "layered_hair",
+      "display_name": "Layered Hair",
+      "description": "A layered hairstyle.",
+      "prompt": "Change the person's hairstyle to layered hair while preserving their identity, facial features, expression, pose, clothing, lighting, framing, and background.",
+      "adapter_id": "train001",
+      "training_label": "LayeredHair",
+      "support_status": "experimental"
+    }
+  ]
+}

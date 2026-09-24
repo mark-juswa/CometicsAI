@@ -28,7 +28,11 @@ MODEL = "black-forest-labs/FLUX.2-klein-base-4B"
 MODEL_REVISION = "a3b4f4849157f664bdbc776fd7453c2783562f4d"
 PORT = 8765
 REQUIREMENTS = ROOT / "scripts/kaggle_inference_requirements.txt"
-STYLES = {"crew_cut", "bob_hair", "layered_hair"}
+sys.path.insert(0, str(ROOT / "backend"))
+from app.registry import enabled_styles, load_registry  # noqa: E402
+
+REGISTRY = load_registry()
+STYLES = {style["style_id"] for style in enabled_styles(REGISTRY)}
 
 
 def write_json(path: Path, data: dict) -> None:
@@ -156,26 +160,34 @@ def dependencies(torch_version: str, cuda_version: str) -> None:
     write_json(OUT / "dependencies.json", {"packages": versions, "torch": torch_version, "cuda": cuda_version})
 
 
-def adapter_directory(explicit: str | None) -> tuple[Path, dict]:
+def adapter_directories(explicit: str | None) -> dict[str, tuple[Path, dict]]:
     sys.path.insert(0, str(ROOT / "scripts"))
     from kaggle_inference_server import read_adapter_metadata
     candidates = [Path(explicit)] if explicit else list(Path("/kaggle/input").rglob("metadata.json"))
-    valid = []
+    valid = {}
     for item in candidates:
         directory = item if item.is_dir() else item.parent
         if not (directory / "adapter.safetensors").is_file():
             continue
+        raw = json.loads((directory / "metadata.json").read_text(encoding="utf-8"))
+        adapter_id = raw.get("adapter_id", "train001" if raw.get("experiment") == "TRAIN-001" else None)
+        if adapter_id not in REGISTRY["adapters"] or REGISTRY["adapters"][adapter_id]["status"] != "enabled":
+            continue
         try:
-            metadata = read_adapter_metadata(directory)
+            metadata = read_adapter_metadata(directory, adapter_id)
             if metadata.get("base_model_revision") != MODEL_REVISION:
                 raise RuntimeError("Adapter Base revision differs from the pinned inference Base")
-            valid.append((directory, metadata))
+            if adapter_id in valid:
+                raise RuntimeError(f"Duplicate enabled adapter bundle: {adapter_id}")
+            valid[adapter_id] = (directory, metadata)
         except (RuntimeError, OSError, ValueError, json.JSONDecodeError) as exc:
             raise RuntimeError(f"Adapter candidate at {directory} is invalid: {exc}") from exc
-    if len(valid) != 1:
-        raise RuntimeError(f"Expected exactly one TRAIN-001 adapter bundle under /kaggle/input; found {len(valid)}. Attach the private Kaggle Dataset containing adapter.safetensors and metadata.json.")
-    print("VERIFIED ADAPTER", valid[0][0], valid[0][1]["checkpoint_sha256"], flush=True)
-    return valid[0]
+    expected = {key for key, value in REGISTRY["adapters"].items() if value["status"] == "enabled"}
+    if set(valid) != expected:
+        raise RuntimeError(f"Attach one verified bundle per enabled adapter. Expected {sorted(expected)}, found {sorted(valid)}")
+    for key, (directory, metadata) in valid.items():
+        print("VERIFIED ADAPTER", key, directory, metadata["checkpoint_sha256"], flush=True)
+    return valid
 
 
 def model_snapshot() -> Path:
@@ -203,15 +215,22 @@ def local_health() -> dict | None:
         return None
 
 
-def expected_health(payload: dict | None, sha: str) -> bool:
+def expected_health(payload: dict | None, hashes: dict[str, str]) -> bool:
+    # A V1 process started before the registry migration is still a valid
+    # TRAIN-001-only fallback during an in-place Kaggle code update.
+    available = payload.get("available_adapters") if payload else None
+    if available is None and set(hashes) == {"train001"}:
+        available = hashes
     return bool(payload and payload.get("status") == "ready" and payload.get("gpu_ready") is True
                 and payload.get("base_model_loaded") is True and payload.get("lora_loaded") is True
-                and payload.get("adapter_steps") == 250 and payload.get("adapter_sha256") == sha
+                and payload.get("adapter_steps") == 250
+                and payload.get("adapter_sha256") == hashes["train001"]
+                and available == hashes
                 and set(payload.get("supported_styles", [])) == STYLES)
 
 
-def start_server(model: Path, adapter: Path, key: str, sha: str) -> None:
-    if expected_health(local_health(), sha):
+def start_server(model: Path, adapters: dict[str, tuple[Path, dict]], key: str, hashes: dict[str, str]) -> None:
+    if expected_health(local_health(), hashes):
         print("Reusing healthy GPU server on localhost.", flush=True)
         return
     if local_health() is not None:
@@ -232,7 +251,7 @@ def start_server(model: Path, adapter: Path, key: str, sha: str) -> None:
                 deadline = time.monotonic() + 900
                 next_update = time.monotonic() + 30
                 while time.monotonic() < deadline:
-                    if expected_health(local_health(), sha):
+                    if expected_health(local_health(), hashes):
                         return
                     if time.monotonic() >= next_update:
                         print(f"Still waiting for GPU server; see {OUT / 'server.log'}", flush=True)
@@ -240,7 +259,8 @@ def start_server(model: Path, adapter: Path, key: str, sha: str) -> None:
                     time.sleep(3)
                 raise RuntimeError(f"An existing GPU server has not become ready. See {OUT / 'server.log'}")
     env = os.environ.copy()
-    env.update({"HAIRCAPSTONE_MODEL_DIR": str(model), "HAIRCAPSTONE_ADAPTER_DIR": str(adapter),
+    env.update({"HAIRCAPSTONE_MODEL_DIR": str(model),
+                "HAIRCAPSTONE_ADAPTER_DIRS": json.dumps({name: str(item[0]) for name, item in adapters.items()}),
                 "HAIRCAPSTONE_API_KEY": key})
     log = (OUT / "server.log").open("a", encoding="utf-8")
     process = subprocess.Popen([sys.executable, "-m", "uvicorn", "scripts.kaggle_inference_server:app",
@@ -253,7 +273,7 @@ def start_server(model: Path, adapter: Path, key: str, sha: str) -> None:
     while time.monotonic() < deadline:
         if process.poll() is not None:
             raise RuntimeError(f"GPU server exited {process.returncode}. See {OUT / 'server.log'}")
-        if expected_health(local_health(), sha):
+        if expected_health(local_health(), hashes):
             return
         if time.monotonic() >= next_update:
             print(f"Still loading Base + LoRA; see {OUT / 'server.log'}", flush=True)
@@ -283,12 +303,12 @@ def cloudflared_binary() -> Path:
     return binary
 
 
-def start_tunnel(sha: str) -> str:
+def start_tunnel(hashes: dict[str, str]) -> str:
     prior = OUT / "endpoint.json"
     if prior.is_file():
         previous = json.loads(prior.read_text(encoding="utf-8"))
         try:
-            if expected_health(read_url(previous["url"] + "/health", 10), sha):
+            if expected_health(read_url(previous["url"] + "/health", 10), hashes):
                 print("Reusing healthy temporary tunnel.", flush=True)
                 return previous["url"]
         except (OSError, URLError, ValueError):
@@ -317,7 +337,7 @@ def start_tunnel(sha: str) -> str:
         if process.poll() is not None:
             raise RuntimeError(f"Tunnel exited {process.returncode} before public health passed. See {log_path}")
         try:
-            if expected_health(read_url(url + "/health", 12), sha):
+            if expected_health(read_url(url + "/health", 12), hashes):
                 write_json(prior, {"url": url, "pid": process.pid, "verified_utc": datetime.now(timezone.utc).isoformat()})
                 return url
         except (OSError, URLError, ValueError):
@@ -333,13 +353,14 @@ def main() -> None:
     args = parser.parse_args()
     report, key = audit_environment()
     dependencies(report["torch"], report["torch_cuda"])
-    adapter, metadata = adapter_directory(args.adapter_dir)
+    adapters = adapter_directories(args.adapter_dir)
+    hashes = {name: metadata["checkpoint_sha256"] for name, (_, metadata) in adapters.items()}
     model = model_snapshot()
-    start_server(model, adapter, key, metadata["checkpoint_sha256"])
-    url = f"http://127.0.0.1:{PORT}" if args.local_only else start_tunnel(metadata["checkpoint_sha256"])
+    start_server(model, adapters, key, hashes)
+    url = f"http://127.0.0.1:{PORT}" if args.local_only else start_tunnel(hashes)
     print("\n=====================================\nHAIR CAPSTONE GPU SERVER READY", flush=True)
     print(f"GPU: {report['selected_gpu']}\nBase: {MODEL}@{MODEL_REVISION}", flush=True)
-    print("Adapter: TRAIN-001 step 250\nStyles: crew_cut, bob_hair, layered_hair", flush=True)
+    print(f"Adapters: {', '.join(sorted(adapters))}\nStyles: {', '.join(sorted(STYLES))}", flush=True)
     print(f"Health: {url}/health\nLocal configuration:\nGENERATION_ENGINE=remote_flux\nFLUX_REMOTE_URL={url}", flush=True)
     print("FLUX_REMOTE_API_KEY=<same value as your Kaggle HAIRCAPSTONE_API_KEY Secret>", flush=True)
     print("=====================================", flush=True)

@@ -1,0 +1,342 @@
+{
+  "status": "FROZEN_FOR_PROJECT_LEAD_REVIEW",
+  "manifest_sha256": "901169bf4b8e0e6340708e487cd2a0d4177c5da43b98d6a8e965dc3c59d908d6",
+  "source_archive_sha256": "46ce34e9de676b5fabee03dee5b52d815133c5d8bd73dceaaebada297c8f6d13",
+  "selected_classes": [
+    "Afro",
+    "BowlCut",
+    "Bun",
+    "CornRows",
+    "DreadLocks",
+    "HiTopFade",
+    "PixieCut",
+    "PonyTail",
+    "SpikyHair",
+    "WaistLenHair"
+  ],
+  "candidate_decisions": {
+    "Afro": {
+      "selected_train": 10,
+      "selected_val": 2,
+      "reserve": 4,
+      "rejected": 14,
+      "reserve_files": [
+        "1.jpg",
+        "5.jpg",
+        "9.jpg",
+        "15.jpg"
+      ],
+      "rejected_files": [
+        "10.jpg",
+        "18.jpg",
+        "19.jpg",
+        "2.jpg",
+        "20.jpg",
+        "21.jpg",
+        "23.jpg",
+        "25.jpg",
+        "28.jpg",
+        "29.jpg",
+        "3.jpg",
+        "30.jpg",
+        "4.jpg",
+        "8.jpg"
+      ],
+      "rejection_notes": "Obscured faces, sunglasses, distant subjects, or repeated image (21.jpg duplicates 5.jpg)."
+    },
+    "BowlCut": {
+      "selected_train": 10,
+      "selected_val": 2,
+      "reserve": 4,
+      "rejected": 14,
+      "reserve_files": [
+        "1.jpg",
+        "6.jpg",
+        "9.jpg",
+        "28.jpg"
+      ],
+      "rejected_files": [
+        "10.jpg",
+        "14.jpg",
+        "18.jpg",
+        "19.jpg",
+        "20.jpg",
+        "21.jpg",
+        "22.jpg",
+        "23.jpg",
+        "24.jpg",
+        "29.jpg",
+        "3.jpg",
+        "30.jpg",
+        "4.jpg",
+        "7.jpg"
+      ],
+      "rejection_notes": "Rear/profile framing or cuts that look closer to pixie, crew, or an unrelated short style."
+    },
+    "Bun": {
+      "selected_train": 10,
+      "selected_val": 2,
+      "reserve": 4,
+      "rejected": 14,
+      "reserve_files": [
+        "18.jpg",
+        "26.jpg",
+        "9.jpg",
+        "6.jpg"
+      ],
+      "rejected_files": [
+        "1.jpg",
+        "11.jpg",
+        "15.jpg",
+        "16.jpg",
+        "19.jpg",
+        "2.jpg",
+        "20.jpg",
+        "22.jpg",
+        "24.jpg",
+        "3.jpg",
+        "30.jpg",
+        "4.jpg",
+        "7.jpg",
+        "8.jpg"
+      ],
+      "rejection_notes": "Collages/product images, hair bun not visible, severe profile, small face, or a portrait visually very similar to another selected stock model (22.jpg)."
+    },
+    "CornRows": {
+      "selected_train": 10,
+      "selected_val": 2,
+      "reserve": 4,
+      "rejected": 14,
+      "reserve_files": [
+        "26.png",
+        "6.jpg",
+        "10.jpg",
+        "29.jpg"
+      ],
+      "rejected_files": [
+        "1.jpg",
+        "14.jpg",
+        "16.jpg",
+        "17.jpg",
+        "19.jpg",
+        "2.jpg",
+        "20.jpg",
+        "24.jpg",
+        "27.jpg",
+        "28.jpg",
+        "30.jpg",
+        "4.jpg",
+        "8.jpg",
+        "9.jpg"
+      ],
+      "rejection_notes": "Several images show generic long braids without a visible cornrow pattern; some are collages or head-down views. 27.jpg and 28.jpg may repeat the identity in selected 25.jpg, so neither is used for validation."
+    },
+    "DreadLocks": {
+      "selected_train": 10,
+      "selected_val": 2,
+      "reserve": 4,
+      "rejected": 14,
+      "reserve_files": [
+        "19.jpg",
+        "25.jpg",
+        "26.jpg",
+        "23.jpg"
+      ],
+      "rejected_files": [
+        "11.jpg",
+        "15.jpg",
+        "17.jpg",
+        "2.jpg",
+        "21.jpg",
+        "24.jpg",
+        "27.jpg",
+        "3.jpg",
+        "4.jpg",
+        "5.jpg",
+        "6.jpg",
+        "7.jpg",
+        "8.jpg",
+        "9.jpg"
+      ],
+      "rejection_notes": "Back/side views, face occlusion, hats, or styles that resemble braids or loose curls rather than locks (24.jpg)."
+    },
+    "HiTopFade": {
+      "selected_train": 10,
+      "selected_val": 2,
+      "reserve": 4,
+      "rejected": 14,
+      "reserve_files": [
+        "10.jpg",
+        "29.jpg",
+        "4.jpg",
+        "8.jpg"
+      ],
+      "rejected_files": [
+        "1.jpg",
+        "11.jpg",
+        "17.jpg",
+        "19.jpg",
+        "20.jpg",
+        "21.jpg",
+        "23.jpg",
+        "24.jpg",
+        "25.jpg",
+        "26.jpg",
+        "27.jpg",
+        "30.jpg",
+        "5.jpg",
+        "7.jpg"
+      ],
+      "rejection_notes": "Many images are extreme profile, distant, or show a low fade without a clear high top."
+    },
+    "PixieCut": {
+      "selected_train": 10,
+      "selected_val": 2,
+      "reserve": 4,
+      "rejected": 14,
+      "reserve_files": [
+        "26.jpg",
+        "21.jpg",
+        "25.jpg",
+        "3.jpg"
+      ],
+      "rejected_files": [
+        "12.jpg",
+        "16.jpg",
+        "18.jpg",
+        "20.jpg",
+        "24.jpg",
+        "27.jpg",
+        "29.jpg",
+        "30.jpg",
+        "4.jpg",
+        "5.jpg",
+        "6.jpg",
+        "7.jpg",
+        "8.jpg",
+        "9.jpg"
+      ],
+      "rejection_notes": "Repeated celebrity identities, side/rear views, or short bobs that blur the pixie label. 27.jpg duplicates SpikyHair/15.jpg byte-for-byte."
+    },
+    "PonyTail": {
+      "selected_train": 10,
+      "selected_val": 2,
+      "reserve": 4,
+      "rejected": 14,
+      "reserve_files": [
+        "15.jpg",
+        "3.png",
+        "8.jpg",
+        "24.jpg"
+      ],
+      "rejected_files": [
+        "1.jpeg",
+        "1.png",
+        "10.jpg",
+        "11.jpg",
+        "13.jpg",
+        "14.jpg",
+        "2.png",
+        "20.jpg",
+        "21.jpg",
+        "22.jpg",
+        "23.jpg",
+        "26.jpg",
+        "7.jpg",
+        "9.jpg"
+      ],
+      "rejection_notes": "Illustrations/collages, loose hair where the ponytail is not visible, or braids mislabelled as a ponytail. 26.jpg repeats the same celebrity as selected 25.jpg."
+    },
+    "SpikyHair": {
+      "selected_train": 10,
+      "selected_val": 2,
+      "reserve": 4,
+      "rejected": 14,
+      "reserve_files": [
+        "2.jpeg",
+        "5.jpg",
+        "6.jpg",
+        "9.jpg"
+      ],
+      "rejected_files": [
+        "1.jpg",
+        "13.jpg",
+        "16.jpg",
+        "18.jpg",
+        "2.jpg",
+        "21.jpg",
+        "22.jpg",
+        "25.jpg",
+        "26.JPG",
+        "28.jpg",
+        "3.jpg",
+        "4.jpg",
+        "7.jpg",
+        "8.jpg"
+      ],
+      "rejection_notes": "Some images show ordinary short hair or pixie cuts with little visible spiking; collages and side-only views excluded."
+    },
+    "WaistLenHair": {
+      "selected_train": 10,
+      "selected_val": 2,
+      "reserve": 4,
+      "rejected": 14,
+      "reserve_files": [
+        "22.jpg",
+        "8.jpg",
+        "9.jpg",
+        "29.jpg"
+      ],
+      "rejected_files": [
+        "1.jpg",
+        "1.png",
+        "13.jpg",
+        "14.jpg",
+        "16.jpg",
+        "17.jpg",
+        "18.jpg",
+        "19.jpg",
+        "2.jpg",
+        "23.jpg",
+        "26.jpg",
+        "28.jpg",
+        "5.jpg",
+        "6.jpg"
+      ],
+      "rejection_notes": "Back views, collages, heavy hats, very small faces, framing that hides the hair length, or celebrity identity repeated in another class (19.jpg versus PonyTail/25.jpg)."
+    }
+  },
+  "identity_counts": {
+    "train": 100,
+    "val": 20
+  },
+  "generation_jobs": 120,
+  "pair_counts": {
+    "train": 200,
+    "val": 40
+  },
+  "target_distribution": {
+    "train/afro": 20,
+    "train/bowl_cut": 20,
+    "train/bun": 20,
+    "train/cornrows": 20,
+    "train/dreadlocks": 20,
+    "train/hi_top_fade": 20,
+    "train/pixie_cut": 20,
+    "train/ponytail": 20,
+    "train/spiky_hair": 20,
+    "train/waist_length_hair": 20,
+    "val/afro": 4,
+    "val/bowl_cut": 4,
+    "val/bun": 4,
+    "val/cornrows": 4,
+    "val/dreadlocks": 4,
+    "val/hi_top_fade": 4,
+    "val/pixie_cut": 4,
+    "val/ponytail": 4,
+    "val/spiky_hair": 4,
+    "val/waist_length_hair": 4
+  },
+  "near_image_hash_matches_for_review": [],
+  "identity_uniqueness": "Manual contact-sheet screening plus exact source SHA-256; semantic identity duplicates cannot be ruled out automatically"
+}

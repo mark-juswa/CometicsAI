@@ -1,11 +1,11 @@
 {
   "status": "FROZEN_FOR_PROJECT_LEAD_REVIEW",
-  "manifest_sha256": "8ee456a102544cbc6f616bbc833fced0037a61f5c5e5301a052bc9f3d1562b9e",
+  "manifest_sha256": "80772b55df3c48c0a195bf6b4cc5b83c02be36ff43d084e393d903eec4288718",
   "source_archive_sha256": "46ce34e9de676b5fabee03dee5b52d815133c5d8bd73dceaaebada297c8f6d13",
   "selected_classes": [
     "CurtainedHair",
     "undercutSidepart",
-    "Fauxhawk",
+    "SpikyHair",
     "UndercutPompadour",
     "PonyTail",
     "PixieCut",
@@ -73,34 +73,34 @@
       ],
       "rejection_notes": "Excluded collages, extreme profiles, ambiguous high pompadours, repeated celebrity portraits, and 5.jpg, which exactly duplicates UndercutPompadour/4.jpg."
     },
-    "Fauxhawk": {
+    "SpikyHair": {
       "selected_train": 10,
       "selected_val": 2,
-      "reserve": 3,
-      "rejected": 15,
+      "reserve": 4,
+      "rejected": 14,
       "reserve_files": [
         "3.jpg",
-        "24.jpg",
-        "25.jpg"
+        "5.jpg",
+        "6.jpg",
+        "28.jpg"
       ],
       "rejected_files": [
-        "11.jpg",
+        "1.jpg",
+        "10.jpg",
         "12.jpg",
-        "14.jpg",
+        "13.jpg",
         "15.jpg",
         "16.jpg",
-        "18.jpg",
+        "2.jpg",
         "20.jpg",
-        "21.jpg",
-        "22.jpg",
         "23.jpg",
-        "26.jpg",
-        "29.jpg",
-        "30.jpg",
+        "24.jpg",
+        "25.jpg",
+        "26.JPG",
         "4.jpg",
-        "9.jpg"
+        "8.jpg"
       ],
-      "rejection_notes": "Excluded child portraits, collages (including selected-on-first-pass 15.jpg), repeated Beckham portraits, and plain short hair without a raised central strip. 16.jpg is below the 256 px short-side threshold. 9.jpg may repeat the apparent identity of selected 1.jpg, so it is excluded from validation. The remaining fauxhawks are more distinguishable from the side-part and pompadour classes than the source Slickback folder."
+      "rejection_notes": "Selected male-leaning portraits with visibly spiked or textured upright hair to reduce overlap with PixieCut. Excluded female short pixies, a child portrait, multi-person frame, weak plain-short styles, and apparent repeats: 20.jpg closely resembles selected 9.jpg, while 15.jpg exactly duplicates PixieCut/27.jpg (a reserve). Profile-heavy 3.jpg and 6.jpg remain reserves requiring another review before substitution."
     },
     "UndercutPompadour": {
       "selected_train": 10,
@@ -318,23 +318,23 @@
   "target_distribution": {
     "train/bun": 20,
     "train/curtain_hair": 20,
-    "train/fauxhawk": 20,
     "train/pixie_cut": 20,
     "train/pompadour_undercut": 20,
     "train/ponytail": 20,
     "train/shag_hair": 20,
     "train/shoulder_length_hair": 20,
     "train/side_part_undercut": 20,
+    "train/spiky_hair": 20,
     "train/wavy_hair": 20,
     "val/bun": 4,
     "val/curtain_hair": 4,
-    "val/fauxhawk": 4,
     "val/pixie_cut": 4,
     "val/pompadour_undercut": 4,
     "val/ponytail": 4,
     "val/shag_hair": 4,
     "val/shoulder_length_hair": 4,
     "val/side_part_undercut": 4,
+    "val/spiky_hair": 4,
     "val/wavy_hair": 4
   },
   "near_image_hash_matches_for_review": [],

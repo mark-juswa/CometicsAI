@@ -122,6 +122,57 @@ The Supervisor's first saved trace showed both the Transformers weight loader an
 
 ## Human review, bounded retry, and later finalization
 
+The Supervisor's log-redirected frozen-manifest run exited `0` and reported 120 `generated.png` files and four review sheets. These are first-attempt outputs, not accepted training pairs. Preserve `/kaggle/working/data002` before the Kaggle session ends. The four sheets and individual images still require explicit human review.
+
+### Authorized fast path for TRAIN-002
+
+The Supervisor subsequently authorized **automated structural acceptance without exhaustive visual review** for DATA-002. This does not change the frozen manifest, generated files, or the normal human-review path below. It records `review_mode: automated_unreviewed`, `TECHNICAL_ACCEPT` decisions, `visual_qa: NOT PERFORMED`, and exact exclusions. It must run against the actual Kaggle output directory before any TRAIN-002 preparation. The previously reported 120 PNG count and exit code do not by themselves establish integrity.
+
+Pull the repository version containing `scripts/paired_dataset.py`'s `audit` and `automated_unreviewed` modes. Then run:
+
+```python
+from pathlib import Path
+import json, subprocess, sys
+
+repo = Path("/kaggle/working/CometicsAI")
+out = Path("/kaggle/working/data002")
+approved = "25a3200c9a79be85ce19f690ba81f564d57d55d86d36e6383b0cacd1188ec5ab"
+subprocess.run(["git", "-C", str(repo), "pull", "--ff-only"], check=True)
+with (out / "audit_console.json").open("w", encoding="utf-8") as log:
+    subprocess.run([
+        sys.executable, str(repo / "scripts/paired_dataset.py"), "audit",
+        "--manifest", str(repo / "docs/data/DATA-002-manifest.json"),
+        "--generation-dir", str(out / "generated"),
+        "--approved-manifest-sha256", approved,
+        "--output", str(out / "generation_audit.json"),
+    ], check=True, stdout=log)
+audit = json.loads((out / "generation_audit.json").read_text())
+print({key: audit[key] for key in (
+    "expected_generation_jobs", "actual_generated_png_count", "actual_metadata_json_count",
+    "valid_generation_count", "actual_pair_counts", "actual_target_distribution",
+    "issues", "severely_underrepresented", "exact_hash_split_leakage")})
+```
+
+The audit checks the frozen manifest marker, all expected IDs and paths, source and target classes, split, Base model and revision, prompt, seed, attempt, dimensions, RGB decode, timestamps, nonempty files, and image SHA-256 values. It reports unexpected directories, exact duplicate hashes, and exact-hash split leakage. The audit cannot establish that two different photographs show different people or that a hairstyle looks correct.
+
+If `issues` is empty, all ten styles remain balanced, and the reported counts are valid, finalize without creating human ACCEPT claims:
+
+```python
+subprocess.run([
+    sys.executable, str(repo / "scripts/paired_dataset.py"), "finalize",
+    "--manifest", str(repo / "docs/data/DATA-002-manifest.json"),
+    "--generation-dir", str(out / "generated"),
+    "--output", str(out / "final"),
+    "--review-mode", "automated_unreviewed",
+    "--approved-manifest-sha256", approved,
+], check=True)
+print((out / "final/reports/qa.json").read_text())
+```
+
+If a small number of jobs are missing or invalid, the audit lists their exact sample IDs. The fast path can finalize the remaining technically valid groups and calculates actual counts, provided every style retains at least half its planned target representation in each split. Preserve the audit and report exclusions to the Project Lead; do not label the resulting data human-reviewed. The runner's `--all` skips complete outputs whose metadata and hashes verify, so missing jobs can be rerun without repeating successful jobs. A corrupt existing file requires inspection and a deliberate targeted repair before rerunning; the runner will not silently overwrite it.
+
+The final DATA-002 output contains `train|val/reference`, `train|val/target`, target caption `.txt` files, `manifests/pairs.json`, `manifests/selection.json`, `manifests/reviews.json`, copied generation metadata, `reports/generation_audit.json`, `reports/qa.json`, and identity/directional contact sheets. A complete valid run should calculate 100 train plus 20 validation identities and 200 train plus 40 validation directional pairs; these remain projections until the Kaggle audit and finalizer report them.
+
 After generation, initialize a review manifest (this writes **PENDING**, not ACCEPT):
 
 ```python

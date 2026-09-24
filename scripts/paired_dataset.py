@@ -81,8 +81,9 @@ def assert_balanced(manifest: dict) -> None:
             raise ValueError(f"Unbalanced or missing target class in {split}: {values}")
 
 
-def plan(manifest: dict) -> dict:
-    assert_balanced(manifest)
+def plan(manifest: dict, require_balanced: bool = True) -> dict:
+    if require_balanced:
+        assert_balanced(manifest)
     samples = manifest["samples"]
     return {"dataset_id": manifest["dataset_id"], "source_revision": manifest["source_revision"],
             "identity_counts": dict(sorted(Counter(sample["split"] for sample in samples).items())),
@@ -97,11 +98,100 @@ def plan(manifest: dict) -> dict:
 
 
 def checked_image(path: Path) -> None:
+    if not path.is_file() or path.stat().st_size == 0:
+        raise ValueError(f"Missing or empty image: {path}")
     with Image.open(path) as image:
         image.verify()
     with Image.open(path) as image:
         if image.mode != "RGB" or image.size != (512, 512):
             raise ValueError(f"Expected 512x512 RGB image: {path}")
+
+
+def audit_generations(manifest: dict, generation_dir: Path, manifest_digest: str) -> dict:
+    """Check each first attempt independently; never infer visual quality."""
+    marker = generation_dir.parent / "manifest.sha256"
+    if not marker.is_file() or marker.read_text(encoding="utf-8").strip() != manifest_digest:
+        raise ValueError(f"Generation directory does not match frozen manifest: {marker}")
+    expected_ids = {sample["sample_id"] for sample in manifest["samples"]}
+    actual_dirs = {path.name for path in generation_dir.iterdir() if path.is_dir()} if generation_dir.is_dir() else set()
+    issues, valid_ids, image_hashes = [], [], defaultdict(list)
+    for sample in manifest["samples"]:
+        key = sample["sample_id"]
+        folder = generation_dir / key
+        original, generated, sidecar = folder / "original.png", folder / "generated.png", folder / "generated.json"
+        missing = [path.name for path in (original, generated, sidecar) if not path.is_file()]
+        if missing:
+            issues.append({"sample_id": key, "kind": "missing", "reason": ", ".join(missing)})
+            continue
+        try:
+            if sidecar.stat().st_size == 0:
+                raise ValueError("empty generated.json")
+            metadata = json.loads(sidecar.read_text(encoding="utf-8"))
+            expected = {
+                "sample_id": key, "identity_group_id": sample["identity_group_id"],
+                "source_path": sample["source_path"], "source_member": sample["source_member"],
+                "source_member_sha256": sample["source_sha256"],
+                "source_style": sample["source_style"], "target_style": sample["target_style"],
+                "split": sample["split"], "attempt": 1,
+                "method": manifest["generation"]["method"],
+                "prompt": instruction(manifest["styles"], sample["target_style"]),
+                "seed": manifest["generation"]["seed"],
+                "steps": manifest["generation"]["steps"],
+                "guidance": manifest["generation"]["guidance"],
+                "width": manifest["generation"]["width"],
+                "height": manifest["generation"]["height"],
+                "source_revision": manifest["source_revision"],
+                "base_model_id": manifest["base_model_id"],
+                "base_model_revision": manifest["base_model_revision"],
+            }
+            differing = [name for name, value in expected.items() if metadata.get(name) != value]
+            if differing:
+                raise ValueError(f"metadata mismatch: {', '.join(differing)}")
+            for role, path in (("original", original), ("generated", generated)):
+                checked_image(path)
+                digest = sha256(path)
+                if metadata.get(f"{role}_sha256") != digest:
+                    raise ValueError(f"{role} SHA-256 mismatch")
+                image_hashes[digest].append({"sample_id": key, "role": role, "split": sample["split"]})
+            if not isinstance(metadata.get("runtime_seconds"), (int, float)) or metadata["runtime_seconds"] <= 0:
+                raise ValueError("missing or invalid generation runtime")
+            if not metadata.get("generated_utc"):
+                raise ValueError("missing generation timestamp")
+            valid_ids.append(key)
+        except (OSError, ValueError, TypeError, KeyError) as error:
+            issues.append({"sample_id": key, "kind": "invalid", "reason": str(error)})
+    duplicates = [entries for entries in image_hashes.values() if len(entries) > 1]
+    duplicated_ids = {entry["sample_id"] for group in duplicates for entry in group}
+    for key in sorted(duplicated_ids):
+        issues.append({"sample_id": key, "kind": "duplicate", "reason": "exact image hash appears more than once"})
+    valid_ids = [key for key in valid_ids if key not in duplicated_ids]
+    valid_set = set(valid_ids)
+    valid_manifest = {**manifest, "samples": [s for s in manifest["samples"] if s["sample_id"] in valid_set]}
+    actual_distribution = distribution(valid_manifest)
+    planned_distribution = distribution(manifest)
+    severe = [name for name, expected in planned_distribution.items()
+              if actual_distribution.get(name, 0) * 2 < expected]
+    train_hashes = {digest for digest, entries in image_hashes.items()
+                    if any(entry["split"] == "train" for entry in entries)}
+    val_hashes = {digest for digest, entries in image_hashes.items()
+                  if any(entry["split"] == "val" for entry in entries)}
+    return {
+        "dataset_id": manifest["dataset_id"], "manifest_sha256": manifest_digest,
+        "review_mode": "automated_unreviewed", "visual_qa": "NOT PERFORMED",
+        "expected_generation_jobs": len(manifest["samples"]),
+        "actual_generated_png_count": len(list(generation_dir.glob("*/generated.png"))),
+        "actual_metadata_json_count": len(list(generation_dir.glob("*/generated.json"))),
+        "actual_original_png_count": len(list(generation_dir.glob("*/original.png"))),
+        "valid_generation_count": len(valid_ids), "valid_sample_ids": valid_ids,
+        "issues": issues, "unexpected_sample_directories": sorted(actual_dirs - expected_ids),
+        "duplicate_sha256_groups": duplicates, "exact_hash_split_leakage": bool(train_hashes & val_hashes),
+        "actual_identity_counts": dict(sorted(Counter(s["split"] for s in valid_manifest["samples"]).items())),
+        "actual_pair_counts": {split: 2 * sum(s["split"] == split for s in valid_manifest["samples"])
+                               for split in ("train", "val")},
+        "planned_target_distribution": planned_distribution,
+        "actual_target_distribution": actual_distribution,
+        "severely_underrepresented": severe,
+    }
 
 
 def contact_sheets(rows: list[tuple[Path, Path, str]], folder: Path, stem: str) -> list[str]:
@@ -128,19 +218,42 @@ def contact_sheet_page(rows: list[tuple[Path, Path, str]], path: Path) -> None:
     sheet.save(path, quality=90)
 
 
-def finalize(manifest: dict, generation_dir: Path, reviews_path: Path, output: Path) -> dict:
-    plan_summary = plan(manifest)
-    reviews = json.loads(reviews_path.read_text(encoding="utf-8"))
-    samples = manifest["samples"]
-    if set(reviews) != {sample["sample_id"] for sample in samples}:
-        raise ValueError("Review identities do not exactly match selection manifest")
+def finalize(manifest: dict, generation_dir: Path, reviews_path: Path | None, output: Path,
+             review_mode: str = "human_reviewed", manifest_digest: str | None = None) -> dict:
+    if review_mode == "automated_unreviewed":
+        if manifest["dataset_id"] != "DATA-002" or not manifest_digest:
+            raise ValueError("Automated acceptance requires DATA-002 and the approved manifest SHA-256")
+        audit = audit_generations(manifest, generation_dir, manifest_digest)
+        if audit["unexpected_sample_directories"] or audit["exact_hash_split_leakage"]:
+            raise ValueError("Unexpected generation folders or exact-hash split leakage; inspect audit first")
+        if audit["severely_underrepresented"] or not audit["valid_sample_ids"]:
+            raise ValueError(f"Too few valid examples for automatic finalization: {audit['severely_underrepresented']}")
+        valid_set = set(audit["valid_sample_ids"])
+        samples = [sample for sample in manifest["samples"] if sample["sample_id"] in valid_set]
+        reviews = {sample["sample_id"]: {"status": "TECHNICAL_ACCEPT", "attempt": 1,
+                                           "review_mode": review_mode,
+                                           "notes": "Passed automated structural checks; visual quality not reviewed"}
+                   for sample in samples}
+        plan_summary = plan({**manifest, "samples": samples}, require_balanced=False)
+    elif review_mode == "human_reviewed":
+        if reviews_path is None:
+            raise ValueError("Human-reviewed finalization requires --reviews")
+        plan_summary = plan(manifest)
+        reviews = json.loads(reviews_path.read_text(encoding="utf-8"))
+        samples = manifest["samples"]
+        audit = None
+        if set(reviews) != {sample["sample_id"] for sample in samples}:
+            raise ValueError("Review identities do not exactly match selection manifest")
+    else:
+        raise ValueError(f"Unsupported review mode: {review_mode}")
     if output.exists() and any(output.iterdir()):
         raise ValueError(f"Refusing to replace a nonempty dataset: {output}")
     inputs, hashes = [], defaultdict(set)
     for sample in samples:
         key = sample["sample_id"]
         review = reviews[key]
-        if (not isinstance(review, dict) or review.get("status") != "ACCEPT"
+        required_status = "TECHNICAL_ACCEPT" if review_mode == "automated_unreviewed" else "ACCEPT"
+        if (not isinstance(review, dict) or review.get("status") != required_status
                 or review.get("attempt") not in (1, 2) or not str(review.get("notes", "")).strip()):
             raise ValueError(f"Explicit ACCEPT and review notes required for {key}")
         folder = generation_dir / key
@@ -218,14 +331,23 @@ def finalize(manifest: dict, generation_dir: Path, reviews_path: Path, output: P
     (output / "manifests" / "pairs.json").write_text(json.dumps(rows, indent=2) + "\n", encoding="utf-8")
     (output / "manifests" / "selection.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     (output / "manifests" / "reviews.json").write_text(json.dumps(reviews, indent=2) + "\n", encoding="utf-8")
+    if audit is not None:
+        audit_path = output / "reports" / "generation_audit.json"
+        audit_path.parent.mkdir(parents=True, exist_ok=True)
+        audit_path.write_text(json.dumps(audit, indent=2) + "\n", encoding="utf-8")
     identity_pages = contact_sheets(identity_sheet, output / "contact_sheets", "identity_generation")
     pair_pages = contact_sheets(pair_sheet, output / "contact_sheets", "directional_pairs")
     report = {"dataset_id": manifest["dataset_id"], "created_utc": datetime.now(timezone.utc).isoformat(),
+              "source_manifest_sha256": manifest_digest, "review_mode": review_mode,
               "identity_counts": plan_summary["identity_counts"], "pair_counts": plan_summary["pair_counts"],
               "target_distribution": dict(sorted(actual.items())), "duplicate_identity_hashes": [],
-              "split_leakage": False, "explicit_accepts": len(reviews),
+              "split_leakage": False,
+              "explicit_accepts": len(reviews) if review_mode == "human_reviewed" else 0,
+              "automated_accepts": len(reviews) if review_mode == "automated_unreviewed" else 0,
+              "excluded_generations": audit["issues"] if audit is not None else [],
               "contact_sheets": identity_pages + pair_pages,
-              "visual_qa": "Explicit human decisions recorded; contact sheets require review"}
+              "visual_qa": ("NOT PERFORMED; automated structural acceptance only" if audit is not None
+                            else "Explicit human decisions recorded; contact sheets require review")}
     report_path = output / "reports" / "qa.json"
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
@@ -234,19 +356,36 @@ def finalize(manifest: dict, generation_dir: Path, reviews_path: Path, output: P
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("mode", choices=("plan", "finalize"))
+    parser.add_argument("mode", choices=("plan", "audit", "finalize"))
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--generation-dir", type=Path)
     parser.add_argument("--reviews", type=Path)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--review-mode", choices=("human_reviewed", "automated_unreviewed"),
+                        default="human_reviewed")
+    parser.add_argument("--approved-manifest-sha256")
     args = parser.parse_args()
     manifest = load_manifest(args.manifest)
     if args.mode == "plan":
         print(json.dumps(plan(manifest), indent=2))
+    elif args.mode == "audit":
+        if not args.generation_dir or not args.approved_manifest_sha256:
+            parser.error("audit requires --generation-dir and --approved-manifest-sha256")
+        if sha256(args.manifest) != args.approved_manifest_sha256:
+            raise ValueError("Frozen manifest hash differs from approved SHA-256")
+        audit = audit_generations(manifest, args.generation_dir, args.approved_manifest_sha256)
+        if args.output:
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            args.output.write_text(json.dumps(audit, indent=2) + "\n", encoding="utf-8")
+        print(json.dumps(audit, indent=2))
     else:
-        if not all((args.generation_dir, args.reviews, args.output)):
-            parser.error("finalize requires --generation-dir, --reviews and --output")
-        print(json.dumps(finalize(manifest, args.generation_dir, args.reviews, args.output), indent=2))
+        if not args.generation_dir or not args.output:
+            parser.error("finalize requires --generation-dir and --output")
+        if args.review_mode == "automated_unreviewed" and (
+                not args.approved_manifest_sha256 or sha256(args.manifest) != args.approved_manifest_sha256):
+            raise ValueError("Automated finalization requires the approved frozen manifest SHA-256")
+        print(json.dumps(finalize(manifest, args.generation_dir, args.reviews, args.output,
+                                  args.review_mode, args.approved_manifest_sha256), indent=2))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,18 @@
+{
+  "status": "VERIFIED",
+  "privateValuesChecked": 13,
+  "secretLeaks": [],
+  "sourceBoundaryViolations": [],
+  "protectedPathsChanged": [],
+  "baseline": "e05b832",
+  "bundles": [
+    {
+      "path": "dist\\web\\_expo\\static\\js\\web\\entry-84526f79d4fdfc56befb12399533fae3.js",
+      "sha256": "f903c5151cc1fc184804110f4da4dbfd1f27c6d4ba9c77f04f69430b49e93f41"
+    },
+    {
+      "path": "dist\\android\\_expo\\static\\js\\android\\entry-f4533404e0b070fb335d7c5ef5ddedb4.hbc",
+      "sha256": "373b559f1ee040ed4a926137723ad7d3a239eadd6ccc6f9edccfb159cb8e24c1"
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "status": "VERIFIED",
+  "environment": "Expo web in headless Edge, not Android",
+  "checks": [
+    {
+      "name": "live_health",
+      "response": {
+        "status": "ok",
+        "generator": "mock"
+      }
+    },
+    {
+      "name": "live_catalog",
+      "feature": "hairstyle",
+      "count": 6,
+      "firstId": "crew-cut"
+    },
+    {
+      "name": "photo_preview_replace_remove_reset_mock_failure",
+      "feature": "hairstyle"
+    },
+    {
+      "name": "live_catalog",
+      "feature": "makeup",
+      "count": 10,
+      "firstId": "natural_makeup"
+    },
+    {
+      "name": "photo_preview_replace_remove_reset_mock_failure",
+      "feature": "makeup"
+    },
+    {
+      "name": "live_catalog",
+      "feature": "nails",
+      "count": 5,
+      "firstId": "classic_red"
+    },
+    {
+      "name": "photo_preview_replace_remove_reset_mock_failure",
+      "feature": "nails"
+    },
+    {
+      "name": "consultation_overview_navigation"
+    },
+    {
+      "name": "connectivity_screen"
+    },
+    {
+      "name": "api_failure_and_explicit_retry"
+    },
+    {
+      "name": "no_upload_generation_or_worker_calls",
+      "count": 11
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/features"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/features/hairstyle/styles"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/features"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/features/makeup/styles"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/features"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/features/nails/styles"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/features"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/features"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/health"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/features/nails/styles"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/features/nails/styles"
+    }
+  ],
+  "pageErrors": []
+}

@@ -1,0 +1,1 @@
+export const makeupPresentation = { route: '/makeup' as const, label: 'Makeup', title: 'Explore a new look.', emphasis: 'Keep the portrait yours.', description: 'Choose a makeup direction and preview it with your portrait.', photoTitle: 'Your portrait', photoDetail: 'Use a clear, well-lit photo of your face.', styleTitle: 'Find your style' };

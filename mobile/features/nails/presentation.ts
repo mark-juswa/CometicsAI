@@ -1,0 +1,3 @@
+export const nailsPresentation = { route: '/nails' as const, label: 'Nails', title: 'A polished look.', emphasis: 'Made for your hands.', description: 'Try a nail finish on your own photo. Show the back of your hand with three to five visible nails.', photoTitle: 'Your hand photo', photoDetail: 'Show the back of your hand in clear light.', styleTitle: 'Choose a nail look' };
+// Exact existing web presentation swatches, independent of backend style availability.
+export const nailSwatches: Record<string, string> = { classic_red: '#aa2138', nude_pink: '#d696a3', glossy_black: '#24232a', french_tip: '#e9d7d6', pink_ombre: '#c6719e' };

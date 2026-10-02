@@ -1,0 +1,1 @@
+export const hairPresentation = { route: '/hair' as const, label: 'Hairstyle', title: 'Discover your', emphasis: 'next hairstyle.', description: 'Upload a portrait, choose a hairstyle, and explore a look that feels like you.', photoTitle: 'Your portrait', photoDetail: 'Start with a clear, front-facing photo.', styleTitle: 'Find your style' };

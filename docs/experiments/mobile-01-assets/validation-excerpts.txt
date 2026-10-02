@@ -1,0 +1,49 @@
+Recorded command output excerpts from this MOBILE-01 session, 2026-10-02.
+Full UI request evidence and bundle protection hashes are in the adjacent JSON files.
+
+mobile: npm test
+✔ configuration has no fallback and rejects credentials, non-HTTP URLs and paths
+✔ all three catalogs and health use the application API via GET, with no upload
+✔ unknown discovery IDs and malformed catalogs are rejected before rendering
+✔ backend detail, validation arrays and adapter errors remain controlled
+✔ HTML failures, broken JSON and network loss show safe errors, never automatic retry
+✔ read deadline aborts a stalled API call
+✔ gallery checks match the backend boundaries without changing a photo
+✔ photo replacement/removal and style change invalidate previews and reset is feature-local
+ℹ tests 8
+ℹ pass 8
+ℹ fail 0
+
+backend: python -m pytest tests -q
+408 passed, 1 warning in 95.24s (0:01:35)
+Existing PendingDeprecationWarning: Please use `import python_multipart` instead.
+
+beautycore: npm run typecheck
+> tsc --noEmit
+Exit code 0.
+
+beautycore: npx tsx --test tests/ai*.test.ts
+ℹ tests 26
+ℹ pass 26
+ℹ fail 0
+
+mobile: npx expo install --check
+Dependencies are up to date
+
+mobile: npx expo-doctor
+Running 21 checks on your project...
+21/21 checks passed. No issues detected!
+
+mobile: npx expo start --web --port 8091
+Starting project at F:\HAIR\mobile
+Metro is running in CI mode, reloads are disabled. Remove CI=true to enable watch mode.
+Starting Metro Bundler
+Waiting on http://localhost:8091
+
+Android SDK: D:\AndroidStudio\Android\Sdk
+adb devices
+List of devices attached
+(No device rows.)
+emulator -list-avds
+(No AVD rows.)
+Supervisor response: Leave Android device acceptance pending for now.

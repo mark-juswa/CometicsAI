@@ -1,0 +1,49 @@
+{
+  "message": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Classic Red.' }) to be visible\u001b[22m\n",
+  "pageErrors": [],
+  "checks": [
+    {
+      "name": "live_health",
+      "response": {
+        "status": "ok",
+        "generator": "mock"
+      }
+    },
+    {
+      "name": "live_catalog",
+      "feature": "hairstyle",
+      "count": 6,
+      "firstId": "crew-cut"
+    },
+    {
+      "name": "photo_preview_replace_remove_reset_mock_failure",
+      "feature": "hairstyle"
+    },
+    {
+      "name": "live_catalog",
+      "feature": "makeup",
+      "count": 10,
+      "firstId": "natural_makeup"
+    },
+    {
+      "name": "photo_preview_replace_remove_reset_mock_failure",
+      "feature": "makeup"
+    },
+    {
+      "name": "live_catalog",
+      "feature": "nails",
+      "count": 5,
+      "firstId": "classic_red"
+    },
+    {
+      "name": "photo_preview_replace_remove_reset_mock_failure",
+      "feature": "nails"
+    },
+    {
+      "name": "consultation_overview_navigation"
+    },
+    {
+      "name": "connectivity_screen"
+    }
+  ]
+}

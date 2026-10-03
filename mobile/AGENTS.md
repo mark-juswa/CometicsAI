@@ -37,6 +37,7 @@ Docs: https://docs.expo.dev/eas/index.md
 ## Rules
 
 - Read `../context/state.md` first and `../docs/guides/mobile-00-contracts.md` for inspected integration contracts. The governing mobile direction is `../docs/specs/0006-mobile-foundation.md`.
+- Product UI direction is `../docs/specs/0007-mobile-product-ux.md`: Consultation leads Home, diagnostics are in Settings, studios share focused stages and temporary drafts, and result comparison is a dedicated route. Consultation is a local brief only until a later API gate. Keep the mock/photo/GET-only boundary; native acceptance of changed UI is separate from MOBILE-01.
 - MOBILE-01 is development only: existing FastAPI health/catalog GET requests, local gallery photos and explicitly labeled unchanged mock results. No generation, camera, direct Kaggle connection, public server secrets or persisted photos.
 - API routes live only in `lib/api/`. Client configuration is only `EXPO_PUBLIC_API_BASE_URL`, with no default address. TanStack Query owns server state; `store/studio.ts` owns temporary drafts.
 - Native visual source is the existing BeautyCore AI studio; `constants/theme.ts` and `design.md` document its translation. User architecture and directory instructions outrank scaffold defaults.

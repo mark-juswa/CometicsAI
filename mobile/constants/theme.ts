@@ -11,3 +11,6 @@ export const colors = {
 export const spacing = { xs: 6, sm: 12, md: 16, lg: 24, xl: 32, hero: 40 };
 export const type = { small: 12, body: 15, button: 13, panel: 25, hero: 40, brand: 18 };
 export const serif = Platform.select({ ios: 'Georgia', web: 'Georgia', default: 'serif' });
+// Compact mobile equivalents of the web's editorial cards and action bar.
+export const layout = { maxWidth: 720, touch: 48, previewMin: 180, previewMax: 280, radius: 12 };
+export const compactType = { heading: 30, headingLine: 36, stage: 22, glyph: 24 };

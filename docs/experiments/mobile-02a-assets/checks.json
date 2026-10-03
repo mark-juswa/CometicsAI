@@ -1,0 +1,71 @@
+{
+  "checks": [
+    "home-hierarchy-settings-entry",
+    "settings-health-error-recheck-recovery",
+    "legacy-diagnostic-deep-link",
+    "hairstyle-real-catalog-6-gallery-back-review-result-retry-reset",
+    "makeup-real-catalog-10-gallery-back-review-result-retry-reset",
+    "nails-real-catalog-5-gallery-back-review-result-retry-reset",
+    "consultation-local-three-stages-preferences-photo-compatibility-custom-handoff",
+    "catalog-error-retry-recovery",
+    "empty-catalog-refresh-recovery",
+    "zero-page-errors-read-only-api-no-generation"
+  ],
+  "calls": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/health"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/health"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/health"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/health"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/features/hairstyle/styles"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/features/makeup/styles"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/features/nails/styles"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/features/nails/styles"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/features/nails/styles"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/features/nails/styles"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/features/nails/styles"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8001/features/nails/styles"
+    }
+  ],
+  "errors": [],
+  "widths": [
+    320,
+    360,
+    390,
+    430
+  ]
+}

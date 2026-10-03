@@ -8,7 +8,7 @@ import { Body } from './ui';
 export function StyleCatalog({ styles, selectedId, onSelect, nails = false, disabled = false }: {
   styles: Style[]; selectedId: string | null; onSelect: (id: string) => void; nails?: boolean; disabled?: boolean;
 }) {
-  if (!styles.length) return <Body>No styles are available from this API. Check the backend catalog configuration.</Body>;
+  if (!styles.length) return <Body>No looks are available right now. Please try again later.</Body>;
   return <View style={sheet.catalog}>{styles.map((style, index) => <Pressable key={style.id}
     accessibilityRole="button" accessibilityLabel={`${style.name}. ${style.description}`}
     accessibilityState={{ selected: selectedId === style.id, disabled }} disabled={disabled} onPress={() => onSelect(style.id)}

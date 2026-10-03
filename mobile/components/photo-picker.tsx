@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { pickPhoto, recoverPhoto } from '../lib/image/picker';
 import type { LocalPhoto } from '../lib/image/validation';
 import { Body, Button, ErrorMessage, Loading } from './ui';
 import { colors, spacing } from '../constants/theme';
+import { PhotoFrame } from './workflow';
 
 export function PhotoPicker({ photo, onChange, hand = false, disabled = false }: {
   photo: LocalPhoto | null; onChange: (photo: LocalPhoto | null) => void; hand?: boolean; disabled?: boolean;
@@ -24,8 +25,8 @@ export function PhotoPicker({ photo, onChange, hand = false, disabled = false }:
   }
   return <View style={styles.container}>
     {photo ? <>
-      <Image testID="photo-preview" accessibilityLabel={hand ? 'Selected hand photo' : 'Selected portrait'} source={{ uri: photo.uri }} style={styles.photo} resizeMode="contain" />
-      <Body>{photo.name}</Body><Body muted>{(photo.size / 1024 / 1024).toFixed(2)} MB · {photo.width} × {photo.height}</Body>
+      <PhotoFrame testID="photo-preview" label={hand ? 'Selected hand photo' : 'Selected portrait'} photo={photo} />
+      <Body>{photo.name}</Body>
       <View style={styles.actions}>
         <View style={styles.action}><Button label="Replace" secondary disabled={disabled || busy} onPress={() => void choose()} /></View>
         <View style={styles.action}><Button label="Remove" secondary disabled={disabled || busy} onPress={() => { onChange(null); setError(''); }} /></View>
@@ -41,8 +42,7 @@ export function PhotoPicker({ photo, onChange, hand = false, disabled = false }:
 }
 const styles = StyleSheet.create({
   container: { gap: spacing.sm },
-  photo: { width: '100%', aspectRatio: 4 / 5, backgroundColor: colors.photo },
-  upload: { minHeight: 240, borderWidth: 1, borderStyle: 'dashed', borderColor: colors.border, padding: spacing.lg, gap: spacing.md, justifyContent: 'center' },
+  upload: { minHeight: 180, borderWidth: 1, borderStyle: 'dashed', borderColor: colors.border, padding: spacing.md, gap: spacing.md, justifyContent: 'center' },
   actions: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   action: { flex: 1, minWidth: 100 },
 });

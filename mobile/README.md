@@ -2,6 +2,8 @@
 
 MOBILE-01 uses Expo SDK 57, React Native, TypeScript and Expo Router. It is additive and uses the existing FastAPI application API for development, as explicitly approved. It never calls Kaggle. Native acceptance is complete on one physical Xiaomi Android 12 phone with Expo Go 57, using observed USB/API evidence and Supervisor manual checks. [Native evidence](../docs/experiments/mobile-native-android.md) is separate from earlier browser checks.
 
+MOBILE-02A product UI is implemented and locally verified. Its new manual Android UX checklist is pending, deferred by the Supervisor; MOBILE-01 remains accepted. [Before/after screenshots, checks and checklist](../docs/experiments/mobile-02a.md).
+
 ## Normal Windows startup
 
 ```powershell
@@ -37,7 +39,9 @@ For advanced manual launches, the app still supports `EXPO_PUBLIC_API_BASE_URL` 
 
 ## Scope and structure
 
-`app/` contains service navigation, connectivity, consultation overview and mock comparison. `components/` has native studio panels, buttons, gallery picker and catalog cards. `features/{hair,makeup,nails,consultation}/` retains service presentation and stages. `lib/api/` owns all routes, runtime validation and Query hooks. `lib/config/` owns public origin validation. `lib/image/` validates JPEG/PNG gallery selections against existing limits. `store/` keeps per-service drafts in memory. `constants/` translates existing studio tokens; `assets/` contains the official scaffold icons.
+`app/` contains Consultation-first Home, Settings diagnostics, three service studios, local Consultation and dedicated mock comparison. `components/` has shared workflow/progress/back/action-bar, service cards, native panels, buttons, gallery picker, preference fields and catalog cards. `features/{hair,makeup,nails,consultation}/` retains feature presentation and actual web preference vocabulary. `lib/api/` owns all routes, runtime validation and Query hooks. `lib/config/` owns public origin validation. `lib/image/` validates JPEG/PNG gallery selections against existing limits. `store/` keeps per-service stages/drafts and a separate Consultation brief in memory. `constants/` translates existing studio tokens; `assets/` contains scaffold icons and copies of actual BeautyCore service imagery.
+
+Custom Studios use Photo → Style → Review with persistent bottom actions. Back preserves photo/style. The unchanged mock result has Original/Result controls, Try Another Style retaining the photo and Start Over clearing only that studio. Consultation uses Service → Direction → Your Looks with local photo/preferences, an honest pending-recommendations state and custom studio photo handoff. Settings preserves connection/recheck and the old `/connection` deep link redirects there.
 
 Catalogs never use mock fallback. Failed API requests show an explicit retry action; automatic retries are disabled. Photos are local URI references, never persisted by the app or uploaded in MOBILE-01. The OS picker may create temporary cache files. Replace/remove/reset releases app state references and invalidates mock results. No camera permission or capture, complete Consultation, download action, authentication or real generation is implemented in this phase.
 
@@ -54,7 +58,7 @@ npm run export:web
 python -m unittest discover -s tests -p test_mobile_launcher.py -v
 ```
 
-On Android: load, visit all services, check configured API connection, verify real catalogs, choose/cancel/replace/remove a gallery photo, select a style, view unchanged mock comparison, navigate back, reset, test unavailable API and small-width layouts. Browser validation supports UI checks but does not prove native gallery or Android runtime acceptance.
+On Android: manually reload, check Home hierarchy/header Settings, verify Consultation local stages/brief and each Hair/Makeup/Nails Photo/Style/Review flow, gallery choose/cancel/replace/remove, style scrolling, Back/state preservation, mock Original/Result, Try Another Style, Start Over and phone-width bottom actions. Browser validation supports UI checks but does not prove native gallery or Android runtime acceptance. No remote phone actions/captures are authorized. The new MOBILE-02A checklist is still pending.
 
 Contracts: [MOBILE-00 inspection](../docs/guides/mobile-00-contracts.md). Reference APIs: [Expo Router setup](https://docs.expo.dev/router/installation/), [SDK 57 ImagePicker](https://docs.expo.dev/versions/v57.0.0/sdk/imagepicker/).
 

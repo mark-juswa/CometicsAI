@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-03",
+  "baseline": "2837e22",
+  "branch": "codex/mobile-02",
+  "typecheck": "passed",
+  "lint": "passed",
+  "mobile_tests": { "passed": 14, "failed": 0 },
+  "expo_dependencies": "up to date",
+  "expo_doctor": { "passed": 21, "total": 21 },
+  "android_export": "passed",
+  "web_export": "passed",
+  "backend_regressions": { "passed": 408, "warnings": 1, "seconds": 81.80, "mode": "CPU/mock" },
+  "beautycore_ai_regressions": { "passed": 26, "failed": 0, "upstream": "mocked" },
+  "protected_paths_changed": 0,
+  "browser_scenarios": "checks.json",
+  "private_value_scan": "bundle-scan.json",
+  "native_android": "NEEDS VERIFICATION",
+  "supervisor_native_response": "ill do this later",
+  "remote_phone_actions": 0,
+  "gpu_generation_requests": 0
+}

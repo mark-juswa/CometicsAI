@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { colors, serif, spacing, type } from '../constants/theme';
+import { colors, compactType, serif, spacing, type } from '../constants/theme';
 
 export function Body({ children, muted = false }: { children: ReactNode; muted?: boolean }) {
   return <Text style={[styles.body, muted && { color: colors.muted }]}>{children}</Text>;
@@ -10,10 +10,10 @@ export function Body({ children, muted = false }: { children: ReactNode; muted?:
 export function Title({ children }: { children: ReactNode }) {
   return <Text accessibilityRole="header" style={styles.title}>{children}</Text>;
 }
-export function Button({ label, onPress, secondary = false, disabled = false, testID }: {
-  label: string; onPress: () => void; secondary?: boolean; disabled?: boolean; testID?: string;
+export function Button({ label, onPress, secondary = false, disabled = false, selected, testID }: {
+  label: string; onPress: () => void; secondary?: boolean; disabled?: boolean; selected?: boolean; testID?: string;
 }) {
-  return <Pressable testID={testID} accessibilityRole="button" accessibilityState={{ disabled }} disabled={disabled} onPress={onPress}
+  return <Pressable testID={testID} accessibilityRole="button" accessibilityState={{ disabled, selected }} disabled={disabled} onPress={onPress}
     style={({ pressed }) => [styles.button, secondary && styles.secondary, disabled && { opacity: 0.47 }, pressed && { opacity: 0.75 }]}>
     <Text style={[styles.buttonText, secondary && { color: colors.white }]}>{label}</Text>
   </Pressable>;
@@ -35,12 +35,12 @@ export function Panel({ number, title, detail, children }: { number?: string; ti
     </View>{children}
   </LinearGradient>;
 }
-export function Screen({ children, title, emphasis, description }: { children: ReactNode; title: string; emphasis?: string; description?: string }) {
+export function Screen({ children, title, emphasis, description, compact = false }: { children: ReactNode; title: string; emphasis?: string; description?: string; compact?: boolean }) {
   return <SafeAreaView style={styles.screen} edges={['left', 'right', 'bottom']}>
     <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-      <View style={styles.hero}>
+      <View style={[styles.hero, compact && { paddingVertical: spacing.xs, gap: spacing.sm }]}>
         <Text style={styles.eyebrow}>THE AI BEAUTY STUDIO</Text>
-        <Text accessibilityRole="header" style={styles.heroTitle}>{title}{emphasis && <Text style={styles.emphasis}>{'\n'}{emphasis}</Text>}</Text>
+        <Text accessibilityRole="header" style={[styles.heroTitle, compact && { fontSize: compactType.heading, lineHeight: compactType.headingLine }]}>{title}{emphasis && <Text style={styles.emphasis}>{'\n'}{emphasis}</Text>}</Text>
         {description && <Body>{description}</Body>}
       </View>
       {children}

@@ -1,28 +1,30 @@
 import { router } from 'expo-router';
-import { Screen, Panel, Body, Button, ErrorMessage, Loading } from '../components/ui';
+import { StyleSheet, Text, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Screen, Body, Button, Title } from '../components/ui';
+import { ServiceCards } from '../components/service-cards';
 import { services } from '../constants/services';
-import { featureIds } from '../lib/api/contracts';
-import { useFeatures } from '../lib/api/queries';
+import { colors, compactType, layout, serif, spacing, type } from '../constants/theme';
 
 export default function Home() {
-  const features = useFeatures();
-  return <Screen title="Your look," emphasis="reimagined." description="ANDREA’S AESTHETIC & WELLNESS CLINIC · Explore your beauty studio.">
-    <Panel title="Choose your service" detail="Find a look that feels like you.">
-      {features.isFetching && <Loading label="Loading services…" />}
-      {features.isError && <ErrorMessage message={features.error.message} retry={() => void features.refetch()} />}
-      {features.data?.length === 0 && <Body>No services are available from this API.</Body>}
-      {featureIds.map(id => {
-        const service = services[id];
-        const remote = features.data?.find(row => row.id === id);
-        return <Panel key={id} title={service.label} detail={remote?.description ?? service.description}>
-          <Button label={`Explore ${service.label}`} secondary onPress={() => router.push(service.route)} />
-        </Panel>;
-      })}
-    </Panel>
-    <Panel title="A little guidance" detail="Service · Direction · Your Looks">
-      <Body>Explore the Consultation stages. Personal recommendations will be connected in a later phase.</Body>
-      <Button label="Consultation" secondary onPress={() => router.push('/consultation')} />
-    </Panel>
-    <Button label="Check API connection" secondary onPress={() => router.push('/connection')} />
+  return <Screen compact title="A look that" emphasis="feels like you." description="ANDREA’S AESTHETIC & WELLNESS CLINIC">
+    <LinearGradient colors={[colors.surface, colors.card]} style={styles.consultation}>
+      <View style={styles.top}><Text style={styles.eyebrow}>YOUR BEAUTY, YOUR DIRECTION</Text><Text style={styles.mark} accessible={false}>✦</Text></View>
+      <Text accessibilityRole="header" style={styles.title}>AI Beauty Consultation</Text>
+      <Body>A little guidance for your next look. Choose your service, share your direction, and make it personal.</Body>
+      <Text style={styles.journey}>Service   →   Direction   →   Your Looks</Text>
+      <Button label="Start Consultation ✦" onPress={() => router.push('/consultation')} />
+    </LinearGradient>
+    <View style={styles.custom}><Title>Custom Services</Title><Body muted>Have a look in mind? Head straight to your studio.</Body>
+      <ServiceCards onSelect={id => router.push(services[id].route)} />
+    </View>
   </Screen>;
 }
+const styles = StyleSheet.create({
+  consultation: { padding: spacing.lg, gap: spacing.md, borderWidth: 1, borderColor: colors.gold, borderRadius: layout.radius },
+  top: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  eyebrow: { color: colors.goldLight, fontSize: type.small, fontWeight: '700', flex: 1, letterSpacing: 1 },
+  mark: { color: colors.goldLight, fontSize: compactType.glyph },
+  title: { color: colors.white, fontFamily: serif, fontSize: compactType.heading, lineHeight: compactType.headingLine },
+  journey: { color: colors.muted, fontSize: type.small }, custom: { gap: spacing.sm },
+});

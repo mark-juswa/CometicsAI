@@ -2,7 +2,7 @@
 
 **Date**: 2026-10-02
 **Decision**: CONFIRMED by the Supervisor's MOBILE-00/MOBILE-01 instruction and API-boundary answer
-**Status**: BLOCKED (Android device acceptance pending by Supervisor choice; implementation and local checks complete)
+**Status**: DONE (2026-10-03, physical Android acceptance observed and confirmed manually by the Supervisor)
 
 ## Summary
 
@@ -51,7 +51,7 @@ The app directory structure follows the Supervisor's requested `app/`, `componen
 
 Data model: each of the three temporary drafts holds nullable `photo`, `styleId` and `previewStyle`. Photo contains local URI, display name, validated MIME, width, height and byte size. PreviewStyle is the live catalog row used for the unchanged mock comparison. Setting photo/style clears previewStyle; reset clears that service draft only. No schema, database, migration or durable device storage is introduced.
 
-Critical scenarios: replace/remove/reset after preview and feature isolation (AC-3); healthy, missing-config, network, timed-out, malformed and HTTP-error API reads with explicit recovery (AC-4, AC-5); three real catalog journeys and mock comparison with zero mutation calls (AC-2, AC-3, AC-5, AC-6); final exports/private-value scan and protected-path comparison (AC-1, AC-7); native device loading, picker lifecycle, Android back and connectivity (AC-8, pending).
+Critical scenarios: replace/remove/reset after preview and feature isolation (AC-3); healthy, missing-config, network, timed-out, malformed and HTTP-error API reads with explicit recovery (AC-4, AC-5); three real catalog journeys and mock comparison with zero mutation calls (AC-2, AC-3, AC-5, AC-6); final exports/private-value scan and protected-path comparison (AC-1, AC-7); native device loading, picker lifecycle, Android back and connectivity (AC-8, completed on one physical phone through observed load/API and Supervisor manual interaction evidence).
 
 Security: development FastAPI is unauthenticated; keep it on a trusted development network. Existing BeautyCore Client identity/roles and signed consultation ownership remain authoritative for the later authenticated generation phase. Only the application API origin is public client configuration. No worker or server secrets are imported.
 
@@ -62,7 +62,7 @@ Security: development FastAPI is unauthenticated; keep it on a trusted developme
 - [x] Connect read-only API, health and three catalogs with controlled failures (AC-4, AC-5).
 - [x] Build native shell, navigation, photo state and mock result journey using existing design (AC-2, AC-3, AC-5, AC-6).
 - [x] Verify TypeScript, lint, contract tests, Expo startup, Android/web exports, phone-width browser checks, protected paths and secret exclusion (AC-7; supporting evidence for AC-2 through AC-6).
-- [ ] Complete native Android device acceptance (AC-8). SDK exists at `D:\AndroidStudio\Android\Sdk`; no AVD or connected device was available. Supervisor chose to leave this pending.
+- [x] Complete native Android device acceptance (AC-8). On 2026-10-03, physical Xiaomi Android 12/Expo Go 57 loaded through ordinary USB launcher reverse and reached health/catalogs. Supervisor manually confirmed gallery lifecycle, mock preview, Back, width, API error/recovery and Consultation overview. Remote phone interaction is prohibited by Supervisor preference. [Native evidence](../experiments/mobile-native-android.md).
 
 ## Consequences and follow-up
 
@@ -78,6 +78,6 @@ Runtime data: ignored `.tmp/mobile/control.json` holds a random session identity
 
 Launcher acceptance: unrelated occupied ports, no transport, unhealthy FastAPI and failed Expo must fail clearly, without restart loops or killing unrelated processes. Confirm real CPU API/Expo start and owned stop, native job child/grandchild isolation, route/ADB failure cases and unchanged env files. A controlled resolver fixture may validate process startup when no phone/trusted route exists, but cannot close AC-8. Native Android acceptance remains an independent required gate.
 
-MOBILE-01 is implemented and locally verified but must report `MOBILE_01_BLOCKED` until Android runtime acceptance closes. Existing spec 0005 and its web privacy boundary remain valid; the development exception is limited to this mobile slice. No major inference architectural change or drift was found.
+MOBILE-01 is implemented, locally verified and accepted on one physical Android phone. Report `MOBILE_01_READY` from the observed and explicit Supervisor manual acceptance, without implying testing on all phones. Ordinary USB debugging is sufficient; further remote phone input/navigation/capture remains prohibited. Existing spec 0005 and its web privacy boundary remain valid; the development exception is limited to this mobile slice. No major inference architectural change or drift was found.
 
 MOBILE-02 first integrates the existing BeautyCore authenticated Client/session boundary and native Origin behavior. Then implement typed native multipart manual generation through the existing application adapter, explicit serialized user actions, elapsed loading, safe failure/ambiguity handling, original/generated comparison and native save/share. Validate one authorized result for each feature using unchanged existing engines, including Nails hybrid routing. Full Consultation and camera are separate future scope.

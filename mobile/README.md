@@ -1,6 +1,6 @@
 # HAIR CAPSTONE mobile
 
-MOBILE-01 uses Expo SDK 57, React Native, TypeScript and Expo Router. It is additive and uses the existing FastAPI application API for development, as explicitly approved. It never calls Kaggle. Native Android acceptance is recorded separately from browser checks in `docs/experiments/MOBILE-01.md`.
+MOBILE-01 uses Expo SDK 57, React Native, TypeScript and Expo Router. It is additive and uses the existing FastAPI application API for development, as explicitly approved. It never calls Kaggle. Native acceptance is complete on one physical Xiaomi Android 12 phone with Expo Go 57, using observed USB/API evidence and Supervisor manual checks. [Native evidence](../docs/experiments/mobile-native-android.md) is separate from earlier browser checks.
 
 ## Normal Windows startup
 
@@ -26,6 +26,8 @@ The launcher starts a separate instance of the unchanged FastAPI source on `0.0.
 | Expo browser preview | Same origin as the chosen mode | Separate dev backend allows that preview origin in its process-only CORS configuration |
 
 ADB discovery ignores unauthorized/offline devices and tries authorized devices in the order reported by ADB. The console identifies the selected device. Reverse setup uses `--no-rebind`, verifies both mappings, preserves an existing identical mapping and refuses to overwrite a different target. Failed setup falls back to another authorized device or LAN. Stop removes only mappings created by this session that still have their original target; it never uses `--remove-all` or `kill-server`. If the phone disconnects before cleanup, an identical leftover mapping can be reused on the next start.
+
+Ordinary USB debugging and this PC's authorization are sufficient for connectivity. Xiaomi's separate `USB debugging (Security settings)` permission for remote input is unnecessary for normal app use. Supervisor performs phone actions manually; no remote taps, navigation or further phone screenshots are authorized.
 
 LAN selection combines route and interface metrics and excludes disconnected, VPN/virtual, Hyper-V/Docker, link-local and public-address adapters. It requires a physical default route with an RFC1918 IPv4 address and a Windows Private or DomainAuthenticated network profile. Equal-priority usable routes or ambiguous source addresses fail clearly. If your trusted home network is marked Public, you can mark that network Private once in Windows Settings > Network & internet, or use USB. The launcher does not change profiles, firewall rules, router forwarding or start a tunnel. Keep this unauthenticated API on the trusted development network. Windows Firewall may require a one-time Private-network allowance for Python/Node and ports 8001/8081. Do not enable a Public-network allowance or Internet port forwarding.
 

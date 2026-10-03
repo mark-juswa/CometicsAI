@@ -1,5 +1,9 @@
 # MOBILE-00 / MOBILE-01 evidence
 
+## Completion, 2026-10-03
+
+**MOBILE-01 DONE, MOBILE_01_READY.** The previously pending native gate is closed on one physical Xiaomi Android 12 phone with Expo Go 57. Ordinary mobile launcher USB reverse, native loading, connected/mock health and catalog transport were observed. Supervisor performed and confirmed gallery lifecycle, navigation/back, mock comparison, phone layout, unavailable API error/recovery and Consultation overview manually after prohibiting remote taps for security. No app/backend/model/launcher source changed and no GPU generation ran. [Native evidence and acceptance limits](mobile-native-android.md). Earlier dated checkpoint results below remain historical evidence, including the original no-device block.
+
 Date: 2026-10-02. Implementation: VERIFIED locally. Android acceptance: NEEDS VERIFICATION. Progress: BLOCKED only at native device acceptance; Supervisor explicitly chose to leave it pending.
 
 ## Configuration and protection

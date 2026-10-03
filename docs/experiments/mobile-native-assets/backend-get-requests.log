@@ -1,0 +1,11 @@
+INFO:     Started server process [10280]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:54409 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57882 - "GET /features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61104 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63396 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64100 - "GET /features/hairstyle/styles HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64100 - "GET /features/makeup/styles HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64100 - "GET /features/nails/styles HTTP/1.1" 200 OK

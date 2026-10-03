@@ -15,6 +15,8 @@ export default function RootLayout() {
       headerTitleStyle: { fontFamily: serif, color: colors.white }, contentStyle: { backgroundColor: colors.deep },
       headerRight: () => <HeaderAction label="Settings" glyph="⚙" onPress={() => router.push('/settings')} /> }}>
       <Stack.Screen name="index" options={{ title: 'ANDREA’S ✦' }} />
+      <Stack.Screen name="login" options={{ title: 'Sign in', headerRight: () => null }} />
+      <Stack.Screen name="generating" options={{ title: 'Creating your look' }} />
       <Stack.Screen name="hair" options={{ title: 'Hairstyle' }} />
       <Stack.Screen name="makeup" options={{ title: 'Makeup' }} />
       <Stack.Screen name="nails" options={{ title: 'Nails' }} />

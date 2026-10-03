@@ -20,7 +20,7 @@ import subprocess
 import sys
 import threading
 import time
-from urllib.error import URLError
+from urllib.error import HTTPError, URLError
 from urllib.request import ProxyHandler, Request, build_opener
 from uuid import uuid4
 
@@ -32,6 +32,7 @@ from scripts.capstone_discovery import StartupError
 WORK = ROOT / '.tmp/mobile'
 STATE = WORK / 'control.json'
 API_PORT, EXPO_PORT = 8001, 8081
+BEAUTYCORE_PORT = 3000
 HTTP = build_opener(ProxyHandler({}))  # Local probes must never go through a proxy.
 SAFE_ENV = {
     'PATH', 'PATHEXT', 'SYSTEMROOT', 'WINDIR', 'COMSPEC', 'TEMP', 'TMP',
@@ -152,10 +153,11 @@ class Connection:
     adb: str | None = None
     device: str | None = None
     created: list[str] = field(default_factory=list)
+    api_port: int = API_PORT
 
     @property
     def origin(self):
-        return f'http://{self.host}:{API_PORT}'
+        return f'http://{self.host}:{self.api_port}'
 
     def cleanup(self):
         if not self.created:
@@ -169,7 +171,7 @@ class Connection:
             print('USB cleanup unavailable (device disconnected); no other mappings were removed.', flush=True)
 
 
-def choose_connection():
+def choose_connection(api_port=API_PORT, usb_only=False):
     adb = find_adb()
     if adb:
         try:
@@ -179,9 +181,10 @@ def choose_connection():
             devices = []
         for device in devices:
             connection = Connection('USB/ADB', '127.0.0.1', f'Android device {device}', adb, device)
+            connection.api_port = api_port
             try:
                 mappings = reverse_mappings(adb_call(adb, '-s', device, 'reverse', '--list'))
-                for number in (API_PORT, EXPO_PORT):
+                for number in (api_port, EXPO_PORT):
                     port = f'tcp:{number}'
                     if port in mappings:
                         if mappings[port] != port:
@@ -190,18 +193,22 @@ def choose_connection():
                         adb_call(adb, '-s', device, 'reverse', '--no-rebind', port, port)
                         connection.created.append(port)
                 mappings = reverse_mappings(adb_call(adb, '-s', device, 'reverse', '--list'))
-                if not all(mappings.get(f'tcp:{p}') == f'tcp:{p}' for p in (API_PORT, EXPO_PORT)):
+                if not all(mappings.get(f'tcp:{p}') == f'tcp:{p}' for p in (api_port, EXPO_PORT)):
                     raise StartupError('ADB reverse verification failed.')
                 return connection
             except (StartupError, subprocess.TimeoutExpired, OSError) as error:
                 print(f'USB reverse unavailable for {device}; checking another device/LAN ({error}).', flush=True)
                 connection.cleanup()
+    if usb_only:
+        raise StartupError('Authenticated mobile mode requires an authorized USB/ADB device. '
+                           'BeautyCore binds loopback; LAN is not exposed. Start START.bat first.')
     host, name = select_lan(network_inventory())
     return Connection('LAN', host, name)
 
 
-def require_free_ports():
-    for port in (API_PORT, EXPO_PORT):
+def require_free_ports(ports=None):
+    ports = (API_PORT, EXPO_PORT) if ports is None else ports
+    for port in ports:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as probe:
             # Windows exclusive bind detects listeners on any local interface.
             probe.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
@@ -293,6 +300,24 @@ def api_healthy(body):
     return isinstance(value, dict) and value.get('status') == 'ok' and value.get('generator') == 'mock'
 
 
+def verify_beautycore(port=BEAUTYCORE_PORT):
+    origin = f'http://127.0.0.1:{port}'
+    try:
+        session = json.loads(read_url(origin + '/api/auth/session'))
+        if not isinstance(session, dict) or session.get('user', 'missing') is not None:
+            raise ValueError('Unexpected session response')
+        try:
+            read_url(origin + '/api/ai/features')
+        except HTTPError as error:
+            if error.code == 401:
+                return
+        raise ValueError('Anonymous AI request was not denied')
+    except (URLError, OSError, ValueError) as error:
+        raise StartupError('BeautyCore is not ready on port 3000 or this is a different service. '
+                           'Run the existing START.bat with your ready Kaggle session first. '
+                           'No existing process was stopped.') from error
+
+
 class Controller:
     def __init__(self):
         self.session = uuid4().hex
@@ -378,7 +403,7 @@ def stop_session():
     print('Mobile session stopped; only its owned children/reverse mappings were released.')
 
 
-def run_session():
+def run_session(beautycore=False):
     if os.name != 'nt':
         raise StartupError('START_MOBILE requires Windows.')
     WORK.mkdir(parents=True, exist_ok=True)
@@ -394,7 +419,11 @@ def run_session():
                 return
             raise StartupError('Another mobile launcher is starting; wait or use STOP_MOBILE.')
         try:
-            require_free_ports()
+            if beautycore:
+                require_free_ports((EXPO_PORT,))
+                verify_beautycore()
+            else:
+                require_free_ports()
             node = shutil.which('node.exe')
             cli = ROOT / 'mobile/node_modules/expo/bin/cli'
             if not node or not cli.is_file():
@@ -408,26 +437,29 @@ def run_session():
                     STATE.unlink()
                 else:
                     raise StartupError('A mobile controller is still active; use STOP_MOBILE.')
-            connection = choose_connection()
+            connection = choose_connection(BEAUTYCORE_PORT, usb_only=True) if beautycore else choose_connection()
             job, controller = None, None
             children = []
             try:
                 print(f'Mobile connection: {connection.mode} ({connection.description})\n'
                       f'Application API: {connection.origin}\n'
-                      f'Expo: http://{connection.host}:{EXPO_PORT}\n'
-                      'Separate CPU mock backend; no GPU generation. Keep this window open.\n'
+                      f'Expo: http://{connection.host}:{EXPO_PORT}\n' +
+                      ('Existing authenticated BeautyCore; only Expo is owned by this mobile session.\n' if beautycore else
+                       'Separate CPU mock backend; no GPU generation. Keep this window open.\n') +
                       'Stop with Ctrl+C or STOP_MOBILE.bat.', flush=True)
                 backend_env, expo_env = child_environments(connection)
                 job = WindowsJob()
                 controller = Controller()
                 controller.save(connection)
                 with (WORK / 'backend.log').open('w', encoding='utf-8') as log:
-                    backend = start_child(job, [sys.executable, '-m', 'uvicorn', 'app.main:app',
-                                               '--host', '0.0.0.0', '--port', str(API_PORT)],
-                                          ROOT / 'backend', backend_env, log)
-                    children.append(backend)
-                    wait_ready(backend, f'http://127.0.0.1:{API_PORT}/health', api_healthy,
-                               'FastAPI (see .tmp/mobile/backend.log)', controller.stop, 45)
+                    backend = None
+                    if not beautycore:
+                        backend = start_child(job, [sys.executable, '-m', 'uvicorn', 'app.main:app',
+                                                   '--host', '0.0.0.0', '--port', str(API_PORT)],
+                                              ROOT / 'backend', backend_env, log)
+                        children.append(backend)
+                        wait_ready(backend, f'http://127.0.0.1:{API_PORT}/health', api_healthy,
+                                   'FastAPI (see .tmp/mobile/backend.log)', controller.stop, 45)
                     # SDK 57 binds "localhost"; prefer IPv4 to match adb reverse/our fixed origin.
                     node_options = ['--dns-result-order=ipv4first'] if connection.adb else []
                     expo = start_child(job, [node, *node_options, str(cli), 'start', '--go', '--clear',
@@ -440,7 +472,7 @@ def run_session():
                                'Expo', controller.stop, 60)
                     print('MOBILE_DEV_RUNNING - open the Expo Go QR/address above.', flush=True)
                     while not controller.stop.wait(0.5):
-                        for label, process in (('FastAPI', backend), ('Expo', expo)):
+                        for label, process in ([('FastAPI', backend)] if backend else []) + [('Expo', expo)]:
                             if process.poll() is not None:
                                 raise StartupError(f'{label} stopped (code {process.returncode}); mobile session closed.')
             finally:
@@ -459,9 +491,10 @@ def run_session():
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--stop', action='store_true')
+    parser.add_argument('--beautycore', action='store_true', help='Use existing authenticated BeautyCore over authorized USB; start only Expo')
     arguments = parser.parse_args()
     try:
-        stop_session() if arguments.stop else run_session()
+        stop_session() if arguments.stop else run_session(beautycore=arguments.beautycore)
     except KeyboardInterrupt:
         print('\nMobile session closed.')
         return 0

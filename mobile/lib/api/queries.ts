@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { api } from './client';
 import type { FeatureId } from './contracts';
 
-export function useHealth() {
-  return useQuery({ queryKey: ['health'], queryFn: ({ signal }) => api.health(signal), staleTime: 0 });
+export function useSession() {
+  return useQuery({ queryKey: ['session'], queryFn: ({ signal }) => api.session(signal), staleTime: 0 });
 }
 export function useFeatures() {
   return useQuery({ queryKey: ['features'], queryFn: ({ signal }) => api.features(signal), staleTime: 60_000 });

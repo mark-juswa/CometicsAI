@@ -1,0 +1,17 @@
+{
+  "anonymous_ai": 401,
+  "invalid_login": 401,
+  "client_login": 200,
+  "client_catalogs": {
+    "hairstyle": 200,
+    "makeup": 200,
+    "nails": 200
+  },
+  "invalid_image": 400,
+  "invalid_style": 400,
+  "wrong_origin": 403,
+  "nonclient_ai": 403,
+  "logout": 200,
+  "after_logout_ai": 401,
+  "gpu_requests": 0
+}

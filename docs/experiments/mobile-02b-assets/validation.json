@@ -1,0 +1,33 @@
+{
+  "mobile_typecheck": "passed",
+  "mobile_lint": "passed",
+  "mobile_tests": 23,
+  "expo_doctor": "21/21 passed",
+  "expo_install_check": "passed",
+  "android_export": "passed",
+  "web_export": "passed",
+  "backend_tests": 408,
+  "beautycore_tests": 26,
+  "beautycore_typecheck": "passed",
+  "launcher_tests": 15,
+  "browser_groups": 7,
+  "browser_widths": [
+    320,
+    360,
+    390,
+    430
+  ],
+  "secret_scan": {
+    "private_values_scanned": 13,
+    "bundle_files_scanned": 57,
+    "files_with_private_matches": 0
+  },
+  "native_hair": "Supervisor confirmed result and actions; server HTTP 200",
+  "native_makeup": "two HTTP 200 server returns, visual acceptance deferred by Supervisor",
+  "native_nails": "not run, deferred by Supervisor",
+  "core_native_checklist": "Supervisor response: it looks good; explicit native logout transcript not separately observed",
+  "models_backend_web_changed": false,
+  "launcher_stop": "owned Expo stopped; BeautyCore PID 17108 and FastAPI PID 21808 preserved",
+  "launcher_restart": "MOBILE_DEV_RUNNING USB reverse 3000/8081",
+  "full_02b_ready": false
+}

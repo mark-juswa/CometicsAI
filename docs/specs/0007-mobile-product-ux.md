@@ -1,6 +1,6 @@
 # MOBILE-02A — BeautyCore mobile product experience
 
-**Decision: CONFIRMED** by Supervisor brief, 2026-10-03. **Status**: BLOCKED at manual native acceptance; implementation DONE, local checks VERIFIED.
+**Decision: CONFIRMED** by Supervisor brief, 2026-10-03. **Status**: IN PROGRESS at combined MOBILE-02B native acceptance; implementation DONE, local checks VERIFIED.
 
 ## Summary
 

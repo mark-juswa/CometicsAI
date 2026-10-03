@@ -5,9 +5,13 @@ import { Screen, Body, Button, Title } from '../components/ui';
 import { ServiceCards } from '../components/service-cards';
 import { services } from '../constants/services';
 import { colors, compactType, layout, serif, spacing, type } from '../constants/theme';
+import { AuthGate } from '../components/auth-gate';
+import { useGeneration, isUnresolved } from '../store/generation';
 
 export default function Home() {
-  return <Screen compact title="A look that" emphasis="feels like you." description="ANDREA’S AESTHETIC & WELLNESS CLINIC">
+  const job = useGeneration(state => state.job);
+  return <AuthGate><Screen compact title="A look that" emphasis="feels like you." description="ANDREA’S AESTHETIC & WELLNESS CLINIC">
+    {job && <Button label={isUnresolved(job) ? 'View current generation' : 'View latest generation'} secondary onPress={() => router.push('/generating')} />}
     <LinearGradient colors={[colors.surface, colors.card]} style={styles.consultation}>
       <View style={styles.top}><Text style={styles.eyebrow}>YOUR BEAUTY, YOUR DIRECTION</Text><Text style={styles.mark} accessible={false}>✦</Text></View>
       <Text accessibilityRole="header" style={styles.title}>AI Beauty Consultation</Text>
@@ -18,7 +22,7 @@ export default function Home() {
     <View style={styles.custom}><Title>Custom Services</Title><Body muted>Have a look in mind? Head straight to your studio.</Body>
       <ServiceCards onSelect={id => router.push(services[id].route)} />
     </View>
-  </Screen>;
+  </Screen></AuthGate>;
 }
 const styles = StyleSheet.create({
   consultation: { padding: spacing.lg, gap: spacing.md, borderWidth: 1, borderColor: colors.gold, borderRadius: layout.radius },

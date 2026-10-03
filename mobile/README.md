@@ -1,49 +1,45 @@
 # HAIR CAPSTONE mobile
 
-MOBILE-01 uses Expo SDK 57, React Native, TypeScript and Expo Router. It is additive and uses the existing FastAPI application API for development, as explicitly approved. It never calls Kaggle. Native acceptance is complete on one physical Xiaomi Android 12 phone with Expo Go 57, using observed USB/API evidence and Supervisor manual checks. [Native evidence](../docs/experiments/mobile-native-android.md) is separate from earlier browser checks.
-
-MOBILE-02A product UI is implemented and locally verified. Its new manual Android UX checklist is pending, deferred by the Supervisor; MOBILE-01 remains accepted. [Before/after screenshots, checks and checklist](../docs/experiments/mobile-02a.md).
+MOBILE-02B retains the accepted MOBILE-01 foundation and MOBILE-02A product UI. It adds existing BeautyCore Client authentication, real feature generation and native result actions. Real Android acceptance is recorded separately from local tests in [MOBILE-02B evidence](../docs/experiments/mobile-02b.md). Earlier [MOBILE-01 acceptance](../docs/experiments/mobile-native-android.md) and [MOBILE-02A screenshots](../docs/experiments/mobile-02a.md) remain historical evidence.
 
 ## Normal Windows startup
 
+With the existing unified Kaggle session ready:
+
 ```powershell
 Set-Location F:\HAIR
+.\START.bat
+# Wait for BEAUTYCORE CAPSTONE READY, then in another terminal:
 .\START_MOBILE.bat
 ```
 
-Connect an Android phone by USB and authorize this PC for debugging, or put the phone and PC on the same trusted Wi-Fi. Run `START_MOBILE.bat`, wait for `MOBILE_DEV_RUNNING`, then open the printed QR/address in Expo Go compatible with SDK 57. USB mode uses `exp://127.0.0.1:8081`; the address reaches the PC through ADB. The launcher window stays open with Expo's normal console. Ctrl+C or `F:\HAIR\STOP_MOBILE.bat` closes only that mobile session. The working root `START.bat` and `STOP.bat` remain separate.
+Connect and authorize an Android phone by USB, wait for `MOBILE_DEV_RUNNING`, and open `exp://127.0.0.1:8081` yourself in SDK 57 Expo Go. Sign in with an existing BeautyCore Client account. No `.env.local` editing, IP discovery or persistent environment changes are needed. The mobile launcher verifies existing BeautyCore on loopback 3000 and anonymous AI denial, reverses 3000/8081, and starts only Expo. Its process receives `EXPO_PUBLIC_API_BASE_URL=http://127.0.0.1:3000` and `EXPO_NO_DOTENV=1`. No server secret is supplied to Expo.
 
-No `.env.local` creation or editing, `ipconfig`, fixed LAN address or persistent environment change is needed. The launcher supplies `EXPO_PUBLIC_API_BASE_URL` to its Expo child only and sets `EXPO_NO_DOTENV=1`, so stale mobile env files cannot override the address or supply other public values. Only the non-secret application API origin is public. No database, Gemini, session, adapter or Kaggle credentials are supplied to Expo.
+`STOP_MOBILE.bat` or Ctrl+C stops only its owned Expo process and newly created reverse mappings. It never stops the existing BeautyCore, private FastAPI or Kaggle worker. Use existing root `STOP.bat` separately when you intend to stop that application. Occupied Expo ports or an incorrect application on 3000 fail clearly without killing unrelated processes.
 
-One-time prerequisites: install Node.js, the existing backend's Python dependencies, and run `npm ci` in `F:\HAIR\mobile`. Python on PATH must be the interpreter with those backend dependencies. For USB, install Android SDK Platform Tools and set `ANDROID_HOME` or `ANDROID_SDK_ROOT`, or put `adb.exe` on PATH. The standard `%LOCALAPPDATA%\Android\Sdk` location is also detected. No administrator window is ordinarily required. A matching Android development build remains an option for native development.
+One-time prerequisites: Node.js, `npm ci` in `mobile/`, the existing root stack's Python dependencies and Android SDK Platform Tools. Set `ANDROID_HOME`/`ANDROID_SDK_ROOT` or put `adb.exe` on PATH; the standard local Android SDK location is also detected. Ordinary USB debugging and PC authorization suffice. The separate Xiaomi security switch is unnecessary. All phone taps and navigation are manual; remote phone actions/captures remain prohibited.
 
-## Device connectivity
+## Device connectivity and application boundary
 
-The launcher starts a separate instance of the unchanged FastAPI source on `0.0.0.0:8001`. Its process uses `GENERATION_ENGINE=mock`, `MAKEUP_GENERATION_ENGINE=mock`, `NAILS_PREVIEW_MODE=mock`, `CONSULTATION_PROVIDER=deterministic`. Existing backend env files, the private working backend and the Kaggle workflow are untouched. It checks `/health` for the mock engine before starting Expo on port 8081. MOBILE-01 continues to send only health/catalog GET requests.
+The existing root application intentionally binds BeautyCore 3000 and private FastAPI 8000 to loopback. Normal authenticated mobile development therefore uses USB/ADB reverse, including authorized emulators. Wi-Fi alone fails clearly in this mode; there is no LAN fallback that exposes FastAPI or changes root startup. The earlier trusted LAN/mock-8001 resolver remains an internal historical launcher test mode and is not the authenticated mobile app boundary. A future LAN application transport requires its own secure approval; do not forward private FastAPI or Kaggle ports.
 
-| Mode | Automatic API origin | Connection |
-| --- | --- | --- |
-| Authorized ADB Android device, physical or emulator | `http://127.0.0.1:8001` | Reverse API 8001 and Expo 8081; Wi-Fi is unnecessary |
-| Physical Android on trusted LAN | `http://<resolved-IPv4>:8001` | Lowest effective-metric usable physical IPv4 default route; Expo advertises that same address |
-| Expo browser preview | Same origin as the chosen mode | Separate dev backend allows that preview origin in its process-only CORS configuration |
+ADB uses `--no-rebind`, verifies mappings, preserves identical existing mappings and refuses conflicting targets. Cleanup removes only mappings this mobile session created that still have the original target, never `--remove-all` or `kill-server`.
 
-ADB discovery ignores unauthorized/offline devices and tries authorized devices in the order reported by ADB. The console identifies the selected device. Reverse setup uses `--no-rebind`, verifies both mappings, preserves an existing identical mapping and refuses to overwrite a different target. Failed setup falls back to another authorized device or LAN. Stop removes only mappings created by this session that still have their original target; it never uses `--remove-all` or `kill-server`. If the phone disconnects before cleanup, an identical leftover mapping can be reused on the next start.
+All client routes live in `lib/api/`: login/session/logout and allowlisted `/api/ai/features` catalogs/generation. Native fetch retains the HttpOnly session in the OS cookie jar; JavaScript keeps only public user identity. Login verifies a follow-up session and protected catalog. Native mutation Origin matches NextURL's localhost normalization for loopback transport. Production hosts retain their configured Origin. Browser role/session/Origin protection is unchanged. Use HTTPS for an eventual deployed application; this USB development acceptance is not a production deployment claim.
 
-Ordinary USB debugging and this PC's authorization are sufficient for connectivity. Xiaomi's separate `USB debugging (Security settings)` permission for remote input is unnecessary for normal app use. Supervisor performs phone actions manually; no remote taps, navigation or further phone screenshots are authorized.
+Mobile → BeautyCore application authentication/adapter → private FastAPI → existing Kaggle unified worker. Multipart includes `image` and `style_id`. SDK 57 globally uses Expo fetch, so native uploads use supported filesystem File blobs, not older React Native URI descriptors. No direct FastAPI fallback or Kaggle URL/credential is included.
 
-LAN selection combines route and interface metrics and excludes disconnected, VPN/virtual, Hyper-V/Docker, link-local and public-address adapters. It requires a physical default route with an RFC1918 IPv4 address and a Windows Private or DomainAuthenticated network profile. Equal-priority usable routes or ambiguous source addresses fail clearly. If your trusted home network is marked Public, you can mark that network Private once in Windows Settings > Network & internet, or use USB. The launcher does not change profiles, firewall rules, router forwarding or start a tunnel. Keep this unauthenticated API on the trusted development network. Windows Firewall may require a one-time Private-network allowance for Python/Node and ports 8001/8081. Do not enable a Public-network allowance or Internet port forwarding.
+## Product flow and safety
 
-Startup rejects occupied ports 8001/8081 without killing their owners, fails if neither transport works, and closes its own session if FastAPI health or Expo startup fails. It performs bounded readiness polling without restarting either process. Logs and authenticated ownership data are ignored local files under `.tmp/mobile/`; backend errors are in `backend.log`. Repeated Start keeps the existing session; Stop then Start resolves a changed connection. Stop never reconstructs ownership from stored PIDs. Closing the launcher window also closes its Windows job and child processes; a subsequent start checks free ports before removing stale ownership data.
+Consultation leads Home. Settings owns account/connection checks. Hair, Makeup and Nails share Photo → Style → Review → Generating → Result. Photos, selected styles and Consultation direction remain temporary app memory; the OS picker may create local cache files. Generation sends a photo only on the explicit action. Logout clears local drafts/results and verifies the session is gone.
 
-For advanced manual launches, the app still supports `EXPO_PUBLIC_API_BASE_URL` supplied by the caller, including the standard emulator host alias `http://10.0.2.2:8001`. This is unnecessary with `START_MOBILE.bat`. Public deployment HTTPS, native BeautyCore authentication and standalone-build local HTTP policy remain MOBILE-02/device verification concerns.
+One global operation blocks duplicate Generate and draft changes across services. It survives ordinary rendering/navigation; keep the app open while processing. Elapsed time is truthful, with no percentage or short generation deadline. App termination/reloading is not a durable job/status system. Never reload or retry while server work might still run. Reads/auth use a 12 second deadline. No generation request automatically retries.
 
-## Scope and structure
+Definitive validation/auth rejection permits manual correction/retry. Response loss, unreadable output, 409 or server failures retain an uncertainty lock. The existing manual contract has no status endpoint. An operator must confirm processing ended before you explicitly release that lock and retry.
 
-`app/` contains Consultation-first Home, Settings diagnostics, three service studios, local Consultation and dedicated mock comparison. `components/` has shared workflow/progress/back/action-bar, service cards, native panels, buttons, gallery picker, preference fields and catalog cards. `features/{hair,makeup,nails,consultation}/` retains feature presentation and actual web preference vocabulary. `lib/api/` owns all routes, runtime validation and Query hooks. `lib/config/` owns public origin validation. `lib/image/` validates JPEG/PNG gallery selections against existing limits. `store/` keeps per-service stages/drafts and a separate Consultation brief in memory. `constants/` translates existing studio tokens; `assets/` contains scaffold icons and copies of actual BeautyCore service imagery.
+Result comparison uses the real inline result and local original. Try Another Style retains the photo; Start Over clears that studio. Android Save opens the system folder chooser and writes only to the granted folder, with cancellation/failure feedback and no broad gallery permission. Share opens the native sharing sheet using an app-cache image removed when the action finishes. iOS Save uses add-only photo permission with denial/settings feedback; iOS runtime acceptance is not claimed. Expo Go's supported legacy media module avoids an unavailable ExpoMediaLibraryNext import.
 
-Custom Studios use Photo → Style → Review with persistent bottom actions. Back preserves photo/style. The unchanged mock result has Original/Result controls, Try Another Style retaining the photo and Start Over clearing only that studio. Consultation uses Service → Direction → Your Looks with local photo/preferences, an honest pending-recommendations state and custom studio photo handoff. Settings preserves connection/recheck and the old `/connection` deep link redirects there.
-
-Catalogs never use mock fallback. Failed API requests show an explicit retry action; automatic retries are disabled. Photos are local URI references, never persisted by the app or uploaded in MOBILE-01. The OS picker may create temporary cache files. Replace/remove/reset releases app state references and invalidates mock results. No camera permission or capture, complete Consultation, download action, authentication or real generation is implemented in this phase.
+Consultation remains the local Service → Direction → Your Looks brief. Real conversation/recommendations are MOBILE-02C, not part of this phase. No camera capture or model changes.
 
 ## Validation
 
@@ -52,18 +48,10 @@ npm run typecheck
 npm run lint
 npm test
 npx expo install --check
+npx expo-doctor
 npm run export:android
-npm run export:web
-# From F:\HAIR, launcher-only regression checks:
+# From F:\HAIR:
 python -m unittest discover -s tests -p test_mobile_launcher.py -v
 ```
 
-On Android: manually reload, check Home hierarchy/header Settings, verify Consultation local stages/brief and each Hair/Makeup/Nails Photo/Style/Review flow, gallery choose/cancel/replace/remove, style scrolling, Back/state preservation, mock Original/Result, Try Another Style, Start Over and phone-width bottom actions. Browser validation supports UI checks but does not prove native gallery or Android runtime acceptance. No remote phone actions/captures are authorized. The new MOBILE-02A checklist is still pending.
-
-Contracts: [MOBILE-00 inspection](../docs/guides/mobile-00-contracts.md). Reference APIs: [Expo Router setup](https://docs.expo.dev/router/installation/), [SDK 57 ImagePicker](https://docs.expo.dev/versions/v57.0.0/sdk/imagepicker/).
-
-Launcher evidence: [automatic connection and owned shutdown](../docs/experiments/mobile-launcher.md). Runtime tests using a controlled resolver fixture cannot prove physical USB transport, LAN phone access or native Android acceptance.
-
-## MOBILE-02: Real Feature Generation
-
-First connect the existing BeautyCore Client identity/session boundary with a tested native session and Origin strategy, preserving fresh roles and user-bound consultation handles. Then add one typed native multipart generation method (`image`, `style_id`) through the existing application adapter, never Kaggle. Implement explicit single-request generation, truthful elapsed loading, controlled errors and manual retry; reconcile ambiguous response loss without blindly duplicating work. Display the returned image with original comparison and native save/share. Validate one authorized Hair, Makeup and Nails real result, preserving Nails hybrid paths and all existing settings/prompts. Full conversational Consultation and camera capture stay separate future slices unless explicitly added to scope.
+Use the existing non-secret BeautyCore origin for exports. Local/mocked tests, exports and PC browser width checks do not substitute for actual Android login, gallery, Save/Share or real generation acceptance. See [integration contracts and safety](../docs/guides/mobile-02b-integration.md).

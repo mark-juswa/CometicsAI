@@ -22,21 +22,21 @@ test('each studio gates progression and Back preserves photo and selection', () 
 
 test('Try Another Style retains draft and Start Over resets only its feature', () => {
   const actions = useStudio.getState();
-  actions.goToStep('hairstyle', 2); actions.showPreview('hairstyle', style); actions.tryAnother('hairstyle');
+  actions.goToStep('hairstyle', 2); actions.tryAnother('hairstyle');
   const draft = useStudio.getState().drafts.hairstyle;
   assert.equal(draft.step, 1); assert.deepEqual(draft.photo, photo);
-  assert.equal(draft.styleId, style.id); assert.equal(draft.previewStyle, null);
+  assert.equal(draft.styleId, style.id);
   actions.reset('hairstyle');
   assert.equal(useStudio.getState().drafts.hairstyle.step, 0);
   assert.equal(useStudio.getState().drafts.hairstyle.photo, null);
   assert.deepEqual(useStudio.getState().drafts.makeup.photo, photo);
 });
 
-test('photo removal repairs an advanced studio and replacement invalidates result', () => {
+test('photo removal repairs an advanced studio and replacement retains the current selection', () => {
   const actions = useStudio.getState();
-  actions.goToStep('nails', 2); actions.showPreview('nails', style);
+  actions.goToStep('nails', 2);
   actions.setPhoto('nails', { ...photo, uri: 'file:///local/replacement.png' });
-  assert.equal(useStudio.getState().drafts.nails.previewStyle, null);
+  assert.equal(useStudio.getState().drafts.nails.photo?.uri, 'file:///local/replacement.png');
   actions.setPhoto('nails', null);
   assert.equal(useStudio.getState().drafts.nails.step, 0);
   actions.tryAnother('nails'); assert.equal(useStudio.getState().drafts.nails.step, 0);

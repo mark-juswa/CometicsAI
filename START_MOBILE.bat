@@ -1,7 +1,7 @@
 @echo off
 setlocal
 cd /d "%~dp0"
-python scripts\mobile_launch.py
+python scripts\mobile_launch.py --beautycore %*
 set "MOBILE_EXIT=%ERRORLEVEL%"
 if not "%MOBILE_EXIT%"=="0" pause
 exit /b %MOBILE_EXIT%

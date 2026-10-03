@@ -1,0 +1,20 @@
+{
+  "checks": [
+    "login-error-client-session-home",
+    "settings-session-catalog-check",
+    "hair-stages-single-post-navigation-result-photo-preserved",
+    "makeup-stages-single-post-navigation-result-photo-preserved",
+    "nails-stages-single-post-navigation-result-photo-preserved",
+    "validation-explicit-retry-ai-unavailable-uncertainty-lock",
+    "logout-clears-session-and-protects-studios"
+  ],
+  "generation_posts": 5,
+  "real_gpu_requests": 0,
+  "console_errors": [],
+  "widths": [
+    320,
+    360,
+    390,
+    430
+  ]
+}

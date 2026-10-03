@@ -31,6 +31,36 @@ def inventory():
 
 
 class MobileLauncherTests(unittest.TestCase):
+    def test_beautycore_probe_requires_existing_session_route_and_anonymous_ai_denial(self):
+        denied = HTTPError('http://local/api/ai/features', 401, 'Denied', {}, None)
+        with patch.object(launcher, 'read_url', side_effect=['{"user":null}', denied]) as read:
+            launcher.verify_beautycore()
+            self.assertEqual([call.args[0] for call in read.call_args_list], [
+                'http://127.0.0.1:3000/api/auth/session', 'http://127.0.0.1:3000/api/ai/features'])
+        for replies in (['{"status":"ok"}'], ['{"user":null}', '[]'],
+                        ['{"user":null}', HTTPError('http://local', 503, 'Unavailable', {}, None)]):
+            with self.subTest(replies=replies), patch.object(launcher, 'read_url', side_effect=replies), \
+                    self.assertRaisesRegex(launcher.StartupError, 'BeautyCore is not ready'):
+                launcher.verify_beautycore()
+
+    def test_authenticated_mode_refuses_lan_instead_of_exposing_private_backend(self):
+        with patch.object(launcher, 'find_adb', return_value=None), \
+                patch.object(launcher, 'network_inventory') as network, \
+                self.assertRaisesRegex(launcher.StartupError, 'USB'):
+            launcher.choose_connection(3000, usb_only=True)
+        network.assert_not_called()
+
+    def test_beautycore_connection_exports_only_application_origin_and_owned_reverse_cleanup(self):
+        connection = launcher.Connection('USB/ADB', '127.0.0.1', 'test phone', 'adb', 'phone')
+        connection.api_port = 3000
+        connection.created = ['tcp:3000', 'tcp:8081']
+        with patch.dict(os.environ, {'JWT_SECRET': 'never-public', 'AI_FASTAPI_URL': 'private', 'KAGGLE_KEY': 'private'}, clear=True):
+            _, expo = launcher.child_environments(connection)
+        self.assertEqual(expo['EXPO_PUBLIC_API_BASE_URL'], 'http://127.0.0.1:3000')
+        self.assertEqual(expo['EXPO_NO_DOTENV'], '1')
+        for key in ('JWT_SECRET', 'AI_FASTAPI_URL', 'KAGGLE_KEY'):
+            self.assertNotIn(key, expo)
+
     def test_route_metric_and_physical_adapter_determine_source(self):
         data = inventory()
         # Virtual default route has a better metric but is not a usable LAN.

@@ -10,8 +10,12 @@ import { occasions, vibes, preferenceOptions } from '../features/consultation/di
 import { services } from '../constants/services';
 import { useConsultation } from '../store/consultation';
 import { useStudio, type StudioStep } from '../store/studio';
+import { AuthGate } from '../components/auth-gate';
 
 export default function Consultation() {
+  return <AuthGate><ConsultationContent /></AuthGate>;
+}
+function ConsultationContent() {
   const { draft, chooseService, setPhoto, setDirection, goToStep, reset } = useConsultation();
   const [more, setMore] = useState(false);
   const back = useCallback(() => {

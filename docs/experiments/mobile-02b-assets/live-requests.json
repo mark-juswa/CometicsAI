@@ -1,0 +1,182 @@
+[
+  {
+    "correlation_id": "690f3e48-b587-4dba-8d35-355944c5232e",
+    "event": "request_start",
+    "feature": "hairstyle",
+    "layer": "central",
+    "request_id": "3bfebaf0-4c1b-44f4-8150-fb754dcb76e2",
+    "time_utc": "2026-10-03T07:29:19.177721+00:00"
+  },
+  {
+    "correlation_id": "690f3e48-b587-4dba-8d35-355944c5232e",
+    "disconnect_observed": false,
+    "elapsed_seconds": 0.078,
+    "event": "request_end",
+    "feature": "hairstyle",
+    "http_status": 400,
+    "layer": "central",
+    "request_id": "3bfebaf0-4c1b-44f4-8150-fb754dcb76e2",
+    "response_body_sent": true,
+    "state": "rejected",
+    "time_utc": "2026-10-03T07:29:19.242723+00:00"
+  },
+  {
+    "correlation_id": "93576609-d2af-4e6b-866d-ed3e4fa2e581",
+    "event": "request_start",
+    "feature": "hairstyle",
+    "layer": "central",
+    "request_id": "28fa2299-4092-4da4-9a80-ecd9d1588e52",
+    "time_utc": "2026-10-03T07:29:19.338718+00:00"
+  },
+  {
+    "correlation_id": "93576609-d2af-4e6b-866d-ed3e4fa2e581",
+    "disconnect_observed": false,
+    "elapsed_seconds": 0.0,
+    "event": "request_end",
+    "feature": "hairstyle",
+    "http_status": 400,
+    "layer": "central",
+    "request_id": "28fa2299-4092-4da4-9a80-ecd9d1588e52",
+    "response_body_sent": true,
+    "state": "rejected",
+    "time_utc": "2026-10-03T07:29:19.339718+00:00"
+  },
+  {
+    "correlation_id": "83706cc8-9d25-47a1-a6fd-79a64c067685",
+    "event": "request_start",
+    "feature": "hairstyle",
+    "layer": "central",
+    "request_id": "6ea6ce71-9e45-4ca0-954c-a9beb9309aed",
+    "time_utc": "2026-10-03T07:31:31.111519+00:00"
+  },
+  {
+    "attempt": 1,
+    "boundary": "inference",
+    "correlation_id": "83706cc8-9d25-47a1-a6fd-79a64c067685",
+    "event": "remote_start",
+    "feature": "hairstyle",
+    "request_id": "d70d72e3-e74e-4dcc-872d-0fc9bcb59daf",
+    "style_id": "crew_cut",
+    "time_utc": "2026-10-03T07:31:31.738816+00:00"
+  },
+  {
+    "attempt": 1,
+    "automatic_retry": false,
+    "boundary": "inference",
+    "category": "success",
+    "correlation_id": "83706cc8-9d25-47a1-a6fd-79a64c067685",
+    "elapsed_seconds": 65.407,
+    "event": "remote_end",
+    "feature": "hairstyle",
+    "http_status": 200,
+    "request_id": "d70d72e3-e74e-4dcc-872d-0fc9bcb59daf",
+    "response_body_received": true,
+    "style_id": "crew_cut",
+    "time_utc": "2026-10-03T07:32:37.132319+00:00"
+  },
+  {
+    "correlation_id": "83706cc8-9d25-47a1-a6fd-79a64c067685",
+    "disconnect_observed": false,
+    "elapsed_seconds": 66.032,
+    "event": "request_end",
+    "feature": "hairstyle",
+    "http_status": 200,
+    "layer": "central",
+    "request_id": "6ea6ce71-9e45-4ca0-954c-a9beb9309aed",
+    "response_body_sent": true,
+    "state": "completed",
+    "time_utc": "2026-10-03T07:32:37.135323+00:00"
+  },
+  {
+    "correlation_id": "971aafde-ce7a-4bb6-ba06-fb9b8f03bac5",
+    "event": "request_start",
+    "feature": "makeup",
+    "layer": "central",
+    "request_id": "80171062-9a13-46b4-b89d-94efff390b24",
+    "time_utc": "2026-10-03T07:33:40.521595+00:00"
+  },
+  {
+    "attempt": 1,
+    "boundary": "inference",
+    "correlation_id": "971aafde-ce7a-4bb6-ba06-fb9b8f03bac5",
+    "event": "remote_start",
+    "feature": "makeup",
+    "request_id": "f218dc1b-6058-4640-9122-6092efa3ca09",
+    "style_id": "soft_glam",
+    "time_utc": "2026-10-03T07:33:41.128376+00:00"
+  },
+  {
+    "attempt": 1,
+    "automatic_retry": false,
+    "boundary": "inference",
+    "category": "success",
+    "correlation_id": "971aafde-ce7a-4bb6-ba06-fb9b8f03bac5",
+    "elapsed_seconds": 62.844,
+    "event": "remote_end",
+    "feature": "makeup",
+    "http_status": 200,
+    "request_id": "f218dc1b-6058-4640-9122-6092efa3ca09",
+    "response_body_received": true,
+    "style_id": "soft_glam",
+    "time_utc": "2026-10-03T07:34:43.960353+00:00"
+  },
+  {
+    "correlation_id": "971aafde-ce7a-4bb6-ba06-fb9b8f03bac5",
+    "disconnect_observed": false,
+    "elapsed_seconds": 63.453,
+    "event": "request_end",
+    "feature": "makeup",
+    "http_status": 200,
+    "layer": "central",
+    "request_id": "80171062-9a13-46b4-b89d-94efff390b24",
+    "response_body_sent": true,
+    "state": "completed",
+    "time_utc": "2026-10-03T07:34:43.964444+00:00"
+  },
+  {
+    "correlation_id": "d97ae751-1b4c-43c1-855e-6774283f5325",
+    "event": "request_start",
+    "feature": "makeup",
+    "layer": "central",
+    "request_id": "8fbab4f5-cd99-49eb-8e54-c0f37635fca0",
+    "time_utc": "2026-10-03T07:35:27.654374+00:00"
+  },
+  {
+    "attempt": 1,
+    "boundary": "inference",
+    "correlation_id": "d97ae751-1b4c-43c1-855e-6774283f5325",
+    "event": "remote_start",
+    "feature": "makeup",
+    "request_id": "4e74786f-0561-4e76-9770-e3fdbc970747",
+    "style_id": "classic_red_lip",
+    "time_utc": "2026-10-03T07:35:28.287336+00:00"
+  },
+  {
+    "attempt": 1,
+    "automatic_retry": false,
+    "boundary": "inference",
+    "category": "success",
+    "correlation_id": "d97ae751-1b4c-43c1-855e-6774283f5325",
+    "elapsed_seconds": 63.969,
+    "event": "remote_end",
+    "feature": "makeup",
+    "http_status": 200,
+    "request_id": "4e74786f-0561-4e76-9770-e3fdbc970747",
+    "response_body_received": true,
+    "style_id": "classic_red_lip",
+    "time_utc": "2026-10-03T07:36:32.249409+00:00"
+  },
+  {
+    "correlation_id": "d97ae751-1b4c-43c1-855e-6774283f5325",
+    "disconnect_observed": false,
+    "elapsed_seconds": 64.594,
+    "event": "request_end",
+    "feature": "makeup",
+    "http_status": 200,
+    "layer": "central",
+    "request_id": "8fbab4f5-cd99-49eb-8e54-c0f37635fca0",
+    "response_body_sent": true,
+    "state": "completed",
+    "time_utc": "2026-10-03T07:36:32.253409+00:00"
+  }
+]

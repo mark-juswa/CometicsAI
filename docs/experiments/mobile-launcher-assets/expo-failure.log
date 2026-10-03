@@ -1,0 +1,6 @@
+Mobile connection: TEST_LOOPBACK (controlled resolver fixture)
+Application API: http://127.0.0.1:8001
+Expo: http://127.0.0.1:8081
+Separate CPU mock backend; no GPU generation. Keep this window open.
+Stop with Ctrl+C or STOP_MOBILE.bat.
+MOBILE_DEV_FAILED: Expo exited during startup (code 23).

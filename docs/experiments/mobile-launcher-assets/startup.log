@@ -1,0 +1,14 @@
+Mobile connection: TEST_LOOPBACK (controlled resolver fixture)
+Application API: http://127.0.0.1:8001
+Expo: http://127.0.0.1:8081
+Separate CPU mock backend; no GPU generation. Keep this window open.
+Stop with Ctrl+C or STOP_MOBILE.bat.
+Starting project at F:\HAIR\mobile
+Starting Metro Bundler
+
+warning: Bundler cache is empty, rebuilding (this may take a minute)
+Waiting on http://localhost:8081
+
+Logs for your project will appear below.
+MOBILE_DEV_RUNNING - open the Expo Go QR/address above.
+Android Bundled 8797ms node_modules\expo-router\entry.js (1498 modules)

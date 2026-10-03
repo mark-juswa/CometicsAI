@@ -66,6 +66,18 @@ Security: development FastAPI is unauthenticated; keep it on a trusted developme
 
 ## Consequences and follow-up
 
+### Windows mobile launcher addendum, 2026-10-03
+
+**Decision: CONFIRMED**, Supervisor explicitly requests automatic development connectivity before MOBILE-02. `START_MOBILE.bat` and `STOP_MOBILE.bat` are additive entry points backed by `scripts/mobile_launch.py` and a read-only PowerShell network inventory. Existing root launchers and all application/model code remain protected.
+
+Value sources: authorized devices come from SDK/PATH ADB `devices -l`; loopback comes from verified reverse mappings for API 8001 and Metro 8081. LAN IPv4 comes from a connected physical default-route interface with a Private/domain Windows profile, RFC1918 address and lowest route-plus-interface metric. Virtual/VPN/disconnected/Public interfaces and ambiguous priorities/sources are rejected. SDK lookup uses configured environment/PATH or the standard per-user installation. No developer address is stored in source.
+
+Startup binds a separate existing FastAPI instance to `0.0.0.0:8001` with process-only mock/deterministic engines, verifies its mock health, then starts normal Expo Go mode on 8081 with the chosen advertised host. Expo receives only whitelisted OS/tooling variables and the process-only API origin, with dotenv loading disabled and Metro cache cleared. No env file, server configuration, firewall/profile or tunnel is changed. No public Internet exposure is authorized. Ordinary startup requires USB authorization or a trusted Windows Private/domain LAN; marking an actually trusted network Private may be a one-time OS setup.
+
+Runtime data: ignored `.tmp/mobile/control.json` holds a random session identity, controller token/loopback port and non-secret connection metadata; `launch.lock` serializes startup. Stop verifies controller identity before requesting shutdown. A kill-on-close Windows job owns only newly spawned suspended children, assigned before they can spawn descendants. Stored PIDs never authorize termination. ADB cleanup removes only newly created, unchanged reverse mappings. Duplicate start retains a live session; stale state never grants process authority.
+
+Launcher acceptance: unrelated occupied ports, no transport, unhealthy FastAPI and failed Expo must fail clearly, without restart loops or killing unrelated processes. Confirm real CPU API/Expo start and owned stop, native job child/grandchild isolation, route/ADB failure cases and unchanged env files. A controlled resolver fixture may validate process startup when no phone/trusted route exists, but cannot close AC-8. Native Android acceptance remains an independent required gate.
+
 MOBILE-01 is implemented and locally verified but must report `MOBILE_01_BLOCKED` until Android runtime acceptance closes. Existing spec 0005 and its web privacy boundary remain valid; the development exception is limited to this mobile slice. No major inference architectural change or drift was found.
 
 MOBILE-02 first integrates the existing BeautyCore authenticated Client/session boundary and native Origin behavior. Then implement typed native multipart manual generation through the existing application adapter, explicit serialized user actions, elapsed loading, safe failure/ambiguity handling, original/generated comparison and native save/share. Validate one authorized result for each feature using unchanged existing engines, including Nails hybrid routing. Full Consultation and camera are separate future scope.

@@ -1,0 +1,26 @@
+{
+  "health": {
+    "status": "ok",
+    "generator": "mock"
+  },
+  "catalog_counts": {
+    "hairstyle": 6,
+    "makeup": 10,
+    "nails": 5
+  },
+  "private_values_scanned": 13,
+  "bundle_secret_leaks": 0,
+  "android_bundle_process_origin": true,
+  "expo_host": "127.0.0.1:8081",
+  "duplicate_start_preserves_session": true,
+  "stop_owned_session_only": true,
+  "stop_output": "Mobile session stopped; only its owned children/reverse mappings were released.",
+  "expo_failure_closes_owned_backend": true,
+  "unhealthy_api_closes_owned_session": true,
+  "occupied_8001_preserves_unrelated_listener": true,
+  "actual_lan_selection": "No usable trusted LAN default route. Connect an authorized Android device by USB, or use trusted Wi-Fi/Ethernet marked Private in Windows Settings > Network & internet. VPN/virtual, disconnected, Public, ambiguous and non-private-address interfaces are excluded.",
+  "authorized_android_devices": [],
+  "actual_no_transport_fails_without_children": true,
+  "environment_files_unchanged": true,
+  "native_acceptance": "PENDING, no authorized device"
+}

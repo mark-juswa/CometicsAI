@@ -25,10 +25,11 @@ export const useConsultation = create<ConsultationStore>((set) => ({
     return { draft: { ...draft, feature, step: 0, photo: compatible ? draft.photo : null,
       direction: { ...draft.direction, servicePreference: '' } } };
   }); },
-  setPhoto: photo => { if (useConsultationSession.getState().clear()) set(({ draft }) => ({ draft: { ...draft, photo, step: photo ? draft.step : 0 } })); },
+  setPhoto: photo => { if (useConsultationSession.getState().clear()) set(({ draft }) => ({ draft: { ...draft, photo,
+    step: !photo && draft.step > 1 ? 1 : draft.step } })); },
   setDirection: (field, value) => { if (useConsultationSession.getState().clear()) set(({ draft }) => ({ draft: { ...draft, direction: { ...draft.direction, [field]: value } } })); },
   goToStep: step => set(({ draft }) => {
-    if (step > 0 && (!draft.feature || !draft.photo)) return { draft };
+    if (step > 0 && !draft.feature || step > 1 && !draft.photo) return { draft };
     return { draft: { ...draft, step } };
   }),
   reset: () => { if (useConsultationSession.getState().clear()) set({ draft: empty() }); },

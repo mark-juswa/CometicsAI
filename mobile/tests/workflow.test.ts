@@ -42,16 +42,25 @@ test('photo removal repairs an advanced studio and replacement retains the curre
   actions.tryAnother('nails'); assert.equal(useStudio.getState().drafts.nails.step, 0);
 });
 
-test('Consultation gates on service/photo and Back preserves optional direction', () => {
+test('Consultation chooses service first, gates conversation on photo and preserves direction on Back', () => {
   const actions = useConsultation.getState(); actions.reset(); actions.goToStep(1);
   assert.equal(useConsultation.getState().draft.step, 0);
   actions.chooseService('hairstyle'); actions.goToStep(1);
-  assert.equal(useConsultation.getState().draft.step, 0);
-  actions.setPhoto(photo); actions.goToStep(1); actions.setDirection('occasion', 'Celebration');
+  assert.equal(useConsultation.getState().draft.step, 1);
+  actions.goToStep(2); assert.equal(useConsultation.getState().draft.step, 1);
+  actions.setPhoto(photo); actions.setDirection('occasion', 'Celebration');
   actions.setDirection('notes', 'My own brief'); actions.goToStep(2); actions.goToStep(0);
   assert.deepEqual(useConsultation.getState().draft.photo, photo);
   assert.equal(useConsultation.getState().draft.direction.occasion, 'Celebration');
   assert.equal(useConsultation.getState().draft.direction.notes, 'My own brief');
+});
+
+test('removing a Consultation photo from Your Looks returns to Direction', () => {
+  const actions = useConsultation.getState(); actions.setPhoto(photo); actions.goToStep(2);
+  actions.setPhoto(null);
+  assert.equal(useConsultation.getState().draft.step, 1);
+  assert.equal(useConsultation.getState().draft.photo, null);
+  actions.setPhoto(photo); actions.goToStep(0);
 });
 
 test('Consultation only clears incompatible photos and service-specific preferences', () => {

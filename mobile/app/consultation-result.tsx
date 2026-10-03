@@ -22,8 +22,9 @@ function ResultContent() {
   const back = useCallback(() => { useConsultation.getState().goToStep(2); router.dismissTo('/consultation'); }, []);
   const timing = id ? session.times[id] : null;
   return <FlowScreen title="Your look, in focus." detail={valid ? recommendation.primary.style_name : 'Your consultation result'} onBack={back}
-    actions={valid ? <><Button label={selected ? 'This Look is selected ✓' : session.busy ? 'Confirming your selection…' : 'Select This Look'} disabled={session.busy || Boolean(session.active) || Boolean(selected) || session.expired} onPress={() => { if (id) void session.select(id); }} />
-      <Button label="Back to Your Looks" secondary onPress={back} /></> : <Button label="Back to Consultation" onPress={back} />}>
+    actions={valid ? <Button label={selected ? 'This Look is selected ✓' : session.busy ? 'Confirming your selection…' : 'Select This Look'}
+      disabled={session.busy || Boolean(session.active) || Boolean(selected) || session.expired} onPress={() => { if (id) void session.select(id); }} /> :
+      <Button label="Back to Consultation" onPress={back} />}>
     {session.error !== '' && <ErrorMessage message={session.error} />}
     {valid ? <>
       <View style={styles.row}><View style={styles.flex}><Button label="Original" selected={view === 'original'} secondary={view !== 'original'} onPress={() => setView('original')} /></View>

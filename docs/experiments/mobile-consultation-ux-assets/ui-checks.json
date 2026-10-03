@@ -1,0 +1,19 @@
+{
+  "checks": [
+    "service-choice-only",
+    "direction-gallery-cancel-replace-remove",
+    "first-text-turn-once",
+    "three-recommendations",
+    "one-featured-look-at-a-time",
+    "custom-photo-handoff"
+  ],
+  "widths": [
+    320,
+    360,
+    390,
+    430
+  ],
+  "generation_posts": 0,
+  "empty_turns": 0,
+  "console_errors": []
+}

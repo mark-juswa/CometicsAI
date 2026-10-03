@@ -62,8 +62,8 @@ function ConsultationContent() {
       {draft.step === 1 && (session.active || ready ? <Button label="See Your Looks →" onPress={() => goToStep(2)} /> :
         session.needsSync ? <Button label="Check consultation status" disabled={session.busy || session.expired} onPress={() => void session.refresh()} /> :
         !conversation ? <Button label={session.busy ? 'Preparing your consultation…' : 'Begin AI conversation ✦'} disabled={session.busy || !feature || !draft.photo} onPress={() => void begin()} /> :
-        <Button label={session.busy ? 'Waiting for your consultant…' : state?.messages.length ? 'Send reply →' : 'Ask the opening question →'} disabled={busy || session.expired || Boolean(state?.messages.length && !reply.trim())}
-          onPress={() => void (state?.messages.length ? send() : session.reply())} />)}
+        <Button label={session.busy ? 'Waiting for your consultant…' : state?.messages.length ? 'Send reply →' : 'Send your direction →'}
+          disabled={busy || session.expired || !reply.trim()} onPress={() => void send()} />)}
       {draft.step === 2 && <Button label={`Explore Custom ${feature ? serviceLabels[feature] : 'Studio'} →`} secondary disabled={!feature || !draft.photo || Boolean(owner) || busy} onPress={openCustom} />}
     </>}>
     {session.error !== '' && <ErrorMessage message={session.error} />}
@@ -94,7 +94,11 @@ function ConsultationContent() {
           <Body muted>Text guidance only. Your photo is reserved for preview generation.</Body></Panel>
         {state?.messages.map((m, index) => <Panel key={index} title={m.role === 'assistant' ? 'Your beauty consultant' : 'You'}><Body>{m.content}</Body></Panel>)}
         {ready ? <Panel title="Your recommendations are ready"><Body>Your consultant returned three looks validated by the studio. Continue to Your Looks to explore them.</Body></Panel> :
-          !session.expired && <DirectionField label="Your reply" value={reply} onChange={setReply} multiline maxLength={500} placeholder="Reply to your consultant’s question" disabled={busy || session.needsSync} />}
+          !session.expired && <>
+            {!state?.messages.length && <Body muted>Describe the look you want in your own words to begin the AI conversation.</Body>}
+            <DirectionField label={state?.messages.length ? 'Your reply' : 'Describe your look'} value={reply} onChange={setReply} multiline maxLength={500}
+              placeholder={state?.messages.length ? 'Reply to your consultant’s question' : 'For example, a classic low maintenance look'} disabled={busy || session.needsSync} />
+          </>}
         <Button label="Edit direction" secondary disabled={busy} onPress={edit} />
       </>}
       <Button label="Start consultation over" secondary disabled={busy} onPress={restart} />

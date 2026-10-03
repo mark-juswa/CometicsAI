@@ -14,7 +14,7 @@ function recs(feature) { return { recommendations: styles.map((s, i) => ({ id: `
   const browser = await chromium.launch({ channel: 'msedge', headless: true });
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
   page.setDefaultNavigationTimeout(120000);
-  let server = initial(), messages = 0, posts = 0, statusReads = 0, selectedPosts = 0;
+  let server = initial(), messages = 0, posts = 0, statusReads = 0, selectedPosts = 0, emptyTurns = 0;
   let finish, outcome = 'completed', lost = false, geminiUnavailable = false, expired = false;
   const errors = [], checks = [];
   page.on('pageerror', e => errors.push(e.message));
@@ -36,6 +36,7 @@ function recs(feature) { return { recommendations: styles.map((s, i) => ({ id: `
       else if (p.endsWith('/state')) { if (method === 'PATCH') assert.ok(JSON.parse(request.postData()).preferences); body = server; }
       else if (p.endsWith('/turn')) {
         if (geminiUnavailable) { status = 503; body = { error: 'AI service could not complete the request.' }; }
+        else if (!JSON.parse(request.postData()).message) { emptyTurns++; status = 502; body = { error: 'At least one user answer is required.' }; }
         else { const message = JSON.parse(request.postData()).message; messages++;
           if (message) server.messages.push({ role: 'user', content: message });
           server.messages.push({ role: 'assistant', content: messages < 3 ? 'What length or finish feels right for you?' : 'Here are three directions for your look.' });
@@ -72,9 +73,14 @@ function recs(feature) { return { recommendations: styles.map((s, i) => ({ id: `
   async function answer() {
     await page.getByLabel('Your reply', { exact: true }).fill('Short and easy to maintain.'); await button('Send reply →').click();
   }
+  async function first() {
+    await page.getByLabel('Describe your look', { exact: true }).fill('Classic and low maintenance.');
+    await button('Send your direction →').click();
+  }
   try {
-    await start(); await page.getByText('What length or finish feels right for you?', { exact: true }).waitFor();
-    await widths('direction', 'Send reply →'); await screenshot('direction-fixture-390');
+    await start(); await page.getByLabel('Describe your look', { exact: true }).waitFor();
+    await widths('direction', 'Send your direction →'); await screenshot('direction-fixture-390');
+    await first(); await page.getByText('What length or finish feels right for you?', { exact: true }).waitFor();
     await answer(); await page.getByText('What length or finish feels right for you?', { exact: true }).nth(1).waitFor();
     assert.equal(await button('See Your Looks →').count(), 0); await answer(); await button('See Your Looks →').click();
     await button('Generate Crew Cut').waitFor(); assert.equal(server.recommendations.recommendations.length, 3); assert.equal(posts, 0);
@@ -91,22 +97,27 @@ function recs(feature) { return { recommendations: styles.map((s, i) => ({ id: `
     checks.push('serial-generation-real-shaped-image-original-result-select');
     await button('Explore Custom Hair →').click(); await button('Crew Cut. Browser fixture only').waitFor();
     await button('Back').click(); await page.getByTestId('photo-preview').waitFor(); checks.push('custom-photo-retained-style-stage');
-    for (const feature of ['Makeup', 'Nails']) { await start(feature); await answer(); await answer(); await button('See Your Looks →').click();
+    for (const feature of ['Makeup', 'Nails']) { await start(feature); await first(); await answer(); await answer(); await button('See Your Looks →').click();
       await button('Generate Crew Cut').waitFor(); assert.equal(server.primary_service, feature === 'Makeup' ? 'makeup' : 'nails'); assert.equal(posts, 1); }
     checks.push('makeup-nails-contract-only-no-generation');
-    await start(); await answer(); await answer(); await button('See Your Looks →').click(); outcome = 'failed';
+    await start(); await first(); await answer(); await answer(); await button('See Your Looks →').click(); outcome = 'failed';
     await button('Generate Crew Cut').click(); await page.getByText('Creating your recommended look', { exact: true }).waitFor(); finish();
     await button('Retry Crew Cut').waitFor(); assert.equal(posts, 2); outcome = 'completed'; lost = true;
     await button('Retry Crew Cut').click(); await page.getByText('Creating your recommended look', { exact: true }).waitFor(); finish();
     await button('View Crew Cut').waitFor(); assert.equal(posts, 3); assert.ok(statusReads >= 1); checks.push('failed-manual-retry-lost-response-get-recovery-no-replay');
     await button('Start consultation over').click(); await button('Hair').click(); const chooser = page.waitForEvent('filechooser');
     await button('Choose your portrait').click(); await (await chooser).setFiles(fixture); await button('Continue to Direction →').click();
-    geminiUnavailable = true; await button('Begin AI conversation ✦').click(); await button('Check consultation status').waitFor();
+    await button('Begin AI conversation ✦').click(); geminiUnavailable = true; await first(); await button('Check consultation status').waitFor();
     await page.getByText('AI service could not complete the request.', { exact: true }).waitFor();
-    geminiUnavailable = false; await button('Check consultation status').click(); await button('Ask the opening question →').waitFor();
-    await button('Ask the opening question →').click(); await button('Send reply →').waitFor(); expired = true;
+    geminiUnavailable = false; await button('Check consultation status').click(); await button('Send your direction →').waitFor();
+    await button('Send your direction →').click(); await page.getByLabel('Your reply', { exact: true }).waitFor(); expired = true;
     await answer(); await page.getByText(/Consultation access has expired/).waitFor(); await widths('expired'); await screenshot('expired-fixture-390');
     checks.push('gemini-unavailable-state-read-expired-handle-controlled');
+    expired = false; await start(); await page.getByLabel('Describe your look', { exact: true }).waitFor();
+    assert.equal(await button('Check consultation status').count(), 0); await first();
+    await page.getByLabel('Your reply', { exact: true }).waitFor(); await answer(); await answer();
+    await button('See Your Looks →').click(); await button('Generate Crew Cut').waitFor();
+    assert.equal(posts, 3); assert.equal(emptyTurns, 0); checks.push('user-first-message-avoids-empty-turn-and-premature-recommendation');
     assert.deepEqual(errors, []);
     const report = { checks, widths: [320, 360, 390, 430], intercepted_generation_posts: posts, status_reads: statusReads, select_posts: selectedPosts, real_gpu_requests: 0, console_errors: errors };
     fs.writeFileSync(path.join(__dirname, 'ui-checks.json'), JSON.stringify(report, null, 2)); console.log(JSON.stringify(report));

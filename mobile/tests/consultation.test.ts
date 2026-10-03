@@ -80,7 +80,7 @@ test('structured direction maps only the selected service fields and bounded avo
 
 test('create, photo upload, preferences and genuine turns precede backend readiness; generation is explicit and Select is confirmed', async () => {
   const f = fake(); let clock = 1000; const store = createConsultationSession(f.client, () => clock);
-  await prepare(store); assert.deepEqual(f.order, ['create', 'photo', 'preferences', 'opening', 'reply']);
+  await prepare(store); assert.deepEqual(f.order, ['create', 'photo', 'preferences', 'reply']);
   assert.equal(store.getState().state?.recommendations?.recommendations.length, 3); assert.equal(f.posts(), 0);
   assert.deepEqual(store.getState().original, photo); assert.equal(store.getState().userId, 'client-test');
   clock = 62000; await store.getState().generate('look_1'); assert.equal(f.posts(), 1); assert.equal(store.getState().active, null);
@@ -124,13 +124,44 @@ test('confirmed failed generation permits an explicit retry, retains siblings an
   await store.getState().generate('look_1'); assert.equal(posts, 3); assert.equal(store.getState().details.look_2.generation.status, 'completed');
 });
 
-test('unavailable Gemini and ambiguous turns require state reconciliation rather than automatic replay', async () => {
+test('unavailable Gemini and ambiguous text turns require state reconciliation rather than automatic replay', async () => {
   let turns = 0; const f = fake({ consultationTurn: async () => { turns++; throw new ApiError('AI unavailable', 'http', 503); } });
   const store = createConsultationSession(f.client);
   await store.getState().begin('hairstyle', photo, {}, 'client-test', async () => new FormData());
+  assert.equal(turns, 0); await store.getState().reply('Hello');
   assert.equal(turns, 1); assert.equal(store.getState().needsSync, true); await store.getState().reply('Hello'); assert.equal(turns, 1);
   await store.getState().refresh(); assert.equal(store.getState().needsSync, false); await store.getState().reply('Hello'); assert.equal(turns, 2);
   assert.equal(f.posts(), 0);
+});
+
+test('first user description starts Gemini only after photo and preferences, without an empty opening turn', async () => {
+  let turns = 0; let firstMessage = '';
+  const f = fake({ consultationTurn: async (_, message) => {
+    turns++;
+    assert.ok(message);
+    firstMessage = message; return { state: state(true), status: 'ready_for_recommendation', recommendations };
+  } });
+  const store = createConsultationSession(f.client);
+  await store.getState().begin('hairstyle', photo, {}, 'client-test', async () => new FormData());
+  assert.equal(turns, 0); assert.equal(store.getState().needsSync, false);
+  assert.equal(store.getState().state?.conversation_status, 'not_started');
+  assert.equal(await store.getState().reply('A classic, short, low maintenance Hair look.'), true);
+  assert.equal(turns, 1);
+  assert.equal(firstMessage, 'A classic, short, low maintenance Hair look.');
+  assert.equal(store.getState().state?.recommendations?.recommendations.length, 3);
+  assert.equal(f.posts(), 0);
+});
+
+test('a lost first text turn still requires explicit status reconciliation before another POST', async () => {
+  let turns = 0; let reads = 0;
+  const f = fake({ consultationTurn: async () => { turns++; throw new ApiError('Connection lost', 'network'); },
+    consultationState: async () => { reads++; return state(); } });
+  const store = createConsultationSession(f.client);
+  await store.getState().begin('hairstyle', photo, {}, 'client-test', async () => new FormData());
+  assert.equal(turns, 0); assert.equal(reads, 0);
+  await store.getState().reply('A short haircut'); assert.equal(turns, 1); assert.equal(store.getState().needsSync, true);
+  await store.getState().reply('A short haircut'); assert.equal(turns, 1);
+  await store.getState().refresh(); assert.equal(reads, 1); assert.equal(store.getState().needsSync, false);
 });
 
 test('unknown or disabled recommendations fail closed; invalid session/expired handle show controlled errors and preserve photo until reset', async () => {

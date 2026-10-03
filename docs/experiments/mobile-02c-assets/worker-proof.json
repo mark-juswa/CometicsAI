@@ -1,0 +1,11 @@
+{
+  "source": "read-only status of the existing unified Kaggle worker after the Android Consultation request",
+  "gpu_runtime_ready": true,
+  "foundation_load_count": 1,
+  "feature": "hairstyle",
+  "style_id": "bob_hair",
+  "adapter_id": "train001",
+  "inference_steps": 20,
+  "http_status": 200,
+  "inference_seconds": 65.843
+}

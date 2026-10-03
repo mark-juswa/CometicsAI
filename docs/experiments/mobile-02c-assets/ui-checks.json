@@ -5,7 +5,8 @@
     "custom-photo-retained-style-stage",
     "makeup-nails-contract-only-no-generation",
     "failed-manual-retry-lost-response-get-recovery-no-replay",
-    "gemini-unavailable-state-read-expired-handle-controlled"
+    "gemini-unavailable-state-read-expired-handle-controlled",
+    "user-first-message-avoids-empty-turn-and-premature-recommendation"
   ],
   "widths": [
     320,

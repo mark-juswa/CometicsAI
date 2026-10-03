@@ -1,6 +1,301 @@
 {
-  "source": "existing private root launcher logs",
-  "server_events": [],
+  "source": "two successive private launcher sessions; allowlisted status and timing only",
+  "server_events": [
+    {
+      "correlation_id": "6843bc94-6c38-4dc2-8ade-a3b5bd682a0e",
+      "event": "request_start",
+      "feature": "unknown",
+      "layer": "central",
+      "request_id": "f70b98d5-91ca-46bb-b11c-0000e546a262",
+      "time_utc": "2026-10-03T13:32:17.995413+00:00"
+    },
+    {
+      "correlation_id": "6843bc94-6c38-4dc2-8ade-a3b5bd682a0e",
+      "disconnect_observed": false,
+      "elapsed_seconds": 0.0,
+      "event": "request_end",
+      "feature": "unknown",
+      "http_status": 201,
+      "layer": "central",
+      "request_id": "f70b98d5-91ca-46bb-b11c-0000e546a262",
+      "response_body_sent": true,
+      "state": "completed",
+      "time_utc": "2026-10-03T13:32:18.000778+00:00"
+    },
+    {
+      "correlation_id": "837bb639-3ffb-438a-bab0-c343f8acb385",
+      "event": "request_start",
+      "feature": "unknown",
+      "layer": "central",
+      "request_id": "7c32fc3c-d727-46ae-acd4-322d78bbc0f5",
+      "time_utc": "2026-10-03T13:32:18.708106+00:00"
+    },
+    {
+      "correlation_id": "837bb639-3ffb-438a-bab0-c343f8acb385",
+      "disconnect_observed": false,
+      "elapsed_seconds": 6.094,
+      "event": "request_end",
+      "feature": "unknown",
+      "http_status": 502,
+      "layer": "central",
+      "request_id": "7c32fc3c-d727-46ae-acd4-322d78bbc0f5",
+      "response_body_sent": true,
+      "state": "rejected",
+      "time_utc": "2026-10-03T13:32:24.798568+00:00"
+    },
+    {
+      "correlation_id": "1e391dd0-30fc-494b-b6b6-8d502ddde560",
+      "event": "request_start",
+      "feature": "unknown",
+      "layer": "central",
+      "request_id": "102cce0c-c87d-49cc-aa90-950d9d68a97d",
+      "time_utc": "2026-10-03T13:40:02.359378+00:00"
+    },
+    {
+      "correlation_id": "1e391dd0-30fc-494b-b6b6-8d502ddde560",
+      "disconnect_observed": false,
+      "elapsed_seconds": 0.0,
+      "event": "request_end",
+      "feature": "unknown",
+      "http_status": 201,
+      "layer": "central",
+      "request_id": "102cce0c-c87d-49cc-aa90-950d9d68a97d",
+      "response_body_sent": true,
+      "state": "completed",
+      "time_utc": "2026-10-03T13:40:02.359378+00:00"
+    },
+    {
+      "correlation_id": "806ff3b1-39e8-436f-a2e6-465b17337147",
+      "event": "request_start",
+      "feature": "unknown",
+      "layer": "central",
+      "request_id": "35f8d45d-98fe-4982-9993-c8e627915161",
+      "time_utc": "2026-10-03T13:40:03.006912+00:00"
+    },
+    {
+      "correlation_id": "806ff3b1-39e8-436f-a2e6-465b17337147",
+      "disconnect_observed": false,
+      "elapsed_seconds": 4.265,
+      "event": "request_end",
+      "feature": "unknown",
+      "http_status": 502,
+      "layer": "central",
+      "request_id": "35f8d45d-98fe-4982-9993-c8e627915161",
+      "response_body_sent": true,
+      "state": "rejected",
+      "time_utc": "2026-10-03T13:40:07.275488+00:00"
+    },
+    {
+      "correlation_id": "337077fd-8c48-4b1d-81de-b92652c308ff",
+      "event": "request_start",
+      "feature": "unknown",
+      "layer": "central",
+      "request_id": "e3c4625f-c9f3-411b-a4e8-c93f26a13f07",
+      "time_utc": "2026-10-03T13:50:32.915895+00:00"
+    },
+    {
+      "correlation_id": "337077fd-8c48-4b1d-81de-b92652c308ff",
+      "disconnect_observed": false,
+      "elapsed_seconds": 0.0,
+      "event": "request_end",
+      "feature": "unknown",
+      "http_status": 201,
+      "layer": "central",
+      "request_id": "e3c4625f-c9f3-411b-a4e8-c93f26a13f07",
+      "response_body_sent": true,
+      "state": "completed",
+      "time_utc": "2026-10-03T13:50:32.917402+00:00"
+    },
+    {
+      "correlation_id": "7b4bcb22-b4c8-4f25-a059-a306a475fbb0",
+      "event": "request_start",
+      "feature": "unknown",
+      "layer": "central",
+      "request_id": "e0e45fa3-359a-44bf-a773-4ecb16686b8b",
+      "time_utc": "2026-10-03T13:50:33.534368+00:00"
+    },
+    {
+      "correlation_id": "7b4bcb22-b4c8-4f25-a059-a306a475fbb0",
+      "disconnect_observed": false,
+      "elapsed_seconds": 4.797,
+      "event": "request_end",
+      "feature": "unknown",
+      "http_status": 502,
+      "layer": "central",
+      "request_id": "e0e45fa3-359a-44bf-a773-4ecb16686b8b",
+      "response_body_sent": true,
+      "state": "rejected",
+      "time_utc": "2026-10-03T13:50:38.333692+00:00"
+    },
+    {
+      "correlation_id": "4d3e8d25-63cc-4443-9e4f-c7819731feb1",
+      "event": "request_start",
+      "feature": "unknown",
+      "layer": "central",
+      "request_id": "d92e0564-4e68-4b30-a188-fc209218544d",
+      "time_utc": "2026-10-03T13:50:52.358969+00:00"
+    },
+    {
+      "correlation_id": "4d3e8d25-63cc-4443-9e4f-c7819731feb1",
+      "disconnect_observed": false,
+      "elapsed_seconds": 3.875,
+      "event": "request_end",
+      "feature": "unknown",
+      "http_status": 200,
+      "layer": "central",
+      "request_id": "d92e0564-4e68-4b30-a188-fc209218544d",
+      "response_body_sent": true,
+      "state": "completed",
+      "time_utc": "2026-10-03T13:50:56.240366+00:00"
+    },
+    {
+      "correlation_id": "bad6aa22-a3f5-45a7-8692-9bae4d1ea6ac",
+      "event": "request_start",
+      "feature": "unknown",
+      "layer": "central",
+      "request_id": "02e3d6f9-3ad4-496f-80b9-c5a31a3e3bcb",
+      "time_utc": "2026-10-03T13:52:07.919700+00:00"
+    },
+    {
+      "attempt": 1,
+      "correlation_id": "bad6aa22-a3f5-45a7-8692-9bae4d1ea6ac",
+      "event": "remote_start",
+      "feature": "hairstyle",
+      "request_id": "9f3d6413-43e3-4212-ac19-8a8f18f6be45",
+      "style_id": "bob_hair",
+      "time_utc": "2026-10-03T13:52:08.586239+00:00"
+    },
+    {
+      "attempt": 1,
+      "automatic_retry": false,
+      "correlation_id": "bad6aa22-a3f5-45a7-8692-9bae4d1ea6ac",
+      "elapsed_seconds": 1.656,
+      "event": "remote_end",
+      "feature": "hairstyle",
+      "http_status": 530,
+      "request_id": "9f3d6413-43e3-4212-ac19-8a8f18f6be45",
+      "style_id": "bob_hair",
+      "time_utc": "2026-10-03T13:52:10.245837+00:00"
+    },
+    {
+      "correlation_id": "bad6aa22-a3f5-45a7-8692-9bae4d1ea6ac",
+      "disconnect_observed": false,
+      "elapsed_seconds": 2.328,
+      "event": "request_end",
+      "feature": "unknown",
+      "http_status": 502,
+      "layer": "central",
+      "request_id": "02e3d6f9-3ad4-496f-80b9-c5a31a3e3bcb",
+      "response_body_sent": true,
+      "state": "rejected",
+      "time_utc": "2026-10-03T13:52:10.246836+00:00"
+    },
+    {
+      "correlation_id": "ca061696-e9b7-4a20-ab11-41b09813c885",
+      "event": "request_start",
+      "feature": "unknown",
+      "layer": "central",
+      "request_id": "9b1d09c1-eb1e-400e-81cb-0bc363072617",
+      "time_utc": "2026-10-03T14:09:10.222073+00:00"
+    },
+    {
+      "correlation_id": "ca061696-e9b7-4a20-ab11-41b09813c885",
+      "disconnect_observed": false,
+      "elapsed_seconds": 0.015,
+      "event": "request_end",
+      "feature": "unknown",
+      "http_status": 201,
+      "layer": "central",
+      "request_id": "9b1d09c1-eb1e-400e-81cb-0bc363072617",
+      "response_body_sent": true,
+      "state": "completed",
+      "time_utc": "2026-10-03T14:09:10.228211+00:00"
+    },
+    {
+      "correlation_id": "ec669ac7-fe97-498f-bc51-c73923cc4296",
+      "event": "request_start",
+      "feature": "unknown",
+      "layer": "central",
+      "request_id": "c85389aa-e791-4086-85ad-a713e4c58dea",
+      "time_utc": "2026-10-03T14:09:15.867927+00:00"
+    },
+    {
+      "correlation_id": "ec669ac7-fe97-498f-bc51-c73923cc4296",
+      "disconnect_observed": false,
+      "elapsed_seconds": 5.875,
+      "event": "request_end",
+      "feature": "unknown",
+      "http_status": 200,
+      "layer": "central",
+      "request_id": "c85389aa-e791-4086-85ad-a713e4c58dea",
+      "response_body_sent": true,
+      "state": "completed",
+      "time_utc": "2026-10-03T14:09:21.743222+00:00"
+    },
+    {
+      "correlation_id": "b18f521b-91c0-45f4-9ab1-1a9e210b5636",
+      "event": "request_start",
+      "feature": "unknown",
+      "layer": "central",
+      "request_id": "8d2dc6ff-5328-4d95-8245-6c04702e4ff8",
+      "time_utc": "2026-10-03T14:09:25.138830+00:00"
+    },
+    {
+      "attempt": 1,
+      "correlation_id": "b18f521b-91c0-45f4-9ab1-1a9e210b5636",
+      "event": "remote_start",
+      "feature": "hairstyle",
+      "request_id": "26b39759-8d3f-49d7-acb3-86d979862f1b",
+      "style_id": "bob_hair",
+      "time_utc": "2026-10-03T14:09:25.732359+00:00"
+    },
+    {
+      "attempt": 1,
+      "automatic_retry": false,
+      "correlation_id": "b18f521b-91c0-45f4-9ab1-1a9e210b5636",
+      "elapsed_seconds": 68.969,
+      "event": "remote_end",
+      "feature": "hairstyle",
+      "http_status": 200,
+      "request_id": "26b39759-8d3f-49d7-acb3-86d979862f1b",
+      "style_id": "bob_hair",
+      "time_utc": "2026-10-03T14:10:34.707058+00:00"
+    },
+    {
+      "correlation_id": "b18f521b-91c0-45f4-9ab1-1a9e210b5636",
+      "disconnect_observed": false,
+      "elapsed_seconds": 69.578,
+      "event": "request_end",
+      "feature": "unknown",
+      "http_status": 200,
+      "layer": "central",
+      "request_id": "8d2dc6ff-5328-4d95-8245-6c04702e4ff8",
+      "response_body_sent": true,
+      "state": "completed",
+      "time_utc": "2026-10-03T14:10:34.714262+00:00"
+    },
+    {
+      "correlation_id": "5fb7a411-d8be-432a-858b-9d6e0a1085cb",
+      "event": "request_start",
+      "feature": "unknown",
+      "layer": "central",
+      "request_id": "e37e4560-3759-4eff-8164-9ffd13ecd294",
+      "time_utc": "2026-10-03T14:11:39.680030+00:00"
+    },
+    {
+      "correlation_id": "5fb7a411-d8be-432a-858b-9d6e0a1085cb",
+      "disconnect_observed": false,
+      "elapsed_seconds": 0.0,
+      "event": "request_end",
+      "feature": "unknown",
+      "http_status": 200,
+      "layer": "central",
+      "request_id": "e37e4560-3759-4eff-8164-9ffd13ecd294",
+      "response_body_sent": true,
+      "state": "completed",
+      "time_utc": "2026-10-03T14:11:39.681032+00:00"
+    }
+  ],
   "consultation_routes": [
     {
       "method": "GET",
@@ -20,6 +315,206 @@
     {
       "method": "GET",
       "route": "/consultations/catalog",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/mode",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/catalog",
+      "http_status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/consultations",
+      "http_status": 201
+    },
+    {
+      "method": "PUT",
+      "route": "/consultations/{consultation}/photo",
+      "http_status": 200
+    },
+    {
+      "method": "PATCH",
+      "route": "/consultations/{consultation}",
+      "http_status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/consultations/{consultation}/turn",
+      "http_status": 502
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/catalog",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/mode",
+      "http_status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/consultations",
+      "http_status": 201
+    },
+    {
+      "method": "PUT",
+      "route": "/consultations/{consultation}/photo",
+      "http_status": 200
+    },
+    {
+      "method": "PATCH",
+      "route": "/consultations/{consultation}",
+      "http_status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/consultations/{consultation}/turn",
+      "http_status": 502
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/catalog",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/mode",
+      "http_status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/consultations",
+      "http_status": 201
+    },
+    {
+      "method": "PUT",
+      "route": "/consultations/{consultation}/photo",
+      "http_status": 200
+    },
+    {
+      "method": "PATCH",
+      "route": "/consultations/{consultation}",
+      "http_status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/consultations/{consultation}/turn",
+      "http_status": 502
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/{consultation}",
+      "http_status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/consultations/{consultation}/turn",
+      "http_status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/consultations/{consultation}/recommendations/{recommendation}/generation",
+      "http_status": 502
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/{consultation}/recommendations/{recommendation}/generation",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/mode",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/mode",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/mode",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/mode",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/mode",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/catalog",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/mode",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/mode",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/mode",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/catalog",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/mode",
+      "http_status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/consultations/catalog",
+      "http_status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/consultations",
+      "http_status": 201
+    },
+    {
+      "method": "PUT",
+      "route": "/consultations/{consultation}/photo",
+      "http_status": 200
+    },
+    {
+      "method": "PATCH",
+      "route": "/consultations/{consultation}",
+      "http_status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/consultations/{consultation}/turn",
+      "http_status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/consultations/{consultation}/recommendations/{recommendation}/generation",
+      "http_status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/consultations/{consultation}/recommendations/{recommendation}/select",
       "http_status": 200
     }
   ],
@@ -47,6 +542,384 @@
       "route": "/api/ai/features",
       "http_status": 401,
       "elapsed_seconds": 0.025
+    },
+    {
+      "method": "GET",
+      "route": "/api/auth/session",
+      "http_status": 200,
+      "elapsed_seconds": 0.016
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/features",
+      "http_status": 401,
+      "elapsed_seconds": 0.035
+    },
+    {
+      "method": "GET",
+      "route": "/api/auth/session",
+      "http_status": 200,
+      "elapsed_seconds": 0.867
+    },
+    {
+      "method": "GET",
+      "route": "/api/auth/session",
+      "http_status": 200,
+      "elapsed_seconds": 0.199
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/mode",
+      "http_status": 200,
+      "elapsed_seconds": 0.236
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/catalog",
+      "http_status": 200,
+      "elapsed_seconds": 0.208
+    },
+    {
+      "method": "POST",
+      "route": "/api/ai/consultations",
+      "http_status": 201,
+      "elapsed_seconds": 0.064
+    },
+    {
+      "method": "PUT",
+      "route": "/api/ai/consultations/photo",
+      "http_status": 200,
+      "elapsed_seconds": 0.114
+    },
+    {
+      "method": "PATCH",
+      "route": "/api/ai/consultations/state",
+      "http_status": 200,
+      "elapsed_seconds": 0.058
+    },
+    {
+      "method": "POST",
+      "route": "/api/ai/consultations/turn",
+      "http_status": 502,
+      "elapsed_seconds": 6.1
+    },
+    {
+      "method": "GET",
+      "route": "/api/auth/session",
+      "http_status": 200,
+      "elapsed_seconds": 1.011
+    },
+    {
+      "method": "GET",
+      "route": "/api/auth/session",
+      "http_status": 200,
+      "elapsed_seconds": 0.061
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/catalog",
+      "http_status": 200,
+      "elapsed_seconds": 0.231
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/mode",
+      "http_status": 200,
+      "elapsed_seconds": 0.234
+    },
+    {
+      "method": "POST",
+      "route": "/api/ai/consultations",
+      "http_status": 201,
+      "elapsed_seconds": 0.127
+    },
+    {
+      "method": "PUT",
+      "route": "/api/ai/consultations/photo",
+      "http_status": 200,
+      "elapsed_seconds": 0.075
+    },
+    {
+      "method": "PATCH",
+      "route": "/api/ai/consultations/state",
+      "http_status": 200,
+      "elapsed_seconds": 0.053
+    },
+    {
+      "method": "POST",
+      "route": "/api/ai/consultations/turn",
+      "http_status": 502,
+      "elapsed_seconds": 4.3
+    },
+    {
+      "method": "GET",
+      "route": "/api/auth/session",
+      "http_status": 200,
+      "elapsed_seconds": 0.373
+    },
+    {
+      "method": "GET",
+      "route": "/api/auth/session",
+      "http_status": 200,
+      "elapsed_seconds": 0.065
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/features",
+      "http_status": 200,
+      "elapsed_seconds": 0.096
+    },
+    {
+      "method": "GET",
+      "route": "/api/auth/session",
+      "http_status": 200,
+      "elapsed_seconds": 0.181
+    },
+    {
+      "method": "GET",
+      "route": "/api/auth/session",
+      "http_status": 200,
+      "elapsed_seconds": 0.596
+    },
+    {
+      "method": "GET",
+      "route": "/api/auth/session",
+      "http_status": 200,
+      "elapsed_seconds": 0.246
+    },
+    {
+      "method": "GET",
+      "route": "/api/auth/session",
+      "http_status": 200,
+      "elapsed_seconds": 0.07
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/catalog",
+      "http_status": 200,
+      "elapsed_seconds": 0.195
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/mode",
+      "http_status": 200,
+      "elapsed_seconds": 0.326
+    },
+    {
+      "method": "POST",
+      "route": "/api/ai/consultations",
+      "http_status": 201,
+      "elapsed_seconds": 0.082
+    },
+    {
+      "method": "PUT",
+      "route": "/api/ai/consultations/photo",
+      "http_status": 200,
+      "elapsed_seconds": 0.066
+    },
+    {
+      "method": "PATCH",
+      "route": "/api/ai/consultations/state",
+      "http_status": 200,
+      "elapsed_seconds": 0.067
+    },
+    {
+      "method": "POST",
+      "route": "/api/ai/consultations/turn",
+      "http_status": 502,
+      "elapsed_seconds": 4.9
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/consultations/state",
+      "http_status": 200,
+      "elapsed_seconds": 0.215
+    },
+    {
+      "method": "POST",
+      "route": "/api/ai/consultations/turn",
+      "http_status": 200,
+      "elapsed_seconds": 4.1
+    },
+    {
+      "method": "POST",
+      "route": "/api/ai/consultations/recommendations/{recommendation}/generation",
+      "http_status": 502,
+      "elapsed_seconds": 2.5
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/consultations/recommendations/{recommendation}/generation",
+      "http_status": 200,
+      "elapsed_seconds": 0.069
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/mode",
+      "http_status": 200,
+      "elapsed_seconds": 0.403
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/mode",
+      "http_status": 200,
+      "elapsed_seconds": 0.403
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/features/hairstyle/styles",
+      "http_status": 200,
+      "elapsed_seconds": 0.984
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/features/makeup/styles",
+      "http_status": 200,
+      "elapsed_seconds": 0.33
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/features/hairstyle/styles",
+      "http_status": 200,
+      "elapsed_seconds": 1.022
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/features/makeup/styles",
+      "http_status": 200,
+      "elapsed_seconds": 0.342
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/features/nails/styles",
+      "http_status": 200,
+      "elapsed_seconds": 0.073
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/features/nails/styles",
+      "http_status": 200,
+      "elapsed_seconds": 0.076
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/mode",
+      "http_status": 200,
+      "elapsed_seconds": 0.083
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/mode",
+      "http_status": 200,
+      "elapsed_seconds": 0.087
+    },
+    {
+      "method": "GET",
+      "route": "/api/auth/session",
+      "http_status": 200,
+      "elapsed_seconds": 0.431
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/features",
+      "http_status": 401,
+      "elapsed_seconds": 1.02
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/mode",
+      "http_status": 200,
+      "elapsed_seconds": 0.925
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/mode",
+      "http_status": 200,
+      "elapsed_seconds": 0.893
+    },
+    {
+      "method": "GET",
+      "route": "/api/auth/session",
+      "http_status": 200,
+      "elapsed_seconds": 0.272
+    },
+    {
+      "method": "GET",
+      "route": "/api/auth/session",
+      "http_status": 200,
+      "elapsed_seconds": 0.297
+    },
+    {
+      "method": "GET",
+      "route": "/api/auth/session",
+      "http_status": 200,
+      "elapsed_seconds": 0.183
+    },
+    {
+      "method": "GET",
+      "route": "/api/auth/session",
+      "http_status": 200,
+      "elapsed_seconds": 0.197
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/mode",
+      "http_status": 200,
+      "elapsed_seconds": 0.207
+    },
+    {
+      "method": "GET",
+      "route": "/api/ai/catalog",
+      "http_status": 200,
+      "elapsed_seconds": 0.186
+    },
+    {
+      "method": "POST",
+      "route": "/api/ai/consultations",
+      "http_status": 201,
+      "elapsed_seconds": 0.079
+    },
+    {
+      "method": "PUT",
+      "route": "/api/ai/consultations/photo",
+      "http_status": 200,
+      "elapsed_seconds": 0.115
+    },
+    {
+      "method": "PATCH",
+      "route": "/api/ai/consultations/state",
+      "http_status": 200,
+      "elapsed_seconds": 0.054
+    },
+    {
+      "method": "POST",
+      "route": "/api/ai/consultations/turn",
+      "http_status": 200,
+      "elapsed_seconds": 6.1
+    },
+    {
+      "method": "POST",
+      "route": "/api/ai/consultations/recommendations/{recommendation}/generation",
+      "http_status": 200,
+      "elapsed_seconds": 70.0
+    },
+    {
+      "method": "GET",
+      "route": "/api/auth/session",
+      "http_status": 200,
+      "elapsed_seconds": 0.199
+    },
+    {
+      "method": "POST",
+      "route": "/api/ai/consultations/recommendations/{recommendation}/select",
+      "http_status": 200,
+      "elapsed_seconds": 0.083
+    },
+    {
+      "method": "GET",
+      "route": "/api/auth/session",
+      "http_status": 200,
+      "elapsed_seconds": 0.144
     }
   ]
 }

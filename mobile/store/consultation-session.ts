@@ -62,7 +62,6 @@ export function createConsultationSession(client: ConsultationApi = api, now = D
           set({ handle: created.handle }); apply(created.state);
           apply(await client.consultationPhoto(created.handle, body));
           apply(await client.consultationPreferences(created.handle, preferences));
-          const first = await client.consultationTurn(created.handle); apply(first.state);
         } catch (error) { fail(error); set({ needsSync: Boolean(get().handle) }); }
         finally { set({ busy: false }); }
       },

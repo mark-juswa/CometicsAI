@@ -12,7 +12,7 @@ Mobile uses its existing credentialed SDK 57 fetch client and BeautyCore Client 
 | `/api/ai/consultations` | POST | Create with `primary_service`; adapter replaces raw state ID with signed handle |
 | `/api/ai/consultations/photo` | PUT | Upload `image` multipart, JPEG/PNG up to 8 MiB |
 | `/api/ai/consultations/state` | PATCH / GET | Structured preferences / bounded consultation state |
-| `/api/ai/consultations/turn` | POST | `{}` opening or `{message}` reply, at most 500 characters |
+| `/api/ai/consultations/turn` | POST | `{message}` user description/reply, at most 500 characters; the server also supports an empty opening request, which the mobile flow does not use |
 | `/api/ai/consultations/recommendations` | POST | Read existing validated recommendation set in Gemini mode |
 | `/api/ai/consultations/recommendations/{recommendation}/generation` | POST / GET | Existing dispatcher / saved status and result |
 | `/api/ai/consultations/recommendations/{recommendation}/select` | POST | Record completed selected look, no booking/payment |
@@ -25,7 +25,7 @@ The adapter alone maps handles to FastAPI consultation IDs. All upstream routes 
 
 Gemini receives structured text preferences and conversation messages, **not the uploaded photo**. The image is validated and temporarily held by the existing bounded FastAPI consultation store for later generation. The mobile gallery reference, direction, public session, opaque handle and results stay in memory; no new database/photo persistence is introduced.
 
-`store/consultation-session.ts` owns asynchronous lifecycle state separately from the existing local draft. Structured fields map to the existing occasion/vibe/avoids/notes and service specific preference enums. Opening and subsequent assistant turns are rendered as returned; the user answers the actual question. A failed or lost turn requires a state read before an explicit further turn. The existing provider configuration and 35 second backend Gemini deadline are unchanged; the mobile turn request is not cut off by the normal 12 second read deadline.
+`store/consultation-session.ts` owns asynchronous lifecycle state separately from the existing local draft. Structured fields map to the existing occasion/vibe/avoids/notes and service specific preference enums. Mobile creates the consultation, uploads the photo and saves structured preferences, then asks the user for a first text description before the first Gemini turn. This avoids the observed empty-turn rejection by the existing backend validator. Subsequent assistant questions are rendered as returned and answered naturally. An ambiguous/lost turn requires a state read before another turn; no turn is automatically repeated. The existing provider configuration and 35 second backend Gemini deadline are unchanged; the mobile turn request is not cut off by the normal 12 second read deadline.
 
 ## Generation safety
 

@@ -10,10 +10,15 @@ import { featureIds } from '../lib/api/contracts';
 import { useStudio } from '../store/studio';
 import { useConsultation } from '../store/consultation';
 import { isUnresolved, useGeneration } from '../store/generation';
+import { useAiOperation } from '../store/ai-operation';
+import { useConsultationSession } from '../store/consultation-session';
 
 export default function Settings() {
   const session = useSession(); const cache = useQueryClient();
   const job = useGeneration(state => state.job);
+  const owner = useAiOperation(state => state.owner);
+  const consultationBusy = useConsultationSession(state => state.busy);
+  const locked = Boolean(owner) || isUnresolved(job) || consultationBusy;
   const [busy, setBusy] = useState(false); const [error, setError] = useState('');
   const [catalogReady, setCatalogReady] = useState(false);
   async function check() {
@@ -25,7 +30,7 @@ export default function Settings() {
     finally { setBusy(false); }
   }
   async function logout() {
-    if (busy || isUnresolved(useGeneration.getState().job)) return;
+    if (busy || useAiOperation.getState().owner || useConsultationSession.getState().busy || isUnresolved(useGeneration.getState().job)) return;
     setBusy(true); setError('');
     try {
       await api.logout();
@@ -42,9 +47,9 @@ export default function Settings() {
     <Panel title="BeautyCore account">
       {session.isPending && <Loading label="Checking your session…" />}
       {session.data?.user ? <><Body>{session.data.user.name}</Body><Body muted>{session.data.user.email} · {session.data.user.role}</Body>
-        <Button label="Sign out" secondary disabled={busy || isUnresolved(job)} onPress={() => void logout()} /></> :
+        <Button label="Sign out" secondary disabled={busy || locked} onPress={() => void logout()} /></> :
         <><Body>Sign in to use your personal studios.</Body><Button label="Sign in" onPress={() => router.push('/login')} /></>}
-      {isUnresolved(job) && <Body muted>Finish or resolve the current generation before signing out.</Body>}
+      {locked && <Body muted>Finish or resolve the current AI request before signing out.</Body>}
     </Panel>
     <Panel title="Studio connection" detail="Check BeautyCore and your authenticated studio access.">
       {(busy || session.isFetching) && <Loading label="Checking connection…" />}
@@ -55,8 +60,8 @@ export default function Settings() {
       <Body muted>{apiBaseUrl || 'No application address configured.'}</Body>
     </Panel>
     <Panel title="Your photos, your choice">
-      <Body>Your photo is sent through BeautyCore only when you choose Generate. On Android, Save writes the generated image to a folder you choose; Share opens your device’s sharing sheet.</Body>
-      <Body muted>Consultation preferences remain local until recommendations are integrated.</Body>
+      <Body>Custom photos are uploaded when you choose Generate. Consultation uploads your photo when you begin the conversation, so it can be used for your recommended previews. On Android, Save writes the result to a folder you choose; Share opens your device’s sharing sheet.</Body>
+      <Body muted>The AI consultant receives text preferences and messages, not your photo. Photos and results are temporary, with no new device storage unless you choose Save or Share.</Body>
     </Panel>
   </Screen>;
 }

@@ -7,9 +7,11 @@ import { services } from '../constants/services';
 import { colors, compactType, layout, serif, spacing, type } from '../constants/theme';
 import { AuthGate } from '../components/auth-gate';
 import { useGeneration, isUnresolved } from '../store/generation';
+import { useConsultationSession } from '../store/consultation-session';
 
 export default function Home() {
   const job = useGeneration(state => state.job);
+  const consultation = useConsultationSession(state => state.handle);
   return <AuthGate><Screen compact title="A look that" emphasis="feels like you." description="ANDREA’S AESTHETIC & WELLNESS CLINIC">
     {job && <Button label={isUnresolved(job) ? 'View current generation' : 'View latest generation'} secondary onPress={() => router.push('/generating')} />}
     <LinearGradient colors={[colors.surface, colors.card]} style={styles.consultation}>
@@ -17,7 +19,7 @@ export default function Home() {
       <Text accessibilityRole="header" style={styles.title}>AI Beauty Consultation</Text>
       <Body>A little guidance for your next look. Choose your service, share your direction, and make it personal.</Body>
       <Text style={styles.journey}>Service   →   Direction   →   Your Looks</Text>
-      <Button label="Start Consultation ✦" onPress={() => router.push('/consultation')} />
+      <Button label={consultation ? 'Continue Consultation ✦' : 'Start Consultation ✦'} onPress={() => router.push('/consultation')} />
     </LinearGradient>
     <View style={styles.custom}><Title>Custom Services</Title><Body muted>Have a look in mind? Head straight to your studio.</Body>
       <ServiceCards onSelect={id => router.push(services[id].route)} />

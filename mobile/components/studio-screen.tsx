@@ -8,6 +8,7 @@ import { services } from '../constants/services';
 import { useStudio, type StudioStep } from '../store/studio';
 import { useAuth } from '../store/auth';
 import { useGeneration, isUnresolved } from '../store/generation';
+import { useAiOperation } from '../store/ai-operation';
 import { AuthGate } from './auth-gate';
 import { Panel, Body, Button, ErrorMessage, Loading } from './ui';
 import { PhotoPicker } from './photo-picker';
@@ -21,13 +22,15 @@ function StudioContent({ feature }: { feature: FeatureId }) {
   const draft = useStudio(state => state.drafts[feature]);
   const { setPhoto, selectStyle, goToStep } = useStudio();
   const job = useGeneration(state => state.job);
-  const blocked = isUnresolved(job);
+  const owner = useAiOperation(state => state.owner);
+  const blocked = Boolean(owner) || isUnresolved(job);
+  const currentGeneration = useCallback(() => router.push(owner === 'consultation' ? '/consultation' : '/generating'), [owner]);
   const selected = catalog.data?.find(style => style.id === draft.styleId);
   const changePhoto = useCallback((photo: LocalPhoto | null) => setPhoto(feature, photo), [feature, setPhoto]);
   const back = useCallback(() => {
-    if (blocked) { router.push('/generating'); return; }
+    if (blocked) { currentGeneration(); return; }
     if (draft.step > 0) goToStep(feature, (draft.step - 1) as StudioStep); else leaveFlow();
-  }, [blocked, draft.step, feature, goToStep]);
+  }, [blocked, currentGeneration, draft.step, feature, goToStep]);
   function generate() {
     const user = useAuth.getState().user;
     if (!draft.photo || !selected || !user || blocked || catalog.isError) return;
@@ -39,7 +42,7 @@ function StudioContent({ feature }: { feature: FeatureId }) {
   const details = [presentation.photoDetail, 'Choose one look from your studio collection.', 'Your photo. Your chosen direction.'];
   return <FlowScreen steps={['Photo', 'Style', 'Review']} step={draft.step} onBack={back}
     title={titles[draft.step]} detail={details[draft.step]} actions={<>
-      {blocked ? <Button label="View current generation" onPress={() => router.push('/generating')} /> : <>
+      {blocked ? <Button label="View current generation" onPress={currentGeneration} /> : <>
         {draft.step === 0 && <Button label="Continue to Style →" disabled={!draft.photo} onPress={() => goToStep(feature, 1)} />}
         {draft.step === 1 && <><Body muted>{selected ? `Selected: ${selected.name}` : 'Select a style to continue.'}</Body>
           <Button label="Review your look →" disabled={!selected || catalog.isError} onPress={() => goToStep(feature, 2)} /></>}

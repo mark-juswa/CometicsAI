@@ -1,2 +1,2 @@
-// The existing three-stage experience is preserved; no provider or generation runs in MOBILE-01.
+// The established stages are preserved while readiness comes from the backend.
 export const consultationStages = ['Service', 'Direction', 'Your Looks'];

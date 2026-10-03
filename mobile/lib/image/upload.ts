@@ -2,7 +2,7 @@ import { Platform } from 'react-native';
 import { File } from 'expo-file-system';
 import { validatePhoto, type LocalPhoto } from './validation';
 
-export async function generationUpload(photo: LocalPhoto, styleId: string): Promise<FormData> {
+export async function photoUpload(photo: LocalPhoto): Promise<FormData> {
   validatePhoto(photo);
   const body = new FormData();
   if (Platform.OS === 'web') {
@@ -16,6 +16,10 @@ export async function generationUpload(photo: LocalPhoto, styleId: string): Prom
     if (!file.exists) throw new Error('Your selected photo is no longer available. Choose it again.');
     body.append('image', file);
   }
+  return body;
+}
+export async function generationUpload(photo: LocalPhoto, styleId: string): Promise<FormData> {
+  const body = await photoUpload(photo);
   body.append('style_id', styleId);
   return body;
 }

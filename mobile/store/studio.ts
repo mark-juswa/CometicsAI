@@ -1,12 +1,13 @@
 import { create } from 'zustand';
 import type { FeatureId } from '../lib/api/contracts';
 import type { LocalPhoto } from '../lib/image/validation';
+import { useAiOperation } from './ai-operation';
 import { isUnresolved, useGeneration } from './generation';
 
 export type StudioStep = 0 | 1 | 2;
 type Draft = { photo: LocalPhoto | null; styleId: string | null; step: StudioStep };
 const empty = (): Draft => ({ photo: null, styleId: null, step: 0 });
-const locked = () => isUnresolved(useGeneration.getState().job);
+const locked = () => Boolean(useAiOperation.getState().owner) || isUnresolved(useGeneration.getState().job);
 type StudioStore = {
   drafts: Record<FeatureId, Draft>;
   setPhoto: (feature: FeatureId, photo: LocalPhoto | null) => void;

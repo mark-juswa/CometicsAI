@@ -1,0 +1,21 @@
+{
+  "checks": [
+    "real-contract-fixture-turns-readiness-exact-three",
+    "serial-generation-real-shaped-image-original-result-select",
+    "custom-photo-retained-style-stage",
+    "makeup-nails-contract-only-no-generation",
+    "failed-manual-retry-lost-response-get-recovery-no-replay",
+    "gemini-unavailable-state-read-expired-handle-controlled"
+  ],
+  "widths": [
+    320,
+    360,
+    390,
+    430
+  ],
+  "intercepted_generation_posts": 3,
+  "status_reads": 1,
+  "select_posts": 1,
+  "real_gpu_requests": 0,
+  "console_errors": []
+}

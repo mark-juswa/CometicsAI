@@ -21,6 +21,7 @@ export default function RootLayout() {
       <Stack.Screen name="makeup" options={{ title: 'Makeup' }} />
       <Stack.Screen name="nails" options={{ title: 'Nails' }} />
       <Stack.Screen name="consultation" options={{ title: 'Consultation' }} />
+      <Stack.Screen name="consultation-result" options={{ title: 'Your recommended look' }} />
       <Stack.Screen name="connection" options={{ title: 'API connection' }} />
       <Stack.Screen name="settings" options={{ title: 'Settings', headerRight: () => null }} />
       <Stack.Screen name="result" options={{ title: 'Your look' }} />

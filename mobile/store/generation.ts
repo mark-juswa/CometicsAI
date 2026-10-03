@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { api, safeGenerationRetry } from '../lib/api/client';
 import type { FeatureId, GenerationResult, Style } from '../lib/api/contracts';
 import type { LocalPhoto } from '../lib/image/validation';
+import { createOperationStore, useAiOperation } from './ai-operation';
 
 export type GenerationJob = {
   id: number; feature: FeatureId; style: Style; original: LocalPhoto; userId: string;
@@ -20,12 +21,12 @@ export function isUnresolved(job: GenerationJob | null) {
 
 // The operation lives outside the screen, so ordinary navigation/rendering cannot
 // cancel it or trigger another request. All features share the duplicate guard.
-export function createGenerationStore(generate: typeof api.generate = api.generate, now = Date.now) {
+export function createGenerationStore(generate: typeof api.generate = api.generate, now = Date.now, operation = createOperationStore()) {
   let sequence = 0;
   return create<GenerationStore>((set, get) => ({
     job: null,
     run: async (feature, photo, style, userId, upload) => {
-      if (isUnresolved(get().job)) return;
+      if (isUnresolved(get().job) || !operation.getState().claim('custom')) return;
       const id = ++sequence;
       set({ job: { id, feature, style, original: photo, userId, phase: 'preparing', startedAt: now() } });
       let dispatched = false;
@@ -39,10 +40,13 @@ export function createGenerationStore(generate: typeof api.generate = api.genera
         set(state => ({ job: state.job && { ...state.job,
           phase: !dispatched || safeGenerationRetry(error) ? 'failed' : 'uncertain', endedAt: now(),
           error: error instanceof Error ? error.message : 'Generation could not be completed.' } }));
+      } finally {
+        if (!isUnresolved(get().job)) operation.getState().release('custom');
       }
     },
-    acknowledgeEnded: () => set(({ job }) => ({ job: job?.phase === 'uncertain' ? { ...job, phase: 'failed' } : job })),
+    acknowledgeEnded: () => { set(({ job }) => ({ job: job?.phase === 'uncertain' ? { ...job, phase: 'failed' } : job }));
+      if (!isUnresolved(get().job)) operation.getState().release('custom'); },
     clear: () => { if (!isUnresolved(get().job)) set({ job: null }); },
   }));
 }
-export const useGeneration = createGenerationStore();
+export const useGeneration = createGenerationStore(api.generate, Date.now, useAiOperation);

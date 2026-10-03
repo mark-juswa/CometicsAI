@@ -1,6 +1,6 @@
 # HAIR CAPSTONE mobile
 
-MOBILE-02B retains the accepted MOBILE-01 foundation and MOBILE-02A product UI. It adds existing BeautyCore Client authentication, real feature generation and native result actions. Real Android acceptance is recorded separately from local tests in [MOBILE-02B evidence](../docs/experiments/mobile-02b.md). Earlier [MOBILE-01 acceptance](../docs/experiments/mobile-native-android.md) and [MOBILE-02A screenshots](../docs/experiments/mobile-02a.md) remain historical evidence.
+MOBILE-02C connects the established mobile Consultation experience to the existing authenticated BeautyCore Consultation system. It retains MOBILE-01, MOBILE-02A design and MOBILE-02B real Custom Studios/result actions. Current contracts and acceptance are recorded in [Consultation integration](../docs/guides/mobile-02c-integration.md) and [MOBILE-02C evidence](../docs/experiments/mobile-02c.md). Earlier [MOBILE-02B evidence](../docs/experiments/mobile-02b.md), [MOBILE-01 acceptance](../docs/experiments/mobile-native-android.md) and [MOBILE-02A screenshots](../docs/experiments/mobile-02a.md) remain historical evidence. Standalone Android Makeup visual acceptance and standalone Android Nails generation acceptance remain explicitly deferred.
 
 ## Normal Windows startup
 
@@ -31,15 +31,15 @@ Mobile → BeautyCore application authentication/adapter → private FastAPI →
 
 ## Product flow and safety
 
-Consultation leads Home. Settings owns account/connection checks. Hair, Makeup and Nails share Photo → Style → Review → Generating → Result. Photos, selected styles and Consultation direction remain temporary app memory; the OS picker may create local cache files. Generation sends a photo only on the explicit action. Logout clears local drafts/results and verifies the session is gone.
+Consultation leads Home. Settings owns account/connection checks. Hair, Makeup and Nails share Photo → Style → Review → Generating → Result. Photos, selected styles and Consultation direction remain temporary app memory; the OS picker may create local cache files. Custom uploads a photo on Generate. Consultation uploads it on Begin AI conversation for later recommended generation; Gemini receives text preferences/messages, not the photo. Logout clears local drafts/results and verifies the session is gone.
 
-One global operation blocks duplicate Generate and draft changes across services. It survives ordinary rendering/navigation; keep the app open while processing. Elapsed time is truthful, with no percentage or short generation deadline. App termination/reloading is not a durable job/status system. Never reload or retry while server work might still run. Reads/auth use a 12 second deadline. No generation request automatically retries.
+One global operation blocks duplicate Generate and draft changes across Custom and Consultation. It survives ordinary rendering/navigation; keep the app open while processing. Elapsed time is truthful, with no percentage or short generation deadline. App termination/reloading is not a durable job/status system. Never reload or retry while server work might still run. Ordinary reads/auth use a 12 second deadline; Gemini turns use the existing backend deadline. No generation request automatically retries.
 
 Definitive validation/auth rejection permits manual correction/retry. Response loss, unreadable output, 409 or server failures retain an uncertainty lock. The existing manual contract has no status endpoint. An operator must confirm processing ended before you explicitly release that lock and retry.
 
 Result comparison uses the real inline result and local original. Try Another Style retains the photo; Start Over clears that studio. Android Save opens the system folder chooser and writes only to the granted folder, with cancellation/failure feedback and no broad gallery permission. Share opens the native sharing sheet using an app-cache image removed when the action finishes. iOS Save uses add-only photo permission with denial/settings feedback; iOS runtime acceptance is not claimed. Expo Go's supported legacy media module avoids an unavailable ExpoMediaLibraryNext import.
 
-Consultation remains the local Service → Direction → Your Looks brief. Real conversation/recommendations are MOBILE-02C, not part of this phase. No camera capture or model changes.
+Consultation preserves Service → Direction → Your Looks. The existing backend decides when real text conversation is ready and validates exactly three recommendations. Mobile keeps an opaque signed handle only in memory, with no raw upstream ID or private API address. Each look requires an explicit Generate. Response loss triggers status GET, never an automatic new POST; a confirmed failure permits manual retry. Original/Result and Select use the returned result and existing selection endpoint. Custom retains the local photo and starts at style selection. No booking, payment, camera or model changes.
 
 ## Validation
 

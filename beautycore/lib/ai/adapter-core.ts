@@ -6,6 +6,8 @@ export type AiDependencies = {
   upstreamFetch: typeof fetch;
   baseUrl: string;
   handleSecret: string;
+  remoteBackend?: boolean;
+  backendKey?: string;
   now?: () => number;
 };
 
@@ -40,6 +42,9 @@ function operation(method: string, parts: string[]): Operation | null {
     if (method === 'POST' && parts.length === 3 && parts[2] === 'generate')
       return { path: '/features/' + feature + '/generate', body: 'manual', consultation: false };
   }
+  if (method === 'GET' && parts[0] === 'jobs' && isConsultationId(parts[1]) &&
+      (parts.length === 2 || parts.length === 3 && parts[2] === 'result'))
+    return { path: '/' + parts.join('/'), body: 'none', consultation: false };
   if (parts[0] !== 'consultations') return null;
   if (parts.length === 2 && parts[1] === 'state' && method === 'GET')
     return { path: '/consultations/{id}', body: 'none', consultation: true };
@@ -61,11 +66,13 @@ function operation(method: string, parts: string[]): Operation | null {
   return null;
 }
 
-function validBaseUrl(value: string): URL | null {
+function validBaseUrl(value: string, remote = false): URL | null {
   try {
     const url = new URL(value);
-    if (url.protocol !== 'http:' || !['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname) ||
-        url.username || url.password || url.search || url.hash || url.pathname !== '/') return null;
+    const destination = remote
+      ? url.protocol === 'https:' && /^[a-z0-9-]+\.trycloudflare\.com$/.test(url.hostname) && !url.port
+      : url.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname);
+    if (!destination || url.username || url.password || url.search || url.hash || url.pathname !== '/') return null;
     return url;
   } catch {
     return null;
@@ -122,8 +129,8 @@ export async function handleAiRequest(request: Request, parts: string[], deps: A
   if (request.method !== 'GET' && request.headers.get('origin') !== new URL(request.url).origin)
     return json(403, 'Same-origin request required.');
 
-  const base = validBaseUrl(deps.baseUrl);
-  if (!base || deps.handleSecret.length < 32) return json(503, 'AI service is not configured.');
+  const base = validBaseUrl(deps.baseUrl, deps.remoteBackend);
+  if (!base || deps.handleSecret.length < 32 || deps.remoteBackend && (deps.backendKey?.length ?? 0) < 32) return json(503, 'AI service is not configured.');
 
   let upstreamPath = op.path;
   if (op.consultation) {
@@ -139,6 +146,10 @@ export async function handleAiRequest(request: Request, parts: string[], deps: A
   if (body instanceof Response) return body;
 
   const headers = new Headers({ Accept: 'application/json' });
+  if (deps.remoteBackend) {
+    headers.set('x-ai-backend-key', deps.backendKey!);
+    headers.set('x-ai-user-id', user.id);
+  }
   if (op.body === 'json') headers.set('Content-Type', 'application/json');
   let upstream: Response;
   try {
@@ -148,9 +159,10 @@ export async function handleAiRequest(request: Request, parts: string[], deps: A
       body,
       cache: 'no-store',
       redirect: 'error',
+      ...(deps.remoteBackend ? { signal: AbortSignal.timeout(90_000) } : {}),
     });
   } catch (error) {
-    if (error instanceof Error && error.name === 'AbortError') return json(504, 'AI service timed out. Check generation status before retrying.');
+    if (error instanceof Error && ['AbortError', 'TimeoutError'].includes(error.name)) return json(504, 'AI service timed out. Check generation status before retrying.');
     return json(502, 'AI service is unavailable. Check generation status before retrying.');
   }
   if (!upstream.ok) {

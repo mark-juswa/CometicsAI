@@ -1,0 +1,28 @@
+# Demo application only. AI and the Python API run in the private Kaggle notebook.
+services:
+  - type: web
+    name: beautycore-demo
+    runtime: node
+    plan: free
+    rootDir: beautycore
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm run start -- --hostname 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    autoDeployTrigger: 'off'
+    envVars:
+      - key: NODE_VERSION
+        value: 24.7.0
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: AI_CONSULTATION_HANDLE_SECRET
+        generateValue: true
+      - key: AI_BACKEND_MODE
+        value: kaggle
+      - key: AI_FASTAPI_URL
+        sync: false
+      - key: AI_BACKEND_API_KEY
+        sync: false

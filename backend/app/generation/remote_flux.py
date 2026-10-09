@@ -4,6 +4,8 @@ import base64
 from io import BytesIO
 import os
 
+from app.generation.remote_destination import valid_gpu_url
+
 import httpx
 from PIL import Image, ImageOps, UnidentifiedImageError
 
@@ -25,7 +27,7 @@ class RemoteFluxEngine:
         self.url = url.rstrip("/")
         self.api_key = api_key
         self.timeout_seconds = timeout_seconds
-        if not self.url.startswith("https://") or not self.api_key:
+        if not valid_gpu_url(self.url) or not self.api_key:
             raise RuntimeError("Remote FLUX needs an HTTPS FLUX_REMOTE_URL and FLUX_REMOTE_API_KEY.")
 
     async def generate(self, image: Image.Image, style: Style) -> GeneratedImage:

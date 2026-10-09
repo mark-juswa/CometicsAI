@@ -1,0 +1,3 @@
+# Kaggle CPU API only: OpenCV 4.12+ requires NumPy 2; MediaPipe env stays on 1.26.4.
+# Do not apply this constraint to the isolated segmentation or GPU environments.
+opencv-contrib-python==4.11.0.86

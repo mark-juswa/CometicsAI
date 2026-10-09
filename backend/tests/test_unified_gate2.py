@@ -319,6 +319,9 @@ def test_packager_refuses_unreviewed_or_overwritten_sources(tmp_path,monkeypatch
 
 
 def test_bootstrap_failure_still_produces_downloadable_evidence(tmp_path,monkeypatch):
+    # Use the real temporary filesystem on Windows as well as Linux.
+    storage = bootstrap.gate.storage
+    monkeypatch.setattr(bootstrap.gate, 'storage', lambda _: storage(tmp_path))
     monkeypatch.setattr(bootstrap,'verify_experiment',lambda:(_ for _ in ()).throw(ValueError('controlled preflight')))
     output=tmp_path/'output'
     result=bootstrap.bootstrap(output)

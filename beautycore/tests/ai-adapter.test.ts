@@ -238,3 +238,39 @@ test('invalid local configuration cannot reach arbitrary host or disclose secret
   }
   assert.equal(seen.length, 0);
 });
+
+
+test('Kaggle mode requires a strong key and exact HTTPS tunnel root; browser headers never select owner', async () => {
+  const config = deps();
+  config.remoteBackend = true;
+  config.baseUrl = 'https://owned-demo.trycloudflare.com/';
+  config.backendKey = SECRET;
+  const incoming = request('GET', 'features');
+  incoming.headers.set('x-ai-user-id', 'attacker');
+  incoming.headers.set('x-ai-backend-key', 'attacker');
+  assert.equal((await handleAiRequest(incoming, ['features'], config)).status, 200);
+  assert.equal(seen[0].headers.get('x-ai-user-id'), USER);
+  assert.equal(seen[0].headers.get('x-ai-backend-key'), SECRET);
+  assert.equal(seen[0].headers.get('cookie'), null);
+  for (const base of ['http://owned-demo.trycloudflare.com/', 'https://evil.example/',
+    'https://owned-demo.trycloudflare.com/path', 'https://owned-demo.trycloudflare.com:9999/']) {
+    config.baseUrl = base;
+    assert.equal((await handleAiRequest(request('GET', 'features'), ['features'], config)).status, 503);
+  }
+  config.baseUrl = 'https://owned-demo.trycloudflare.com/';
+  config.backendKey = 'short';
+  assert.equal((await handleAiRequest(request('GET', 'features'), ['features'], config)).status, 503);
+});
+
+test('jobs and result reads retain client authentication and accept asynchronous tickets', async () => {
+  const config = deps(undefined, () => Response.json({ job_id: ID, status: 'generating', result_available: false }, { status: 202 }));
+  const form = image('image/png'); form.append('style_id', 'crew_cut');
+  assert.equal((await handleAiRequest(request('POST', 'features/hairstyle/generate', form),
+    ['features', 'hairstyle', 'generate'], config)).status, 202);
+  for (const path of [['jobs', ID], ['jobs', ID, 'result']]) {
+    assert.equal((await handleAiRequest(request('GET', path.join('/')), path, config)).status, 202);
+    assert.equal(seen.at(-1)!.url, 'http://127.0.0.1:8000/' + path.join('/'));
+    assert.equal((await handleAiRequest(request('GET', path.join('/')), path, deps(null))).status, 401);
+  }
+  assert.equal((await handleAiRequest(request('GET', 'jobs/other'), ['jobs', 'other'], config)).status, 404);
+});

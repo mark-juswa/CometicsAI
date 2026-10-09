@@ -5,6 +5,7 @@ from urllib.parse import urlsplit
 
 import httpx
 
+from app.generation.remote_destination import valid_gpu_url
 from app.nails.contract import MODEL_REVISION
 from app.nails.inference_options import configured_steps
 
@@ -16,7 +17,7 @@ def configuration(env):
     if not url or len(key) < 24:
         raise ValueError('Set both unified URL and API key (at least 24 characters), then restart FastAPI.')
     parts = urlsplit(url)
-    if (parts.scheme != 'https' or not parts.hostname or parts.username or parts.password
+    if (not valid_gpu_url(url) or not parts.hostname or parts.username or parts.password
             or parts.query or parts.fragment or parts.path.rstrip('/')):
         raise ValueError('Unified URL must be an HTTPS server root without credentials, query or feature path.')
     modes = {'GENERATION_ENGINE': 'remote_flux', 'MAKEUP_GENERATION_ENGINE': 'remote_makeup',

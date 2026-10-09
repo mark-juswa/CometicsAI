@@ -103,6 +103,34 @@ async function request(path: string, init: RequestInit = {}, handle?: string): P
   try { return await response.json(); }
   catch { throw new AiClientError('The AI response could not be read.', 502, true); }
 }
+/** Both synchronous local responses and asynchronous hosted responses use the same UI contract. */
+export async function resolveGenerationJob(value: unknown, read: (path: string) => Promise<unknown>,
+                                           pollMs = 2000): Promise<unknown> {
+  if (!object(value) || !('job_id' in value)) return value;
+  if (typeof value.job_id !== 'string' ||
+      !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value.job_id))
+    throw new AiClientError('The generation ticket is invalid.', 502, true);
+  const path = 'jobs/' + value.job_id;
+  const deadline = Date.now() + 30 * 60 * 1000;
+  let status: unknown = value;
+  const readAccepted = async (url: string): Promise<unknown> => {
+    try { return await read(url); }
+    catch (error) {
+      if (error instanceof AiClientError) throw new AiClientError(error.message, error.status, true);
+      throw error;
+    }
+  };
+  while (true) {
+    if (!object(status) || status.job_id !== value.job_id ||
+        !['generating', 'completed', 'failed'].includes(String(status.status)))
+      throw new AiClientError('The generation status is invalid. No new request was sent.', 502, true);
+    if (status.status === 'completed' || status.status === 'failed') return readAccepted(path + '/result');
+    if (Date.now() >= deadline)
+      throw new AiClientError('Generation is still unresolved. Check status before retrying.', 504, true);
+    await new Promise(resolve => setTimeout(resolve, pollMs));
+    status = await readAccepted(path);
+  }
+}
 function jsonBody(value: unknown): RequestInit {
   return { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value) };
 }
@@ -140,8 +168,9 @@ export async function getRecommendations(handle: string): Promise<Recommendation
   return recommendations(await request('consultations/recommendations', { method: 'POST' }, handle));
 }
 export async function generateRecommendation(handle: string, recommendationId: string): Promise<GenerationDetail> {
-  return detail(await request('consultations/recommendations/' + encodeURIComponent(recommendationId) + '/generation',
-    { method: 'POST' }, handle));
+  const value = await request('consultations/recommendations/' + encodeURIComponent(recommendationId) + '/generation',
+    { method: 'POST' }, handle);
+  return detail(await resolveGenerationJob(value, path => request(path)));
 }
 export async function getGenerationStatus(handle: string, recommendationId: string): Promise<GenerationDetail> {
   return detail(await request('consultations/recommendations/' + encodeURIComponent(recommendationId) + '/generation',
@@ -160,7 +189,8 @@ export async function getStyles(service: FeatureId): Promise<AiStyle[]> {
 }
 export async function generateCustom(service: FeatureId, file: File, styleId: string): Promise<GeneratedResult> {
   const body = new FormData(); body.append('image', file); body.append('style_id', styleId);
-  const value = await request('features/' + service + '/generate', { method: 'POST', body });
+  const initial = await request('features/' + service + '/generate', { method: 'POST', body });
+  const value = await resolveGenerationJob(initial, path => request(path));
   if (!object(value) || !object(value.image) || typeof value.image.data_url !== 'string' ||
       !/^data:image\/(png|jpeg);base64,/.test(value.image.data_url))
     throw new AiClientError('The generated image response is invalid.', 502);

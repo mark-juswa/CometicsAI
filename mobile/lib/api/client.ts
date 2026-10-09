@@ -4,17 +4,17 @@ import { type Preferences, type Catalog, type CreatedConsultation, type Consulta
   type RecommendationSet, isConsultationState, isConsultationTurn, isGenerationDetail, isRecommendationSet, consultationView } from './consultation-contracts';
 
 export class ApiError extends Error {
-  constructor(message: string, public readonly code: 'configuration' | 'network' | 'timeout' | 'http' | 'invalid_response', public readonly status?: number) {
+  constructor(message: string, public readonly code: 'configuration' | 'network' | 'timeout' | 'http' | 'invalid_response', public readonly status?: number, public readonly generationAccepted = false) {
     super(message); this.name = 'ApiError';
   }
 }
 // Only pre-dispatch/auth/validation HTTP failures can safely unlock manual retry.
 export function safeGenerationRetry(error: unknown) {
-  return error instanceof ApiError && (error.code === 'configuration' || error.code === 'http' &&
+  return error instanceof ApiError && !error.generationAccepted && (error.code === 'configuration' || error.code === 'http' &&
     [400, 401, 403, 404, 413, 415, 422, 429].includes(error.status ?? 0));
 }
 
-export function createApiClient(base: string | undefined, fetcher: typeof fetch = fetch, timeoutMs = 12_000) {
+export function createApiClient(base: string | undefined, fetcher: typeof fetch = fetch, timeoutMs = 12_000, pollMs = 2000) {
   async function request<T>(path: string, validate: (body: unknown) => body is T, options: {
     method?: 'GET' | 'POST' | 'PUT' | 'PATCH'; body?: BodyInit; json?: boolean; signal?: AbortSignal; generation?: boolean; handle?: string; longRunning?: boolean;
   } = {}): Promise<T> {
@@ -70,6 +70,31 @@ export function createApiClient(base: string | undefined, fetcher: typeof fetch 
       if (deadline) clearTimeout(deadline); options.signal?.removeEventListener('abort', abort);
     }
   }
+  type JobTicket = { job_id: string; status: 'generating' | 'completed' | 'failed'; result_available: boolean };
+  const ticket = (v: unknown): v is JobTicket => record(v) && typeof v.job_id === 'string' &&
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(v.job_id) &&
+    ['generating', 'completed', 'failed'].includes(String(v.status)) && typeof v.result_available === 'boolean';
+  async function generateAndWait<T>(path: string, validate: (v: unknown) => v is T,
+                                   options: { body?: BodyInit; handle?: string }): Promise<T> {
+    const initial = await request<T | JobTicket>(path, (v): v is T | JobTicket => validate(v) || ticket(v),
+      { ...options, method: 'POST', generation: true });
+    if (!ticket(initial)) return initial;
+    const jobPath = '/api/ai/jobs/' + initial.job_id;
+    const deadline = Date.now() + 30 * 60 * 1000;
+    let current = initial;
+    try {
+      while (current.status === 'generating') {
+        if (Date.now() >= deadline) throw new ApiError('Generation is unresolved. Check status before retrying.', 'timeout');
+        await new Promise(resolve => setTimeout(resolve, pollMs));
+        current = await request<JobTicket>(jobPath, ticket, { longRunning: true });
+        if (current.job_id !== initial.job_id) throw new ApiError('Generation status did not match.', 'invalid_response');
+      }
+      return await request<T>(jobPath + '/result', validate, { longRunning: true, generation: true });
+    } catch (error) {
+      if (error instanceof ApiError) throw new ApiError(error.message, error.code, error.status, true);
+      throw error;
+    }
+  }
   return {
     login: (email: string, password: string) => request<Session>('/api/auth/login', isSession, { method: 'POST', json: true, body: JSON.stringify({ email, password }) }),
     session: (signal?: AbortSignal) => request<Session>('/api/auth/session', isSession, { signal }),
@@ -77,7 +102,7 @@ export function createApiClient(base: string | undefined, fetcher: typeof fetch 
     features: (signal?: AbortSignal) => request<Feature[]>('/api/ai/features', (body): body is Feature[] => Array.isArray(body) && body.every(isFeature), { signal }),
     styles: (feature: FeatureId, signal?: AbortSignal) => request<Style[]>(`/api/ai/features/${feature}/styles`, (body): body is Style[] => Array.isArray(body) && body.every(isStyle), { signal }),
     generate: async (feature: FeatureId, styleId: string, image: FormData) => {
-      const result = await request<GenerationResult>(`/api/ai/features/${feature}/generate`, isGenerationResult, { method: 'POST', body: image, generation: true });
+      const result = await generateAndWait<GenerationResult>(`/api/ai/features/${feature}/generate`, isGenerationResult, { body: image });
       if (result.style.id !== styleId) throw new ApiError('The service returned a different style. No automatic retry was made.', 'invalid_response');
       return result;
     },
@@ -104,7 +129,7 @@ export function createApiClient(base: string | undefined, fetcher: typeof fetch 
       return { state: consultationView(v.state), status: v.status, recommendations: v.recommendations };
     },
     consultationRecommendations: (handle: string) => request<RecommendationSet>('/api/ai/consultations/recommendations', isRecommendationSet, { handle, method: 'POST' }),
-    consultationGenerate: (handle: string, recommendationId: string) => request<GenerationDetail>(`/api/ai/consultations/recommendations/${encodeURIComponent(recommendationId)}/generation`, isGenerationDetail, { handle, method: 'POST', generation: true }),
+    consultationGenerate: (handle: string, recommendationId: string) => generateAndWait<GenerationDetail>(`/api/ai/consultations/recommendations/${encodeURIComponent(recommendationId)}/generation`, isGenerationDetail, { handle }),
     consultationGeneration: (handle: string, recommendationId: string) => request<GenerationDetail>(`/api/ai/consultations/recommendations/${encodeURIComponent(recommendationId)}/generation`, isGenerationDetail, { handle }),
     consultationSelect: async (handle: string, recommendationId: string) => consultationView(await request<ConsultationState>(`/api/ai/consultations/recommendations/${encodeURIComponent(recommendationId)}/select`, isConsultationState, { handle, method: 'POST' })),
   };

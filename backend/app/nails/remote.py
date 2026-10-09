@@ -4,6 +4,8 @@ import base64
 import binascii
 from io import BytesIO
 
+from app.generation.remote_destination import valid_gpu_url
+
 import httpx
 from PIL import Image, UnidentifiedImageError
 
@@ -24,7 +26,7 @@ class RemoteLocalizedNails:
         self.url, self.api_key, self.timeout_seconds = url.rstrip("/"), api_key, timeout_seconds
         self.inference_steps = validate_steps(inference_steps)
         self._steps_verified = self.inference_steps == STEPS
-        if not self.url.startswith("https://") or len(api_key) < 24:
+        if not valid_gpu_url(self.url) or len(api_key) < 24:
             raise RuntimeError("Nails GPU needs an HTTPS URL and a shared key of at least 24 characters")
 
     async def _verify_step_support(self, client):

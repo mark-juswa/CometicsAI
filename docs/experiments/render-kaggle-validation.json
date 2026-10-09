@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-09",
+  "status": "LOCAL_VERIFIED_ONLINE_NEEDS_VERIFICATION",
+  "backend_tests": {
+    "passed": 421,
+    "failed": 0,
+    "note": "Isolated CPU test env; existing Python311 site-packages used only for Torch/safetensors training test. Windows bootstrap test now measures pytest temporary disk."
+  },
+  "beautycore_tests": {
+    "passed": 31,
+    "failed": 0
+  },
+  "mobile_tests": {
+    "passed": 40,
+    "failed": 0
+  },
+  "typecheck": {
+    "beautycore": "passed",
+    "mobile": "passed"
+  },
+  "production_build": "passed after final recovery guard",
+  "lint": {
+    "mobile": "passed",
+    "beautycore": "Official Next config passed with three existing unused-id warnings. Existing repository config cannot load missing eslint-plugin-react-refresh."
+  },
+  "local_production_http": {
+    "HealthStatus": 200,
+    "AnonymousAiStatus": 401,
+    "WorkingSetMiB": 94.59,
+    "PeakWorkingSetMiB": 94.59
+  },
+  "bundle": "docs/experiments/render-kaggle-bundle.json",
+  "rollback": "Old notebooks/bundles/weights, root launchers and private env files not modified.",
+  "pending": [
+    "Fresh Kaggle Linux setup and combined host memory",
+    "Real online Hair/Makeup/model Nails/renderer Nails/Gemini rehearsal",
+    "Render free runtime memory during uploads/result delivery",
+    "Manual native HTTPS cookie/mobile acceptance",
+    "Notebook restart/tunnel URL recovery"
+  ],
+  "cloud_resources": "New unrun Kaggle notebook draft; Render configuration draft only; service not deployed yet"
+}

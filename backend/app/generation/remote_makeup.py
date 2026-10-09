@@ -4,6 +4,8 @@ import base64
 from io import BytesIO
 import os
 
+from app.generation.remote_destination import valid_gpu_url
+
 import httpx
 from PIL import Image, ImageOps, UnidentifiedImageError
 
@@ -23,7 +25,7 @@ class RemoteMakeupEngine:
 
     def __init__(self, url: str, api_key: str, timeout_seconds: float = 180):
         self.url, self.api_key, self.timeout_seconds = url.rstrip("/"), api_key, timeout_seconds
-        if not self.url.startswith("https://") or len(api_key) < 24:
+        if not valid_gpu_url(self.url) or len(api_key) < 24:
             raise RuntimeError("Remote Makeup requires MAKEUP_REMOTE_URL (HTTPS) and MAKEUP_REMOTE_API_KEY (at least 24 characters).")
 
     async def generate(self, image: Image.Image, style: MakeupStyle) -> GeneratedImage:

@@ -120,3 +120,46 @@ test('failed photo preparation never dispatches generation and remains correctab
   await store.getState().run('hairstyle', photo, style, user.id, upload);
   assert.equal(calls, 1); assert.equal(store.getState().job?.phase, 'completed');
 });
+
+
+test('hosted generation polls authenticated reads and preserves the normal image contract', async () => {
+  const id = '4d321734-0990-4511-a119-0a45796a267b';
+  const calls: { path: string; method: string }[] = [];
+  const client = createApiClient('https://application.example.test', async (url, init) => {
+    const path = new URL(String(url)).pathname;
+    calls.push({ path, method: init?.method ?? 'GET' });
+    assert.equal(init?.credentials, 'include');
+    return Response.json(path.endsWith('/result') ? result : { job_id: id,
+      status: calls.length === 1 ? 'generating' : 'completed', result_available: calls.length > 1 });
+  }, 100, 0);
+  assert.deepEqual(await client.generate('hairstyle', style.id, new FormData()), result);
+  assert.deepEqual(calls, [
+    { path: '/api/ai/features/hairstyle/generate', method: 'POST' },
+    { path: '/api/ai/jobs/' + id, method: 'GET' },
+    { path: '/api/ai/jobs/' + id + '/result', method: 'GET' },
+  ]);
+});
+
+test('lost hosted status does not issue a second generation POST', async () => {
+  let attempts = 0;
+  const client = createApiClient('https://application.example.test', async () => {
+    attempts++;
+    if (attempts > 1) throw new Error('Lost status');
+    return Response.json({ job_id: '4d321734-0990-4511-a119-0a45796a267b', status: 'generating', result_available: false }, { status: 202 });
+  }, 100, 0);
+  await assert.rejects(client.generate('hairstyle', style.id, new FormData()), ApiError);
+  assert.equal(attempts, 2);
+});
+
+
+test('a polling 404 after job acceptance cannot be mistaken for a safe pre-dispatch rejection', async () => {
+  let calls = 0;
+  const client = createApiClient('https://application.example.test', async () => {
+    calls++;
+    return calls === 1 ? Response.json({ job_id: '4d321734-0990-4511-a119-0a45796a267b', status: 'generating', result_available: false })
+      : Response.json({ error: 'Lost state' }, { status: 404 });
+  }, 100, 0);
+  try { await client.generate('hairstyle', style.id, new FormData()); assert.fail('Expected polling failure'); }
+  catch (error) { assert.equal(safeGenerationRetry(error), false); }
+  assert.equal(calls, 2);
+});

@@ -2,6 +2,14 @@
 
 2026-10-09. **Local preparation verified. Online deployment and real combined Kaggle inference NEED VERIFICATION.** Use this guide for a scheduled capstone demonstration. No paid service, database migration, or change to trained weights is needed for this plan.
 
+## Current cloud preparation, 2026-10-09
+
+The implementation is published on `codex/render-kaggle-demo` (code commit `c7fb37e`). The NEW [private Render Kaggle Demo notebook](https://www.kaggle.com/code/cosmetics100/render-kaggle-demo/edit) contains the three prepared cells and both private inputs. The CPU overlay was created successfully as `cosmetics100/render-kaggle-cpu-20261009`; the original GPU dataset is unchanged. GPU T4 x2 and Internet are selected. No cells have run and the draft session is off.
+
+The Render dashboard draft selects the correct branch, Free compute, manual deployments, and `/api/health`. Variable names and nonsecret values are prepared. **The Render service has not been deployed.** The owner must privately create/enable the Kaggle secrets and fill the Render database/session/backend secrets. Browser security rules require human entry of new authentication credentials. In Kaggle, use **Add-ons → Secrets**; create `AI_BACKEND_API_KEY` and enable it together with `AI_REMOTE_API_KEY` and `GEMINI_API_KEY` for this notebook. Keep values out of chat.
+
+After that handoff, run the notebook, place its fresh tunnel root in Render's `AI_FASTAPI_URL`, deploy the free service, and complete the acceptance checks below. The dashboard draft may not survive a page refresh; `render.yaml` and this guide preserve its settings.
+
 ## Where everything runs
 
 ```mermaid

@@ -38,5 +38,23 @@
     "Manual native HTTPS cookie/mobile acceptance",
     "Notebook restart/tunnel URL recovery"
   ],
-  "cloud_resources": "New unrun Kaggle notebook draft; Render configuration draft only; service not deployed yet"
+  "cloud_resources": {
+    "repository": "https://github.com/mark-juswa/CometicsAI",
+    "branch": "codex/render-kaggle-demo",
+    "implementation_commit": "c7fb37e",
+    "kaggle_notebook": "https://www.kaggle.com/code/cosmetics100/render-kaggle-demo/edit",
+    "notebook_visibility": "Private; confirmed in Share settings",
+    "notebook_cells": "Three prepared cells; none executed; draft session off",
+    "inputs_attached": [
+      "cosmetics100/capstone-train002-20260928-v1",
+      "cosmetics100/render-kaggle-cpu-20261009"
+    ],
+    "cpu_dataset_visibility": "Private selected when created; successful creation verified",
+    "accelerator": "GPU T4 x2 selected; no session started",
+    "internet": "on",
+    "render": "Configuration draft only; correct deployment branch selected; Free compute; auto deploy Off; health /api/health; required variable names prepared",
+    "credential_handoff": "Human must create and enable Kaggle secrets and privately fill Render database/session/backend secrets; no new credential entered by agent",
+    "service_deployed": false,
+    "online_generation_verified": false
+  }
 }

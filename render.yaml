@@ -22,6 +22,8 @@ services:
         generateValue: true
       - key: AI_BACKEND_MODE
         value: kaggle
+      - key: AI_ENDPOINT_MODE
+        value: registered
       - key: AI_FASTAPI_URL
         sync: false
       - key: AI_BACKEND_API_KEY

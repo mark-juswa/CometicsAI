@@ -1,0 +1,28 @@
+{
+  "checked_at_utc": "2026-10-09T16:01:07.602736+00:00",
+  "status": "IMPLEMENTED; LOCAL_AND_NEON_VERIFIED; LIVE_ROLLOUT_IN_PROGRESS",
+  "authorization": "Supervisor: okay lets proceed after the automatic registry proposal",
+  "checks": {
+    "beautycore_ai_tests": 54,
+    "python_startup_registration_tests": 44,
+    "typecheck": "passed",
+    "production_build": "passed; 42 static pages plus new internal dynamic route",
+    "neon_migration": "Only ai_runtime_endpoints created/verified",
+    "neon_atomic_smoke": "passed: durable read, replay, renewal, expiry, replacement, old-session refusal and concurrent admission; own test metadata removed"
+  },
+  "configuration": {
+    "render_mode": "AI_ENDPOINT_MODE=registered (one time)",
+    "lease_seconds": 180,
+    "heartbeat_seconds": 60,
+    "signed_clock_skew_seconds": 90,
+    "shared_secret": "Existing AI_BACKEND_API_KEY; no secret value stored in registry or logs",
+    "roll_back": "Explicit AI_ENDPOINT_MODE=static plus existing AI_FASTAPI_URL"
+  },
+  "preserved": "Original private archives, model weights, runtime guards, local/synchronous paths and old notebooks",
+  "pending": [
+    "Render deploy",
+    "Fresh Kaggle auto-registration acknowledgement",
+    "Changed-URL restart without Render edit",
+    "Real Hair/Makeup/Nails/Consultation outputs"
+  ]
+}

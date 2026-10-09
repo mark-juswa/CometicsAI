@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, timestamp, varchar, integer, jsonb, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, text, timestamp, varchar, integer, jsonb, pgEnum, bigint } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
 // ─── Enums ──────────────────────────────────────────────────────────────────
@@ -138,3 +138,14 @@ export type UserRole = (typeof userRoleEnum.enumValues)[number];
 export type AppointmentStatus = (typeof appointmentStatusEnum.enumValues)[number];
 export type ProductStatus = (typeof productStatusEnum.enumValues)[number];
 export type StyleType = (typeof styleTypeEnum.enumValues)[number];
+
+// Server-only endpoint metadata for the scheduled Kaggle demonstration.
+export const aiRuntimeEndpoints = pgTable('ai_runtime_endpoints', {
+  slot: text('slot').primaryKey(),
+  sessionId: uuid('session_id').notNull(),
+  endpoint: varchar('endpoint', { length: 256 }).notNull(),
+  startedAt: bigint('started_at', { mode: 'number' }).notNull(),
+  lastIssuedAt: bigint('last_issued_at', { mode: 'number' }).notNull(),
+  leaseExpiresAt: timestamp('lease_expires_at', { withTimezone: true }).notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+});

@@ -5,6 +5,7 @@ export type AiDependencies = {
   currentUser: () => Promise<AiUser>;
   upstreamFetch: typeof fetch;
   baseUrl: string;
+  resolveBaseUrl?: () => Promise<string | null>;
   handleSecret: string;
   remoteBackend?: boolean;
   backendKey?: string;
@@ -67,7 +68,7 @@ function operation(method: string, parts: string[]): Operation | null {
   return null;
 }
 
-function validBaseUrl(value: string, remote = false): URL | null {
+export function validBaseUrl(value: string, remote = false): URL | null {
   try {
     const url = new URL(value);
     const destination = remote
@@ -148,7 +149,13 @@ export async function handleAiRequest(request: Request, parts: string[], deps: A
       return json(403, 'Same-origin request required.');
   }
 
-  const base = validBaseUrl(deps.baseUrl, deps.remoteBackend);
+  let baseUrl = deps.baseUrl;
+  if (deps.resolveBaseUrl) {
+    try { baseUrl = await deps.resolveBaseUrl() ?? ''; }
+    catch { return json(503, 'AI connection is temporarily unavailable.'); }
+    if (!baseUrl) return json(503, 'AI is offline. Start the Kaggle demo notebook and wait for connection.');
+  }
+  const base = validBaseUrl(baseUrl, deps.remoteBackend);
   if (!base || deps.handleSecret.length < 32 || deps.remoteBackend && (deps.backendKey?.length ?? 0) < 32) return json(503, 'AI service is not configured.');
 
   let upstreamPath = op.path;

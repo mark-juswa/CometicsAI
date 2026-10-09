@@ -18,6 +18,7 @@ async function route(request: Request, context: Context): Promise<Response> {
     handleSecret: process.env.AI_CONSULTATION_HANDLE_SECRET ?? '',
     remoteBackend: process.env.AI_BACKEND_MODE === 'kaggle',
     backendKey: process.env.AI_BACKEND_API_KEY ?? '',
+    publicOrigin: process.env.RENDER_EXTERNAL_URL,
     upstreamFetch: fetch,
     currentUser: async () => {
       const session = await getSession();

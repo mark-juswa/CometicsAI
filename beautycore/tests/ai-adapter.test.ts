@@ -274,3 +274,83 @@ test('jobs and result reads retain client authentication and accept asynchronous
   }
   assert.equal((await handleAiRequest(request('GET', 'jobs/other'), ['jobs', 'other'], config)).status, 404);
 });
+
+const RENDER_ORIGIN = 'https://beautycore-demo.onrender.com';
+const INTERNAL_ORIGIN = 'http://localhost:10000';
+
+function proxiedRequest(method: string, path: string, origin: string | null,
+                        body?: BodyInit, token?: string, internalOrigin = INTERNAL_ORIGIN): Request {
+  const headers = new Headers();
+  if (origin !== null) headers.set('origin', origin);
+  if (token) headers.set('x-ai-consultation-handle', token);
+  if (typeof body === 'string') headers.set('content-type', 'application/json');
+  return new Request(internalOrigin + '/api/ai/' + path, { method, headers, body });
+}
+
+test('Render public HTTPS origin authorizes POST, PATCH, PUT and all three feature mutations over internal HTTP', async () => {
+  const config = deps();
+  config.publicOrigin = RENDER_ORIGIN;
+  const token = await handle();
+  const operations: [string, string[], BodyInit, string | undefined, number][] = [
+    ['POST', ['consultations'], '{"primary_service":"hairstyle"}', undefined, 201],
+    ['PATCH', ['consultations', 'state'], '{"preferences":{}}', token, 200],
+    ['PUT', ['consultations', 'photo'], image('image/png'), token, 200],
+  ];
+  for (const feature of ['hairstyle', 'makeup', 'nails']) {
+    const form = image('image/png');
+    form.append('style_id', 'supported_style');
+    operations.push(['POST', ['features', feature, 'generate'], form, undefined, 200]);
+  }
+  // Next can retain HTTPS from forwarding headers while using its bound host/port.
+  for (const internalOrigin of [INTERNAL_ORIGIN, 'https://0.0.0.0:10000']) {
+    for (const [method, parts, body, handleToken, status] of operations) {
+      const response = await handleAiRequest(proxiedRequest(method, parts.join('/'), RENDER_ORIGIN, body, handleToken, internalOrigin), parts, config);
+      assert.equal(response.status, status);
+    }
+  }
+  assert.equal(seen.length, operations.length * 2);
+});
+
+test('configured public origin rejects foreign, missing, opaque, HTTP and wrong-port origins before upstream', async () => {
+  const config = deps();
+  config.publicOrigin = RENDER_ORIGIN;
+  for (const origin of [null, 'null', 'https://evil.example', INTERNAL_ORIGIN,
+                        'http://beautycore-demo.onrender.com', RENDER_ORIGIN + ':444', RENDER_ORIGIN + '/']) {
+    const response = await handleAiRequest(proxiedRequest('POST', 'consultations', origin, '{}'), ['consultations'], config);
+    assert.equal(response.status, 403);
+  }
+  assert.equal(seen.length, 0);
+});
+
+test('spoofed Host and forwarding headers do not select the allowed origin behind Render', async () => {
+  const config = deps();
+  config.publicOrigin = RENDER_ORIGIN;
+  const request = proxiedRequest('POST', 'consultations', 'https://evil.example', '{}');
+  request.headers.set('host', 'evil.example');
+  request.headers.set('x-forwarded-host', 'evil.example');
+  request.headers.set('x-forwarded-proto', 'https');
+  assert.equal((await handleAiRequest(request, ['consultations'], config)).status, 403);
+  assert.equal(seen.length, 0);
+});
+
+test('malformed public origin configuration fails closed instead of falling back to internal URL', async () => {
+  for (const origin of ['', 'null', 'http://beautycore-demo.onrender.com',
+                        RENDER_ORIGIN + '/path', RENDER_ORIGIN + '?allow=all',
+                        RENDER_ORIGIN + '#fragment', 'https://user:pass@beautycore-demo.onrender.com']) {
+    const config = deps();
+    config.publicOrigin = origin;
+    assert.equal((await handleAiRequest(proxiedRequest('POST', 'consultations', INTERNAL_ORIGIN, '{}'), ['consultations'], config)).status, 503);
+  }
+  assert.equal(seen.length, 0);
+});
+
+test('public origin does not bypass anonymous or non-client access and GET still needs authentication', async () => {
+  for (const user of [null, { id: USER, role: 'admin' }]) {
+    const config = deps(user);
+    config.publicOrigin = RENDER_ORIGIN;
+    for (const [method, parts, body] of [['POST', ['consultations'], '{}'], ['GET', ['features'], undefined]] as const) {
+      assert.equal((await handleAiRequest(proxiedRequest(method, parts.join('/'), RENDER_ORIGIN, body), [...parts], config)).status, user ? 403 : 401);
+    }
+  }
+  assert.equal(seen.length, 0);
+});

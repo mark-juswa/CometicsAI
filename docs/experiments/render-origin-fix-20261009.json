@@ -1,0 +1,30 @@
+{
+  "status": "ORIGIN FIX LOCAL VERIFIED; RENDER REDEPLOY PENDING; AUTHENTICATED LIVE RETEST PENDING",
+  "reported_error": "Same-origin request required, HTTP 403 on Consultation and manual AI generation after first Render deployment.",
+  "live_service": {
+    "url": "https://beautycore-demo.onrender.com",
+    "id": "srv-db4ftmbbc2fs73blpkr0",
+    "plan": "Free",
+    "branch": "codex/render-kaggle-demo",
+    "previous_commit": "65216271127a205ee63319e991509bda79690aee"
+  },
+  "source_evidence": "Adapter compares incoming Origin to new URL(request.url).origin. Installed Next 16.2.6 next-server.js attachRequestMeta builds initUrl with fetchHostname and bound port when provided (next start --hostname 0.0.0.0 --port $PORT); forwarding protocol may retain HTTPS. This can differ from public browser origin. Render terminates TLS and supplies RENDER_EXTERNAL_URL automatically.",
+  "fix": "Add trusted publicOrigin dependency sourced server-side from RENDER_EXTERNAL_URL. Mutations compare Origin exactly to its validated HTTPS root; missing/foreign/opaque origins still fail. Invalid configured origins fail closed with 503. Local behavior is unchanged when unset. Request Host and forwarding headers are not consulted.",
+  "validation": {
+    "ai_suites": {
+      "passed": 36,
+      "failed": 0,
+      "command": "node --import tsx --test tests/ai-adapter.test.ts tests/ai-client-flow.test.ts tests/ai-jobs.test.ts tests/ai-studio-integration.test.ts",
+      "workdir": "beautycore"
+    },
+    "typecheck": "passed",
+    "production_build": "passed, 42 pages",
+    "regressions": "POST/PATCH/PUT, all three features, internal HTTP and bound HTTPS host/port, auth/roles, signed handles, foreign/missing/opaque/insecure/wrong-port origins, spoofed forwarding headers, malformed config, no automatic replay",
+    "runner_correction": "An intermediate invocation from repository root could not resolve BeautyCore @ aliases. Correct required working directory rerun passed all 36 tests."
+  },
+  "official_sources": [
+    "https://render.com/docs/web-services#connect-from-the-public-internet",
+    "https://render.com/docs/environment-variables#render_external_url"
+  ],
+  "limits": "Local upstream responses are fixtures; new real GPU images and authenticated deployed POST success remain unverified."
+}

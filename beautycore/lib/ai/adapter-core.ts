@@ -8,6 +8,7 @@ export type AiDependencies = {
   handleSecret: string;
   remoteBackend?: boolean;
   backendKey?: string;
+  publicOrigin?: string;
   now?: () => number;
 };
 
@@ -79,6 +80,20 @@ function validBaseUrl(value: string, remote = false): URL | null {
   }
 }
 
+// Use a server-configured public origin behind TLS-terminating proxies.
+// Request-controlled Host/forwarding headers must never choose the CSRF origin.
+function applicationOrigin(request: Request, configured?: string): string | null {
+  if (configured === undefined) return new URL(request.url).origin;
+  try {
+    const url = new URL(configured);
+    if (url.protocol !== 'https:' || url.username || url.password ||
+        url.pathname !== '/' || url.search || url.hash) return null;
+    return url.origin;
+  } catch {
+    return null;
+  }
+}
+
 function contentLengthTooLarge(request: Request, max: number): boolean {
   const raw = request.headers.get('content-length');
   if (!raw) return false;
@@ -126,8 +141,12 @@ export async function handleAiRequest(request: Request, parts: string[], deps: A
   catch { return json(503, 'Authentication is temporarily unavailable.'); }
   if (!user) return json(401, 'Sign in to continue.');
   if (user.role !== 'client') return json(403, 'Client access is required.');
-  if (request.method !== 'GET' && request.headers.get('origin') !== new URL(request.url).origin)
-    return json(403, 'Same-origin request required.');
+  if (request.method !== 'GET') {
+    const expectedOrigin = applicationOrigin(request, deps.publicOrigin);
+    if (!expectedOrigin) return json(503, 'Application origin is not configured correctly.');
+    if (request.headers.get('origin') !== expectedOrigin)
+      return json(403, 'Same-origin request required.');
+  }
 
   const base = validBaseUrl(deps.baseUrl, deps.remoteBackend);
   if (!base || deps.handleSecret.length < 32 || deps.remoteBackend && (deps.backendKey?.length ?? 0) < 32) return json(503, 'AI service is not configured.');

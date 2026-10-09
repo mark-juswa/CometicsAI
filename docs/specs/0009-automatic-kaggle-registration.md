@@ -1,6 +1,6 @@
 # Automatic Kaggle endpoint registration
 
-**2026-10-10 — CONFIRMED by Supervisor; implementation and local/Neon checks VERIFIED; live rollout IN PROGRESS.** The Supervisor requests eliminating manual Render environment changes after every Kaggle restart. The Supervisor approved implementation. One additive metadata table has been applied and verified against the actual Neon database. Account/business tables are unchanged. Cloud rollout and fresh Kaggle restart acceptance are tracked separately.
+**2026-10-10 — CONFIRMED by Supervisor; implementation, local/Neon checks and LIVE automatic registration VERIFIED.** The Supervisor requests eliminating manual Render environment changes after every Kaggle restart. The Supervisor approved implementation. One additive metadata table has been applied and verified against the actual Neon database. Account/business tables are unchanged. Fresh startup and changed-tunnel replacement passed on the owner account; full provider restart and client image-generation acceptance are tracked separately.
 
 ## Outcome
 
@@ -81,6 +81,6 @@ The recommended design adds operational code and one small database row. It uses
 - Hair, Makeup, model Nails, renderer Nails and all three Consultation looks complete through the selected active facade.
 - Existing local/static mode, client Origin checks, job ownership and opaque handles pass regression checks.
 
-**Current status:** implementation, typecheck, production build, 54 BeautyCore tests, 44 Python startup/heartbeat checks and actual Neon atomic-query smoke passed. Fresh Kaggle registration/restart and real all-feature generation remain Needs verification pending live evidence.
+**Current status:** implementation, typecheck, production build, 54 BeautyCore tests, 44 Python startup/heartbeat checks and actual Neon atomic-query smoke passed. Render commit `2bba523` is Live in registered mode. Fresh pinned Kaggle startup, signed registration, changed-tunnel replacement without Render edits/redeploy, lease renewal and signed-in website discovery passed. Private notebook Version 1 is saved with its normal status cell restored. The API/GPU stayed loaded during the address-change rehearsal: complete provider stop/restart, client-account operation and real all-feature generation remain Needs verification. [Live evidence](../experiments/automatic-kaggle-registration-20261010.json).
 
 Sources: [Cloudflare Quick Tunnels](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/) (temporary URL and changing hostname); [Render Free](https://render.com/docs/free) (ephemeral filesystem and service restart behavior).

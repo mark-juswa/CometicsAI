@@ -1,6 +1,6 @@
 {
-  "checked_at_utc": "2026-10-09T16:01:07.602736+00:00",
-  "status": "IMPLEMENTED; LOCAL_AND_NEON_VERIFIED; LIVE_ROLLOUT_IN_PROGRESS",
+  "checked_at_utc": "2026-10-09T16:32:35.814718+00:00",
+  "status": "LIVE_AUTOMATIC_REGISTRATION_AND_CHANGED_URL_VERIFIED",
   "authorization": "Supervisor: okay lets proceed after the automatic registry proposal",
   "checks": {
     "beautycore_ai_tests": 54,
@@ -20,9 +20,51 @@
   },
   "preserved": "Original private archives, model weights, runtime guards, local/synchronous paths and old notebooks",
   "pending": [
-    "Render deploy",
-    "Fresh Kaggle auto-registration acknowledgement",
-    "Changed-URL restart without Render edit",
-    "Real Hair/Makeup/Nails/Consultation outputs"
-  ]
+    "Complete provider stop/restart and real generation without Render edit",
+    "Real Hair/Makeup/model Nails/renderer Nails/Consultation outputs in this deployed session",
+    "Client account private-input/Secret/pinned-environment access and actual defense device rehearsal"
+  ],
+  "deployment": {
+    "commit": "2bba523",
+    "service": "beautycore-demo",
+    "deploy_id": "dep-db4h1fflk1mc7380s0jg",
+    "status": "Live",
+    "mode": "registered; unsigned registration responds 401",
+    "public_checks": {
+      "health": 200,
+      "unsigned_registration": 401,
+      "anonymous_ai": 401
+    }
+  },
+  "kaggle": {
+    "url": "https://www.kaggle.com/code/cosmetics100/render-kaggle-demo-pinned/edit",
+    "starter_import": "verified in existing pinned editor; Draft saved",
+    "private_bundle_and_original_host_preflight": "passed in 13.607 seconds",
+    "work_directory": "/kaggle/working/render-kaggle-client-9a1ea439e05d4f43bfa03b0ea21a1324",
+    "cpu_isolated_package_model_checks": "passed including segment-load and landmark-load",
+    "gpu_bootstrap": "passed; initial Cell 2 355.955 seconds",
+    "registered_connection": "verified: CONNECTED TO WEBSITE",
+    "saved_private_version": 1,
+    "routine_status_cell_restored": true
+  },
+  "live_acceptance": {
+    "initial_endpoint": "https://health-non-belong-rest.trycloudflare.com",
+    "replacement_endpoint": "https://wellness-hints-ball-revisions.trycloudflare.com",
+    "address_change": "passed in 143.989 seconds; owned tunnel and heartbeat replaced; CPU API and GPU remained loaded",
+    "render_edit_or_redeploy_during_rotation": false,
+    "render_deployment_remained": "dep-db4h1fflk1mc7380s0jg / 2bba523",
+    "foundation_load_count_after_rotation": 1,
+    "new_facade_public_health": {
+      "status": 200,
+      "service": "render-kaggle-demo-v1"
+    },
+    "heartbeat": "verified: same replacement endpoint lease remaining rose from 123 to 162 seconds",
+    "signed_in_website": "after reload consultation discovery available; Hair Studio populated its hairstyle choices through registered routing",
+    "test_scope": "Fresh consolidated startup and changed-tunnel replacement with loaded services, not a complete provider stop/restart or all-feature image-generation acceptance",
+    "proofs": [
+      "automatic-registration-render-live.jpg",
+      "automatic-registration-url-change.jpg",
+      "automatic-registration-kaggle-connected.jpg"
+    ]
+  }
 }

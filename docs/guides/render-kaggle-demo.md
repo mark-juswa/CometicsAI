@@ -1,14 +1,22 @@
 # Render + Kaggle demo deployment
 
-2026-10-09. **Local preparation verified. Online deployment and real combined Kaggle inference NEED VERIFICATION.** Use this guide for a scheduled capstone demonstration. No paid service, database migration, or change to trained weights is needed for this plan.
+> **Automatic endpoint upgrade, 2026-10-10:** commit `2bba523` is Live with `AI_ENDPOINT_MODE=registered`; the endpoint metadata table is applied. The corrected `render_kaggle_client_demo.ipynb` signs and registers its fresh URL, so the per-run manual URL/deploy steps below apply only to explicit static rollback. [Current client workflow](client-demo-handover.md). Fresh pinned bundle/host/CPU/GPU startup, signed registration, changed-tunnel replacement without Render edits/deploy, heartbeat renewal and signed-in feature discovery passed. Private notebook Version 1 is saved. Full provider restart and real client-account generation remain Needs verification.
+
+
+> **Historical outage / preparation, 2026-10-09 (superseded by the live automatic connection above):** Render health returns 200; the previous Kaggle tunnel returns 530. The earlier successful startup is historical, not current AI availability. Use the [client handover guide](client-demo-handover.md) and separate corrected `notebooks/render_kaggle_client_demo.ipynb` for a fresh rehearsal. Its 27 local startup/recovery tests pass, but fresh consolidated Kaggle startup and client-account generation are still Needs verification. The original notebook/private archive remain preserved; the original archived runner still needs the recorded manual recoveries.
+
+
+2026-10-09. **Free Render deployment, Kaggle readiness and live authenticated Consultation start verified. Real image generation acceptance NEEDS VERIFICATION.** Use this guide for a scheduled capstone demonstration. No paid service or change to trained weights is needed. The 2026-10-10 automatic upgrade adds one operational metadata table to existing Neon; business/account tables are unchanged.
 
 ## Current cloud preparation, 2026-10-09
 
-The implementation is published on `codex/render-kaggle-demo` (code commit `c7fb37e`). The NEW [private Render Kaggle Demo notebook](https://www.kaggle.com/code/cosmetics100/render-kaggle-demo/edit) contains the three prepared cells and both private inputs. The CPU overlay was created successfully as `cosmetics100/render-kaggle-cpu-20261009`; the original GPU dataset is unchanged. GPU T4 x2 and Internet are selected. No cells have run and the draft session is off.
+The implementation is published on `codex/render-kaggle-demo` (initial code commit `c7fb37e`). The original private GPU and CPU input datasets remain unchanged. After the recorded ensurepip and inline-plotting recoveries, the owner supplied successful CPU package/model checks, GPU bootstrap and `READY_FOR_REHEARSAL`. Independent read-only HTTP checks returned 200 for `/health` with the expected service identifier and 401 for anonymous `/features`. This verifies startup/readiness and the basic public authentication boundary, not real generation.
 
-The Render dashboard draft selects the correct branch, Free compute, manual deployments, and `/api/health`. Variable names and nonsecret values are prepared. **The Render service has not been deployed.** The owner must privately create/enable the Kaggle secrets and fill the Render database/session/backend secrets. Browser security rules require human entry of new authentication credentials. In Kaggle, use **Add-ons → Secrets**; create `AI_BACKEND_API_KEY` and enable it together with `AI_REMOTE_API_KEY` and `GEMINI_API_KEY` for this notebook. Keep values out of chat.
+The owner completed private credential entry and deployed the Free `beautycore-demo` service at `https://beautycore-demo.onrender.com`. The confirmed branch and `beautycore` root are used. The first deployed adapter rejected mutations because Next.js's bound server hostname/port differed from the browser origin. Commit `ddd5961` uses Render's automatic `RENDER_EXTERNAL_URL` for the exact trusted origin and is now Live. The real signed-in demo UI created a consultation, uploaded a synthetic nonpersonal image and received a Gemini opening question without the 403. Application health returned 200 and anonymous AI access returned 401. No GPU image generation was started in that retest; the full image/mobile/restart acceptance checklist remains open.
 
-After that handoff, run the notebook, place its fresh tunnel root in Render's `AI_FASTAPI_URL`, deploy the free service, and complete the acceptance checks below. The dashboard draft may not survive a page refresh; `render.yaml` and this guide preserve its settings.
+Keep the running Kaggle session available. Its tunnel URL is temporary and is recorded as session evidence rather than a permanent service address. [Deployed origin fix and live retest](../experiments/render-origin-fix-20261009.json).
+
+[Current readiness and Render handoff evidence](../experiments/render-kaggle-ready-20261009.json).
 
 ## Where everything runs
 
@@ -75,6 +83,18 @@ The runner requires at least 30 GiB total **host RAM**, in addition to the GPU; 
 
 Copy the printed URL privately into Render's `AI_FASTAPI_URL`. Do not use the GPU's `127.0.0.1:8765` URL there. `READY_FOR_REHEARSAL` means readiness checks passed; it does not mean real generation has passed.
 
+### Recover the early CPU ensurepip failure
+
+If `backend-env-create.log` reports the target Python failing at `-m ensurepip --upgrade --default-pip`, use `notebooks/render_kaggle_cell2_recovery.py` as the entire replacement Cell 2. Keep the extracted inputs and run the replacement directly. It uses the documented host pip `--python` option to install pip 25.3 into CPU environments created with `--without-pip`; application/model dependencies retain their existing pins. It changes the loaded runner only in memory and preserves the uploaded archive hash. Future newly packaged runner source includes this bootstrapping fix.
+
+The replacement refuses active service ports and evidence of later startup stages. It archives only the known early failed `starting` reservation; it does not remove environment directories or bundled source. Recovery behavior passed seven local checks and a real Windows isolated-install smoke test. Actual Kaggle Linux startup and generated outputs remain **NEEDS VERIFICATION**. This cell is specific to the early ensurepip failure, not a general restart command.
+
+### Resume after the MediaPipe inline plotting failure
+
+When `landmark-load.log` shows `ValueError: Key backend: 'module://matplotlib_inline.backend_inline'`, replace Cell 2 with the entire `notebooks/render_kaggle_cell2_resume.py` and run it in the same session. It sets `MPLBACKEND=Agg` only for CPU commands/API, reuses completed installations, reruns package checks and YOLO/MediaPipe loads, then continues the original GPU bootstrap. The notebook host and GPU environment are preserved. It refuses existing GPU/API startup evidence and active service ports, and archives only the identified failed reservation. A preceding missing-wrapt sitecustomize warning is separate; the supplied traceback proves execution continued to the Matplotlib error.
+
+Both recovery cells passed 15 local checks. Actual Kaggle model rechecks and online feature acceptance remain **NEEDS VERIFICATION**. No reset, reupload or dependency reinstall is required for this targeted resume. Keep the early ensurepip cell as historical recovery only; it intentionally refuses this later stage.
+
 ## 3. Create the Render service
 
 Use **New → Web Service**, the confirmed repository, and these settings:
@@ -105,6 +125,8 @@ Set only server-side environment variables:
 | `AI_BACKEND_MODE` | `kaggle` |
 | `AI_BACKEND_API_KEY` | Exact same NEW backend key enabled in Kaggle |
 | `AI_FASTAPI_URL` | HTTPS root printed by the new notebook, with no path/query/credentials |
+
+Render automatically supplies `RENDER_EXTERNAL_URL`. The AI routes use this fixed HTTPS application origin for mutation checks because Next.js's reconstructed server URL can use its internal bound hostname/port. No extra Origin variable or CORS bypass is required. Foreign or missing Origin values remain rejected. Local operation keeps its original request-origin comparison when this deployment variable is unset. The current hosted check expects the service's canonical `onrender.com` URL; a future custom domain requires a deliberate canonical-origin configuration change.
 
 The new bridge accepts only an exact HTTPS `*.trycloudflare.com` root in Kaggle mode. Cookies, browser origins and signed-in database roles remain enforced. Keys and IDs supplied by the browser are ignored; the server adds its own trusted values. Do not use any `NEXT_PUBLIC_*` or `EXPO_PUBLIC_*` variable for secrets. GPU, Gemini and HF keys are not needed in Render for these integrated studios.
 

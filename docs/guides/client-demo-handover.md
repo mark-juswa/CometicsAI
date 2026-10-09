@@ -2,13 +2,13 @@
 
 **Purpose:** run the deployed Render website with Kaggle providing AI compute for scheduled demonstrations. The client needs a browser and an internet connection, not a local GPU or Python installation.
 
-**Status, 2026-10-09:** Render is available; the last Kaggle tunnel returned HTTP 530. The corrected client starter passes 27 local startup/recovery tests. It has **not yet been run as a complete fresh Kaggle session or on the client's account**. Do not describe the handover as fully verified until the rehearsal below passes.
+**Status, 2026-10-10:** automatic connection is Live on Render commit `2bba523`. The owner's pinned Kaggle notebook completed fresh bundle/host/CPU/GPU startup, registered its URL, and saved private Version 1. A changed tunnel URL was accepted without Render edits or redeployment; heartbeat renewal and signed-in website feature discovery passed. The API/GPU stayed loaded during that address-change test. Complete provider stop/restart, real image outputs in this deployment and the client-account/device rehearsal remain **Needs verification**. [Live evidence](../experiments/automatic-kaggle-registration-20261010.json).
 
 Website: https://beautycore-demo.onrender.com
 
-## What caused the reported error?
+## Earlier outage and navigation behavior
 
-A Render website health response of 200 means the website process is available. It does not mean the separate Kaggle AI service is available. The recorded Kaggle URL returned 530 while Render returned 200, which explains current AI unavailability and is consistent with stopping the Kaggle session or losing its tunnel. The probes cannot identify exactly which Kaggle process stopped or prove that every earlier 502 had this cause.
+A Render website health response of 200 means the website process is available. It does not mean the separate Kaggle AI service is available. The recorded Kaggle URL returned 530 while Render returned 200, which explained the recorded AI outage and is consistent with stopping the Kaggle session or losing its tunnel. The probes cannot identify exactly which Kaggle process stopped or prove that every earlier 502 had this cause.
 
 A generation already accepted by Kaggle continues after the user leaves the page. The current web consultation starts its three recommendations sequentially; navigating away does not explicitly cancel its asynchronous batch. The facade allows one generation at a time across Hair, Makeup and Nails. An overlapping request is rejected with 429, not queued. Switching services alone does not establish the cause of a 502.
 
@@ -16,9 +16,9 @@ During a demo, wait for all three consultation results before starting another f
 
 ## Choose who will operate Kaggle
 
-**For the nearest demonstration:** you operate the existing Kaggle account and Render service. Start AI before the client's appointment, update Render, verify real generation, and give the client the website link. The client uses the site on their device. This avoids an account transfer immediately before a demo, but still depends on you starting the GPU session.
+**For the nearest demonstration:** you operate the existing Kaggle account and Render service. Start AI before the client's appointment, wait for automatic connection, verify real generation, and give the client the website link. The client uses the site on their device. This avoids an account transfer immediately before a demo, but still depends on you starting the GPU session.
 
-**For independent client operation:** provide a private copy of the tested pinned notebook, access to both private input datasets, their own Kaggle GPU access, and authorized access to update the Render service environment. They enter their own Gemini key and backend/GPU keys into Kaggle Secrets; the backend key must match Render. Notebook/dataset sharing does not substitute for checking actual access under the client account. Do not share your account password. If handing over the entire project rather than demo operation only, also arrange repository, Render and Neon ownership/access explicitly; a website link does not transfer those resources.
+**For independent client operation:** provide a private copy of the tested pinned notebook, access to both private input datasets, their own Kaggle GPU access, and the fixed website address. Routine starts do not require Render dashboard access after the one-time upgrade. They enter their own Gemini key and backend/GPU keys into Kaggle Secrets; the backend key must match Render. Notebook/dataset sharing does not substitute for checking actual access under the client account. Do not share your account password. If handing over the entire project rather than demo operation only, also arrange repository, Render and Neon ownership/access explicitly; a website link does not transfer those resources.
 
 ## Files and private inputs to provide
 
@@ -45,8 +45,8 @@ Keep the existing SERVER notebooks and these original bundles as fallback. The n
 | `HF_TOKEN` | Only if the pinned model download requires authentication |
 
 6. Run Cell 1. It verifies both archives and checks the GPU host against the original reviewed environment before starting package installation. The reviewed host is Python **3.12.13**, Torch **2.10.0+cu128**, CUDA **12.8**, **Tesla T4**. The runner also requires at least **30 GiB host RAM**. A newer default Kaggle image previously failed this compatibility gate. If Cell 1 reports a mismatch, use the tested pinned copy; do not remove the check or replace Torch to force startup.
-7. Run Cell 2 once. It installs the isolated CPU dependencies, loads the GPU model, starts the private API and creates the authenticated public tunnel. Wait until it prints `READY_FOR_REHEARSAL` and `Render AI_FASTAPI_URL: https://...trycloudflare.com`.
-8. Run Cell 3 to show status and the current URL. Save a version of the working notebook only after checking that its source/output contains no secret values. A saved version is a record, not an always-running server.
+7. Run Cell 2 once. It installs the isolated CPU dependencies, loads the GPU model, starts the private API and creates the authenticated public tunnel. Wait until it prints `CONNECTED TO WEBSITE` and `READY_FOR_REHEARSAL`. No Render URL edit is needed in automatic mode.
+8. Run Cell 3 to show connection status. Use **Save Version → Quick Save** to save a version of the working notebook only after checking that its source/output contains no secret values. A saved version is a record, not an always-running server.
 
 **Needs verification:** copying/importing the pinned environment into the client's own account and actual GPU access. The original runtime/model checks remain authoritative.
 
@@ -58,12 +58,12 @@ Use the updated `render_kaggle_client_demo.ipynb`. Its fixed website root is `ht
 
 After this upgrade, every demo is: **Run Kaggle → wait for CONNECTED TO WEBSITE → open the website**. A lease lasts three minutes and is renewed every minute while the API/tunnel processes and GPU/API ports are alive. If connection fails, the notebook says AI is running but website connection is pending. Do not rerun GPU startup to repair registration.
 
-Fresh automatic Kaggle connection and changed-URL restart acceptance remain Needs verification until live evidence is recorded.
+Fresh automatic Kaggle connection and a changed-tunnel replacement were verified on the owner's pinned notebook. The latter stopped only the owned tunnel/heartbeat and retained the loaded API/GPU. A complete Kaggle provider stop/restart followed by real generation, plus operation on the client account, remain Needs verification. The corrected private notebook is saved as Version 1; the one-off rotation test was removed from its normal status cell.
 
 ## Every demo: exact operator sequence
 
 1. Open the private tested Kaggle notebook. If the previous session was stopped or failed, start a fresh session. If another AI worker is still active, finish/stop that session before launching a second one. Do not repeatedly run Cell 2 in the same active session.
-2. Check Internet, T4 and all three Secrets. Run the three code cells in order. Allow time for dependencies and model loading; no measured startup-time guarantee is available.
+2. Check Internet, T4 and all three Secrets. Run the three code cells in order. Allow time for dependencies and model loading; the observed fresh Cell 2 startup took about six minutes, but this is one measurement, not a startup-time guarantee.
 3. Wait for **CONNECTED TO WEBSITE** and `READY_FOR_REHEARSAL`. The new URL is registered automatically; no Render setting or deployment is needed each run.
 4. If registration is pending, check that the one-time upgrade is deployed and the backend Secret matches. Inspect safe registration messages rather than starting the GPU again.
 5. Keep the shared key and the working database/authentication settings in place.
@@ -99,7 +99,7 @@ These checks remain **Needs verification** where fresh evidence is absent. Do no
 
 | Symptom | Operator action |
 | --- | --- |
-| Website opens, generation fails with 502 | Check Kaggle session/tunnel first, then API/GPU logs; current outage returned tunnel 530 |
+| Website opens, generation fails with 502 | Check Kaggle session/tunnel first, then API/GPU logs; the earlier recorded outage returned tunnel 530 |
 | Old tunnel is unavailable | Start the updated tested notebook and wait for automatic connection; static rollback still uses a manual URL |
 | Busy/429 | Wait for the existing accepted generation; do not restart the GPU to bypass the lock |
 | Old consultation/photo missing after restart | Create a new consultation and upload the photo again |
@@ -114,4 +114,4 @@ This is a scheduled-demo arrangement with an operator. It does not provide alway
 
 For a permanent unattended client service, replace the operator-dependent GPU/tunnel arrangement deliberately; that is a separate deployment decision.
 
-Maintainer evidence: `docs/experiments/render-kaggle-client-handoff-20261009.json`. Rebuild the starter from its reviewed source with `python scripts/package_render_kaggle_client_notebook.py`; this does not rebuild or replace either private binary archive.
+Current maintainer evidence: `docs/experiments/automatic-kaggle-registration-20261010.json`. Earlier outage evidence: `docs/experiments/render-kaggle-client-handoff-20261009.json`. Rebuild the starter from its reviewed source with `python scripts/package_render_kaggle_client_notebook.py`; this does not rebuild or replace either private binary archive.

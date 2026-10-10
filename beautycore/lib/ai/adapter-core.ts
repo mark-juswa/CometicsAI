@@ -27,8 +27,31 @@ const MAX_MULTIPART_BYTES = MAX_IMAGE_BYTES + 64 * 1024;
 const MAX_JSON_BYTES = 32 * 1024;
 const PRIVATE_HEADERS = { 'Cache-Control': 'private, no-store', 'Content-Type': 'application/json' };
 
-function json(status: number, message: string): Response {
-  return new Response(JSON.stringify({ error: message }), { status, headers: PRIVATE_HEADERS });
+function json(status: number, message: string, code?: 'AI_BUSY'): Response {
+  return new Response(JSON.stringify({ error: message, ...(code ? { code } : {}) }), { status, headers: PRIVATE_HEADERS });
+}
+
+// Only recognize the facade's known pre-admission rejection. Never expose raw
+// upstream errors or treat an arbitrary provider 429 as proof of non-admission.
+async function isDemoBusy(upstream: Response): Promise<boolean> {
+  if (!upstream.headers.get('content-type')?.toLowerCase().includes('application/json') || !upstream.body) return false;
+  const reader = upstream.body.getReader();
+  let bytes = new Uint8Array(0);
+  try {
+    while (true) {
+      const chunk = await reader.read();
+      if (chunk.done) break;
+      if (bytes.length + chunk.value.length > 4096) return false;
+      const next = new Uint8Array(bytes.length + chunk.value.length);
+      next.set(bytes); next.set(chunk.value, bytes.length); bytes = next;
+    }
+    const value: unknown = JSON.parse(new TextDecoder().decode(bytes));
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+    const detail = (value as Record<string, unknown>).detail;
+    return detail === 'The demo is busy. No new generation was started.' ||
+      detail === 'The demo is busy or result capacity is full. No new generation was started.';
+  } catch { return false; }
+  finally { await reader.cancel().catch(() => {}); }
 }
 
 function operation(method: string, parts: string[]): Operation | null {
@@ -192,6 +215,10 @@ export async function handleAiRequest(request: Request, parts: string[], deps: A
     return json(502, 'AI service is unavailable. Check generation status before retrying.');
   }
   if (!upstream.ok) {
+    const generationSubmission = request.method === 'POST' &&
+      (op.body === 'manual' || op.path.endsWith('/generation'));
+    if (deps.remoteBackend && upstream.status === 429 && generationSubmission && await isDemoBusy(upstream))
+      return json(429, 'Another AI generation is still running. Hair, Makeup, Nails and Consultation share one generation slot. Wait for it to finish, then try again. No new generation was started.', 'AI_BUSY');
     const allowed = new Set([400, 401, 403, 404, 409, 413, 415, 422, 429, 502, 503, 504]);
     const status = allowed.has(upstream.status) ? upstream.status : 502;
     return json(status, status < 500 ? 'AI request could not be completed.' : 'AI service could not complete the request.');

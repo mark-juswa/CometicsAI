@@ -354,3 +354,41 @@ test('public origin does not bypass anonymous or non-client access and GET still
   }
   assert.equal(seen.length, 0);
 });
+
+
+test('hosted Nails admission reports known busy rejection without exposing raw errors or retrying', async () => {
+  for (const detail of ['The demo is busy. No new generation was started.',
+                        'The demo is busy or result capacity is full. No new generation was started.']) {
+    const config = deps(undefined, () => Response.json({ detail }, { status: 429 }));
+    config.remoteBackend = true;
+    config.baseUrl = 'https://demo.trycloudflare.com';
+    config.backendKey = SECRET;
+    const form = image('image/png'); form.append('style_id', 'classic_red');
+    const response = await handleAiRequest(request('POST', 'features/nails/generate', form),
+      ['features', 'nails', 'generate'], config);
+    assert.equal(response.status, 429);
+    const error = await response.json();
+    assert.equal(error.code, 'AI_BUSY');
+    assert.match(error.error, /share one generation slot/);
+    assert.match(error.error, /No new generation was started/);
+    assert.equal(response.headers.get('cache-control'), 'private, no-store');
+  }
+  assert.equal(seen.length, 2);
+});
+
+test('unknown, oversized or non-generation 429 stays generic and never leaks upstream detail', async () => {
+  for (const [parts, payload] of [
+    [['features', 'nails', 'generate'], { detail: 'provider quota with private diagnostic' }],
+    [['features', 'nails', 'generate'], { detail: 'The demo is busy. No new generation was started.', padding: 'x'.repeat(4096) }],
+    [['consultations', 'turn'], { detail: 'The demo is busy. No new generation was started.' }],
+  ] as const) {
+    const config = deps(undefined, () => Response.json(payload, { status: 429 }));
+    config.remoteBackend = true; config.baseUrl = 'https://demo.trycloudflare.com'; config.backendKey = SECRET;
+    const form = image('image/png'); form.append('style_id', 'classic_red');
+    const response = await handleAiRequest(request('POST', parts.join('/'),
+      parts[0] === 'features' ? form : '{}', parts[0] === 'consultations' ? await handle() : undefined), [...parts], config);
+    assert.equal(response.status, 429);
+    assert.deepEqual(await response.json(), { error: 'AI request could not be completed.' });
+  }
+  assert.equal(seen.length, 3);
+});

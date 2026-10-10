@@ -94,11 +94,15 @@ async function request(path: string, init: RequestInit = {}, handle?: string): P
   }
   if (!response.ok) {
     let message = 'The AI request could not be completed.';
+    let rejectedBeforeAdmission = false;
     try {
       const error: unknown = await response.json();
       if (object(error) && typeof error.error === 'string') message = error.error;
+      rejectedBeforeAdmission = object(error) && error.code === 'AI_BUSY' && response.status === 429 &&
+        init.method === 'POST' && (/^features\/(hairstyle|makeup|nails)\/generate$/.test(path) ||
+          /^consultations\/recommendations\/[A-Za-z0-9_-]{1,80}\/generation$/.test(path));
     } catch { /* Never show upstream HTML or internal errors. */ }
-    throw new AiClientError(message, response.status, response.status >= 500 || response.status === 429);
+    throw new AiClientError(message, response.status, response.status >= 500 || response.status === 429 && !rejectedBeforeAdmission);
   }
   try { return await response.json(); }
   catch { throw new AiClientError('The AI response could not be read.', 502, true); }

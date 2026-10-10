@@ -1,0 +1,36 @@
+{
+  "checked_at_utc": "2026-10-10T03:23:54.805441+00:00",
+  "status": "DEPLOYED_VERIFIED; SPECIFIC_REPORTED_JOB_CAUSE_NEEDS_VERIFICATION",
+  "reported_operation": "POST /api/ai/features/nails/generate",
+  "reported_status": 429,
+  "specific_request_cause": "NEEDS VERIFICATION: operator unsure whether another generation was active; original upstream error details and job logs unavailable",
+  "source_verified": {
+    "facade": "Hosted gateway rejects overlapping manual or consultation generation with 429 before admitting a new job. All features share one slot.",
+    "reporting_bug": "BeautyCore discarded the known busy detail and returned a generic error.",
+    "local_server_key": "No usable local shared backend key for protected live readiness; no key values printed.",
+    "current_lease": "A new comp-spot-sellers-moment.trycloudflare.com endpoint had an unexpired lease during investigation; lease is not generation proof."
+  },
+  "correction": {
+    "commit": "c42fae4",
+    "contract": "AI_BUSY only for the two exact known facade messages on hosted generation submission; arbitrary upstream errors stay generic",
+    "bounds": "4096-byte JSON error body limit; raw internal errors not exposed",
+    "retry": "No automatic retry. Known pre-admission busy rejection is distinguished from uncertain errors; any read failure after admission stays uncertain.",
+    "preserved": "Kaggle notebook, private bundles, model settings, GPU serialization, Origin, login, ownership and registry unchanged"
+  },
+  "validation": {
+    "beautycore_ai_tests": 58,
+    "gateway_admission_tests": 3,
+    "production_build": "passed including TypeScript and 42 static pages"
+  },
+  "pending": [
+    "User retest of reported request after current job completes; if still busy while no job should exist, inspect Kaggle gateway/GPU logs without resetting first"
+  ],
+  "deployment": {
+    "commit": "c42fae4",
+    "id": "dep-db4qtnvlk1mc73fn3180",
+    "status": "Deploy succeeded | Live",
+    "duration": "1m54s",
+    "website_health": 200,
+    "proof": "nails-busy-fix-render-live.jpg"
+  }
+}

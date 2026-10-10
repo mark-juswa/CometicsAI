@@ -6,6 +6,8 @@
 
 Website: https://beautycore-demo.onrender.com
 
+**Earlier availability recheck, 2026-10-10 (historical):** the website health endpoint returns 200, but the last Kaggle lease has expired and its tunnel is unreachable. The prior successful connection test is historical evidence, not an always-running AI server. Start a fresh tested notebook session and wait for `CONNECTED TO WEBSITE` before the next rehearsal.
+
 ## Earlier outage and navigation behavior
 
 A Render website health response of 200 means the website process is available. It does not mean the separate Kaggle AI service is available. The recorded Kaggle URL returned 530 while Render returned 200, which explained the recorded AI outage and is consistent with stopping the Kaggle session or losing its tunnel. The probes cannot identify exactly which Kaggle process stopped or prove that every earlier 502 had this cause.
@@ -32,7 +34,7 @@ Keep the existing SERVER notebooks and these original bundles as fallback. The n
 ## One-time Kaggle setup
 
 1. Make a **private copy of the already tested pinned notebook**. Use a unique title, for example `BeautyCore Client Demo 20261009`.
-2. Replace its three code cells with the three code cells from `render_kaggle_client_demo.ipynb`. Do not run the old recovery cells as well. If importing the file into a new notebook, first check that the import/copy retained the tested environment; importing alone does not prove this.
+2. Copy the tested **Version 1** containing the updated automatic starter. If using an older copy, replace its three code cells with those from `render_kaggle_client_demo.ipynb`. Do not add the old recovery cells. If importing into a new notebook, first check that the import/copy retained the tested environment; importing alone does not prove this.
 3. Attach exactly one copy of each private binary input listed above.
 4. Enable Internet and the tested T4 GPU configuration.
 5. In Add-ons → Secrets, enable the following exact names for this notebook:
@@ -101,7 +103,7 @@ These checks remain **Needs verification** where fresh evidence is absent. Do no
 | --- | --- |
 | Website opens, generation fails with 502 | Check Kaggle session/tunnel first, then API/GPU logs; the earlier recorded outage returned tunnel 530 |
 | Old tunnel is unavailable | Start the updated tested notebook and wait for automatic connection; static rollback still uses a manual URL |
-| Busy/429 | Wait for the existing accepted generation; do not restart the GPU to bypass the lock |
+| Busy/429 | All studios and Consultation share one slot. Wait for the existing generation to finish, then manually try Nails again. Leaving its page does not cancel it. A known busy rejection starts no new job; no restart or automatic retry is needed. If it remains busy unexpectedly, inspect gateway/GPU logs before resetting |
 | Old consultation/photo missing after restart | Create a new consultation and upload the photo again |
 | Secret startup error | Enable the exact three Secret names and check required minimum lengths privately |
 | Environment mismatch | Recover the tested pinned notebook image; do not bypass the original model checks |

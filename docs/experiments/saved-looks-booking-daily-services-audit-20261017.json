@@ -1,0 +1,78 @@
+{
+  "audit_date": "2026-10-17",
+  "source_commit": "9d18585",
+  "status": "INSPECTION_VERIFIED; IMPLEMENTATION_PROPOSED_NOT_STARTED",
+  "plan": "docs/specs/0010-saved-looks-booking-daily-services.md",
+  "authorized_action": "Inspect and propose; no application implementation or deployment",
+  "supervisor_clarifications": {
+    "daily_transactions": "Completed services and recorded amounts, not actual payments",
+    "makeup": "Plan a booking option; no fixed names/prices supplied"
+  },
+  "database_audit": {
+    "method": "read-only information_schema/pg_catalog/index/timezone queries and aggregate-only counts",
+    "tables": [
+      "users",
+      "client_profiles",
+      "appointments",
+      "inventory",
+      "ai_generations",
+      "ai_runtime_endpoints"
+    ],
+    "no_payment_ledger": true,
+    "appointment_look_fk": false,
+    "style_type_enum": [
+      "hair",
+      "nail"
+    ],
+    "database_timezone": "GMT",
+    "appointment_timestamp_type": "timestamp without time zone",
+    "appointments_total": 15,
+    "appointments_completed": 6,
+    "appointments_unassigned": 1,
+    "legacy_generations_total": 51,
+    "legacy_generations_with_non_null_result": 21,
+    "largest_existing_generated_image_text_bytes": 472554,
+    "note": "Aggregate legacy data sizes do not establish current generated output limits. No client rows/photos/amounts or secrets retrieved."
+  },
+  "source_findings": {
+    "current_studios_persist_to_neon": false,
+    "legacy_generate_persists_to_ai_generations": true,
+    "consultation_selection": "process-local; one-hour lifetime",
+    "job_retention": "default 3 jobs; finished-job 30-minute expiry rule; can be evicted earlier",
+    "booking_catalog_makeup": false,
+    "admin_headline_revenue": "completed only",
+    "admin_service_breakdown_revenue": "all statuses; inconsistent with headline",
+    "archived_transactions_ui": "hardcoded React state under _legacy_src; not current live transaction data"
+  },
+  "proposal": {
+    "reuse": [
+      "ai_generations",
+      "appointments",
+      "users",
+      "existing service catalog",
+      "existing role-specific pages"
+    ],
+    "new_transaction_table": false,
+    "new_duplicate_saved_image_table": false,
+    "application_scope": "web client/admin/stylist first; existing mobile compatibility; mobile account save/book UI requires explicit inclusion",
+    "review_required": [
+      "bounded Neon image storage/capacity",
+      "one look per booking and immutable booked content",
+      "remove from gallery retains booked reference",
+      "scheduled-service-day reporting in Asia/Manila",
+      "Makeup Application, price to be confirmed"
+    ]
+  },
+  "validation": {
+    "referenced_files_exist": 16,
+    "application_tests": "Not run: planning only",
+    "gpu_inference": "Not run",
+    "database_mutations": false,
+    "deployment_changes": false,
+    "remaining_verification": [
+      "representative real image sizes and deployment storage quota",
+      "historical timestamp interpretation",
+      "implementation and end-to-end/client-device acceptance"
+    ]
+  }
+}

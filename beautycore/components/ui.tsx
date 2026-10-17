@@ -109,6 +109,7 @@ export function SkeletonCard() {
 
 export function formatDate(date: Date | string): string {
   return new Date(date).toLocaleDateString('en-PH', {
+    timeZone: 'Asia/Manila',
     weekday: 'short',
     day: 'numeric',
     month: 'short',
@@ -121,6 +122,7 @@ export function formatTime(date: Date | string): string {
     hour: 'numeric',
     minute: '2-digit',
     hour12: true,
+    timeZone: 'Asia/Manila',
   });
 }
 

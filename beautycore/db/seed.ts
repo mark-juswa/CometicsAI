@@ -34,8 +34,8 @@ async function seed() {
 
   // ─── Clear existing data (children first, FK order) ───────────────────────
   console.log('  Clearing existing data...');
-  await db.delete(aiGenerations);
   await db.delete(appointments);
+  await db.delete(aiGenerations);
   await db.delete(clientProfiles);
   await db.delete(inventory);
   await db.delete(users);

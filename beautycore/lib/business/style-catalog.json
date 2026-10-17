@@ -1,0 +1,26 @@
+{
+  "hairstyle": {
+    "crew_cut": "Crew Cut",
+    "bob_hair": "Bob Hair",
+    "layered_hair": "Layered Hair"
+  },
+  "makeup": {
+    "natural_makeup": "Natural Makeup",
+    "no_makeup_makeup": "No-Makeup Makeup",
+    "soft_glam": "Soft Glam",
+    "smoky_glam": "Smoky Glam",
+    "dewy_peach": "Dewy Peach",
+    "rosy_pink": "Rosy Pink",
+    "bronze_golden_glam": "Bronze / Golden Glam",
+    "matte_nude": "Matte Nude",
+    "classic_red_lip": "Classic Red Lip",
+    "bold_evening_glam": "Bold Evening Glam"
+  },
+  "nails": {
+    "classic_red": "Classic Red Gloss",
+    "nude_pink": "Nude Pink Gloss",
+    "glossy_black": "Glossy Black",
+    "french_tip": "French Tip",
+    "pink_ombre": "Pink Ombre"
+  }
+}

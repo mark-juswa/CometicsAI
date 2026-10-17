@@ -1,4 +1,5 @@
 'use client';
+import { AppointmentLookPreview,type AppointmentLook } from '@/components/appointment-look';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -17,6 +18,7 @@ import {
 import type { AppointmentStatus } from '@/db/schema';
 
 interface Row {
+  look?: AppointmentLook | null;
   id: string;
   serviceName: string;
   serviceType: string;
@@ -172,7 +174,8 @@ export default function ClientAppointmentsPage() {
                         </span>
                       )}
                     </p>
-                    {r.notes && (
+                    <AppointmentLookPreview look={r.look} />
+                  {r.notes && (
                       <p className="mt-2 rounded-sm border border-purple-light/10 bg-surface/25 p-2.5 text-[12px] leading-relaxed text-secondary">
                         {r.notes}
                       </p>
@@ -181,7 +184,7 @@ export default function ClientAppointmentsPage() {
 
                   <div className="flex shrink-0 flex-col items-end gap-2.5">
                     <span className="text-[15px] font-medium text-white">
-                      {formatPeso(r.totalPrice)}
+                      {r.totalPrice === null ? 'Price to be confirmed' : formatPeso(r.totalPrice)}
                     </span>
                     {isUpcoming && (
                       <button

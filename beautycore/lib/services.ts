@@ -22,7 +22,7 @@ export interface ServiceGroup {
   sub: string;
   intro: string;
   /** Maps to appointments.serviceType. */
-  serviceType: 'hair' | 'nail' | 'treatment' | 'massage' | 'aesthetic';
+  serviceType: 'hair' | 'nail' | 'makeup' | 'treatment' | 'massage' | 'aesthetic';
   categories: ServiceCategory[];
 }
 
@@ -191,6 +191,14 @@ export const serviceGroups: ServiceGroup[] = [
       },
     ],
   },
+  {
+    id: 'makeup',
+    label: 'Makeup',
+    sub: 'Makeup application',
+    serviceType: 'makeup',
+    intro: 'Bring your selected look and discuss the final service and price with the salon.',
+    categories: [{ title: 'Makeup', items: [item('Makeup Application', 'Price to be confirmed')] }],
+  },
 ];
 
 /** Flat list for booking dropdowns. */
@@ -201,12 +209,12 @@ export const allServices = serviceGroups.flatMap((g) =>
       groupId: g.id,
       groupLabel: g.label,
       serviceType: g.serviceType,
-    }))
-  )
+    })),
+  ),
 );
 
 /** "Mula ₱1,500" -> 1500. Returns null for "Libre" / "Konsultasyon". */
 export function parsePrice(price: string): number | null {
   const m = price.match(/₱([\d,]+)/);
-  return m ? Number(m[1].replace(/,/g, '')) : null;
+  return m ? Number(m[1].replace(/,/g, '')) : price === 'Libre' ? 0 : null;
 }

@@ -1,6 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { businessRequest, savedGroup, type SavedLook } from '@/lib/business/client';
+import { salonDay, salonDateTime } from '@/lib/business/dates';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, User, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
@@ -12,6 +15,10 @@ export default function BookingForm() {
   const searchParams = useSearchParams();
   const { user, loading: authLoading } = useAuth();
 
+  const lookId = searchParams.get('look');
+  const [look, setLook] = useState<SavedLook | null>(null);
+  const [lookLoading, setLookLoading] = useState(!!lookId);
+  const [lookError, setLookError] = useState('');
   const preselectedGroup = searchParams.get('service');
   const firstGroup = preselectedGroup
     ? serviceGroups.find((g) => g.id === preselectedGroup) || serviceGroups[0]
@@ -36,13 +43,40 @@ export default function BookingForm() {
       .catch(() => setStylists([]));
   }, []);
 
+  useEffect(() => {
+    const controller = new AbortController();
+    setLook(null);
+    setLookError('');
+    setLookLoading(!!lookId && !!user);
+    if (!lookId || !user) return;
+    businessRequest('/api/saved-looks/' + encodeURIComponent(lookId), { signal: controller.signal })
+      .then((data) => {
+        if (controller.signal.aborted) return;
+        setLook(data.look);
+        const group = serviceGroups.find((g) => g.id === savedGroup(data.look.styleType));
+        if (group) {
+          setGroup(group);
+          setServiceName('');
+        }
+      })
+      .catch((cause) => {
+        if (!controller.signal.aborted) setLookError(cause.message);
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLookLoading(false);
+      });
+    return () => controller.abort();
+  }, [lookId, user]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     if (!user) {
-      router.push(`/login?redirect=${encodeURIComponent('/booking')}`);
+      router.push(
+        `/login?redirect=${encodeURIComponent('/booking' + (lookId ? '?look=' + encodeURIComponent(lookId) : ''))}`,
+      );
       return;
     }
 
@@ -52,7 +86,7 @@ export default function BookingForm() {
       return;
     }
 
-    const appointmentDate = new Date(`${date}T${time}`);
+    const appointmentDate = new Date(salonDateTime(date, time));
     if (appointmentDate.getTime() < Date.now()) {
       setError('Please choose a future date and time.');
       setLoading(false);
@@ -67,6 +101,7 @@ export default function BookingForm() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          lookId: look?.id,
           serviceName,
           serviceType: group.serviceType,
           appointmentDate: appointmentDate.toISOString(),
@@ -125,6 +160,39 @@ export default function BookingForm() {
             Pick a service, choose a time, and we&apos;ll see you soon.
           </p>
 
+          {lookId && !user && !authLoading && (
+            <p className="business-panel">
+              <a
+                href={`/login?redirect=${encodeURIComponent(`/booking?look=${encodeURIComponent(lookId)}`)}`}
+              >
+                Sign in to view your selected look and finish booking.
+              </a>
+            </p>
+          )}
+          {lookLoading && <p role="status">Loading your selected look…</p>}
+          {lookError && (
+            <p role="alert" className="studio-alert">
+              {lookError} Select a saved look again before booking.
+            </p>
+          )}
+          {look && (
+            <section className="business-panel mb-6">
+              <h2>Booking with {look.styleName}</h2>
+              <div className="relative mt-3 h-56">
+                <Image
+                  src={look.imageUrl}
+                  alt={look.styleName}
+                  fill
+                  unoptimized
+                  className="object-contain"
+                />
+              </div>
+              <p>
+                This preview will be available to your assigned stylist. Choose the salon service
+                below.
+              </p>
+            </section>
+          )}
           {error && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -147,6 +215,7 @@ export default function BookingForm() {
                   <button
                     key={g.id}
                     type="button"
+                    disabled={!!look && g.id !== savedGroup(look.styleType)}
                     onClick={() => {
                       setGroup(g);
                       setServiceName('');
@@ -165,7 +234,10 @@ export default function BookingForm() {
 
             {/* Service */}
             <div className="mb-5">
-              <label htmlFor="service" className="mb-2 block text-[11px] font-medium text-secondary">
+              <label
+                htmlFor="service"
+                className="mb-2 block text-[11px] font-medium text-secondary"
+              >
                 Service
               </label>
               <select
@@ -184,19 +256,22 @@ export default function BookingForm() {
               </select>
             </div>
 
+            {serviceName && (
+              <p className="mb-5 text-sm text-secondary">{selectedServiceLabel(serviceName)}</p>
+            )}
             {/* Date */}
             <div className="mb-5 grid gap-4 sm:grid-cols-2">
               <div>
                 <label htmlFor="date" className="mb-2 block text-[11px] font-medium text-secondary">
                   <Calendar size={13} className="mr-1 inline" />
-                  Date
+                  Date (Philippine time)
                 </label>
                 <input
                   id="date"
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  min={new Date().toISOString().split('T')[0]}
+                  min={salonDay()}
                   required
                   className="w-full rounded-sm border border-purple-light/20 bg-surface/40 px-4 py-2.5 text-[13px] text-white focus:border-purple-light focus:outline-none"
                 />
@@ -220,7 +295,10 @@ export default function BookingForm() {
 
             {/* Stylist */}
             <div className="mb-5">
-              <label htmlFor="stylist" className="mb-2 block text-[11px] font-medium text-secondary">
+              <label
+                htmlFor="stylist"
+                className="mb-2 block text-[11px] font-medium text-secondary"
+              >
                 <User size={13} className="mr-1 inline" />
                 Preferred Stylist (optional)
               </label>
@@ -257,7 +335,9 @@ export default function BookingForm() {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={
+                loading || (!!user && (lookLoading || (!!lookId && (!look || !!lookError))))
+              }
               className="flex w-full items-center justify-center gap-2 bg-gold px-6 py-3 text-[11px] font-semibold uppercase tracking-[2px] text-card transition-all hover:bg-gold-hover disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? (
@@ -280,4 +360,14 @@ export default function BookingForm() {
       </div>
     </div>
   );
+}
+
+function selectedServiceLabel(name: string) {
+  const item = allServices.find((s) => s.name === name);
+  if (!item) return '';
+  return parsePrice(item.price) === null
+    ? 'Price to be confirmed by the salon.'
+    : item.price.startsWith('Mula')
+      ? `Starting price: ${item.price}. Final amount is confirmed by the salon.`
+      : `Catalog price: ${item.price}`;
 }

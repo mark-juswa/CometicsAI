@@ -1,4 +1,5 @@
 'use client';
+import { AppointmentLookPreview,type AppointmentLook } from '@/components/appointment-look';
 
 import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
@@ -16,6 +17,7 @@ import {
 import { appointmentStatusEnum, type AppointmentStatus } from '@/db/schema';
 
 interface Row {
+  look?: AppointmentLook | null;
   id: string;
   serviceName: string;
   serviceType: string;
@@ -162,8 +164,9 @@ export default function StylistAppointmentsPage() {
                       <Clock size={11} />
                       {formatTime(r.appointmentDate)}
                     </span>
-                    <span className="text-white">{formatPeso(r.totalPrice)}</span>
+                    <span className="text-white">{r.totalPrice === null ? 'Price to be confirmed' : formatPeso(r.totalPrice)}</span>
                   </p>
+                  <AppointmentLookPreview look={r.look} />
                   {r.notes && (
                     <p className="mt-2 rounded-sm border border-purple-light/10 bg-surface/25 p-2.5 text-[12px] leading-relaxed text-secondary">
                       {r.notes}

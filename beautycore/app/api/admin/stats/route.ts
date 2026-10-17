@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
-import { sql, eq, gte, and, desc } from 'drizzle-orm';
+import { sql, eq, gte, and, desc, lt } from 'drizzle-orm';
 import { db } from '@/db';
 import { appointments, inventory, users } from '@/db/schema';
-import { requireRole } from '@/lib/auth';
+import { businessDependencies } from '@/lib/business/server';
+import { salonDay } from '@/lib/business/dates';
 
 /**
  * GET /api/admin/stats — dashboard aggregates.
@@ -12,14 +13,15 @@ import { requireRole } from '@/lib/auth';
  */
 export async function GET() {
   try {
-    const session = await requireRole(['admin']);
-    if (!session) {
+    const session = await businessDependencies.actor();
+    if (!session || session.role !== 'admin') {
       return NextResponse.json({ error: 'Admins only.' }, { status: 403 });
     }
 
-    const startOfMonth = new Date();
-    startOfMonth.setDate(1);
-    startOfMonth.setHours(0, 0, 0, 0);
+    const month = salonDay().slice(0, 7);
+    const startOfMonth = new Date(month + '-01T00:00:00+08:00');
+    const [year, monthNumber] = month.split('-').map(Number);
+    const endOfMonth = new Date(Date.UTC(year, monthNumber, 1, -8));
 
     const [
       revenueRow,
@@ -31,18 +33,19 @@ export async function GET() {
       topServices,
     ] = await Promise.all([
       db
-        .select({ total: sql<number>`coalesce(sum(total_price), 0)::int` })
+        .select({ total: sql<number>`coalesce(sum(total_price), 0)::bigint`.mapWith(Number) })
         .from(appointments)
         .where(eq(appointments.status, 'completed')),
 
       db
-        .select({ total: sql<number>`coalesce(sum(total_price), 0)::int` })
+        .select({ total: sql<number>`coalesce(sum(total_price), 0)::bigint`.mapWith(Number) })
         .from(appointments)
         .where(
           and(
             eq(appointments.status, 'completed'),
-            gte(appointments.appointmentDate, startOfMonth)
-          )
+            gte(appointments.appointmentDate, startOfMonth),
+            lt(appointments.appointmentDate, endOfMonth),
+          ),
         ),
 
       db.select({ n: sql<number>`count(*)::int` }).from(appointments),
@@ -78,7 +81,10 @@ export async function GET() {
           serviceName: appointments.serviceName,
           serviceType: appointments.serviceType,
           bookings: sql<number>`count(*)::int`,
-          revenue: sql<number>`coalesce(sum(total_price), 0)::int`,
+          revenue:
+            sql<number>`coalesce(sum(total_price) filter (where status = 'completed'), 0)::bigint`.mapWith(
+              Number,
+            ),
         })
         .from(appointments)
         .groupBy(appointments.serviceName, appointments.serviceType)

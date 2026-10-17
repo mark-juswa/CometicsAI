@@ -11,7 +11,9 @@
     "typecheck": "tsc --noEmit",
     "db:push": "drizzle-kit push",
     "db:seed": "tsx db/seed.ts",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "test:business": "node --experimental-test-module-mocks --import tsx --test tests/business-workflows.test.ts tests/business-ui.test.mjs tests/finance-stats.test.mjs",
+    "db:check:saved-looks": "tsx scripts/apply-saved-looks.ts --check"
   },
   "dependencies": {
     "@google/genai": "^1.31.0",
@@ -25,11 +27,14 @@
     "next": "^16.2.6",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "server-only": "^0.0.1"
+    "server-only": "^0.0.1",
+    "sharp": "0.34.5"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.10",
     "@eslint/js": "^9.39.4",
     "@tailwindcss/postcss": "^4.2.4",
+    "@testing-library/react": "^16.3.3",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "25.6.2",
     "@types/react": "^19.2.14",
@@ -39,7 +44,9 @@
     "eslint-config-next": "^16.2.6",
     "eslint-plugin-react-hooks": "^7.0.1",
     "globals": "^17.4.0",
+    "jsdom": "^29.1.1",
     "postcss": "^8.5.14",
+    "prettier": "^3.9.10",
     "tailwindcss": "^4.1.7",
     "tsx": "^4.20.3",
     "typescript": "^5.7.3"

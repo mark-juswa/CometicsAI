@@ -115,7 +115,7 @@ export default function MakeupPage() {
     {generateError && <p role="alert" className="studio-alert">{generateError}</p>}
     {result && !resultOpen && <button type="button" className="studio-view-result" onClick={() => setResultOpen(true)}>View your result again</button>}
     {generating && <GenerationProgress feature="makeup" mock={!liveMode} />}
-    <ResultDialog result={result} open={resultOpen} original={previewUrl} originalAlt="Original uploaded portrait" generatedAlt={realResult ? `MAKEUP-001 generated ${result?.style.name} result` : "Normalized original portrait returned by the makeup prototype"}
+    <ResultDialog feature="makeup" result={result} open={resultOpen} original={previewUrl} originalAlt="Original uploaded portrait" generatedAlt={realResult ? `MAKEUP-001 generated ${result?.style.name} result` : "Normalized original portrait returned by the makeup prototype"}
       title={realResult ? "Your MAKEUP-001 result" : "A preview of the workflow"} note={realResult ? "Generated with FLUX.2 Klein Base + MAKEUP-001. This AI preview may change facial details, skin tone, lighting or texture; it is not an exact prediction of real cosmetics." : "No makeup was applied. This is your normalized original image, not an AI makeup transformation."}
       onClose={() => setResultOpen(false)} onRegenerate={() => void onGenerate()} />
   </StudioShell>;

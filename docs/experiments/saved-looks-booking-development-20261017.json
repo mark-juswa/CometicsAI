@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-17",
+  "status": "LOCAL_IMPLEMENTATION_VERIFIED; PRODUCTION_ROLLOUT_NOT_STARTED",
+  "authorization": "Supervisor: proceed on development; separate deployment approval retained from reviewed plan",
+  "base_commit": "9d18585",
+  "scope": [
+    "web account saved looks",
+    "look-linked bookings",
+    "assigned stylist previews",
+    "admin daily completed-service reporting",
+    "unknown-price Makeup booking option"
+  ],
+  "implementation": {
+    "reuse": [
+      "ai_generations",
+      "appointments",
+      "users",
+      "Neon/Drizzle",
+      "existing generated result bytes"
+    ],
+    "new_payment_ledger": false,
+    "new_image_provider": false,
+    "original_photo_required_for_saving": false,
+    "gpu_or_notebook_changes": false,
+    "native_mobile_save_book_screens": false
+  },
+  "verification": {
+    "combined_tests": {
+      "passed": 84,
+      "failed": 0,
+      "existing_ai": 58,
+      "business_workflows": 17,
+      "dom_ui": 7,
+      "finance_routes": 2,
+      "database": "isolated PGlite PostgreSQL fixtures; no production connection",
+      "images": "synthetic fixtures; no GPU inference"
+    },
+    "production_build": "PASSED, including Next TypeScript validation",
+    "public_style_snapshot_check": "PASSED against current backend public catalogs",
+    "live_database_preflight": {
+      "mode": "read-only-check",
+      "applied": false,
+      "existing_image_text_bytes": 10964227,
+      "rows_photos_and_credentials_exported": false
+    },
+    "isolated_validator_probe": {
+      "concurrent_images": 2,
+      "each_dimensions": [
+        4096,
+        4096
+      ],
+      "each_png_bytes": 233666,
+      "baseline_rss_mib": 80,
+      "observed_peak_rss_mib": 209,
+      "limitation": "standalone validator probe; not representative of maximum image file bytes or full Next/Render process under load"
+    },
+    "lint": "NOT VERIFIED; existing next lint script/legacy config is incompatible; no unrelated lint rewrite",
+    "browser_visual_device_acceptance": "NOT PERFORMED; DOM tests are not a live browser/device rehearsal",
+    "staged_secret_scan": {
+      "status": "PASSED",
+      "scope": "57 scoped staged files; compared against known local environment credential values without printing them",
+      "private_environment_files_staged": false
+    }
+  },
+  "limits": {
+    "decoded_image_bytes": 8388608,
+    "max_image_side": 4096,
+    "max_pixels": 16777216,
+    "default_active_looks_per_client": 20,
+    "default_global_image_text_budget": 134217728,
+    "save_admission_per_process": 2,
+    "default_enabled": false,
+    "retention": "gallery removal hides; booked reference/content retained; hidden images still count toward budget"
+  },
+  "production_mutations": {
+    "schema": false,
+    "data": false,
+    "deployment": false,
+    "cloud_configuration": false
+  },
+  "pending": [
+    "production capacity and Render memory acceptance",
+    "real Hair/Makeup/model and renderer Nails output limits",
+    "known historical booking timestamp check",
+    "business confirmation of Makeup service label",
+    "live visual/client-device role walkthrough",
+    "approved disposable-copy rehearsal then production migration and deliberate deployment"
+  ],
+  "guide": "docs/guides/saved-looks-booking-rollout.md",
+  "review_branch": "codex/saved-looks-bookings"
+}

@@ -1,4 +1,6 @@
 'use client';
+import { AdminBookingControls } from '@/components/admin-booking-controls';
+import { AppointmentLookPreview, type AppointmentLook } from '@/components/appointment-look';
 
 import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
@@ -16,6 +18,8 @@ import {
 import { appointmentStatusEnum, type AppointmentStatus } from '@/db/schema';
 
 interface Row {
+  look?: AppointmentLook | null;
+  stylistId: string | null;
   id: string;
   serviceName: string;
   serviceType: string;
@@ -28,6 +32,19 @@ interface Row {
 }
 
 export default function AdminAppointmentsPage() {
+  const [stylists, setStylists] = useState<{ id: string; name: string }[]>([]);
+  useEffect(() => {
+    let active = true;
+    fetch('/api/stylists')
+      .then((r) => r.json())
+      .then((d) => {
+        if (active) setStylists(d.stylists ?? []);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
@@ -87,10 +104,7 @@ export default function AdminAppointmentsPage() {
 
   return (
     <>
-      <PageHeader
-        title="Appointments"
-        subtitle={`${rows.length} total · managing all bookings`}
-      />
+      <PageHeader title="Appointments" subtitle={`${rows.length} total · managing all bookings`} />
 
       {/* Controls */}
       <div className="mb-6 flex flex-wrap gap-3">
@@ -152,9 +166,7 @@ export default function AdminAppointmentsPage() {
                   </div>
                   <p className="mb-1 text-[12px] text-secondary">
                     {r.client?.name ?? 'Unknown client'}
-                    {r.client?.email && (
-                      <span className="text-muted"> · {r.client.email}</span>
-                    )}
+                    {r.client?.email && <span className="text-muted"> · {r.client.email}</span>}
                   </p>
                   <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted">
                     <span className="flex items-center gap-1.5">
@@ -166,8 +178,18 @@ export default function AdminAppointmentsPage() {
                       {formatTime(r.appointmentDate)}
                     </span>
                     <span>{r.stylist?.name ?? 'Unassigned'}</span>
-                    <span className="text-white">{formatPeso(r.totalPrice)}</span>
+                    <span className="text-white">
+                      {r.totalPrice === null ? 'Price to be confirmed' : formatPeso(r.totalPrice)}
+                    </span>
                   </p>
+                  <AppointmentLookPreview look={r.look} />
+                  <AdminBookingControls
+                    id={r.id}
+                    stylistId={r.stylistId ?? r.stylist?.id ?? null}
+                    totalPrice={r.totalPrice}
+                    onUpdated={load}
+                    stylists={stylists}
+                  />
                   {r.notes && (
                     <p className="mt-2 rounded-sm border border-purple-light/10 bg-surface/25 p-2.5 text-[12px] text-secondary">
                       {r.notes}

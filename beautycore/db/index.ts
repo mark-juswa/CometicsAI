@@ -6,14 +6,12 @@ import * as dotenv from 'dotenv';
 dotenv.config({ path: '.env.local', quiet: true });
 
 if (!process.env.DATABASE_URL) {
-  throw new Error(
-    'DATABASE_URL is not set. Add it to .env.local — see .env.local.example.'
-  );
+  throw new Error('DATABASE_URL is not set. Add it to .env.local — see .env.local.example.');
 }
 
-const sql = neon(process.env.DATABASE_URL);
+export const databaseSql = neon(process.env.DATABASE_URL);
 
-export const db = drizzle(sql, { schema });
+export const db = drizzle(databaseSql, { schema });
 
 // ─── Re-exports ─────────────────────────────────────────────────────────────
 // Lets routes/components import tables and types from a single place:

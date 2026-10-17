@@ -7,7 +7,7 @@ import { getSession } from '@/lib/auth';
 /**
  * GET /api/generations — the signed-in client's AI history.
  *
- * Omits sourceImageUrl by default: those are base64 data URLs and would make
+ * Omits image payloads by default: those are base64 data URLs and would make
  * the payload enormous. Pass ?full=true when the images are actually needed.
  */
 export async function GET(req: Request) {
@@ -28,7 +28,7 @@ export async function GET(req: Request) {
         : {
             id: true,
             promptText: true,
-            generatedImageUrl: true,
+            generatedImageUrl: false,
             styleType: true,
             analysisResult: true,
             createdAt: true,

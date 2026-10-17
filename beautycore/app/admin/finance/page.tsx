@@ -1,4 +1,5 @@
 'use client';
+import { DailyServices } from '@/components/daily-services';
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -61,7 +62,7 @@ export default function AdminFinancePage() {
       value: stats?.totalRevenue ?? 0,
       prefix: '₱',
       icon: Wallet,
-      note: 'From completed appointments',
+      note: 'Recorded completed-service amounts',
       accent: 'text-gold',
     },
     {
@@ -93,9 +94,10 @@ export default function AdminFinancePage() {
     <>
       <PageHeader
         title="Finance"
-        subtitle="Revenue is counted from completed appointments only."
+        subtitle="Recorded amounts from completed appointments; these are not payment receipts."
       />
 
+      <DailyServices />
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {loading
           ? [0, 1, 2, 3].map((i) => <Skeleton key={i} className="h-32 w-full" />)
@@ -139,9 +141,7 @@ export default function AdminFinancePage() {
               {services.map((s, i) => (
                 <li key={`${s.serviceName}-${i}`}>
                   <div className="mb-1.5 flex items-baseline justify-between gap-3">
-                    <span className="truncate text-[12px] text-secondary">
-                      {s.serviceName}
-                    </span>
+                    <span className="truncate text-[12px] text-secondary">{s.serviceName}</span>
                     <span className="shrink-0 text-[12px] font-medium text-white">
                       {formatPeso(s.revenue)}
                     </span>

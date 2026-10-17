@@ -105,7 +105,7 @@ export default function NailsPage() {
     {error && <p role="alert" className="studio-alert">{error}</p>}
     {result && !resultOpen && <button type="button" className="studio-view-result" onClick={() => setResultOpen(true)}>View your result again</button>}
     {working && <GenerationProgress feature="nails" />}
-    <ResultDialog result={result} open={resultOpen} original={preview} originalAlt="Original hand photo" generatedAlt={result?.status === "placeholder" ? "Original photo preview" : `Hand with ${result?.style.name} nails`}
+    <ResultDialog feature="nails" result={result} open={resultOpen} original={preview} originalAlt="Original hand photo" generatedAlt={result?.status === "placeholder" ? "Original photo preview" : `Hand with ${result?.style.name} nails`}
       title={result?.status === "placeholder" ? "A preview of the workflow" : "Your nail look is ready"} note={result?.status === "placeholder" ? "Nail styling is unavailable in this development preview." : "AI previews may differ from real polish. Check the comparison before downloading."}
       onClose={() => setResultOpen(false)} onRegenerate={() => void generate()} />
   </StudioShell>;

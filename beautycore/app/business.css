@@ -1,0 +1,18 @@
+.business-panel {padding:1.4rem;margin-bottom:1.25rem;border:1px solid #b891d52b;border-radius:.4rem;background:#25173688;}
+.business-panel h2 {font-size:1.35rem;margin-bottom:.5rem;color:#fff;}
+.business-filters {display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;}
+.business-filters label {display:grid;gap:.4rem;min-width:150px;font-size:.85rem;color:#d9cbe6;}
+.business-filters input,.business-filters select,.booking-admin-controls input,.booking-admin-controls select {padding:.6rem;background:#22132e;color:#fff;border:1px solid #ac7cce66;border-radius:.2rem;max-width:100%;}
+.business-table-wrap {overflow:auto;max-width:100%;}
+.business-table {width:100%;border-collapse:collapse;font-size:.85rem;}
+.business-table th,.business-table td {padding:.75rem;text-align:left;border-bottom:1px solid #ba9acc2b;white-space:nowrap;}
+.business-table th {color:#d9b769;}
+.business-pagination {display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1rem;margin:1rem 0;}
+.business-pagination button {padding:.5rem 1rem;border:1px solid #a888c777;border-radius:.2rem;}
+.business-pagination button:disabled {opacity:.4;}
+.saved-gallery {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:1.25rem;}
+.saved-look-actions {padding:.8rem 0;}
+.saved-look-actions p {margin-top:.5rem;font-size:.85rem;color:#d0c0dc;}
+.booking-look-reference {margin-top:.9rem;padding:.8rem;border:1px solid #b68cd638;border-radius:.3rem;}
+.booking-admin-controls {display:flex;flex-wrap:wrap;gap:.6rem;align-items:end;width:100%;margin-top:.8rem;}
+.booking-admin-controls label {display:grid;font-size:.8rem;gap:.3rem;}

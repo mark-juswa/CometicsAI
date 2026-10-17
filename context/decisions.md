@@ -108,3 +108,12 @@ Later startup automation: **CONFIRMED scope; LOCAL VERIFIED implementation; fres
 ## Automatic Render/Kaggle endpoint registration, 2026-10-10
 
 **CONFIRMED.** Supervisor approved the source-grounded Neon registration proposal with “okay lets proceed”. Render retains existing authentication and AI routing; Kaggle announces the protected CPU facade URL with a domain-separated signature derived from the existing backend key. One additive operational metadata table persists a 180-second lease, renewed every 60 seconds while the session processes/ports are alive. Newer sessions replace only expired leases; old sessions/replays cannot reactivate their address. Static mode is explicit rollback, never automatic stale fallback. No additional hosting service, model change or retraining. [Contract](../docs/specs/0009-automatic-kaggle-registration.md).
+
+
+## Client business improvements planning, 2026-10-17
+
+**CONFIRMED scope clarification:** Supervisor wants daily completed services and recorded amounts, not payment accounting, and requests planning the missing Makeup booking option. **PROPOSED, not approved for implementation:** saved-look storage/retention, appointment linkage, service-day reporting and UI/API/schema changes in [the review plan](../docs/specs/0010-saved-looks-booking-daily-services.md). No migration, code implementation or deployment authorization inferred from planning.
+
+## Saved-look business workflow implementation approval, 2026-10-17
+
+**CONFIRMED:** Supervisor's “proceed on development” approves the reviewed web implementation. Reuse existing Neon generations/appointments, persist generated previews with bounded quotas, preserve booked references on gallery removal, allow one selected look per appointment, and report completed-service recorded amounts by scheduled Asia/Manila service day. Initial Makeup Application remains Price to be confirmed; business label and real storage/device gates are checked before release. Development is locally verified; the plan's separate production migration/deployment approval remains in force. No payment ledger, GPU/model changes or native Save/Book screens are included. [Current guide](../docs/guides/saved-looks-booking-rollout.md).

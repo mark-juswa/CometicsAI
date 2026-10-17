@@ -1,0 +1,144 @@
+{
+  "date": "2026-10-17",
+  "status": "PRODUCTION_MIGRATION_VERIFIED; RENDER_DASHBOARD_DEPLOY_PENDING",
+  "authorization": "Supervisor approved rollout, then explicitly chose lets skip that in response to the provider-side backup request; no new backup created",
+  "release_commit": "80ef11a4e853fa09aa80910556f1036a9d947dd0",
+  "github": {
+    "repository": "mark-juswa/CometicsAI",
+    "feature_branch": "codex/saved-looks-bookings",
+    "push": "VERIFIED on feature and configured deployment branches",
+    "deployment_branch_changed": true,
+    "deployment_branch": "codex/render-kaggle-demo",
+    "verified_branch_code_commit": "80ef11a4e853fa09aa80910556f1036a9d947dd0"
+  },
+  "production_preflight": {
+    "read_only": true,
+    "database_bytes": 19767296,
+    "appointments": 15,
+    "generations": 51,
+    "users": 9,
+    "public_tables": 6,
+    "custom_public_functions": 0,
+    "custom_public_views": 0,
+    "custom_public_sequences": 0
+  },
+  "migration_rehearsal": {
+    "status": "VERIFIED",
+    "source": "read-only actual public schema metadata; synthetic records only",
+    "engine": "isolated PGlite",
+    "migration_runs": 2,
+    "legacy_fixture_preserved": true,
+    "live_client_rows_exported": false,
+    "server_side_aggregate_fingerprints_only": true
+  },
+  "backup_attempt": {
+    "status": "REJECTED_BEFORE_EXECUTION",
+    "reviewer": "automatic approval review",
+    "reason": "Local full-row export would copy live client/account records without explicit authorization for the payload and local destination",
+    "backup_created": false,
+    "safer_alternative": "provider-side Neon child branch before-saved-looks-20261017 with Current data and no expiration; user action requested",
+    "provider_recovery_branch": "SKIPPED at explicit Supervisor request"
+  },
+  "capability_limits": {
+    "github_push_access": true,
+    "database_sql_access": true,
+    "browser_control_tool_available": false,
+    "render_management_credentials_available": false,
+    "neon_management_credentials_available": false
+  },
+  "production_mutations": {
+    "database_schema": true,
+    "existing_application_record_values_changed": false,
+    "application_records_created_or_deleted": false,
+    "render_deploy": false,
+    "render_environment": false,
+    "kaggle_notebook": false
+  },
+  "next": [
+    "User saves SAVED_LOOKS_ENABLED=true, SAVED_LOOKS_CLIENT_LIMIT=20, SAVED_LOOKS_STORAGE_BYTES=134217728 in Render Environment using Save only",
+    "User triggers Manual Deploy -> Deploy latest commit and waits for Live",
+    "Verify deployed build/status and client/stylist/admin workflows; use existing Kaggle notebook for fresh generation"
+  ],
+  "sources": [
+    "https://neon.com/docs/manage/branches",
+    "https://render.com/docs/deploys",
+    "https://render.com/docs/configure-environment-variables"
+  ],
+  "migration_transport_correction": {
+    "initial_attempt": "FAILED with SQLSTATE 42601; no schema/data changes committed",
+    "cause": "Neon HTTP prepared query accepts one SQL statement, not a full multi-command SQL file",
+    "fix": "Explicit top-level statement boundaries, atomic transaction per migration file; enum batch committed before function batch",
+    "regression_tests": "2 passed: single-statement protocol + repeat/legacy preservation; batch rollback/no next-file execution",
+    "code_commit": "80ef11a4e853fa09aa80910556f1036a9d947dd0"
+  },
+  "production_migration": {
+    "status": "VERIFIED",
+    "applied": true,
+    "check_mode": "read-only-check after explicit apply",
+    "existing_image_text_bytes": 10964227,
+    "columns_added": 7,
+    "new_enum": "makeup",
+    "owner_fk_and_integrity_constraint_present": true,
+    "save_and_immutable_functions_present": true,
+    "preservation": {
+      "capturedAt": "2026-10-17T13:38:56.089Z",
+      "mode": "post-migration-verification",
+      "readOnly": true,
+      "exportedLiveRows": false,
+      "comparison": [
+        {
+          "name": "ai_generations",
+          "beforeCount": 51,
+          "afterCount": 51,
+          "originalFieldsUnchanged": true
+        },
+        {
+          "name": "ai_runtime_endpoints",
+          "beforeCount": 1,
+          "afterCount": 1,
+          "originalFieldsUnchanged": true
+        },
+        {
+          "name": "appointments",
+          "beforeCount": 15,
+          "afterCount": 15,
+          "originalFieldsUnchanged": true
+        },
+        {
+          "name": "client_profiles",
+          "beforeCount": 5,
+          "afterCount": 5,
+          "originalFieldsUnchanged": true
+        },
+        {
+          "name": "inventory",
+          "beforeCount": 18,
+          "afterCount": 18,
+          "originalFieldsUnchanged": true
+        },
+        {
+          "name": "users",
+          "beforeCount": 9,
+          "afterCount": 9,
+          "originalFieldsUnchanged": true
+        }
+      ],
+      "coreApplicationTablesUnchanged": true
+    },
+    "live_read_only_store_smoke": "PASSED: nonexistent owner gallery/appointments and empty future-date daily report, every query forced read-only; no customer rows requested"
+  },
+  "verification": {
+    "combined_tests_passed": 86,
+    "failed": 0,
+    "business_tests": 28,
+    "retained_ai_tests": 58,
+    "production_build": "PASSED including TypeScript and 42 static pages",
+    "existing_website_health": {
+      "url": "https://beautycore-demo.onrender.com/api/health",
+      "status": 200,
+      "note": "Existing live release; does not establish deployment of new UI"
+    },
+    "gpu_inference_performed": false,
+    "live_visual_role_walkthrough": "NOT PERFORMED"
+  }
+}

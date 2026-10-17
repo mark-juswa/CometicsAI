@@ -117,3 +117,11 @@ Later startup automation: **CONFIRMED scope; LOCAL VERIFIED implementation; fres
 ## Saved-look business workflow implementation approval, 2026-10-17
 
 **CONFIRMED:** Supervisor's “proceed on development” approves the reviewed web implementation. Reuse existing Neon generations/appointments, persist generated previews with bounded quotas, preserve booked references on gallery removal, allow one selected look per appointment, and report completed-service recorded amounts by scheduled Asia/Manila service day. Initial Makeup Application remains Price to be confirmed; business label and real storage/device gates are checked before release. Development is locally verified; the plan's separate production migration/deployment approval remains in force. No payment ledger, GPU/model changes or native Save/Book screens are included. [Current guide](../docs/guides/saved-looks-booking-rollout.md).
+
+## Saved-look production rollout authorization, 2026-10-17
+
+**CONFIRMED:** Supervisor said “lets try that now” to the explicit recovery-point → migration → Render deployment → feature enablement → live testing sequence. This supersedes the pending deployment authorization above. Existing Kaggle notebook/models remain unchanged. An automatic-review rejection prevents an unapproved local export of live account/client records; use a provider-side Neon recovery branch. Render dashboard actions require the user in this session because browser-control tools and management credentials are absent. [Progress evidence](../docs/experiments/saved-looks-render-rollout-20261017.json).
+
+## Supervisor waives new rollout backup, 2026-10-17
+
+**CONFIRMED:** In direct response to the provider-side recovery-branch request, Supervisor said “lets skip that”. Proceed with the authorized additive production migration without creating a new backup; do not reinterpret this as permission to export live client/account rows locally. Both migration batches subsequently applied and record preservation was verified via server-side aggregate checksums. Existing schema additions/data are retained on application rollback. Render manual deployment and live rehearsal remain. [Evidence](../docs/experiments/saved-looks-render-rollout-20261017.json).

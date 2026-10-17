@@ -1,8 +1,10 @@
 # Saved looks, booking references and daily services: rollout guide
 
-**2026-10-17 — implementation DONE; local verification VERIFIED; production rollout NOT STARTED.**
+**2026-10-17 — implementation DONE; local verification VERIFIED; production database migration VERIFIED; Render deployment PENDING.**
 
-This adds account-persistent looks to BeautyCore's web app. It does not change the Kaggle notebook, model weights, generation queue or automatic endpoint registration. The existing live website/database have not been migrated or deployed for this feature.
+**Current rollout:** The Supervisor approved rollout and explicitly requested skipping the new backup. Both additive migrations are applied to the existing database. Server-side counts/checksums confirm that all six tables' existing records and original fields remain unchanged. No live client/account rows were exported. The first migration attempt failed before committing because Neon HTTP queries require one statement at a time; the corrected atomic-batch runner passed two new regression tests. Combined 86 tests and production build pass. [Rollout evidence](../experiments/saved-looks-render-rollout-20261017.json).
+
+The database is ready for the new website code. Render still requires its environment settings and a manual deployment. In the service dashboard, add `SAVED_LOOKS_ENABLED=true`, `SAVED_LOOKS_CLIENT_LIMIT=20`, and `SAVED_LOOKS_STORAGE_BYTES=134217728`; choose **Save only**, then **Manual Deploy → Deploy latest commit** from the published `codex/render-kaggle-demo` branch (release code `80ef11a`). Do not change the existing database or AI credentials. This setup uses the existing Kaggle notebook/models/registration unchanged. Real-image limits, loaded Render memory and client-device acceptance remain to be checked during rehearsal.
 
 ## What is implemented
 
@@ -41,17 +43,19 @@ From the repository root:
 ```powershell
 python scripts/check_saved_look_catalog.py
 cd beautycore
-node --experimental-test-module-mocks --import tsx --test tests/ai-runtime-registry.test.ts tests/ai-adapter.test.ts tests/ai-client-flow.test.ts tests/ai-jobs.test.ts tests/ai-studio-integration.test.ts tests/business-workflows.test.ts tests/business-ui.test.mjs tests/finance-stats.test.mjs
+node --experimental-test-module-mocks --import tsx --test tests/ai-runtime-registry.test.ts tests/ai-adapter.test.ts tests/ai-client-flow.test.ts tests/ai-jobs.test.ts tests/ai-studio-integration.test.ts tests/business-workflows.test.ts tests/business-ui.test.mjs tests/finance-stats.test.mjs tests/saved-look-migrations.test.ts
 npm run build
 ```
 
-The final combined run passed **84 tests**: 58 retained AI tests, 17 business API/database tests, seven DOM UI tests and two actual admin-statistics route tests. The production build, including TypeScript checking, passed. `npm run test:business` runs the 26 business tests alone. Tests use isolated PGlite PostgreSQL fixtures and synthetic images; they do not mutate Neon or call a GPU service.
+The final combined run passed **86 tests**: 58 retained AI tests, 17 business API/database tests, seven DOM UI tests, two actual admin-statistics route tests and two migration transport/rollback tests. The production build, including TypeScript checking, passed. `npm run test:business` runs the 28 business tests alone. Tests use isolated PGlite PostgreSQL fixtures and synthetic images; they do not mutate Neon or call a GPU service.
 
 The DOM tests exercise the real components/API handlers, including Nails generation fixture → save → booking → assigned stylist preview → completion → daily report. They also cover save failure/retry without another inference request, client gallery removal, anonymous login return, admin assignment/amount, ownership, roles, byte/dimension bounds, quotas, idempotency, retention, date boundaries and completed-only totals. This is automated component/integration evidence, not live-browser visual or real-device acceptance.
 
 The old `npm run lint` script/configuration is not a working Next.js lint check in this checkout; lint is not claimed as passed. No unrelated dependency-audit upgrade was performed.
 
-## Production rollout — perform only after approval
+## Production rollout procedure
+
+The migration has already been applied for this rollout; keep the commands below for future environments. The Supervisor waived the new backup in this rollout.
 
 **Do not deploy the new appointment routes before the migration.** Those routes join the new saved-look fields even when new saving is disabled. The flag alone cannot make the new code compatible with the old schema.
 
@@ -71,7 +75,7 @@ The old `npm run lint` script/configuration is not a working Next.js lint check 
    npm run db:check:saved-looks
    ```
 
-   The utility runs `0002_saved_looks.sql` and then `0003_saved_look_admission.sql` as separate requests/transactions. PostgreSQL must commit the added Makeup enum before using it in the save function. Confirm `applied: true`; stop on errors. The migrations are additive and tested for repeat execution. They never run automatically on app build/start. Do not substitute `db:push` or `db:seed`.
+   The utility runs `0002_saved_looks.sql` and then `0003_saved_look_admission.sql` as separate atomic transactions, each containing one HTTP query per explicitly marked SQL statement. PostgreSQL must commit the added Makeup enum before using it in the save function. Confirm `applied: true`; stop on errors. The migrations are additive and tested for repeat execution. They never run automatically on app build/start. Do not substitute `db:push` or `db:seed`.
 5. Deploy the reviewed application commit to Render deliberately, retaining the existing database, authentication, AI backend and dynamic Kaggle registration configuration. Keep `SAVED_LOOKS_ENABLED=false` during initial verification. No Kaggle update is required.
 6. Once capacity and image limits are accepted, set `SAVED_LOOKS_ENABLED=true`, `SAVED_LOOKS_CLIENT_LIMIT=20`, and `SAVED_LOOKS_STORAGE_BYTES=134217728` unless explicitly revised after review. Restart/redeploy for environment changes.
 7. Run the acceptance checklist below with designated test accounts. If something fails, disable new saving and retain the schema and existing image data while investigating. Do not delete live bookings to repeat a test.

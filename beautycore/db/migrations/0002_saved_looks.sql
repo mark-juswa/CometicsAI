@@ -1,15 +1,23 @@
 -- Apply this migration and commit before 0003 uses the new enum value.
 ALTER TYPE style_type ADD VALUE IF NOT EXISTS 'makeup';
+--> statement-breakpoint
 ALTER TABLE ai_generations ALTER COLUMN source_image_url DROP NOT NULL;
+--> statement-breakpoint
 ALTER TABLE ai_generations ALTER COLUMN prompt_text DROP NOT NULL;
+--> statement-breakpoint
 ALTER TABLE ai_generations ADD COLUMN IF NOT EXISTS style_id varchar(80),
  ADD COLUMN IF NOT EXISTS style_name varchar(255), ADD COLUMN IF NOT EXISTS saved_at timestamptz,
  ADD COLUMN IF NOT EXISTS result_hash varchar(64), ADD COLUMN IF NOT EXISTS image_bytes integer,
  ADD COLUMN IF NOT EXISTS source_kind varchar(20) NOT NULL DEFAULT 'legacy';
+--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS ai_generations_id_owner_idx ON ai_generations(id,client_id);
+--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS ai_generations_saved_dedup_idx ON ai_generations(client_id,style_type,style_id,result_hash);
+--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS ai_generations_client_saved_idx ON ai_generations(client_id,saved_at DESC,id);
+--> statement-breakpoint
 ALTER TABLE appointments ADD COLUMN IF NOT EXISTS ai_generation_id uuid;
+--> statement-breakpoint
 DO $$ BEGIN
  IF NOT EXISTS(SELECT 1 FROM pg_constraint WHERE conname='appointments_look_owner_fk' AND conrelid='appointments'::regclass) THEN
  ALTER TABLE appointments ADD CONSTRAINT appointments_look_owner_fk FOREIGN KEY(ai_generation_id,client_id) REFERENCES ai_generations(id,client_id);
@@ -20,9 +28,13 @@ DO $$ BEGIN
  AND generated_image_url IS NOT NULL AND image_bytes IS NOT NULL AND image_bytes BETWEEN 1 AND 8388608 AND source_kind IN ('manual','consultation')));
  END IF;
 END $$;
+--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS appointments_stylist_date_idx ON appointments(stylist_id,appointment_date);
+--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS appointments_date_status_idx ON appointments(appointment_date,status);
+--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS appointments_look_idx ON appointments(ai_generation_id);
+--> statement-breakpoint
 CREATE OR REPLACE FUNCTION beautycore_saved_content_immutable() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
  IF OLD.result_hash IS NOT NULL AND (NEW.generated_image_url,NEW.client_id,NEW.style_type,NEW.style_id,NEW.style_name,NEW.result_hash,NEW.image_bytes,NEW.source_kind)
@@ -30,5 +42,8 @@ BEGIN
  RAISE EXCEPTION 'Saved look content is immutable';
  END IF; RETURN NEW;
 END $$;
+--> statement-breakpoint
 DROP TRIGGER IF EXISTS beautycore_saved_content_guard ON ai_generations;
+--> statement-breakpoint
 CREATE TRIGGER beautycore_saved_content_guard BEFORE UPDATE ON ai_generations FOR EACH ROW EXECUTE FUNCTION beautycore_saved_content_immutable();
+--> statement-breakpoint

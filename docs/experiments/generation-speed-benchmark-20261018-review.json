@@ -1,0 +1,198 @@
+{
+  "review_date": "2026-10-18",
+  "timezone": "Asia/Manila",
+  "status": "VERIFIED for this bounded worker comparison; application adoption NEEDS VERIFICATION",
+  "source": {
+    "user_provided_file": "D:/Downloads/beautycore-speed-results.zip",
+    "zip_sha256": "26e0775c09a687ecf0eba4beeb6e75aada04bc7114ce9c807d61525c812c5549",
+    "zip_bytes": 5149178,
+    "crc": "PASSED",
+    "member_count": 23,
+    "report_copy": "generation-speed-benchmark-20261018-report.json",
+    "run_source_commit": "5eb723b"
+  },
+  "independent_checks": {
+    "duplicate_or_unexpected_members": false,
+    "reported_png_sha256_matches": 22,
+    "reported_rgb_sha256_matches": 22,
+    "png_dimensions": "All 512x512",
+    "exact_byte_equal_baseline_candidate_pairs": 11,
+    "exact_pixel_equal_baseline_candidate_pairs": 11,
+    "unchanged_repeated_baseline_outputs": true,
+    "summary_medians_and_savings_recomputed": true,
+    "reported_input_hashes_match_immutable_approved_bundle": true,
+    "reported_base_revision_adapter_hashes_seed_steps_guidance_match_reviewed_contract": true,
+    "model_steps_reduced": false,
+    "code_from_archive_executed": false
+  },
+  "reported_environment": {
+    "gpu": "Tesla T4",
+    "torch": "2.10.0+cu128",
+    "cuda": "12.8",
+    "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+    "foundation_load_count": 1,
+    "startup_seconds": 70.650352828
+  },
+  "results": [
+    {
+      "feature": "hairstyle",
+      "style_id": "crew_cut",
+      "paired_samples": 3,
+      "baseline_median_seconds": 65.00457448199995,
+      "candidate_median_seconds": 56.64180145399996,
+      "observed_median_saving_percent": 12.864899269997807,
+      "candidate_first_cache_fill_seconds": 65.50035292900009,
+      "candidate_reused_prompt_seconds": [
+        56.64180145399996,
+        56.355237343999875
+      ],
+      "baseline_repeatable": true,
+      "all_pairs_byte_and_pixel_identical": true,
+      "diagnostic_phase_seconds": {
+        "prompt_encoding": 3.67933,
+        "image_encoding": 0.782378,
+        "denoising": 49.968214,
+        "image_decoding": 6.801146
+      },
+      "peak_allocated_gpu_baseline_mib": 8304.30517578125,
+      "peak_allocated_gpu_reuse_mib": [
+        8080.28662109375,
+        8080.78662109375
+      ]
+    },
+    {
+      "feature": "hairstyle",
+      "style_id": "bun",
+      "paired_samples": 1,
+      "baseline_median_seconds": 65.16227292500002,
+      "candidate_median_seconds": 65.70776558199987,
+      "observed_median_saving_percent": -0.8371295728552741,
+      "candidate_first_cache_fill_seconds": 65.70776558199987,
+      "candidate_reused_prompt_seconds": [],
+      "baseline_repeatable": null,
+      "all_pairs_byte_and_pixel_identical": true,
+      "diagnostic_phase_seconds": {
+        "prompt_encoding": 2.883094,
+        "image_encoding": 0.179536,
+        "denoising": 54.56716,
+        "image_decoding": 6.210435
+      },
+      "peak_allocated_gpu_baseline_mib": 8304.30517578125,
+      "peak_allocated_gpu_reuse_mib": []
+    },
+    {
+      "feature": "makeup",
+      "style_id": "natural_makeup",
+      "paired_samples": 3,
+      "baseline_median_seconds": 65.6526277559999,
+      "candidate_median_seconds": 56.430582276999985,
+      "observed_median_saving_percent": 14.046727136762819,
+      "candidate_first_cache_fill_seconds": 65.23754061,
+      "candidate_reused_prompt_seconds": [
+        56.430582276999985,
+        56.360682236
+      ],
+      "baseline_repeatable": true,
+      "all_pairs_byte_and_pixel_identical": true,
+      "diagnostic_phase_seconds": {
+        "prompt_encoding": 2.782423,
+        "image_encoding": 0.177042,
+        "denoising": 54.058886,
+        "image_decoding": 6.202063
+      },
+      "peak_allocated_gpu_baseline_mib": 8304.30517578125,
+      "peak_allocated_gpu_reuse_mib": [
+        8080.28662109375,
+        8080.78662109375
+      ]
+    },
+    {
+      "feature": "nails",
+      "style_id": "classic_red",
+      "paired_samples": 3,
+      "baseline_median_seconds": 37.474865849000025,
+      "candidate_median_seconds": 29.054657001000123,
+      "observed_median_saving_percent": 22.468949940816362,
+      "candidate_first_cache_fill_seconds": 37.20695712800011,
+      "candidate_reused_prompt_seconds": [
+        29.054657001000123,
+        28.569947190999983
+      ],
+      "baseline_repeatable": true,
+      "all_pairs_byte_and_pixel_identical": true,
+      "diagnostic_phase_seconds": {
+        "prompt_encoding": 2.825487,
+        "image_encoding": 0.178677,
+        "denoising": 25.955908,
+        "image_decoding": 6.227018
+      },
+      "peak_allocated_gpu_baseline_mib": 8304.30517578125,
+      "peak_allocated_gpu_reuse_mib": [
+        8080.28662109375,
+        8080.78662109375
+      ]
+    },
+    {
+      "feature": "nails",
+      "style_id": "glossy_black",
+      "paired_samples": 1,
+      "baseline_median_seconds": 37.92940312499991,
+      "candidate_median_seconds": 36.68176465700003,
+      "observed_median_saving_percent": 3.289370159314576,
+      "candidate_first_cache_fill_seconds": 36.68176465700003,
+      "candidate_reused_prompt_seconds": [],
+      "baseline_repeatable": null,
+      "all_pairs_byte_and_pixel_identical": true,
+      "diagnostic_phase_seconds": {
+        "prompt_encoding": 2.867178,
+        "image_encoding": 0.176999,
+        "denoising": 25.85115,
+        "image_decoding": 6.245749
+      },
+      "peak_allocated_gpu_baseline_mib": 8304.30517578125,
+      "peak_allocated_gpu_reuse_mib": []
+    }
+  ],
+  "diagnosis": {
+    "largest_measured_worker_phase": "Denoising/model image-generation loop: about 73\u201385% of separately profiled runtime",
+    "prompt_encoding": "About 2.8\u20133.7 seconds in diagnostic warm-ups; whole-runtime savings can also include scheduling/offload effects. Do not attribute the entire 8\u20139 second observed gain to that phase alone.",
+    "timing_scope": "Whole worker wall time, no phase synchronization barriers in timed pairs; diagnostic warm-ups collected separately",
+    "timed_runs": 22,
+    "warmup_generations": 5,
+    "all_timed_worker_seconds": 1158.2866360219998,
+    "end_to_end_total_duration_measured": false
+  },
+  "quality_review": {
+    "representative_images_visually_inspected": [
+      "Crew Cut",
+      "Bun",
+      "Natural Makeup",
+      "Classic Red crop",
+      "Glossy Black crop"
+    ],
+    "comparison_conclusion": "No added change from the candidate in any supplied output: all paired PNG bytes and decoded pixels are identical. This preserves the baseline, not proof that baseline quality is ideal.",
+    "existing_limits": "Nail crops remain soft/smooth; no full-hand composite in this artifact. Appearance/identity generalization across other photos or presets is not established."
+  },
+  "decision": {
+    "candidate_suitable_for_next_isolated_application_rehearsal": true,
+    "production_enablement": false,
+    "render_deployment": false,
+    "live_database_changes": false,
+    "working_demo_changed": false,
+    "new_benchmark_run_required_for_this_review": false
+  },
+  "limits": [
+    "Three pairs per primary case, including one candidate cold cache and two reuse runs; tiny samples do not establish percentiles or universal speedup",
+    "Bun/Glossy Black each have a single cold-cache pair: equivalent outputs verified, no repeated-use speed conclusion",
+    "No first-use speed guarantee: Crew Cut cold candidate was slower; other cold results were close to baseline",
+    "Nails measures one approved localized crop, not a five-nail hand or fivefold end-to-end speedup",
+    "No CPU geometry/refinement, renderer style, website/browser, network or three-look Consultation latency measured",
+    "No new photo coverage or cached Hair restoration full application rehearsal",
+    "Setup logs/host.json and executed overlay hashes are not included in the returned ZIP; GPU/model/runtime metadata are reported by the benchmark, input/output image hashes independently checked"
+  ],
+  "next_acceptance": [
+    "One full-hand Red/Black before/after with unchanged masks, all nails and outside-mask checks",
+    "Hair/Makeup and adapter restoration, renderer styles and Consultation rehearsal with time to first/all looks",
+    "Keep working demo and both runtime flags unchanged until application acceptance; original no-Render-deploy instruction remains"
+  ]
+}

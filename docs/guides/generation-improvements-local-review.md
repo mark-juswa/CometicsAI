@@ -1,6 +1,6 @@
 # BeautyCore generation improvements: local review and GPU benchmark
 
-2026-10-18. Development approved by the Supervisor. **No Render deployment or live database migration has been performed.** Web changes are locally verified; the optional speed candidate remains experimental and disabled. This guide concerns the new improvements, not a claim that the currently hosted website already includes them.
+2026-10-18. Development approved by the Supervisor. **No Render deployment or live database migration has been performed.** Web changes are locally verified; the speed candidate passed the bounded worker comparison and remains disabled pending full application acceptance. This guide concerns the new improvements, not a claim that the currently hosted website already includes them.
 
 ## What changed
 
@@ -57,7 +57,7 @@ The fixed positive and empty negative prompts are encoded again for each model c
 
 The optional worker flags are `AI_INFERENCE_PROFILE=1` for diagnostic phase timings and `AI_PROMPT_CACHE=1` for the candidate cache. **Leave both unset in the working demo.** No flag has been set in Render/Kaggle. Profiling adds synchronization overhead; the paired speed samples disable phase barriers and collect a separate diagnostic warm-up. Persistent CPU segmentation is not implemented because its contribution still needs current measurements.
 
-CPU tensor tests prove repeated encoding work can be reused in the wrapper. They do not measure FLUX GPU latency or prove image quality. There is no new measured percentage improvement yet.
+CPU tensor tests prove repeated encoding work can be reused in the wrapper. The subsequently returned GPU artifact now also verifies identical outputs and bounded repeated-use timing gains; see the review below. Full application latency and general image quality remain separate gates.
 
 ## Run the separate private Kaggle comparison
 
@@ -80,4 +80,8 @@ If setup stops, retain the printed workspace and `setup-evidence` logs. A host m
 
 Web AI routing/business regressions, Python backend/worker tests, disposable migration/idempotency checks, source catalog synchronization and the production build were run locally. Exact outcomes are recorded in `docs/experiments/generation-improvements-development-20261018.json`.
 
-Still pending: the new real GPU before/after report and visual review, full application/device acceptance, confirmed Makeup/missing service prices and special Nail Art pricing rules. Native mobile's strict Consultation contract still carries its existing demo numeric fields; this web slice preserves that contract and does not claim native price consistency. No code was pushed, no old demo bundle was rebuilt, and no live migration, notebook replacement or Render deployment was performed.
+The new GPU worker report and exact-output comparison have now been reviewed: Crew Cut65.005→56.642s, Natural Makeup65.653→56.431s and single-nail Red37.475→29.055s medians (three pairs each). All eleven baseline/candidate pairs are byte/pixel identical. Gains depend on reused prompts; Bun/Black have single cold pairs only. [Full interpretation](../experiments/generation-speed-benchmark-20261018-review.md). Still pending: full-hand/application/device acceptance, confirmed Makeup/missing service prices and special Nail Art pricing rules. Native mobile's strict Consultation contract still carries its existing demo numeric fields; this web slice preserves that contract and does not claim native price consistency. No code was pushed, no old demo bundle was rebuilt, and no live migration, notebook replacement or Render deployment was performed.
+
+## Completed worker benchmark — no rerun needed for this review
+
+The user supplied `beautycore-speed-results.zip`; independent CRC, inventory, timing-summary and all22 image-hash checks passed. The separate experiment record preserves the raw report. The dominant measured worker phase remains the model image-generation loop (about73–85% in diagnostic warm-ups). The candidate improves repeated-prompt worker cases while preserving their exact outputs; first-use performance is not consistently faster. It remains disabled in the working system pending the narrower full application rehearsal. No further27-generation benchmark is required merely to confirm this artifact.

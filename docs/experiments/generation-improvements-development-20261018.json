@@ -138,5 +138,11 @@
     "beautycore/db/migrations/0004_look_details.sql": "b48aa38faf90d97cacb9f01d2f88ae3a6ef81962297fb6a4681f74e7933f38ce",
     "beautycore/lib/business/style-catalog.json": "b762538f4c9fc651382a1cc6419dc4e97f19cb1c24060559e282a2d40512fdee"
   },
-  "guide": "docs/guides/generation-improvements-local-review.md"
+  "guide": "docs/guides/generation-improvements-local-review.md",
+  "follow_up": {
+    "date": "2026-10-18",
+    "completed_gpu_worker_review": "docs/experiments/generation-speed-benchmark-20261018-review.json",
+    "status": "Bounded worker timing/output equivalence verified; full application acceptance and enablement pending",
+    "historical_development_verification_retained": true
+  }
 }

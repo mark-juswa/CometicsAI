@@ -116,5 +116,10 @@
     "production_runtime_flags_enabled": false,
     "new_gpu_run_performed_here": false
   },
-  "guide": "docs/guides/application-rehearsal-20261018.md"
+  "guide": "docs/guides/application-rehearsal-20261018.md",
+  "follow_up": {
+    "review": "docs/experiments/application-rehearsal-20261018-review.json",
+    "returned_result": "Completed and independently reviewed",
+    "status": "Output preservation verified; global-cache performance gate failed for new Hair/Makeup; Nails-only policy proposed"
+  }
 }

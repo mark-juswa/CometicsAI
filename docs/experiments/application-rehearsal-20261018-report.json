@@ -1,0 +1,2546 @@
+{
+  "status": "APPLICATION_COMPARISON_COMPLETE_VISUAL_REVIEW_REQUIRED",
+  "scope": "Actual CPU API/gateway + loopback GPU, one approved full hand",
+  "gemini_called": false,
+  "browser_or_render_tested": false,
+  "modes": {
+    "baseline": {
+      "hair_consultation": {
+        "styles": [
+          "bob_hair",
+          "bun",
+          "crew_cut"
+        ],
+        "first_result_seconds": 64.13063128800002,
+        "all_three_seconds": 190.40412126800004,
+        "selected_completed_look": true
+      },
+      "nails_consultation": {
+        "styles": [
+          "classic_red",
+          "french_tip",
+          "glossy_black"
+        ],
+        "first_result_seconds": 196.50089336299993,
+        "all_three_seconds": 401.158910503,
+        "selected_completed_look": true
+      },
+      "final_health": {
+        "status": "ready",
+        "process_alive": true,
+        "gpu_runtime_ready": true,
+        "base_model_loaded": true,
+        "foundation_load_count": 1,
+        "base_model_id": "black-forest-labs/FLUX.2-klein-base-4B",
+        "base_model_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+        "active_feature": "nails",
+        "active_adapter": "nails",
+        "supported_features": [
+          "hairstyle",
+          "makeup",
+          "nails"
+        ],
+        "load_seconds": 61.037,
+        "nails_inference_steps": [
+          8,
+          12,
+          20
+        ],
+        "gpu_busy": false,
+        "diagnostics_version": "deployment-01"
+      }
+    },
+    "candidate": {
+      "hair_consultation": {
+        "styles": [
+          "bob_hair",
+          "bun",
+          "crew_cut"
+        ],
+        "first_result_seconds": 70.14809771099999,
+        "all_three_seconds": 212.45704742800012,
+        "selected_completed_look": true
+      },
+      "nails_consultation": {
+        "styles": [
+          "classic_red",
+          "french_tip",
+          "glossy_black"
+        ],
+        "first_result_seconds": 172.45391172400014,
+        "all_three_seconds": 345.0563136169999,
+        "selected_completed_look": true
+      },
+      "final_health": {
+        "status": "ready",
+        "process_alive": true,
+        "gpu_runtime_ready": true,
+        "base_model_loaded": true,
+        "foundation_load_count": 1,
+        "base_model_id": "black-forest-labs/FLUX.2-klein-base-4B",
+        "base_model_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+        "active_feature": "nails",
+        "active_adapter": "nails",
+        "supported_features": [
+          "hairstyle",
+          "makeup",
+          "nails"
+        ],
+        "load_seconds": 61.037,
+        "nails_inference_steps": [
+          8,
+          12,
+          20
+        ],
+        "gpu_busy": false,
+        "diagnostics_version": "deployment-01"
+      }
+    }
+  },
+  "requests": [
+    {
+      "case": "hairstyle-bob_hair",
+      "mode": "baseline",
+      "style_id": "bob_hair",
+      "feature": "hairstyle",
+      "wall_seconds": 64.10462495099989,
+      "png_sha256": "b8cdb58e7be59a342d154889354e0d98a0494ab0065746c0319dc55abbe596e0",
+      "rgb_sha256": "252bb561964909866743d093563aaf5d4e3255a2f37fc56620411c26d00d6870",
+      "result": "baseline-hairstyle-bob_hair.png",
+      "metadata": {
+        "style_id": "bob_hair",
+        "base_model_id": "black-forest-labs/FLUX.2-klein-base-4B",
+        "base_model_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+        "adapter_id": "train001",
+        "adapter_experiment": "TRAIN-001",
+        "adapter_steps": 250,
+        "adapter_sha256": "7e3991f8a4e502573d3e82e9ac34c89fdf3f0b66fb337abb026a5b4c9ad080ff",
+        "seed": 1977,
+        "steps": 20,
+        "guidance": 4.0,
+        "runtime_seconds": 61.65,
+        "peak_gpu_mib": 8302.2
+      },
+      "worker_requests": [
+        {
+          "feature": "hairstyle",
+          "style_id": "bob_hair",
+          "request_id": "989deb29-225a-46f3-903f-0b0694dfb9ff",
+          "correlation_id": "8b81009e-f768-463c-99f7-52a65a46b201",
+          "inference_steps": 20,
+          "adapter_id": "train001",
+          "adapter_sha256": "7e3991f8a4e502573d3e82e9ac34c89fdf3f0b66fb337abb026a5b4c9ad080ff",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 62.474,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20773875712,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11485708288
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 56623104,
+              "peak_allocated": 8705465856,
+              "peak_reserved": 8965324800
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 191,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 61.655123,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": false,
+              "entries": 0,
+              "cpu_bytes": 0
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        }
+      ]
+    },
+    {
+      "case": "hairstyle-bun",
+      "mode": "baseline",
+      "style_id": "bun",
+      "feature": "hairstyle",
+      "wall_seconds": 62.11227051900005,
+      "png_sha256": "236e9cd2a53e19e5eb98e96a17d60cd67575362f4865cf1bcd798f6dc2316b59",
+      "rgb_sha256": "1a93d1d3a613dc20ee6b5a14959998ad100907c6e1338fa696208b9c31544d62",
+      "result": "baseline-hairstyle-bun.png",
+      "metadata": {
+        "style_id": "bun",
+        "base_model_id": "black-forest-labs/FLUX.2-klein-base-4B",
+        "base_model_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+        "adapter_id": "train002",
+        "adapter_experiment": "TRAIN-002",
+        "adapter_steps": 500,
+        "adapter_sha256": "59d527217a68139bc2aaa4eedbfcd2d5789ef115f8ecb924410eea24a952939b",
+        "seed": 1977,
+        "steps": 20,
+        "guidance": 4.0,
+        "runtime_seconds": 59.29,
+        "peak_gpu_mib": 8304.3
+      },
+      "worker_requests": [
+        {
+          "feature": "hairstyle",
+          "style_id": "bun",
+          "request_id": "5eabc292-524c-4dca-9d3f-822a5f639eaf",
+          "correlation_id": "674032e0-29ee-48b3-a13d-be291cf4652a",
+          "inference_steps": 20,
+          "adapter_id": "train002",
+          "adapter_sha256": "59d527217a68139bc2aaa4eedbfcd2d5789ef115f8ecb924410eea24a952939b",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 59.794,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20013670400,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 12220317696
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 58720256,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8971616256
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 193,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 59.294064,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": false,
+              "entries": 0,
+              "cpu_bytes": 0
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        }
+      ]
+    },
+    {
+      "case": "hairstyle-crew_cut",
+      "mode": "baseline",
+      "style_id": "crew_cut",
+      "feature": "hairstyle",
+      "wall_seconds": 64.1091623650002,
+      "png_sha256": "da234556a871228b97543f97b3a9fe650894b24703510fff2836a12eb66c3497",
+      "rgb_sha256": "5c7bdb9a80f4b490951dabd9efeaf3940074efa7d97176c3bb4d4d8e2e50e4ee",
+      "result": "baseline-hairstyle-crew_cut.png",
+      "metadata": {
+        "style_id": "crew_cut",
+        "base_model_id": "black-forest-labs/FLUX.2-klein-base-4B",
+        "base_model_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+        "adapter_id": "train001",
+        "adapter_experiment": "TRAIN-001",
+        "adapter_steps": 250,
+        "adapter_sha256": "7e3991f8a4e502573d3e82e9ac34c89fdf3f0b66fb337abb026a5b4c9ad080ff",
+        "seed": 1977,
+        "steps": 20,
+        "guidance": 4.0,
+        "runtime_seconds": 60.45,
+        "peak_gpu_mib": 8304.3
+      },
+      "worker_requests": [
+        {
+          "feature": "hairstyle",
+          "style_id": "crew_cut",
+          "request_id": "73f989e2-af45-4cb5-8d8d-eb620671fe38",
+          "correlation_id": "98d1f367-47d8-4f15-8169-351e85945fb2",
+          "inference_steps": 20,
+          "adapter_id": "train001",
+          "adapter_sha256": "7e3991f8a4e502573d3e82e9ac34c89fdf3f0b66fb337abb026a5b4c9ad080ff",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 60.941,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20029411328,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 12206280704
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 56623104,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8971616256
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 191,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 60.448467,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": false,
+              "entries": 0,
+              "cpu_bytes": 0
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        }
+      ]
+    },
+    {
+      "case": "makeup-natural_makeup",
+      "mode": "baseline",
+      "style_id": "natural_makeup",
+      "feature": "makeup",
+      "wall_seconds": 64.11024325900007,
+      "png_sha256": "2c8a1511035fec5b326878af85130cdb10118c3706a56eae168241f395f8fd39",
+      "rgb_sha256": "1ccf3fc59a7d9823082ee2c91c1750d643bad0e9f2aa657c947a700d5ca26c13",
+      "result": "baseline-makeup-natural_makeup.png",
+      "metadata": {
+        "feature": "makeup",
+        "style_id": "natural_makeup",
+        "adapter_id": "MAKEUP-001",
+        "adapter_sha256": "f6f0419e4259a75102f08a450222ad806e3aec1c2ae50ff89f875139084ae510",
+        "adapter_steps": 250,
+        "lora_active": true,
+        "base_model_id": "black-forest-labs/FLUX.2-klein-base-4B",
+        "base_model_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+        "prompt_presets_sha256": "8e6e244f6174dc70f33cb15a037f5e67e2a245f15278967f4d2f85bc909cd5f5",
+        "prompt": "Apply restrained everyday makeup with light upper-lash definition, soft neutral cheek blush and a muted rose lip. Edit the supplied photo of the same person. Keep their recognizable identity, face shape, eyes, nose, mouth geometry, expression, natural skin tone and skin texture. Keep the original hairstyle, hair color, clothing, background, pose, framing and lighting. Change makeup only. Keep cosmetic color in plausible facial regions and avoid mask-like patches or plastic skin.",
+        "seed": 1977,
+        "steps": 20,
+        "guidance": 4.0,
+        "preprocessing": "aspect-preserving pad to 512x512",
+        "runtime_seconds": 61.38,
+        "peak_gpu_mib": 8304.3
+      },
+      "worker_requests": [
+        {
+          "feature": "makeup",
+          "style_id": "natural_makeup",
+          "request_id": "cd1b830a-ba9c-43f3-8692-b8867ef92378",
+          "correlation_id": "a90d07cd-a2e2-4e20-b0c6-3fc35e823dc6",
+          "inference_steps": 20,
+          "adapter_id": "MAKEUP-001",
+          "adapter_sha256": "f6f0419e4259a75102f08a450222ad806e3aec1c2ae50ff89f875139084ae510",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 61.858,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20057653248,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11858219008
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 56623104,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8971616256
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 191,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 61.383366,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": false,
+              "entries": 0,
+              "cpu_bytes": 0
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        }
+      ]
+    },
+    {
+      "case": "hair-restored-crew_cut",
+      "mode": "baseline",
+      "style_id": "crew_cut",
+      "feature": "hairstyle",
+      "wall_seconds": 66.12541665899994,
+      "png_sha256": "da234556a871228b97543f97b3a9fe650894b24703510fff2836a12eb66c3497",
+      "rgb_sha256": "5c7bdb9a80f4b490951dabd9efeaf3940074efa7d97176c3bb4d4d8e2e50e4ee",
+      "result": "baseline-hair-restored-crew_cut.png",
+      "metadata": {
+        "style_id": "crew_cut",
+        "base_model_id": "black-forest-labs/FLUX.2-klein-base-4B",
+        "base_model_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+        "adapter_id": "train001",
+        "adapter_experiment": "TRAIN-001",
+        "adapter_steps": 250,
+        "adapter_sha256": "7e3991f8a4e502573d3e82e9ac34c89fdf3f0b66fb337abb026a5b4c9ad080ff",
+        "seed": 1977,
+        "steps": 20,
+        "guidance": 4.0,
+        "runtime_seconds": 62.21,
+        "peak_gpu_mib": 8304.3
+      },
+      "worker_requests": [
+        {
+          "feature": "hairstyle",
+          "style_id": "crew_cut",
+          "request_id": "8ff356e3-8cc2-43c3-aa17-994d7b71a324",
+          "correlation_id": "e5bb7072-2280-43ef-a6a2-063a40ef8a6c",
+          "inference_steps": 20,
+          "adapter_id": "train001",
+          "adapter_sha256": "7e3991f8a4e502573d3e82e9ac34c89fdf3f0b66fb337abb026a5b4c9ad080ff",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 62.707,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20033011712,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11852926976
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 56623104,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8971616256
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 191,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 62.215467,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": false,
+              "entries": 0,
+              "cpu_bytes": 0
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        }
+      ]
+    },
+    {
+      "case": "nails-classic_red",
+      "mode": "baseline",
+      "style_id": "classic_red",
+      "feature": "nails",
+      "wall_seconds": 196.35373153799992,
+      "png_sha256": "083de295548fde0c9c5ff2abc54f9b33d744fd3757baa96764270bf3dbea1f3d",
+      "rgb_sha256": "10c111d05f7108ad563b7416cf305e4359b951e500699cdece530c2cd1c748de",
+      "result": "baseline-nails-classic_red.png",
+      "metadata": {
+        "feature": "nails",
+        "inference_path": "model",
+        "nails_edited": 5,
+        "model_seconds": 184.6491014959995,
+        "renderer_seconds": null,
+        "compositing": "original_nail_mask",
+        "timing_seconds": {
+          "image_validation": 0.051,
+          "normalization": 0.031,
+          "hand_localization": 0.042,
+          "nail_segmentation": 5.663,
+          "mask_preparation": 0.006,
+          "mask_refinement": 5.35,
+          "crop_preparation": 0.646,
+          "gpu_request": 183.769,
+          "model_generation": 174.09,
+          "result_reconstruction": 0.134,
+          "compositing": 0.101,
+          "total_request": 196.103
+        },
+        "adapter_id": "NAILS-001-LOCAL-v1",
+        "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+        "inference_steps": 8
+      },
+      "worker_requests": [
+        {
+          "feature": "nails",
+          "style_id": "classic_red",
+          "request_id": "0fd4fa9d-83fc-42c9-a50f-3b5440d45499",
+          "correlation_id": "45ccc22d-8e2e-41ee-bb5f-3d015287700b",
+          "crop_index": 1,
+          "finger_id": "thumb",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 35.304,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20123717632,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 12079607808
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 56623104,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8971616256
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 191,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 34.843202,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": false,
+              "entries": 0,
+              "cpu_bytes": 0
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        },
+        {
+          "feature": "nails",
+          "style_id": "classic_red",
+          "request_id": "25303fea-57cd-4f07-8d65-a94ea48482c2",
+          "correlation_id": "45ccc22d-8e2e-41ee-bb5f-3d015287700b",
+          "crop_index": 2,
+          "finger_id": "index",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 35.229,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20055031808,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11889160192
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 56623104,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8971616256
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 191,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 34.76462,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": false,
+              "entries": 0,
+              "cpu_bytes": 0
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        },
+        {
+          "feature": "nails",
+          "style_id": "classic_red",
+          "request_id": "176397e6-644e-43d2-ae6c-ca4899a4e244",
+          "correlation_id": "45ccc22d-8e2e-41ee-bb5f-3d015287700b",
+          "crop_index": 3,
+          "finger_id": "middle",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 35.345,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20123717632,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 12128641024
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 56623104,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8971616256
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 191,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 34.879238,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": false,
+              "entries": 0,
+              "cpu_bytes": 0
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        },
+        {
+          "feature": "nails",
+          "style_id": "classic_red",
+          "request_id": "16be2f06-e770-49b1-bf6d-821627c9c168",
+          "correlation_id": "45ccc22d-8e2e-41ee-bb5f-3d015287700b",
+          "crop_index": 4,
+          "finger_id": "ring",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 35.203,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20115869696,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11702480896
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 56623104,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8971616256
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 191,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 34.726629,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": false,
+              "entries": 0,
+              "cpu_bytes": 0
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        },
+        {
+          "feature": "nails",
+          "style_id": "classic_red",
+          "request_id": "d673f06a-5858-4104-b458-de5016ef058b",
+          "correlation_id": "45ccc22d-8e2e-41ee-bb5f-3d015287700b",
+          "crop_index": 5,
+          "finger_id": "little",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 35.337,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20201365504,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11938406400
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 56623104,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8971616256
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 191,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 34.876143,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": false,
+              "entries": 0,
+              "cpu_bytes": 0
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        }
+      ],
+      "changed_outside_mask_pixels": 0,
+      "changed_pixels_per_finger": {
+        "little": 2566,
+        "ring": 4342,
+        "middle": 4311,
+        "index": 3894,
+        "thumb": 2469
+      },
+      "mask_file": "baseline-nails-classic_red-mask.png",
+      "mask_pixels_sha256": "35cc76d3c81952315c158b2af2e524f97eb14f5067c2247a823df15e19cd36e9"
+    },
+    {
+      "case": "nails-french_tip",
+      "mode": "baseline",
+      "style_id": "french_tip",
+      "feature": "nails",
+      "wall_seconds": 10.021387443000094,
+      "png_sha256": "b5cca09df1f8c08d862f0787ad378246bb08e9037c7b64c22a7b0ae4bbc54eaf",
+      "rgb_sha256": "10e2b6aa39c4e67f0895374c30866eae87d402244cd324a2c7a48583fbb61dcf",
+      "result": "baseline-nails-french_tip.png",
+      "metadata": {
+        "feature": "nails",
+        "inference_path": "renderer",
+        "nails_edited": 5,
+        "model_seconds": null,
+        "renderer_seconds": 0.11561965700002474,
+        "compositing": "original_nail_mask",
+        "timing_seconds": {
+          "image_validation": 0.047,
+          "normalization": 0.037,
+          "hand_localization": 0.037,
+          "nail_segmentation": 3.591,
+          "mask_preparation": 0.006,
+          "mask_refinement": 5.108,
+          "style_rendering": 0.03,
+          "compositing": 0.086,
+          "total_request": 9.25
+        }
+      },
+      "worker_requests": [],
+      "changed_outside_mask_pixels": 0,
+      "changed_pixels_per_finger": {
+        "little": 2566,
+        "ring": 4342,
+        "middle": 4311,
+        "index": 3894,
+        "thumb": 2469
+      },
+      "mask_file": "baseline-nails-french_tip-mask.png",
+      "mask_pixels_sha256": "35cc76d3c81952315c158b2af2e524f97eb14f5067c2247a823df15e19cd36e9"
+    },
+    {
+      "case": "nails-glossy_black",
+      "mode": "baseline",
+      "style_id": "glossy_black",
+      "feature": "nails",
+      "wall_seconds": 194.34513624500005,
+      "png_sha256": "9cd22cace8702397ced12206d39888564882c356f05503003bdd094f7d69cd4c",
+      "rgb_sha256": "1f97280eee526f756f186675aedf55151363736cace23656424a7e76f96ff9ef",
+      "result": "baseline-nails-glossy_black.png",
+      "metadata": {
+        "feature": "nails",
+        "inference_path": "model",
+        "nails_edited": 5,
+        "model_seconds": 184.13184956199962,
+        "renderer_seconds": null,
+        "compositing": "original_nail_mask",
+        "timing_seconds": {
+          "image_validation": 0.038,
+          "normalization": 0.029,
+          "hand_localization": 0.032,
+          "nail_segmentation": 3.67,
+          "mask_preparation": 0.006,
+          "mask_refinement": 5.204,
+          "crop_preparation": 0.665,
+          "gpu_request": 183.25,
+          "model_generation": 174.18,
+          "result_reconstruction": 0.128,
+          "compositing": 0.089,
+          "total_request": 193.419
+        },
+        "adapter_id": "NAILS-001-LOCAL-v1",
+        "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+        "inference_steps": 8
+      },
+      "worker_requests": [
+        {
+          "feature": "nails",
+          "style_id": "glossy_black",
+          "request_id": "cc4ef257-6621-4664-be2a-389cbb24cba3",
+          "correlation_id": "b65afabd-338e-49b6-8c10-9f29b4128079",
+          "crop_index": 1,
+          "finger_id": "thumb",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 34.837,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20151590912,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 12059578368
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 56623104,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8971616256
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 191,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 34.372322,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": false,
+              "entries": 0,
+              "cpu_bytes": 0
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        },
+        {
+          "feature": "nails",
+          "style_id": "glossy_black",
+          "request_id": "0895eec2-ccd9-44ea-8b3d-d553bd81cbaa",
+          "correlation_id": "b65afabd-338e-49b6-8c10-9f29b4128079",
+          "crop_index": 2,
+          "finger_id": "index",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 35.056,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20258066432,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11932979200
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 56623104,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8971616256
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 191,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 34.59339,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": false,
+              "entries": 0,
+              "cpu_bytes": 0
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        },
+        {
+          "feature": "nails",
+          "style_id": "glossy_black",
+          "request_id": "e4e5096e-8f8a-46f3-88f7-3a99a007f2bf",
+          "correlation_id": "b65afabd-338e-49b6-8c10-9f29b4128079",
+          "crop_index": 3,
+          "finger_id": "middle",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 35.126,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20136468480,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11496263680
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 56623104,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8971616256
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 191,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 34.665343,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": false,
+              "entries": 0,
+              "cpu_bytes": 0
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        },
+        {
+          "feature": "nails",
+          "style_id": "glossy_black",
+          "request_id": "2f78b1a6-3a6d-4bce-bcf0-2b92eb50ff09",
+          "correlation_id": "b65afabd-338e-49b6-8c10-9f29b4128079",
+          "crop_index": 4,
+          "finger_id": "ring",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 35.279,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20165345280,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11834232832
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 56623104,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8971616256
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 191,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 34.818973,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": false,
+              "entries": 0,
+              "cpu_bytes": 0
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        },
+        {
+          "feature": "nails",
+          "style_id": "glossy_black",
+          "request_id": "da89fdf0-f01b-43de-9d27-9430a8b7b574",
+          "correlation_id": "b65afabd-338e-49b6-8c10-9f29b4128079",
+          "crop_index": 5,
+          "finger_id": "little",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 36.202,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20314808320,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11885592576
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 56623104,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8971616256
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 191,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 35.731009,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": false,
+              "entries": 0,
+              "cpu_bytes": 0
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        }
+      ],
+      "changed_outside_mask_pixels": 0,
+      "changed_pixels_per_finger": {
+        "little": 2566,
+        "ring": 4342,
+        "middle": 4311,
+        "index": 3894,
+        "thumb": 2468
+      },
+      "mask_file": "baseline-nails-glossy_black-mask.png",
+      "mask_pixels_sha256": "35cc76d3c81952315c158b2af2e524f97eb14f5067c2247a823df15e19cd36e9"
+    },
+    {
+      "case": "nails-nude_pink",
+      "mode": "baseline",
+      "style_id": "nude_pink",
+      "feature": "nails",
+      "wall_seconds": 10.020186177999904,
+      "png_sha256": "d279750a1e3d9a216d5215e4143214853ea43d05c3a316a176e94b4a427ec4ea",
+      "rgb_sha256": "41a84a64c681eee2e196e0ddf530f7f77d526adfad5ade5baf01e79b1fca14be",
+      "result": "baseline-nails-nude_pink.png",
+      "metadata": {
+        "feature": "nails",
+        "inference_path": "renderer",
+        "nails_edited": 5,
+        "model_seconds": null,
+        "renderer_seconds": 0.1033080649999647,
+        "compositing": "original_nail_mask",
+        "timing_seconds": {
+          "image_validation": 0.038,
+          "normalization": 0.029,
+          "hand_localization": 0.033,
+          "nail_segmentation": 3.554,
+          "mask_preparation": 0.006,
+          "mask_refinement": 5.234,
+          "style_rendering": 0.021,
+          "compositing": 0.082,
+          "total_request": 9.304
+        }
+      },
+      "worker_requests": [],
+      "changed_outside_mask_pixels": 0,
+      "changed_pixels_per_finger": {
+        "little": 2566,
+        "ring": 4342,
+        "middle": 4311,
+        "index": 3894,
+        "thumb": 2469
+      },
+      "mask_file": "baseline-nails-nude_pink-mask.png",
+      "mask_pixels_sha256": "35cc76d3c81952315c158b2af2e524f97eb14f5067c2247a823df15e19cd36e9"
+    },
+    {
+      "case": "nails-pink_ombre",
+      "mode": "baseline",
+      "style_id": "pink_ombre",
+      "feature": "nails",
+      "wall_seconds": 10.019052702999943,
+      "png_sha256": "7adf4abde4cef01f808cef63d400dd4298cf7c76232924b57af6cd92bf728fef",
+      "rgb_sha256": "03a36bb970f67a5a3b59043a24067e47a9674ca41bbc9ef5ce145134e979594e",
+      "result": "baseline-nails-pink_ombre.png",
+      "metadata": {
+        "feature": "nails",
+        "inference_path": "renderer",
+        "nails_edited": 5,
+        "model_seconds": null,
+        "renderer_seconds": 0.10300357999994958,
+        "compositing": "original_nail_mask",
+        "timing_seconds": {
+          "image_validation": 0.039,
+          "normalization": 0.029,
+          "hand_localization": 0.031,
+          "nail_segmentation": 3.538,
+          "mask_preparation": 0.006,
+          "mask_refinement": 5.281,
+          "style_rendering": 0.02,
+          "compositing": 0.083,
+          "total_request": 9.334
+        }
+      },
+      "worker_requests": [],
+      "changed_outside_mask_pixels": 0,
+      "changed_pixels_per_finger": {
+        "little": 2566,
+        "ring": 4342,
+        "middle": 4311,
+        "index": 3894,
+        "thumb": 2469
+      },
+      "mask_file": "baseline-nails-pink_ombre-mask.png",
+      "mask_pixels_sha256": "35cc76d3c81952315c158b2af2e524f97eb14f5067c2247a823df15e19cd36e9"
+    },
+    {
+      "case": "hairstyle-bob_hair",
+      "mode": "candidate",
+      "style_id": "bob_hair",
+      "feature": "hairstyle",
+      "wall_seconds": 70.1199813369999,
+      "png_sha256": "b8cdb58e7be59a342d154889354e0d98a0494ab0065746c0319dc55abbe596e0",
+      "rgb_sha256": "252bb561964909866743d093563aaf5d4e3255a2f37fc56620411c26d00d6870",
+      "result": "candidate-hairstyle-bob_hair.png",
+      "metadata": {
+        "style_id": "bob_hair",
+        "base_model_id": "black-forest-labs/FLUX.2-klein-base-4B",
+        "base_model_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+        "adapter_id": "train001",
+        "adapter_experiment": "TRAIN-001",
+        "adapter_steps": 250,
+        "adapter_sha256": "7e3991f8a4e502573d3e82e9ac34c89fdf3f0b66fb337abb026a5b4c9ad080ff",
+        "seed": 1977,
+        "steps": 20,
+        "guidance": 4.0,
+        "runtime_seconds": 65.81,
+        "peak_gpu_mib": 8304.3
+      },
+      "worker_requests": [
+        {
+          "feature": "hairstyle",
+          "style_id": "bob_hair",
+          "request_id": "b79daa74-0fe8-4a7b-929f-018f02ce8b4d",
+          "correlation_id": "c4ec5719-8e4a-47d4-800f-7ff8085ed63d",
+          "inference_steps": 20,
+          "adapter_id": "train001",
+          "adapter_sha256": "7e3991f8a4e502573d3e82e9ac34c89fdf3f0b66fb337abb026a5b4c9ad080ff",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 66.301,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20203163648,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11799748608
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 56623104,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8971616256
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 191,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 65.813562,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 2,
+              "bypasses": 0,
+              "enabled": true,
+              "entries": 2,
+              "cpu_bytes": 15761408
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        }
+      ]
+    },
+    {
+      "case": "hairstyle-bun",
+      "mode": "candidate",
+      "style_id": "bun",
+      "feature": "hairstyle",
+      "wall_seconds": 72.12290413300002,
+      "png_sha256": "236e9cd2a53e19e5eb98e96a17d60cd67575362f4865cf1bcd798f6dc2316b59",
+      "rgb_sha256": "1a93d1d3a613dc20ee6b5a14959998ad100907c6e1338fa696208b9c31544d62",
+      "result": "candidate-hairstyle-bun.png",
+      "metadata": {
+        "style_id": "bun",
+        "base_model_id": "black-forest-labs/FLUX.2-klein-base-4B",
+        "base_model_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+        "adapter_id": "train002",
+        "adapter_experiment": "TRAIN-002",
+        "adapter_steps": 500,
+        "adapter_sha256": "59d527217a68139bc2aaa4eedbfcd2d5789ef115f8ecb924410eea24a952939b",
+        "seed": 1977,
+        "steps": 20,
+        "guidance": 4.0,
+        "runtime_seconds": 67.72,
+        "peak_gpu_mib": 8304.3
+      },
+      "worker_requests": [
+        {
+          "feature": "hairstyle",
+          "style_id": "bun",
+          "request_id": "d01c7708-ba7f-4f85-a088-66349d9e9355",
+          "correlation_id": "d197395b-0425-4f59-a2da-b01aa43162a0",
+          "inference_steps": 20,
+          "adapter_id": "train002",
+          "adapter_sha256": "59d527217a68139bc2aaa4eedbfcd2d5789ef115f8ecb924410eea24a952939b",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 68.21,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20250423296,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11900993536
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 56623104,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8971616256
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 191,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 67.722933,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 2,
+              "bypasses": 0,
+              "enabled": true,
+              "entries": 4,
+              "cpu_bytes": 31522816
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        }
+      ]
+    },
+    {
+      "case": "hairstyle-crew_cut",
+      "mode": "candidate",
+      "style_id": "crew_cut",
+      "feature": "hairstyle",
+      "wall_seconds": 70.13167193100003,
+      "png_sha256": "da234556a871228b97543f97b3a9fe650894b24703510fff2836a12eb66c3497",
+      "rgb_sha256": "5c7bdb9a80f4b490951dabd9efeaf3940074efa7d97176c3bb4d4d8e2e50e4ee",
+      "result": "candidate-hairstyle-crew_cut.png",
+      "metadata": {
+        "style_id": "crew_cut",
+        "base_model_id": "black-forest-labs/FLUX.2-klein-base-4B",
+        "base_model_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+        "adapter_id": "train001",
+        "adapter_experiment": "TRAIN-001",
+        "adapter_steps": 250,
+        "adapter_sha256": "7e3991f8a4e502573d3e82e9ac34c89fdf3f0b66fb337abb026a5b4c9ad080ff",
+        "seed": 1977,
+        "steps": 20,
+        "guidance": 4.0,
+        "runtime_seconds": 66.73,
+        "peak_gpu_mib": 8303.1
+      },
+      "worker_requests": [
+        {
+          "feature": "hairstyle",
+          "style_id": "crew_cut",
+          "request_id": "0e4f3351-abc7-47a3-9cef-cccccbf82d2c",
+          "correlation_id": "d48a841f-4e32-4ee8-8b71-51bde92db2d2",
+          "inference_steps": 20,
+          "adapter_id": "train001",
+          "adapter_sha256": "7e3991f8a4e502573d3e82e9ac34c89fdf3f0b66fb337abb026a5b4c9ad080ff",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 67.224,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20213350400,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11987050496
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 77594624,
+              "peak_allocated": 8706384384,
+              "peak_reserved": 8954839040
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 211,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 66.733252,
+            "prompt_cache": {
+              "hits": 1,
+              "misses": 1,
+              "bypasses": 0,
+              "enabled": true,
+              "entries": 4,
+              "cpu_bytes": 31522816
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        }
+      ]
+    },
+    {
+      "case": "makeup-natural_makeup",
+      "mode": "candidate",
+      "style_id": "natural_makeup",
+      "feature": "makeup",
+      "wall_seconds": 72.13082292600006,
+      "png_sha256": "2c8a1511035fec5b326878af85130cdb10118c3706a56eae168241f395f8fd39",
+      "rgb_sha256": "1ccf3fc59a7d9823082ee2c91c1750d643bad0e9f2aa657c947a700d5ca26c13",
+      "result": "candidate-makeup-natural_makeup.png",
+      "metadata": {
+        "feature": "makeup",
+        "style_id": "natural_makeup",
+        "adapter_id": "MAKEUP-001",
+        "adapter_sha256": "f6f0419e4259a75102f08a450222ad806e3aec1c2ae50ff89f875139084ae510",
+        "adapter_steps": 250,
+        "lora_active": true,
+        "base_model_id": "black-forest-labs/FLUX.2-klein-base-4B",
+        "base_model_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+        "prompt_presets_sha256": "8e6e244f6174dc70f33cb15a037f5e67e2a245f15278967f4d2f85bc909cd5f5",
+        "prompt": "Apply restrained everyday makeup with light upper-lash definition, soft neutral cheek blush and a muted rose lip. Edit the supplied photo of the same person. Keep their recognizable identity, face shape, eyes, nose, mouth geometry, expression, natural skin tone and skin texture. Keep the original hairstyle, hair color, clothing, background, pose, framing and lighting. Change makeup only. Keep cosmetic color in plausible facial regions and avoid mask-like patches or plastic skin.",
+        "seed": 1977,
+        "steps": 20,
+        "guidance": 4.0,
+        "preprocessing": "aspect-preserving pad to 512x512",
+        "runtime_seconds": 67.48,
+        "peak_gpu_mib": 8304.3
+      },
+      "worker_requests": [
+        {
+          "feature": "makeup",
+          "style_id": "natural_makeup",
+          "request_id": "8d09b90f-6961-41a0-93ab-b5e007f5ee1e",
+          "correlation_id": "40759761-d591-46cf-a30f-46cb2be77d40",
+          "inference_steps": 20,
+          "adapter_id": "MAKEUP-001",
+          "adapter_sha256": "f6f0419e4259a75102f08a450222ad806e3aec1c2ae50ff89f875139084ae510",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 67.944,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20265873408,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11942367232
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 56623104,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8971616256
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 191,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 67.479349,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 2,
+              "bypasses": 0,
+              "enabled": true,
+              "entries": 4,
+              "cpu_bytes": 31522816
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        }
+      ]
+    },
+    {
+      "case": "hair-restored-crew_cut",
+      "mode": "candidate",
+      "style_id": "crew_cut",
+      "feature": "hairstyle",
+      "wall_seconds": 62.10526836899999,
+      "png_sha256": "da234556a871228b97543f97b3a9fe650894b24703510fff2836a12eb66c3497",
+      "rgb_sha256": "5c7bdb9a80f4b490951dabd9efeaf3940074efa7d97176c3bb4d4d8e2e50e4ee",
+      "result": "candidate-hair-restored-crew_cut.png",
+      "metadata": {
+        "style_id": "crew_cut",
+        "base_model_id": "black-forest-labs/FLUX.2-klein-base-4B",
+        "base_model_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+        "adapter_id": "train001",
+        "adapter_experiment": "TRAIN-001",
+        "adapter_steps": 250,
+        "adapter_sha256": "7e3991f8a4e502573d3e82e9ac34c89fdf3f0b66fb337abb026a5b4c9ad080ff",
+        "seed": 1977,
+        "steps": 20,
+        "guidance": 4.0,
+        "runtime_seconds": 58.43,
+        "peak_gpu_mib": 8080.3
+      },
+      "worker_requests": [
+        {
+          "feature": "hairstyle",
+          "style_id": "crew_cut",
+          "request_id": "b8ee77d3-7180-45f6-946e-7f87e1b123b3",
+          "correlation_id": "7e84032c-1a75-40e8-9553-f8c0b15aab63",
+          "inference_steps": 20,
+          "adapter_id": "train001",
+          "adapter_sha256": "7e3991f8a4e502573d3e82e9ac34c89fdf3f0b66fb337abb026a5b4c9ad080ff",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 58.901,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20313067520,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11610615808
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 54525952,
+              "peak_allocated": 8472794624,
+              "peak_reserved": 8980004864
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 189,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 58.433177,
+            "prompt_cache": {
+              "hits": 2,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": true,
+              "entries": 4,
+              "cpu_bytes": 31522816
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        }
+      ]
+    },
+    {
+      "case": "nails-classic_red",
+      "mode": "candidate",
+      "style_id": "classic_red",
+      "feature": "nails",
+      "wall_seconds": 172.31039399300016,
+      "png_sha256": "083de295548fde0c9c5ff2abc54f9b33d744fd3757baa96764270bf3dbea1f3d",
+      "rgb_sha256": "10c111d05f7108ad563b7416cf305e4359b951e500699cdece530c2cd1c748de",
+      "result": "candidate-nails-classic_red.png",
+      "metadata": {
+        "feature": "nails",
+        "inference_path": "model",
+        "nails_edited": 5,
+        "model_seconds": 161.79980403199988,
+        "renderer_seconds": null,
+        "compositing": "original_nail_mask",
+        "timing_seconds": {
+          "image_validation": 0.037,
+          "normalization": 0.029,
+          "hand_localization": 0.033,
+          "nail_segmentation": 3.532,
+          "mask_preparation": 0.005,
+          "mask_refinement": 5.075,
+          "crop_preparation": 0.666,
+          "gpu_request": 160.913,
+          "model_generation": 151.2,
+          "result_reconstruction": 0.131,
+          "compositing": 0.09,
+          "total_request": 170.82
+        },
+        "adapter_id": "NAILS-001-LOCAL-v1",
+        "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+        "inference_steps": 8
+      },
+      "worker_requests": [
+        {
+          "feature": "nails",
+          "style_id": "classic_red",
+          "request_id": "490f6e27-f928-4059-967e-7e9a9ccd288c",
+          "correlation_id": "df158400-05df-4ce0-b5fb-f293be7b8110",
+          "crop_index": 1,
+          "finger_id": "thumb",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 36.913,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20263256064,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11362947072
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 54525952,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8980004864
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 189,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 36.431804,
+            "prompt_cache": {
+              "hits": 0,
+              "misses": 2,
+              "bypasses": 0,
+              "enabled": true,
+              "entries": 4,
+              "cpu_bytes": 31522816
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        },
+        {
+          "feature": "nails",
+          "style_id": "classic_red",
+          "request_id": "874ebc3d-e9b3-431d-ba9e-6f738e7474c8",
+          "correlation_id": "df158400-05df-4ce0-b5fb-f293be7b8110",
+          "crop_index": 2,
+          "finger_id": "index",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 29.898,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20263256064,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11701792768
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 54525952,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8980004864
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 189,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 29.437951,
+            "prompt_cache": {
+              "hits": 2,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": true,
+              "entries": 4,
+              "cpu_bytes": 31522816
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        },
+        {
+          "feature": "nails",
+          "style_id": "classic_red",
+          "request_id": "5daba04b-4eb8-4ba5-b3a4-11f6fdbe3a0c",
+          "correlation_id": "df158400-05df-4ce0-b5fb-f293be7b8110",
+          "crop_index": 3,
+          "finger_id": "middle",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 28.616,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20263256064,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11934117888
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 52428800,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8980004864
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 187,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 28.137654,
+            "prompt_cache": {
+              "hits": 2,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": true,
+              "entries": 4,
+              "cpu_bytes": 31522816
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        },
+        {
+          "feature": "nails",
+          "style_id": "classic_red",
+          "request_id": "ec35ace2-9f75-439e-b03f-26768465a1ee",
+          "correlation_id": "df158400-05df-4ce0-b5fb-f293be7b8110",
+          "crop_index": 4,
+          "finger_id": "ring",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 28.793,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20263256064,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11936989184
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 52428800,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8980004864
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 187,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 28.326248,
+            "prompt_cache": {
+              "hits": 2,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": true,
+              "entries": 4,
+              "cpu_bytes": 31522816
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        },
+        {
+          "feature": "nails",
+          "style_id": "classic_red",
+          "request_id": "17fb7833-d9b5-4b6b-8398-7b786c040fbf",
+          "correlation_id": "df158400-05df-4ce0-b5fb-f293be7b8110",
+          "crop_index": 5,
+          "finger_id": "little",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 29.33,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20263256064,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11430105088
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 52428800,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8980004864
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 187,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 28.862508,
+            "prompt_cache": {
+              "hits": 2,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": true,
+              "entries": 4,
+              "cpu_bytes": 31522816
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        }
+      ],
+      "changed_outside_mask_pixels": 0,
+      "changed_pixels_per_finger": {
+        "little": 2566,
+        "ring": 4342,
+        "middle": 4311,
+        "index": 3894,
+        "thumb": 2469
+      },
+      "mask_file": "candidate-nails-classic_red-mask.png",
+      "mask_pixels_sha256": "35cc76d3c81952315c158b2af2e524f97eb14f5067c2247a823df15e19cd36e9"
+    },
+    {
+      "case": "nails-french_tip",
+      "mode": "candidate",
+      "style_id": "french_tip",
+      "feature": "nails",
+      "wall_seconds": 10.01808532799987,
+      "png_sha256": "b5cca09df1f8c08d862f0787ad378246bb08e9037c7b64c22a7b0ae4bbc54eaf",
+      "rgb_sha256": "10e2b6aa39c4e67f0895374c30866eae87d402244cd324a2c7a48583fbb61dcf",
+      "result": "candidate-nails-french_tip.png",
+      "metadata": {
+        "feature": "nails",
+        "inference_path": "renderer",
+        "nails_edited": 5,
+        "model_seconds": null,
+        "renderer_seconds": 0.11136635400043815,
+        "compositing": "original_nail_mask",
+        "timing_seconds": {
+          "image_validation": 0.038,
+          "normalization": 0.029,
+          "hand_localization": 0.032,
+          "nail_segmentation": 3.568,
+          "mask_preparation": 0.006,
+          "mask_refinement": 5.128,
+          "style_rendering": 0.021,
+          "compositing": 0.091,
+          "total_request": 9.223
+        }
+      },
+      "worker_requests": [],
+      "changed_outside_mask_pixels": 0,
+      "changed_pixels_per_finger": {
+        "little": 2566,
+        "ring": 4342,
+        "middle": 4311,
+        "index": 3894,
+        "thumb": 2469
+      },
+      "mask_file": "candidate-nails-french_tip-mask.png",
+      "mask_pixels_sha256": "35cc76d3c81952315c158b2af2e524f97eb14f5067c2247a823df15e19cd36e9"
+    },
+    {
+      "case": "nails-glossy_black",
+      "mode": "candidate",
+      "style_id": "glossy_black",
+      "feature": "nails",
+      "wall_seconds": 162.30644231999986,
+      "png_sha256": "9cd22cace8702397ced12206d39888564882c356f05503003bdd094f7d69cd4c",
+      "rgb_sha256": "1f97280eee526f756f186675aedf55151363736cace23656424a7e76f96ff9ef",
+      "result": "candidate-nails-glossy_black.png",
+      "metadata": {
+        "feature": "nails",
+        "inference_path": "model",
+        "nails_edited": 5,
+        "model_seconds": 152.81260786300027,
+        "renderer_seconds": null,
+        "compositing": "original_nail_mask",
+        "timing_seconds": {
+          "image_validation": 0.038,
+          "normalization": 0.029,
+          "hand_localization": 0.032,
+          "nail_segmentation": 3.599,
+          "mask_preparation": 0.006,
+          "mask_refinement": 4.999,
+          "crop_preparation": 0.64,
+          "gpu_request": 151.953,
+          "model_generation": 143.01,
+          "result_reconstruction": 0.127,
+          "compositing": 0.092,
+          "total_request": 161.82
+        },
+        "adapter_id": "NAILS-001-LOCAL-v1",
+        "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+        "inference_steps": 8
+      },
+      "worker_requests": [
+        {
+          "feature": "nails",
+          "style_id": "glossy_black",
+          "request_id": "e227453e-5d0e-435a-b02f-435a82961d9f",
+          "correlation_id": "4184cddc-688d-4183-897b-e80c286bae76",
+          "crop_index": 1,
+          "finger_id": "thumb",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 35.679,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20107005952,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11373178880
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 79691776,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8980004864
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 213,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 35.217322,
+            "prompt_cache": {
+              "hits": 1,
+              "misses": 1,
+              "bypasses": 0,
+              "enabled": true,
+              "entries": 4,
+              "cpu_bytes": 31522816
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        },
+        {
+          "feature": "nails",
+          "style_id": "glossy_black",
+          "request_id": "104eeab6-5973-42e9-a7e5-3cf671559feb",
+          "correlation_id": "4184cddc-688d-4183-897b-e80c286bae76",
+          "crop_index": 2,
+          "finger_id": "index",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 27.434,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20107005952,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11346731008
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 54525952,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8980004864
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 189,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 26.974047,
+            "prompt_cache": {
+              "hits": 2,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": true,
+              "entries": 4,
+              "cpu_bytes": 31522816
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        },
+        {
+          "feature": "nails",
+          "style_id": "glossy_black",
+          "request_id": "00d9b8c9-7461-49b6-a722-91acb177777b",
+          "correlation_id": "4184cddc-688d-4183-897b-e80c286bae76",
+          "crop_index": 3,
+          "finger_id": "middle",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 27.458,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20107005952,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 11856445440
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 52428800,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8980004864
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 187,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 26.996627,
+            "prompt_cache": {
+              "hits": 2,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": true,
+              "entries": 4,
+              "cpu_bytes": 31522816
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        },
+        {
+          "feature": "nails",
+          "style_id": "glossy_black",
+          "request_id": "af70f104-26de-49a6-8914-b698440f5000",
+          "correlation_id": "4184cddc-688d-4183-897b-e80c286bae76",
+          "crop_index": 4,
+          "finger_id": "ring",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 27.432,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20116443136,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 12066963456
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 52428800,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8980004864
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 187,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 26.971287,
+            "prompt_cache": {
+              "hits": 2,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": true,
+              "entries": 4,
+              "cpu_bytes": 31522816
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        },
+        {
+          "feature": "nails",
+          "style_id": "glossy_black",
+          "request_id": "c1dd745d-e406-42fd-a929-e0c2286a8757",
+          "correlation_id": "4184cddc-688d-4183-897b-e80c286bae76",
+          "crop_index": 5,
+          "finger_id": "little",
+          "inference_steps": 8,
+          "adapter_id": "NAILS-001-LOCAL-v1",
+          "adapter_sha256": "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f",
+          "base_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+          "inference_seconds": 27.313,
+          "http_status": 200,
+          "memory_after": {
+            "process_rss_bytes": 20163633152,
+            "process_peak_rss_bytes": 24926838784,
+            "system_ram_bytes": {
+              "MemTotal": 33658314752,
+              "MemAvailable": 12023160832
+            },
+            "torch_gpu_bytes": {
+              "allocated": 9569280,
+              "reserved": 52428800,
+              "peak_allocated": 8707695104,
+              "peak_reserved": 8980004864
+            },
+            "device_memory_mib": [
+              {
+                "index": 0,
+                "used": 187,
+                "total": 15360
+              },
+              {
+                "index": 1,
+                "used": 0,
+                "total": 15360
+              }
+            ],
+            "warnings": []
+          },
+          "performance": {
+            "phase_seconds": {},
+            "phase_calls": {},
+            "runtime_seconds": 26.850678,
+            "prompt_cache": {
+              "hits": 2,
+              "misses": 0,
+              "bypasses": 0,
+              "enabled": true,
+              "entries": 4,
+              "cpu_bytes": 31522816
+            },
+            "timing_kind": "whole_runtime_synchronized_no_phase_barriers"
+          }
+        }
+      ],
+      "changed_outside_mask_pixels": 0,
+      "changed_pixels_per_finger": {
+        "little": 2566,
+        "ring": 4342,
+        "middle": 4311,
+        "index": 3894,
+        "thumb": 2468
+      },
+      "mask_file": "candidate-nails-glossy_black-mask.png",
+      "mask_pixels_sha256": "35cc76d3c81952315c158b2af2e524f97eb14f5067c2247a823df15e19cd36e9"
+    },
+    {
+      "case": "nails-nude_pink",
+      "mode": "candidate",
+      "style_id": "nude_pink",
+      "feature": "nails",
+      "wall_seconds": 10.017741359999945,
+      "png_sha256": "d279750a1e3d9a216d5215e4143214853ea43d05c3a316a176e94b4a427ec4ea",
+      "rgb_sha256": "41a84a64c681eee2e196e0ddf530f7f77d526adfad5ade5baf01e79b1fca14be",
+      "result": "candidate-nails-nude_pink.png",
+      "metadata": {
+        "feature": "nails",
+        "inference_path": "renderer",
+        "nails_edited": 5,
+        "model_seconds": null,
+        "renderer_seconds": 0.09731784099994911,
+        "compositing": "original_nail_mask",
+        "timing_seconds": {
+          "image_validation": 0.038,
+          "normalization": 0.029,
+          "hand_localization": 0.033,
+          "nail_segmentation": 3.566,
+          "mask_preparation": 0.005,
+          "mask_refinement": 5.13,
+          "style_rendering": 0.019,
+          "compositing": 0.078,
+          "total_request": 9.206
+        }
+      },
+      "worker_requests": [],
+      "changed_outside_mask_pixels": 0,
+      "changed_pixels_per_finger": {
+        "little": 2566,
+        "ring": 4342,
+        "middle": 4311,
+        "index": 3894,
+        "thumb": 2469
+      },
+      "mask_file": "candidate-nails-nude_pink-mask.png",
+      "mask_pixels_sha256": "35cc76d3c81952315c158b2af2e524f97eb14f5067c2247a823df15e19cd36e9"
+    },
+    {
+      "case": "nails-pink_ombre",
+      "mode": "candidate",
+      "style_id": "pink_ombre",
+      "feature": "nails",
+      "wall_seconds": 10.01853132000042,
+      "png_sha256": "7adf4abde4cef01f808cef63d400dd4298cf7c76232924b57af6cd92bf728fef",
+      "rgb_sha256": "03a36bb970f67a5a3b59043a24067e47a9674ca41bbc9ef5ce145134e979594e",
+      "result": "candidate-nails-pink_ombre.png",
+      "metadata": {
+        "feature": "nails",
+        "inference_path": "renderer",
+        "nails_edited": 5,
+        "model_seconds": null,
+        "renderer_seconds": 0.09739313199997923,
+        "compositing": "original_nail_mask",
+        "timing_seconds": {
+          "image_validation": 0.038,
+          "normalization": 0.029,
+          "hand_localization": 0.031,
+          "nail_segmentation": 3.611,
+          "mask_preparation": 0.005,
+          "mask_refinement": 5.041,
+          "style_rendering": 0.019,
+          "compositing": 0.078,
+          "total_request": 9.161
+        }
+      },
+      "worker_requests": [],
+      "changed_outside_mask_pixels": 0,
+      "changed_pixels_per_finger": {
+        "little": 2566,
+        "ring": 4342,
+        "middle": 4311,
+        "index": 3894,
+        "thumb": 2469
+      },
+      "mask_file": "candidate-nails-pink_ombre-mask.png",
+      "mask_pixels_sha256": "35cc76d3c81952315c158b2af2e524f97eb14f5067c2247a823df15e19cd36e9"
+    }
+  ],
+  "source_sha256": {
+    "hairstyle": "3690f83b3f517ea1d2408ee35c1cdb3bdb89ddc3a69d061d6b57fba51f69e537",
+    "makeup": "81e57faca39e3989ed9920ebd6568efad563ae4f012f3fbb130918858d18e8ed",
+    "nails": "c483244132e74ffc6e492271e742c17dce4ce694050abab78c43bc306dd4fd98"
+  },
+  "source_files": {
+    "hand": "hand.png"
+  },
+  "limits": [
+    "Deterministic built-in recommendation provider for reproducible generation; no Gemini conversation test",
+    "One paired observation per application case; no universal speed claim",
+    "In-process ASGI gateway and real loopback HTTP worker, no Next.js/browser/network/device acceptance",
+    "Mask observer copies are included equally in measured requests; no segmentation reuse optimization",
+    "Baseline runs first; first-request warm-up/order effects may affect single-pair timings",
+    "Consultation first/all timings include local result checks between sequential calls, not browser-visible completion"
+  ],
+  "comparisons": [
+    {
+      "case": "hairstyle-bob_hair",
+      "baseline_seconds": 64.10462495099989,
+      "candidate_seconds": 70.1199813369999,
+      "observed_saving_percent": -9.383654284847635,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim."
+    },
+    {
+      "case": "hairstyle-bun",
+      "baseline_seconds": 62.11227051900005,
+      "candidate_seconds": 72.12290413300002,
+      "observed_saving_percent": -16.116998348881374,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim."
+    },
+    {
+      "case": "hairstyle-crew_cut",
+      "baseline_seconds": 64.1091623650002,
+      "candidate_seconds": 70.13167193100003,
+      "observed_saving_percent": -9.394147956123911,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim."
+    },
+    {
+      "case": "makeup-natural_makeup",
+      "baseline_seconds": 64.11024325900007,
+      "candidate_seconds": 72.13082292600006,
+      "observed_saving_percent": -12.510605574521868,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim."
+    },
+    {
+      "case": "hair-restored-crew_cut",
+      "baseline_seconds": 66.12541665899994,
+      "candidate_seconds": 62.10526836899999,
+      "observed_saving_percent": 6.079581034220665,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim."
+    },
+    {
+      "case": "nails-classic_red",
+      "baseline_seconds": 196.35373153799992,
+      "candidate_seconds": 172.31039399300016,
+      "observed_saving_percent": 12.244909916747217,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim."
+    },
+    {
+      "case": "nails-french_tip",
+      "baseline_seconds": 10.021387443000094,
+      "candidate_seconds": 10.01808532799987,
+      "observed_saving_percent": 0.03295067692977647,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim."
+    },
+    {
+      "case": "nails-glossy_black",
+      "baseline_seconds": 194.34513624500005,
+      "candidate_seconds": 162.30644231999986,
+      "observed_saving_percent": 16.48546217519475,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim."
+    },
+    {
+      "case": "nails-nude_pink",
+      "baseline_seconds": 10.020186177999904,
+      "candidate_seconds": 10.017741359999945,
+      "observed_saving_percent": 0.024398927889442732,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim."
+    },
+    {
+      "case": "nails-pink_ombre",
+      "baseline_seconds": 10.019052702999943,
+      "candidate_seconds": 10.01853132000042,
+      "observed_saving_percent": 0.005203915130286145,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim."
+    }
+  ]
+}

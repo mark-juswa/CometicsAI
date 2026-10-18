@@ -51,3 +51,7 @@ This is **not** a Next.js/browser, live Render, client-device, saved-look/bookin
 The candidate remains disabled in the working demo until the returned evidence is reviewed. The earlier instruction **do not deploy to Render** remains in force. No new live schema migration, model bundle rebuild or cloud configuration change is performed by this notebook.
 
 Local checks use synthetic vision/GPU boundaries around the real gateway/Consultation router. They verify the test harness, not real Kaggle model performance. See `docs/experiments/application-rehearsal-preparation-20261018.json` for exact local test and generated-artifact evidence.
+
+## Completed result — do not rerun just for this review
+
+The user returned the full ZIP. All20 output image hashes, ten exact image pairs, five mask pairs and all-five-nail/outside-mask checks pass independent validation. Full-hand Red196.35→172.31s and Black194.35→162.31s improve; new Hair/Makeup requests are slower. Hair Consultation190.40→212.46s regresses while Nails Consultation401.16→345.06s improves. These are single-pair observations. **Do not enable the global cache flag from these results.** Recommend implementing a Nails-only scope first; that scoped policy is not yet implemented/tested here. Current flags, working demo, Render and live database are unchanged. [Review](../experiments/application-rehearsal-20261018-review.md). The earlier notebook instructions remain a reproduction guide, not a request to rerun the entire rehearsal.

@@ -1,0 +1,266 @@
+{
+  "review_date": "2026-10-18",
+  "timezone": "Asia/Manila",
+  "status": "Execution/output preservation VERIFIED; global cache performance acceptance FAILED for this sequence",
+  "source_zip": {
+    "user_provided_file": "D:/Downloads/beautycore-application-results.zip",
+    "sha256": "ff67ec497d3181594db154fae1bbffbf486577b862e6fe32b9285c324cb938b5",
+    "bytes": 10560674,
+    "crc": "PASSED",
+    "raw_report": "application-rehearsal-20261018-report.json"
+  },
+  "provenance": {
+    "expected_source_overlay_hashes_match": true,
+    "source_hashes": {
+      "scripts/inference_performance.py": {
+        "sha256": "85bdf65eae8661627d555402495af0332f4b90a0a39118f367ed87e991f8db61"
+      },
+      "scripts/unified_gate3_server.py": {
+        "sha256": "3ccfd73745147af617331b18ce95e5024a2426bec06a054b96526e5b831fc77f"
+      },
+      "scripts/application_rehearsal_worker.py": {
+        "sha256": "1674f085a9c2fa4bf8cfa13c4ed036aff0ed4129edba774f55a4bb2b2a7235c9"
+      },
+      "scripts/application_rehearsal.py": {
+        "sha256": "68f150113e4effda016782e5e09cf730eb6b5b3744176bf5b299dea3e0a11ab4"
+      },
+      "scripts/application_rehearsal_bootstrap.py": {
+        "sha256": "8de1a19d7fa3e56f62a687609770c2e26412de178d2b85fcfa7492911f30192b"
+      }
+    },
+    "reported_host": {
+      "python": "3.12.13",
+      "torch": "2.10.0+cu128",
+      "cuda": "12.8",
+      "gpu": "Tesla T4"
+    },
+    "reported_resolved_environment_matches_reviewed_environment": true,
+    "model_index_hash_matches_reviewed_model": true,
+    "approved_input_hashes_match": true,
+    "no_archive_code_executed": true
+  },
+  "independent_checks": {
+    "output_png_sha256_verified": 20,
+    "decoded_rgb_sha256_verified": 20,
+    "final_masks_hashed": 10,
+    "exact_before_after_png_and_pixel_pairs": 10,
+    "exact_mask_pairs": 5,
+    "outside_mask_checks_with_zero_changes": 10,
+    "five_disjoint_mask_components_all_edited": 10,
+    "reported_finger_edit_count_multisets_match_independent_components": true,
+    "hair_restoration_png_bytes_match_within_each_mode": true,
+    "reported_model_calls": 30,
+    "expected_call_counts_per_result_match": true,
+    "timing_summaries_recomputed": true,
+    "foundation_count_one_ready_after_each_mode": true,
+    "consultation_completion_selection_reported": true,
+    "script_terminal_completion_logged": true,
+    "owned_worker_graceful_shutdown_logged": true
+  },
+  "timing_observations": [
+    {
+      "case": "hairstyle-bob_hair",
+      "baseline_seconds": 64.10462495099989,
+      "candidate_seconds": 70.1199813369999,
+      "observed_saving_percent": -9.383654284847635,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim.",
+      "classification": "slower observation"
+    },
+    {
+      "case": "hairstyle-bun",
+      "baseline_seconds": 62.11227051900005,
+      "candidate_seconds": 72.12290413300002,
+      "observed_saving_percent": -16.116998348881374,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim.",
+      "classification": "slower observation"
+    },
+    {
+      "case": "hairstyle-crew_cut",
+      "baseline_seconds": 64.1091623650002,
+      "candidate_seconds": 70.13167193100003,
+      "observed_saving_percent": -9.394147956123911,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim.",
+      "classification": "slower observation"
+    },
+    {
+      "case": "makeup-natural_makeup",
+      "baseline_seconds": 64.11024325900007,
+      "candidate_seconds": 72.13082292600006,
+      "observed_saving_percent": -12.510605574521868,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim.",
+      "classification": "slower observation"
+    },
+    {
+      "case": "hair-restored-crew_cut",
+      "baseline_seconds": 66.12541665899994,
+      "candidate_seconds": 62.10526836899999,
+      "observed_saving_percent": 6.079581034220665,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim.",
+      "classification": "faster observation"
+    },
+    {
+      "case": "nails-classic_red",
+      "baseline_seconds": 196.35373153799992,
+      "candidate_seconds": 172.31039399300016,
+      "observed_saving_percent": 12.244909916747217,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim.",
+      "classification": "faster observation"
+    },
+    {
+      "case": "nails-french_tip",
+      "baseline_seconds": 10.021387443000094,
+      "candidate_seconds": 10.01808532799987,
+      "observed_saving_percent": 0.03295067692977647,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim.",
+      "classification": "approximately unchanged"
+    },
+    {
+      "case": "nails-glossy_black",
+      "baseline_seconds": 194.34513624500005,
+      "candidate_seconds": 162.30644231999986,
+      "observed_saving_percent": 16.48546217519475,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim.",
+      "classification": "faster observation"
+    },
+    {
+      "case": "nails-nude_pink",
+      "baseline_seconds": 10.020186177999904,
+      "candidate_seconds": 10.017741359999945,
+      "observed_saving_percent": 0.024398927889442732,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim.",
+      "classification": "approximately unchanged"
+    },
+    {
+      "case": "nails-pink_ombre",
+      "baseline_seconds": 10.019052702999943,
+      "candidate_seconds": 10.01853132000042,
+      "observed_saving_percent": 0.005203915130286145,
+      "pixels_equal": true,
+      "mask_pixels_equal": true,
+      "png_bytes_equal": true,
+      "note": "One paired application observation; no median/percentile/generalization claim.",
+      "classification": "approximately unchanged"
+    }
+  ],
+  "consultation_observations": {
+    "hair_consultation": {
+      "baseline": {
+        "styles": [
+          "bob_hair",
+          "bun",
+          "crew_cut"
+        ],
+        "first_result_seconds": 64.13063128800002,
+        "all_three_seconds": 190.40412126800004,
+        "selected_completed_look": true
+      },
+      "candidate": {
+        "styles": [
+          "bob_hair",
+          "bun",
+          "crew_cut"
+        ],
+        "first_result_seconds": 70.14809771099999,
+        "all_three_seconds": 212.45704742800012,
+        "selected_completed_look": true
+      },
+      "all_three_saved_seconds": -22.052926160000084,
+      "observed_all_three_saving_percent": -11.582168501993644
+    },
+    "nails_consultation": {
+      "baseline": {
+        "styles": [
+          "classic_red",
+          "french_tip",
+          "glossy_black"
+        ],
+        "first_result_seconds": 196.50089336299993,
+        "all_three_seconds": 401.158910503,
+        "selected_completed_look": true
+      },
+      "candidate": {
+        "styles": [
+          "classic_red",
+          "french_tip",
+          "glossy_black"
+        ],
+        "first_result_seconds": 172.45391172400014,
+        "all_three_seconds": 345.0563136169999,
+        "selected_completed_look": true
+      },
+      "all_three_saved_seconds": 56.10259688600013,
+      "observed_all_three_saving_percent": 13.985130435132282
+    }
+  },
+  "cache_diagnosis": {
+    "candidate_new_bob_bun_makeup": "Each recorded zero hits/two misses and was slower than its baseline; Crew Cut had one hit/one miss and was also slower",
+    "candidate_restored_crew": "Two hits/zero misses; 66.125\u219262.105seconds, 6.08% faster in this pair",
+    "candidate_red": "First crop0hits/2misses; next4crops2hits/0misses. Full hand196.354\u2192172.310seconds, 12.24% faster",
+    "candidate_black": "First crop1hit/1miss; next4crops2hits/0misses. Full hand194.345\u2192162.306seconds, 16.49% faster",
+    "renderer": "No model calls; all three approximately10seconds unchanged",
+    "causal_limit": "Pattern is consistent with encoding reuse benefiting consecutive crops. Single fixed-order pairs cannot isolate cache-copy/offload costs from hardware clock/load/order effects or prove a universal slowdown."
+  },
+  "visual_review": {
+    "opened": [
+      "Original hand",
+      "Full-hand Classic Red",
+      "Full-hand Glossy Black",
+      "Full-hand French Tip"
+    ],
+    "conclusion": "All five nails present and style changes visible; exact comparison preserves baseline. Soft/material and angular-thumb mask limitations remain baseline aesthetics, not new cache degradation.",
+    "raw_images_committed": false
+  },
+  "nonfatal_setup_note": "CPU pip-check logs include inherited sitecustomize wrapt warnings, followed by No broken requirements found; all real generations completed. Not a measured cause of generation timing.",
+  "adoption_decision": {
+    "enable_globally": false,
+    "recommendation": "Prepare Nails-only prompt-cache policy; preserve baseline Hair/Makeup path including Hair Consultation. Renderer branches remain unchanged.",
+    "nails_only_policy_implemented_or_gpu_tested_in_this_review": false,
+    "cache_enabled_in_working_demo": false,
+    "no_repeat_of_entire_benchmark_needed_to_interpret_this_artifact": true
+  },
+  "limits": [
+    "One approved full hand and one paired application observation per case",
+    "Baseline runs before candidate; warm-up/hardware/order differences possible",
+    "Deterministic built-in recommendation provider; Gemini conversation not tested",
+    "Actual CPU ASGI facade/generation and loopback HTTP worker; no live Next.js/Render/network/client-device acceptance",
+    "Three-look Makeup Consultation not tested",
+    "Saved-look/pricing database changes and Market Trends UI not deployed",
+    "No broad aesthetics/generalization guarantee from exact preservation of one baseline"
+  ],
+  "boundaries": {
+    "production_runtime_or_config_changed": false,
+    "render_deployed": false,
+    "database_changed": false,
+    "working_demo_notebook_or_bundle_changed": false,
+    "new_gpu_calls_performed_here": false,
+    "github_pushed": false
+  },
+  "follow_up": "Narrow opt-in cache scope to model-based Nails before any release; keep explicit no-Render-deploy boundary and review future activation separately."
+}

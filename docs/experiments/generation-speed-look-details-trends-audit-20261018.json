@@ -1,0 +1,117 @@
+{
+  "date": "2026-10-18",
+  "commit": "6bd961e9b90d60eb5d1966e7aeb6cf60d0bebcce",
+  "status": "SOURCE_AND_EXISTING_EVIDENCE_INSPECTED; PLAN_PROPOSED; IMPLEMENTATION_NOT_STARTED",
+  "scope": "Investigate/plan generation speed, catalog-based descriptions and estimates, Market Trends removal; no deployment",
+  "historical_measurements": {
+    "classic_red_same_hand": [
+      {
+        "steps": 20,
+        "wall_seconds": 365.375,
+        "generation_seconds": 322.81
+      },
+      {
+        "steps": 12,
+        "wall_seconds": 264.062,
+        "generation_seconds": 226.06
+      },
+      {
+        "steps": 8,
+        "wall_seconds": 221.0,
+        "generation_seconds": 185.1
+      }
+    ],
+    "renderer_wall_seconds": 12.531,
+    "renderer_render_composite_seconds": 0.031,
+    "consultation_per_look_seconds": {
+      "hair": [
+        68,
+        64,
+        65
+      ],
+      "makeup": [
+        66,
+        66,
+        70
+      ],
+      "nails_red_french_black": [
+        234,
+        12,
+        204
+      ]
+    },
+    "current_session_measurement": false
+  },
+  "source_findings": {
+    "hosted_nails_steps": 8,
+    "generic_nails_steps_default": 20,
+    "hair_makeup_steps": 20,
+    "single_foundation_per_worker": true,
+    "cpu_offload": true,
+    "model_nails_sequential_pipeline_per_crop": true,
+    "consultation_three_results_sequential": true,
+    "hosted_gpu_transport": "loopback inside Kaggle",
+    "hosted_busy_admission": "rejects competing generation with 429; not an unbounded queue",
+    "segmentation_loads": "coarse subprocess plus refinement subprocess; all refinement ROIs share one invocation",
+    "poll_ms": 2000,
+    "repeated_positive_and_negative_prompt_encoding": "verified in exact pinned Diffusers pipeline when embeddings not supplied; time share unmeasured"
+  },
+  "pricing": {
+    "authoritative_file": "beautycore/lib/services.ts",
+    "individual_service_descriptions": false,
+    "mens_cut_php": 180,
+    "womens_cut_and_blowdry_php": 350,
+    "children_under_12_cut_php": 150,
+    "blowdry_and_style_php": 250,
+    "updo_special_occasion_php": 500,
+    "bridal_hair_from_php": 1500,
+    "classic_manicure_php": 180,
+    "gel_manicure_php": 350,
+    "nail_art_from_php_per_nail": 50,
+    "makeup_application_php": null,
+    "demo_only_consultation_prices": {
+      "hair": 600,
+      "makeup": 500,
+      "nails": 350
+    },
+    "style_service_mapping_verified": false
+  },
+  "saved_hair_catalog_gap": {
+    "web_saved_ids": 3,
+    "hosted_registry_ids": 13,
+    "checker_targets": "default registry only",
+    "impact": "Expanded supported Hair outputs are not accepted by current save validation"
+  },
+  "market_trends": {
+    "active_page": "beautycore/app/admin/market-trends/page.tsx",
+    "active_navigation": "beautycore/components/AdminSidebar.tsx",
+    "shared_apis_to_retain": [
+      "/api/admin/stats",
+      "/api/generations"
+    ],
+    "shared_data_to_retain": [
+      "ai_generations",
+      "analysis_result",
+      "appointments"
+    ],
+    "other_consumers": [
+      "Admin Finance",
+      "Admin Dashboard",
+      "legacy/account history",
+      "saved looks and booking references"
+    ],
+    "dedicated_table_found": false
+  },
+  "native_compatibility": "Existing mobile Consultation renders and strictly validates demo numeric fields; proposed web-first slice must preserve contracts and coordinate native display follow-up",
+  "actions": {
+    "documentation_written": true,
+    "application_code_changed": false,
+    "database_read_or_write": false,
+    "gpu_generation_or_notebook_mutation": false,
+    "render_deploy_or_config_change": false,
+    "git_push": false,
+    "new_feature_tests_run": false
+  },
+  "external_primary_source": "https://github.com/huggingface/diffusers/blob/c943837899b16cbae2f619b8dd4f7bb6f07dd81a/src/diffusers/pipelines/flux2/pipeline_flux2_klein.py",
+  "plan": "docs/specs/0011-generation-speed-look-details-remove-trends.md"
+}

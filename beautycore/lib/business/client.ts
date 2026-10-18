@@ -1,9 +1,11 @@
+import type { LookDetails } from './look-information';
 import type { FeatureId, GeneratedResult } from '../ai/browser-client';
 export type SavedLook = {
   id: string;
   styleType: 'hair' | 'nail' | 'makeup';
   styleId: string;
   styleName: string;
+  lookDetails?: LookDetails | null;
   imageUrl: string;
   savedAt: string;
   createdAt: string;

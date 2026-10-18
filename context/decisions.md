@@ -125,3 +125,11 @@ Later startup automation: **CONFIRMED scope; LOCAL VERIFIED implementation; fres
 ## Supervisor waives new rollout backup, 2026-10-17
 
 **CONFIRMED:** In direct response to the provider-side recovery-branch request, Supervisor said “lets skip that”. Proceed with the authorized additive production migration without creating a new backup; do not reinterpret this as permission to export live client/account rows locally. Both migration batches subsequently applied and record preservation was verified via server-side aggregate checksums. Existing schema additions/data are retained on application rollback. Render manual deployment and live rehearsal remain. [Evidence](../docs/experiments/saved-looks-render-rollout-20261017.json).
+
+## New improvements review boundary, 2026-10-18
+
+**CONFIRMED:** Supervisor requests code inspection/findings and a concise implementation plan before development for generation speed, catalog-grounded descriptions/costs and Market Trends removal. Explicitly **do not deploy this update to Render**. No implementation or new live schema/notebook changes inferred. **PROPOSED:** measure first, bounded fixed-prompt encoding reuse if justified, one saved metadata snapshot in existing generations, retain shared stats/history APIs while removing Trends page/navigation. Price mappings/missing prices and native display scope remain review items. [Plan](../docs/specs/0011-generation-speed-look-details-remove-trends.md).
+
+## Generation improvements development approval, 2026-10-18
+
+**CONFIRMED:** Supervisor “lets start” authorizes the reviewed local web-first implementation and isolated profiling/cache experiment; separate private Kaggle benchmark session confirmed available. Preserve model settings, working demo notebook/bundles, current live system and native payload compatibility. Explicit no-Render-deploy boundary remains; no live migration or cloud configuration change inferred. Named service estimates are conditional, unpriced Makeup/curl/wave services quote-required, historical saved snapshots immutable, legacy estimates labeled current. Cache remains experimental and disabled until actual paired GPU timing/quality and application review. [Implementation guide](../docs/guides/generation-improvements-local-review.md).

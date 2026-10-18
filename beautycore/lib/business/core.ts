@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import sharp from 'sharp';
-import styles from './style-catalog.json';
+import { publicStyle, snapshotLookInformation } from './look-information';
 import type { UserRole } from '../../db/schema';
 export type Actor = { id: string; role: UserRole };
 export class BusinessError extends Error {
@@ -104,8 +104,7 @@ export async function validateLook(body: Record<string, unknown>) {
   const feature = String(body.feature);
   const styleType = featureToType(feature);
   const styleId = typeof body.styleId === 'string' ? body.styleId : '';
-  const catalog = styles[feature as keyof typeof styles] as Record<string, string>;
-  const styleName = Object.hasOwn(catalog, styleId) ? catalog[styleId] : undefined;
+  const styleName = publicStyle(feature, styleId)?.name;
   if (!styleName) fail('Choose a supported style.');
   if (body.status !== 'completed') fail('Only a completed preview can be saved.');
   if (body.sourceKind !== 'manual' && body.sourceKind !== 'consultation')
@@ -133,7 +132,10 @@ export async function validateLook(body: Record<string, unknown>) {
     )
       fail('Use a single PNG or JPEG image up to 4096 pixels per side.');
     // Decode the whole image too: a valid header alone is insufficient.
-    await sharp(image, { limitInputPixels: 4096 * 4096, failOn: 'warning' }).stats();
+    await sharp(image, {
+      limitInputPixels: 4096 * 4096,
+      failOn: 'warning',
+    }).stats();
   } catch (error) {
     if (error instanceof BusinessError) throw error;
     fail('The preview image could not be read.');
@@ -146,6 +148,7 @@ export async function validateLook(body: Record<string, unknown>) {
     hash: createHash('sha256').update(image).digest('hex'),
     imageBytes: image.length,
     sourceKind: body.sourceKind as 'manual' | 'consultation',
+    lookDetails: snapshotLookInformation(feature as 'hairstyle' | 'makeup' | 'nails', styleId),
   };
 }
 export { SALON_TIMEZONE, salonDay, salonDateTime } from './dates';

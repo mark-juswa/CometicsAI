@@ -8,7 +8,7 @@ from zipfile import ZipFile, ZIP_DEFLATED
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_NAME = 'unified_gate3_20260928_v2.bin'
 SOURCE_SHA = 'a3d73ce4ac0995a17bfa6a7c48253e2a2fa7db9ae635941295804d60dcb03683'
-FILES = ('scripts/unified_gate3_server.py', 'scripts/unified_gate3_nails.py',
+FILES = ('scripts/inference_performance.py', 'scripts/unified_gate3_server.py', 'scripts/unified_gate3_nails.py',
          'backend/app/nails/inference_options.py', 'backend/app/generation/diagnostics.py')
 
 

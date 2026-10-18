@@ -1,7 +1,7 @@
 """Gate 3 candidate: one authenticated HTTP service and one verified FLUX foundation."""
 
 import asyncio
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, nullcontext
 from io import BytesIO
 import json
 import logging
@@ -23,6 +23,7 @@ from scripts.unified_gate2 import SharedExperiment, SwitchFailure, inspect_adapt
 from scripts.kaggle_inference_server import FluxRuntime, read_adapter_metadata, validated_image as portrait_image
 from scripts.makeup_inference_server import MakeupRuntime, validated_portrait
 from scripts.unified_gate3_nails import NailsRuntime
+from scripts.inference_performance import configured_performance
 from app.nails.inference_options import SUPPORTED_STEPS
 from app.generation.diagnostics import RequestDiagnostics, current, emit
 from app.styles import REGISTRY
@@ -102,6 +103,7 @@ class ServingOwner(SharedExperiment):
         self.torch, self.views, self.hair_adapters = torch, views, hair_adapters
         self.foundation_load_count = 1
         self.audit = []
+        self.performance = configured_performance(self.synchronize, os.environ)
 
     def operate(self, adapter_key, label, image, style_id, inference_steps=20):
         self.sequence += 1
@@ -124,7 +126,9 @@ class ServingOwner(SharedExperiment):
             self.event('inference_start', feature=feature, label=label)
             emit('worker_inference_start', feature=feature, style_id=style_id)
             try:
-                with gate.optional_runtime_telemetry(self.torch, []):
+                scope = (self.performance.measure(self.pipe, identity=(adapter_key, expected['adapter_sha256'], gate.REVISION),
+                         allowed_prompts={expected['prompt'], ''}) if self.performance else nullcontext())
+                with scope, gate.optional_runtime_telemetry(self.torch, []):
                     if feature == 'nails' and inference_steps != 20:
                         payload = self.views[feature].generate(image, style_id, inference_steps=inference_steps)
                     else:
@@ -134,6 +138,8 @@ class ServingOwner(SharedExperiment):
                 self.assert_active(adapter_key)
             except Exception:
                 self.ready, self.active, self.active_state = False, None, None
+                if self.performance:
+                    self.performance.clear()
                 try:
                     self.synchronize()
                 except Exception as exc:
@@ -149,10 +155,16 @@ class ServingOwner(SharedExperiment):
                 'adapter_id': expected['adapter_id'], 'adapter_sha256': expected['adapter_sha256'],
                 'base_revision': gate.REVISION, 'inference_seconds': round(time.monotonic() - started, 3),
                 'http_status': 200, 'memory_after': self.measure()})
+            if self.performance:
+                self.audit[-1]['performance'] = self.performance.last
             del self.audit[:-30]
             emit('worker_inference_end', feature=feature, style_id=style_id,
                  adapter_id=expected['adapter_id'], inference_seconds=round(time.monotonic() - started, 3))
             return payload
+        except BaseException:
+            if self.performance:
+                self.performance.clear()
+            raise
         finally:
             self.event('ownership_end', label=label)
 

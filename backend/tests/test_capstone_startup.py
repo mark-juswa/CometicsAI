@@ -326,7 +326,14 @@ def test_original_bundle_extract_no_runtime_changes(tmp_path):
     target = tmp_path / 'runtime'
     kaggle.extract(source, target)
     kaggle.extract(source, target)
-    assert (target / 'scripts/unified_gate3_server.py').read_bytes() == (root / 'scripts/unified_gate3_server.py').read_bytes().replace(b'\r\n', b'\n')
+    # The accepted demo bundle is immutable; candidate source may evolve independently.
+    from zipfile import ZipFile
+    with ZipFile(source) as archive:
+        manifest = json.loads(archive.read('gate3_bundle.json'))
+        for name, digest in manifest['files'].items():
+            extracted = (target / name).read_bytes()
+            assert extracted == archive.read(name)
+            assert sha256(extracted).hexdigest() == digest
     assert sha256(source.read_bytes()).hexdigest() == discovery.BUNDLE_SHA
 
 

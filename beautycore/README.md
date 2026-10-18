@@ -42,7 +42,7 @@ app/
   (auth)/            login, register
   client/            dashboard, ai-advisor, nail/hair studio, appointments, profile
   admin/             dashboard, appointments, clients, inventory, finance,
-                     market-trends, security
+                     security
   stylist/           dashboard, appointments, clients, services, profile
   api/               auth, appointments, inventory, users, profile,
                      analyze, generate, generations, admin/stats

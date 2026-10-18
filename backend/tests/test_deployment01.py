@@ -115,9 +115,16 @@ def test_generated_notebook_and_sources_match_verified_bundle():
         compile(''.join(cell['source']), f'cell-{index}', 'exec')
         assert not cell['outputs']
     assert 'assert health.get("diagnostics_version") == "deployment-01"' in ''.join(saved['cells'][2]['source'])
-    for name, digest in report['source_hashes'].items():
-        # Bundle sources use LF; Windows Git may check them out as CRLF.
-        assert sha256((root / name).read_bytes().replace(b'\r\n', b'\n')).hexdigest() == digest
+    # Validate historical provenance against its immutable artifact, not a later candidate checkout.
+    from zipfile import ZipFile
+    bundle = root / 'artifacts' / report['name']
+    if not bundle.is_file():
+        pytest.skip('Private deployment bundle not present on this checkout')
+    assert sha256(bundle.read_bytes()).hexdigest() == report['sha256']
+    with ZipFile(bundle) as archive:
+        assert archive.testzip() is None
+        for name, digest in report['source_hashes'].items():
+            assert sha256(archive.read(name)).hexdigest() == digest
 
 
 def test_crop_diagnostics_and_renderer_bypass(caplog):

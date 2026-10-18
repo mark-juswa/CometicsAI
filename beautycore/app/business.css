@@ -16,3 +16,11 @@
 .booking-look-reference {margin-top:.9rem;padding:.8rem;border:1px solid #b68cd638;border-radius:.3rem;}
 .booking-admin-controls {display:flex;flex-wrap:wrap;gap:.6rem;align-items:end;width:100%;margin-top:.8rem;}
 .booking-admin-controls label {display:grid;font-size:.8rem;gap:.3rem;}
+
+.look-information{margin:1rem 0;padding:1rem;border:1px solid rgba(196,163,90,.22);border-radius:.5rem;background:rgba(196,163,90,.035);font-size:.875rem;line-height:1.6}
+.look-description{margin:0 0 .75rem;color:var(--color-secondary,#ccc)}
+.look-estimate-label{font-weight:600;margin:.4rem 0}
+.look-information ul{list-style:none;padding:0;margin:.5rem 0}
+.look-information li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.25rem 1rem;padding:.25rem 0}
+.look-information li strong{font-weight:500;white-space:normal}
+.look-estimate-note{font-size:.75rem;margin:.5rem 0 0;color:var(--color-muted,#aaa)}

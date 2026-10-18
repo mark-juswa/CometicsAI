@@ -1,10 +1,14 @@
 'use client';
 import Image from 'next/image';
+import { LookInformation } from './look-information';
+import { featureFromType, type LookDetails } from '../lib/business/look-information';
 import { useRef } from 'react';
 export type AppointmentLook = {
   id: string;
   styleName: string;
   styleType: string;
+  styleId?: string;
+  lookDetails?: LookDetails | null;
   imageUrl: string;
 };
 export function AppointmentLookPreview({ look }: { look: AppointmentLook | null | undefined }) {
@@ -58,6 +62,12 @@ export function AppointmentLookPreview({ look }: { look: AppointmentLook | null 
               className="object-contain"
             />
           </div>
+          <LookInformation
+            saved
+            feature={featureFromType(look.styleType)}
+            styleId={look.styleId ?? ''}
+            details={look.lookDetails}
+          />
           <p className="studio-result-note">
             Client-selected reference for this appointment. Confirm the final service with the
             client.

@@ -21,9 +21,10 @@ try {
     "result_hash",
     "image_bytes",
     "source_kind",
+    "look_details",
   ];
   const functions = await query.query(
-    "SELECT EXISTS(SELECT 1 FROM pg_proc WHERE proname='beautycore_save_look') AS present",
+    "SELECT EXISTS(SELECT 1 FROM pg_proc WHERE proname='beautycore_save_look_with_details') AS present",
   );
   const fk = await query.query(
     "SELECT EXISTS(SELECT 1 FROM pg_constraint WHERE conname='appointments_look_owner_fk' AND conrelid='appointments'::regclass) AS present",

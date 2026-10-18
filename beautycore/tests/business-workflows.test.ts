@@ -73,7 +73,11 @@ test.before(async () => {
     "INSERT INTO ai_generations(client_id,source_image_url,prompt_text,style_type) VALUES($1,'legacy-source','legacy-prompt','hair')",
     [C],
   );
-  for (const file of ['0002_saved_looks.sql', '0003_saved_look_admission.sql'])
+  for (const file of [
+    '0002_saved_looks.sql',
+    '0003_saved_look_admission.sql',
+    '0004_look_details.sql',
+  ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   assert.equal(
     (await query('SELECT source_image_url,saved_at FROM ai_generations'))[0].source_image_url,
@@ -83,7 +87,11 @@ test.before(async () => {
     (await query('SELECT source_image_url,saved_at FROM ai_generations'))[0].saved_at,
     null,
   );
-  for (const file of ['0002_saved_looks.sql', '0003_saved_look_admission.sql'])
+  for (const file of [
+    '0002_saved_looks.sql',
+    '0003_saved_look_admission.sql',
+    '0004_look_details.sql',
+  ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   image =
     'data:image/png;base64,' +
@@ -590,17 +598,110 @@ test('invalid calendar dates and malformed configured origins fail closed', asyn
   }
 });
 
-
 test('save admission bounds concurrent payloads and releases capacity after completion', async () => {
- const original=deps.store;let started=0;let release;let admit;
- const gate=new Promise<void>(resolve=>{release=resolve;});
- const admitted=new Promise<void>(resolve=>{admit=resolve;});
- deps.store={...original,save:async(...args)=>{started++;if(started===2)admit!();await gate;return original.save(...args);}};
- try {
-  const first=save();const second=save();await admitted;
-  assert.equal((await save()).status,429);
-  release!();const responses=await Promise.all([first,second]);assert.deepEqual(responses.map(response=>response.status).sort(),[200,201]);
-  assert.equal((await save()).status,200);
-  assert.equal((await query('SELECT count(*)::int AS n FROM ai_generations'))[0].n,1);
- } finally {release!();deps.store=original;}
+  const original = deps.store;
+  let started = 0;
+  let release;
+  let admit;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  const admitted = new Promise<void>((resolve) => {
+    admit = resolve;
+  });
+  deps.store = {
+    ...original,
+    save: async (...args) => {
+      started++;
+      if (started === 2) admit!();
+      await gate;
+      return original.save(...args);
+    },
+  };
+  try {
+    const first = save();
+    const second = save();
+    await admitted;
+    assert.equal((await save()).status, 429);
+    release!();
+    const responses = await Promise.all([first, second]);
+    assert.deepEqual(responses.map((response) => response.status).sort(), [200, 201]);
+    assert.equal((await save()).status, 200);
+    assert.equal((await query('SELECT count(*)::int AS n FROM ai_generations'))[0].n, 1);
+  } finally {
+    release!();
+    deps.store = original;
+  }
+});
+
+test('expanded Hair looks save with server-owned descriptions and survive catalog price changes', async () => {
+  const response = await save(saveBody('hairstyle', 'bun'));
+  assert.equal(response.status, 201);
+  const { look } = await response.json();
+  assert.match(look.lookDetails.description, /gathered/);
+  assert.ok(look.lookDetails.capturedAt);
+  const original = look.lookDetails;
+  const service = allServices.find((s) => s.name === 'Updo / Special Occasion')!;
+  const oldPrice = service.price;
+  try {
+    service.price = '₱999';
+    const read = await savedLooks(request('/api/saved-looks/' + look.id), look.id, false, deps);
+    assert.deepEqual((await read.json()).look.lookDetails, original);
+    const duplicate = await save(saveBody('hairstyle', 'bun'));
+    assert.equal(duplicate.status, 200);
+    assert.deepEqual((await duplicate.json()).look.lookDetails, original);
+    const booked = await bookingApi(
+      request('/api/appointments', 'POST', { ...booking(look.id), serviceName: service.name }),
+      undefined,
+      deps,
+    );
+    assert.equal(booked.status, 201);
+    const rows = await deps.store.appointments({ id: S, role: 'stylist' }, false);
+    assert.equal(rows[0].totalPrice, 999);
+    assert.deepEqual((rows[0].look as any).lookDetails, original);
+    await assert.rejects(
+      query('UPDATE ai_generations SET look_details=$2::jsonb WHERE id=$1', [
+        look.id,
+        JSON.stringify({ ...original, description: 'Changed' }),
+      ]),
+      /immutable/,
+    );
+  } finally {
+    service.price = oldPrice;
+  }
+});
+
+test('clients cannot inject description/price snapshots and Makeup stays unpriced', async () => {
+  assert.equal(
+    (await save({ ...saveBody(), lookDetails: { description: 'Fake', price: 1 } } as any)).status,
+    400,
+  );
+  const response = await save(saveBody('makeup', 'natural_makeup'));
+  assert.equal(response.status, 201);
+  const look = (await response.json()).look;
+  assert.equal(look.lookDetails.quoteRequired, true);
+  assert.equal(look.lookDetails.options[0].amount, null);
+  assert.equal(look.lookDetails.options[0].kind, 'quote');
+});
+
+test('previous save function remains compatible and old saved looks get a current estimate fallback', async () => {
+  const hash = 'b'.repeat(64);
+  const inserted = await query(
+    `SELECT * FROM beautycore_save_look($1,'hair','crew_cut','Crew Cut',$2,$3,1,'manual',20,134217728)`,
+    [C, image, hash],
+  );
+  const response = await savedLooks(
+    request('/api/saved-looks/' + inserted[0].look_id),
+    String(inserted[0].look_id),
+    false,
+    deps,
+  );
+  assert.equal(response.status, 200);
+  const look = (await response.json()).look;
+  assert.equal(look.lookDetails.capturedAt, null);
+  assert.equal(
+    (await query('SELECT look_details FROM ai_generations WHERE id=$1', [look.id]))[0].look_details,
+    null,
+  );
+  assert.match(look.lookDetails.description, /short/);
 });

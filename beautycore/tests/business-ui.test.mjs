@@ -44,7 +44,7 @@ HTMLDialogElement.prototype.close = function () {
 const { render, screen, fireEvent, cleanup, waitFor } = await import('@testing-library/react');
 const { AppRouterContext } =
   await import('next/dist/shared/lib/app-router-context.shared-runtime.js');
-const { SearchParamsContext } =
+const { SearchParamsContext, PathnameContext } =
   await import('next/dist/shared/lib/hooks-client-context.shared-runtime.js');
 // Node's CJS default wrapper differs from Next's bundler. Normalize the real framework exports in this DOM harness only.
 for (const path of ['next/image', 'next/link']) {
@@ -117,9 +117,9 @@ async function transport(input, init = {}) {
     });
   if (url.pathname === '/api/ai/features/nails/styles')
     return Response.json(
-      Object.entries(catalog.nails).map(([id, name]) => ({
+      Object.entries(catalog.nails).map(([id, info]) => ({
         id,
-        name,
+        name: info.name,
         description: 'Fixture style',
         status: 'available',
       })),
@@ -140,7 +140,11 @@ async function transport(input, init = {}) {
 test.before(async () => {
   db = new PGlite();
   await db.exec(readFileSync('tests/fixtures/business-base.sql', 'utf8'));
-  for (const file of ['0002_saved_looks.sql', '0003_saved_look_admission.sql'])
+  for (const file of [
+    '0002_saved_looks.sql',
+    '0003_saved_look_admission.sql',
+    '0004_look_details.sql',
+  ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   png = await sharp({ create: { width: 64, height: 64, channels: 3, background: '#e1c9c2' } })
     .png()
@@ -287,7 +291,7 @@ test('look-aware booking and assigned stylist preview complete against the same 
   cleanup();
   actor = S;
   mount(StylistPage);
-  await screen.findByText('Gel Manicure');
+  await screen.findByRole('heading', { name: 'Gel Manicure' });
   fireEvent.click(screen.getByRole('button', { name: /View requested look/ }));
   assert.ok(screen.getByRole('dialog').hasAttribute('open'));
   assert.match(screen.getByRole('dialog').textContent, /Nude Pink Gloss/);
@@ -300,7 +304,7 @@ test('look-aware booking and assigned stylist preview complete against the same 
   mount(DailyServices);
   fireEvent.change(screen.getByLabelText('From date'), { target: { value: '2030-10-17' } });
   fireEvent.change(screen.getByLabelText('Through date'), { target: { value: '2030-10-17' } });
-  await screen.findByText('Gel Manicure');
+  await screen.findByText('Gel Manicure', { selector: 'td' });
   assert.match(document.body.textContent, /₱350/);
   assert.match(document.body.textContent, /Stylist One/);
 });
@@ -344,4 +348,59 @@ test('admin can assign a stylist and confirm the recorded amount through the exi
     assert.equal(row.stylist_id, S);
     assert.equal(row.total_price, 450);
   });
+});
+
+test('look information displays named service prices and labels saved/current estimates honestly', async () => {
+  const { LookInformation } = await import('../components/look-information.tsx');
+  const { snapshotLookInformation } = await import('../lib/business/look-information.ts');
+  render(React.createElement(LookInformation, { feature: 'nails', styleId: 'french_tip' }));
+  assert.ok(screen.getByText('Natural pink nails with white tips.'));
+  assert.ok(screen.getByText('Nail Art (per nail)'));
+  assert.ok(screen.getByText('From ₱50'));
+  cleanup();
+  render(React.createElement(LookInformation, { feature: 'makeup', styleId: 'natural_makeup' }));
+  assert.ok(screen.getByText('Price to be confirmed by the salon.'));
+  assert.equal(screen.queryByText(/₱500/), null);
+  cleanup();
+  render(
+    React.createElement(LookInformation, {
+      saved: true,
+      feature: 'hairstyle',
+      styleId: 'crew_cut',
+    }),
+  );
+  assert.ok(screen.getByText('Current service estimate; the original estimate was not recorded.'));
+  cleanup();
+  render(
+    React.createElement(LookInformation, {
+      saved: true,
+      feature: 'hairstyle',
+      styleId: 'crew_cut',
+      details: snapshotLookInformation('hairstyle', 'crew_cut'),
+    }),
+  );
+  assert.ok(screen.getByText('Estimated cost when saved'));
+  assert.equal(
+    screen.queryByText('Current service estimate; the original estimate was not recorded.'),
+    null,
+  );
+});
+
+test('admin navigation removes Market Trends and keeps Finance and Dashboard', async () => {
+  const { default: AdminSidebar } = await import('../components/AdminSidebar.tsx');
+  actor = A;
+  mount(
+    () =>
+      React.createElement(
+        PathnameContext.Provider,
+        { value: '/admin/dashboard' },
+        React.createElement(AdminSidebar),
+      ),
+    {},
+    '',
+    true,
+  );
+  assert.equal(screen.queryByRole('link', { name: 'Market Trends' }), null);
+  assert.ok(screen.getByRole('link', { name: 'Finance' }));
+  assert.ok(screen.getByRole('link', { name: 'Dashboard' }));
 });

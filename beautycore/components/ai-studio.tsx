@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { SavedLookActions } from "./saved-look-actions";
+import { LookInformation } from "./look-information";
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
@@ -100,6 +101,7 @@ export function ResultDialog({ feature, result, open, original, originalAlt, gen
       <div className="studio-result-header"><div><p className="studio-eyebrow">YOUR NEW LOOK IS READY</p><h2 id="studio-result-title">{title}</h2><p>{result.style.name} · {result.status === "completed" ? "AI preview" : "Development preview"}</p></div><button type="button" className="studio-icon-button" aria-label="Close result" onClick={() => ref.current?.close()}>×</button></div>
       <div className="studio-result-grid"><div className="studio-result-image"><span>01 / ORIGINAL IMAGE</span><StudioPhoto src={original} alt={originalAlt} /></div><div className="studio-result-image studio-result-generated"><span>02 / GENERATED IMAGE</span><StudioPhoto src={result.image.data_url} alt={generatedAlt} /></div></div>
       {note && <p className="studio-result-note">{note}</p>}
+      {result.status === "completed" && <LookInformation feature={feature} styleId={result.style.id} fallbackDescription={result.style.description} />}
       <SavedLookActions feature={feature} result={result} />
       <div className="studio-result-actions"><button type="button" className="studio-secondary-button" onClick={() => ref.current?.close()}>Close</button><button type="button" className="studio-secondary-button" onClick={() => { ref.current?.close(); onRegenerate(); }}>Regenerate</button><a className="studio-primary-button" href={result.image.data_url} download={filename}>Download image <span aria-hidden="true">↗</span></a></div>
     </div>

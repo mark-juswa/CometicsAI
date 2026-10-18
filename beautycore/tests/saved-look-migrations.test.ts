@@ -24,7 +24,7 @@ test("release runner uses single-statement queries, commits enum before use and 
         for (const statement of statements) await tx.query(statement);
       });
     await applySavedLookMigrations(transaction);
-    const result = await pg.query(
+    const result = await pg.query<{ outcome: string }>(
       `SELECT * FROM beautycore_save_look('11111111-1111-4111-8111-111111111111','makeup','natural','Natural','fixture-preview',repeat('a',64),1,'manual',20,134217728)`,
     );
     assert.equal(result.rows[0].outcome, "created");
@@ -42,7 +42,7 @@ test("release runner uses single-statement queries, commits enum before use and 
       },
     ]);
     assert.equal(
-      (await pg.query("SELECT count(*)::int AS n FROM ai_generations")).rows[0]
+      (await pg.query<{ n: number }>("SELECT count(*)::int AS n FROM ai_generations")).rows[0]
         .n,
       2,
     );
@@ -70,7 +70,7 @@ test("a failed schema batch rolls back completely and does not run the next migr
     );
     assert.deepEqual(result.rows, [{ added: false, makeup: false }]);
     assert.equal(
-      (await pg.query("SELECT count(*)::int AS n FROM ai_generations")).rows[0]
+      (await pg.query<{ n: number }>("SELECT count(*)::int AS n FROM ai_generations")).rows[0]
         .n,
       1,
     );

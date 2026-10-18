@@ -1,3 +1,4 @@
+import { featureFromType, resolveLookInformation, type LookDetails } from './look-information';
 import type { Actor } from './core';
 export type Query = (text: string, values?: unknown[]) => Promise<Record<string, unknown>[]>;
 export type SavedInput = {
@@ -8,22 +9,32 @@ export type SavedInput = {
   hash: string;
   imageBytes: number;
   sourceKind: string;
+  lookDetails?: LookDetails | null;
 };
-export type Settings = { enabled: boolean; clientLimit: number; storageBudget: number };
-const lookFields = `g.id,g.client_id AS "clientId",g.style_type AS "styleType",g.style_id AS "styleId",g.style_name AS "styleName",g.saved_at AS "savedAt",g.result_hash AS "resultHash",g.image_bytes AS "imageBytes",g.source_kind AS "sourceKind",(g.created_at AT TIME ZONE 'UTC') AS "createdAt"`;
+export type Settings = {
+  enabled: boolean;
+  clientLimit: number;
+  storageBudget: number;
+};
+const lookFields = `g.id,g.client_id AS "clientId",g.style_type AS "styleType",g.style_id AS "styleId",g.style_name AS "styleName",g.saved_at AS "savedAt",g.result_hash AS "resultHash",g.image_bytes AS "imageBytes",g.source_kind AS "sourceKind",g.look_details AS "lookDetails",(g.created_at AT TIME ZONE 'UTC') AS "createdAt"`;
 export function lookView(row: Record<string, unknown>) {
   return {
     id: row.id,
     styleType: row.styleType,
     styleId: row.styleId,
     styleName: row.styleName,
+    lookDetails:
+      row.lookDetails ??
+      (featureFromType(String(row.styleType))
+        ? resolveLookInformation(featureFromType(String(row.styleType))!, String(row.styleId))
+        : null),
     savedAt: row.savedAt,
     createdAt: row.createdAt,
     imageUrl: `/api/saved-looks/${row.id}/image`,
   };
 }
 const appointmentFields = `a.id,a.client_id AS "clientId",a.stylist_id AS "stylistId",a.service_name AS "serviceName",a.service_type AS "serviceType",(a.appointment_date AT TIME ZONE 'UTC') AS "appointmentDate",a.status,a.total_price AS "totalPrice",a.notes,a.ai_generation_id AS "aiGenerationId"`;
-const lookJoin = `CASE WHEN g.id IS NULL THEN NULL ELSE json_build_object('id',g.id,'styleType',g.style_type,'styleName',g.style_name,'styleId',g.style_id,'imageUrl','/api/saved-looks/'||g.id||'/image') END AS look`;
+const lookJoin = `CASE WHEN g.id IS NULL THEN NULL ELSE json_build_object('id',g.id,'styleType',g.style_type,'styleName',g.style_name,'styleId',g.style_id,'lookDetails',g.look_details,'imageUrl','/api/saved-looks/'||g.id||'/image') END AS look`;
 export function createBusinessStore(query: Query) {
   const getLook = async (identity: string, owner: string) =>
     (
@@ -34,18 +45,22 @@ export function createBusinessStore(query: Query) {
     )[0];
   const save = async (owner: string, input: SavedInput, settings: Settings) =>
     (
-      await query('SELECT * FROM beautycore_save_look($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)', [
-        owner,
-        input.styleType,
-        input.styleId,
-        input.styleName,
-        input.imageUrl,
-        input.hash,
-        input.imageBytes,
-        input.sourceKind,
-        settings.clientLimit,
-        settings.storageBudget,
-      ])
+      await query(
+        'SELECT * FROM beautycore_save_look_with_details($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11::jsonb)',
+        [
+          owner,
+          input.styleType,
+          input.styleId,
+          input.styleName,
+          input.imageUrl,
+          input.hash,
+          input.imageBytes,
+          input.sourceKind,
+          settings.clientLimit,
+          settings.storageBudget,
+          input.lookDetails ? JSON.stringify(input.lookDetails) : null,
+        ],
+      )
     )[0];
   return {
     currentUser: async (identity: string) =>

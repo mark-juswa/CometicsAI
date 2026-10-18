@@ -1,4 +1,6 @@
 'use client';
+import { LookInformation } from '@/components/look-information';
+import { featureFromType } from '@/lib/business/look-information';
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
@@ -178,6 +180,7 @@ export default function BookingForm() {
           {look && (
             <section className="business-panel mb-6">
               <h2>Booking with {look.styleName}</h2>
+              <LookInformation saved feature={featureFromType(look.styleType)} styleId={look.styleId} details={look.lookDetails} />
               <div className="relative mt-3 h-56">
                 <Image
                   src={look.imageUrl}

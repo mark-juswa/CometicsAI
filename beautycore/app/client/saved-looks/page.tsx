@@ -1,4 +1,6 @@
 'use client';
+import { LookInformation } from '@/components/look-information';
+import { featureFromType } from '@/lib/business/look-information';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -136,6 +138,7 @@ export default function SavedLooksPage() {
                 />
               </div>
               <h2>{look.styleName}</h2>
+              <LookInformation saved feature={featureFromType(look.styleType)} styleId={look.styleId} details={look.lookDetails} />
               <p className="text-sm text-secondary">
                 {look.styleType === 'nail'
                   ? 'Nails'

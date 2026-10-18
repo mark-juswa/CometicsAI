@@ -1,3 +1,4 @@
+import type { LookDetails } from '../lib/business/look-information';
 import {
   pgTable,
   uuid,
@@ -118,6 +119,7 @@ export const aiGenerations = pgTable(
     resultHash: varchar('result_hash', { length: 64 }),
     imageBytes: integer('image_bytes'),
     sourceKind: varchar('source_kind', { length: 20 }).notNull().default('legacy'),
+    lookDetails: jsonb('look_details').$type<LookDetails>(),
     styleType: styleTypeEnum('style_type').notNull(),
     analysisResult: jsonb('analysis_result').$type<{
       category: 'hair' | 'nails';

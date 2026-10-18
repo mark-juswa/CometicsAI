@@ -1,4 +1,5 @@
 "use client";
+import { LookInformation } from "@/components/look-information";
 
 import Link from "next/link";
 import { SavedLookActions } from "@/components/saved-look-actions";
@@ -421,7 +422,7 @@ export default function ConsultationPage() {
             <span className="consult-featured-index">LOOK 0{activeIndex + 1} / 03</span></div>
           <div className="consult-featured-copy"><div className="consult-card-top"><span>YOUR PERSONALIZED EDIT</span><span className={`consult-status consult-status-${activeCard.status}`}>{activeCard.status === "pending" ? "Up next" : activeCard.status}</span></div>
             <h3>{activeCard.recommendation.primary.style_name}</h3><p className="consult-reason">{activeCard.recommendation.reason}</p>
-            <p className="consult-estimate">Estimated ₱{activeCard.recommendation.primary.service.estimated_price.toLocaleString()} · {activeCard.recommendation.primary.service.estimated_duration_minutes} min <small>(demo estimate)</small></p>
+            <LookInformation feature={activeCard.recommendation.primary.feature} styleId={activeCard.recommendation.primary.style_id} />
             {activeCard.recommendation.complements.length > 0 && <p className="consult-complements">Pairs with {activeCard.recommendation.complements.map((item) => item.style_name).join(", ")}. Complementary visuals are not generated.</p>}
             {activeCard.error && <p role="alert" className="consult-card-error">{activeCard.error}</p>}
             {activeCard.status === "completed" && activeCard.result && <SavedLookActions feature={activeCard.recommendation.primary.feature} result={activeCard.result} sourceKind="consultation" />}
@@ -451,7 +452,7 @@ export default function ConsultationPage() {
         && <button type="button" className="studio-secondary-button consult-continue" onClick={() => void continuePending()}>Continue remaining looks</button>}
       {selected && <section className="consult-selection" aria-label="Selected recommendation"><p className="studio-eyebrow">YOUR SELECTED LOOK</p>
         <h2>{selected.recommendation.primary.style_name}</h2><p>Selected for this consultation. Use Save Look to keep it in your account, or Book This Look to arrange an appointment. No booking has been made.</p>
-        <p>{selected.recommendation.primary.service.name} · ₱{selected.recommendation.primary.service.estimated_price.toLocaleString()} · {selected.recommendation.primary.service.estimated_duration_minutes} min (demo estimate)</p>
+        <LookInformation feature={selected.recommendation.primary.feature} styleId={selected.recommendation.primary.style_id} />
         {selected.recommendation.complements.length > 0 && <p>Suggested complements: {selected.recommendation.complements.map((item) => item.style_name).join(", ")}</p>}
       </section>}
       <div className="consult-stage-footer">{customLink}</div>

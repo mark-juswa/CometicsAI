@@ -8,6 +8,7 @@ export async function applySavedLookMigrations(
   for (const name of [
     "0002_saved_looks.sql",
     "0003_saved_look_admission.sql",
+    "0004_look_details.sql",
   ]) {
     const statements = readFileSync(
       new URL("../db/migrations/" + name, import.meta.url),

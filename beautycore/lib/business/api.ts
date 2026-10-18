@@ -165,6 +165,7 @@ export function savedLooks(
             hash: String(row.resultHash),
             imageBytes: Number(row.imageBytes),
             sourceKind: String(row.sourceKind),
+            lookDetails: row.lookDetails as import('./look-information').LookDetails | null,
           },
           deps,
         );

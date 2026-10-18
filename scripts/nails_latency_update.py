@@ -10,7 +10,7 @@ import subprocess
 import sys
 import time
 
-FILES = ('scripts/unified_gate3_server.py', 'scripts/unified_gate3_nails.py',
+FILES = ('scripts/inference_performance.py', 'scripts/unified_gate3_server.py', 'scripts/unified_gate3_nails.py',
          'backend/app/nails/inference_options.py')
 MAKEUP_PRESETS = 'data/makeup/DATA-M001-paired/inference_presets.json'
 

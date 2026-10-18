@@ -1,26 +1,232 @@
 {
   "hairstyle": {
-    "crew_cut": "Crew Cut",
-    "bob_hair": "Bob Hair",
-    "layered_hair": "Layered Hair"
+    "crew_cut": {
+      "name": "Crew Cut",
+      "description": "A short, easy-to-maintain haircut with closely trimmed sides and back.",
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry",
+        "Children's Cut (under 12)"
+      ]
+    },
+    "bob_hair": {
+      "name": "Bob Hair",
+      "description": "A short-to-medium cut with a defined shape around the jaw or shoulders.",
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry",
+        "Children's Cut (under 12)"
+      ]
+    },
+    "layered_hair": {
+      "name": "Layered Hair",
+      "description": "A haircut with graduated lengths that add movement and shape.",
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry",
+        "Children's Cut (under 12)"
+      ]
+    },
+    "bun": {
+      "name": "Bun",
+      "description": "Hair gathered and secured into an updo at the back or top of the head.",
+      "services": [
+        "Blowdry & Style",
+        "Updo / Special Occasion",
+        "Bridal Hair"
+      ]
+    },
+    "curtain_hair": {
+      "name": "Curtain Hair",
+      "description": "A centre-parted style with longer pieces framing both sides of the face.",
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry",
+        "Children's Cut (under 12)"
+      ]
+    },
+    "perm_curls": {
+      "name": "Perm-Style Curls",
+      "description": "A curly style with added volume and defined bends or curls.",
+      "services": []
+    },
+    "pixie_cut": {
+      "name": "Pixie Cut",
+      "description": "A short cropped cut with closely trimmed sides and a shaped top.",
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry",
+        "Children's Cut (under 12)"
+      ]
+    },
+    "pompadour_undercut": {
+      "name": "Pompadour Undercut",
+      "description": "A full, swept-back top paired with closely trimmed sides.",
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry",
+        "Children's Cut (under 12)"
+      ]
+    },
+    "ponytail": {
+      "name": "Ponytail",
+      "description": "Hair gathered and tied back, leaving the length free to fall.",
+      "services": [
+        "Blowdry & Style",
+        "Updo / Special Occasion",
+        "Bridal Hair"
+      ]
+    },
+    "shag_hair": {
+      "name": "Shag Hair",
+      "description": "A textured layered cut with a relaxed, tousled finish.",
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry",
+        "Children's Cut (under 12)"
+      ]
+    },
+    "shoulder_length_hair": {
+      "name": "Shoulder-Length Hair",
+      "description": "A medium-length cut that falls around the shoulders.",
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry",
+        "Children's Cut (under 12)"
+      ]
+    },
+    "side_part_undercut": {
+      "name": "Side-Part Undercut",
+      "description": "A side-parted top with closely trimmed or shaved sides.",
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry",
+        "Children's Cut (under 12)"
+      ]
+    },
+    "wavy_hair": {
+      "name": "Wavy Hair",
+      "description": "Soft waves that add movement and texture through the hair.",
+      "services": []
+    }
   },
   "makeup": {
-    "natural_makeup": "Natural Makeup",
-    "no_makeup_makeup": "No-Makeup Makeup",
-    "soft_glam": "Soft Glam",
-    "smoky_glam": "Smoky Glam",
-    "dewy_peach": "Dewy Peach",
-    "rosy_pink": "Rosy Pink",
-    "bronze_golden_glam": "Bronze / Golden Glam",
-    "matte_nude": "Matte Nude",
-    "classic_red_lip": "Classic Red Lip",
-    "bold_evening_glam": "Bold Evening Glam"
+    "natural_makeup": {
+      "name": "Natural Makeup",
+      "description": "Subtle, balanced everyday color.",
+      "services": [
+        "Makeup Application"
+      ]
+    },
+    "no_makeup_makeup": {
+      "name": "No-Makeup Makeup",
+      "description": "Barely visible polish and even tone.",
+      "services": [
+        "Makeup Application"
+      ]
+    },
+    "soft_glam": {
+      "name": "Soft Glam",
+      "description": "Blended eyes and a polished finish.",
+      "services": [
+        "Makeup Application"
+      ]
+    },
+    "smoky_glam": {
+      "name": "Smoky Glam",
+      "description": "Smoky eyes with a refined base.",
+      "services": [
+        "Makeup Application"
+      ]
+    },
+    "dewy_peach": {
+      "name": "Dewy Peach",
+      "description": "Fresh peach color and luminous skin.",
+      "services": [
+        "Makeup Application"
+      ]
+    },
+    "rosy_pink": {
+      "name": "Rosy Pink",
+      "description": "Soft pink eyes, cheeks, and lips.",
+      "services": [
+        "Makeup Application"
+      ]
+    },
+    "bronze_golden_glam": {
+      "name": "Bronze / Golden Glam",
+      "description": "Warm bronze eyes and golden glow.",
+      "services": [
+        "Makeup Application"
+      ]
+    },
+    "matte_nude": {
+      "name": "Matte Nude",
+      "description": "Muted neutral color with a matte finish.",
+      "services": [
+        "Makeup Application"
+      ]
+    },
+    "classic_red_lip": {
+      "name": "Classic Red Lip",
+      "description": "A crisp red lip with simple eyes.",
+      "services": [
+        "Makeup Application"
+      ]
+    },
+    "bold_evening_glam": {
+      "name": "Bold Evening Glam",
+      "description": "Statement eyes and evening color.",
+      "services": [
+        "Makeup Application"
+      ]
+    }
   },
   "nails": {
-    "classic_red": "Classic Red Gloss",
-    "nude_pink": "Nude Pink Gloss",
-    "glossy_black": "Glossy Black",
-    "french_tip": "French Tip",
-    "pink_ombre": "Pink Ombre"
+    "classic_red": {
+      "name": "Classic Red Gloss",
+      "description": "Rich glossy red polish.",
+      "services": [
+        "Classic Manicure",
+        "Gel Manicure",
+        "Nail Art (per nail)"
+      ]
+    },
+    "nude_pink": {
+      "name": "Nude Pink Gloss",
+      "description": "Soft natural pink polish.",
+      "services": [
+        "Classic Manicure",
+        "Gel Manicure",
+        "Nail Art (per nail)"
+      ]
+    },
+    "glossy_black": {
+      "name": "Glossy Black",
+      "description": "Deep reflective black polish.",
+      "services": [
+        "Classic Manicure",
+        "Gel Manicure",
+        "Nail Art (per nail)"
+      ]
+    },
+    "french_tip": {
+      "name": "French Tip",
+      "description": "Natural pink nails with white tips.",
+      "services": [
+        "Classic Manicure",
+        "Gel Manicure",
+        "Nail Art (per nail)"
+      ]
+    },
+    "pink_ombre": {
+      "name": "Pink Ombre",
+      "description": "A soft pink gradient toward each tip.",
+      "services": [
+        "Classic Manicure",
+        "Gel Manicure",
+        "Nail Art (per nail)"
+      ]
+    }
   }
 }

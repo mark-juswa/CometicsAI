@@ -13,7 +13,7 @@ from scripts import unified_gate1 as gate
 GATE2_SHA = '0e5ffd854f394f86e5c1ca49d47b9b230b0088aae2da828d893601330d190feb'
 NEW_FILES = ('scripts/unified_gate3_server.py', 'scripts/unified_gate3_bootstrap.py',
              'scripts/unified_gate3_requirements.txt',
-             'scripts/unified_gate3_nails.py', 'backend/app/nails/inference_options.py',
+             'scripts/inference_performance.py', 'scripts/unified_gate3_nails.py', 'backend/app/nails/inference_options.py',
              'docs/experiments/unified-kaggle-gate2-review.json')
 
 

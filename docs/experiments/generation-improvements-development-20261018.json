@@ -1,0 +1,142 @@
+{
+  "date": "2026-10-18",
+  "timezone": "Asia/Manila",
+  "decision": "CONFIRMED",
+  "implementation_progress": "DONE for web features; IN PROGRESS for real GPU performance validation",
+  "checkout": "I:/HAIR",
+  "base_commit": "6bd961e9b90d60eb5d1966e7aeb6cf60d0bebcce",
+  "local_branch": "codex/look-details-performance",
+  "authorization": [
+    "Supervisor: lets start",
+    "Supervisor: separate private Kaggle benchmark session available",
+    "Do not deploy to Render"
+  ],
+  "implemented": [
+    "One pure public look-information resolver references the existing service catalog; editorial short Hair descriptions and reused Makeup/Nails descriptions",
+    "Conditional named estimates retain fixed/from/per-nail/quote kinds, no inferred gender/age and no invented Makeup or perm/wave amount",
+    "Shared display in standalone results, Consultation, gallery, booking and requested-look dialogs",
+    "Nullable immutable server-owned snapshot on existing generation; no second image/table; original snapshot retained for duplicates/restores; clearly labeled current fallback for legacy records",
+    "Expanded approved thirteen-style Hair save metadata/checker; backend availability unchanged",
+    "Market Trends active page/sidebar removed; stats/history APIs, Finance/Dashboard and archived source retained",
+    "Default-disabled phase instrumentation and bounded public prompt tensor cache; fresh source-only private benchmark notebook; model/runtime pins unchanged"
+  ],
+  "database": {
+    "migration": "beautycore/db/migrations/0004_look_details.sql",
+    "live_applied": false,
+    "tested_on": "Disposable PGlite fixtures",
+    "old_save_function_retained": true,
+    "new_function": "beautycore_save_look_with_details",
+    "data_export": false,
+    "production_reads": false
+  },
+  "verification": {
+    "web_combined": {
+      "passed": 94,
+      "failed": 0,
+      "command": "node --experimental-test-module-mocks --import tsx --test tests/ai-runtime-registry.test.ts tests/ai-adapter.test.ts tests/ai-client-flow.test.ts tests/ai-jobs.test.ts tests/ai-studio-integration.test.ts tests/business-workflows.test.ts tests/business-ui.test.mjs tests/finance-stats.test.mjs tests/saved-look-migrations.test.ts tests/look-information.test.ts",
+      "working_directory": "beautycore",
+      "log": "beautycore/.tmp/look-details-combined-tests.log",
+      "scope": "Actual components/API/store with JSDOM and disposable PGlite; no live browser/Neon/GPU"
+    },
+    "python_full": {
+      "passed": 478,
+      "failed": 0,
+      "warnings": 1,
+      "warning": "Existing python_multipart pending deprecation",
+      "seconds": 97.78,
+      "command": "python -m pytest tests -q",
+      "working_directory": "backend",
+      "log": ".tmp/generation-improvements-python-tests.log"
+    },
+    "production_build": {
+      "command": "npm run build",
+      "working_directory": "beautycore",
+      "status": "PASSED",
+      "build_id": "F-fiJtA_NNRsXtXC10PNE",
+      "static_pages_generated": 41,
+      "typecheck": "Included and passed",
+      "market_trends_route_present": false,
+      "finance_and_dashboard_routes_present": true
+    },
+    "catalog_check": {
+      "command": "python scripts/check_saved_look_catalog.py",
+      "status": "PASSED",
+      "scope": "Both approved Hair registries, Makeup and Nails"
+    },
+    "whitespace": "git diff --check passed",
+    "initial_failures_resolved": [
+      "Two historical bundle tests incorrectly compared accepted immutable artifacts with evolving checkout source; now verify actual extracted members/provenance hashes against immutable bundles. New test verifies future package inventories include optional helper. Existing private artifacts were not regenerated."
+    ]
+  },
+  "performance": {
+    "status": "EXPERIMENTAL; real GPU timing/quality NEEDS VERIFICATION",
+    "local_cuda": false,
+    "local_torch": "2.10.0+cpu",
+    "enabled_in_working_demo": false,
+    "defaults": {
+      "AI_INFERENCE_PROFILE": "unset",
+      "AI_PROMPT_CACHE": "unset"
+    },
+    "cache": {
+      "entries": 4,
+      "maximum_cpu_bytes": 67108864,
+      "gpu_tensor_retention": false,
+      "images_cached": false
+    },
+    "cpu_structural_test": {
+      "five_synthetic_calls_prompt_encodings_before": 10,
+      "after": 2,
+      "output_tensors_equal": true,
+      "model_speedup_measured": false,
+      "image_quality_verified": false
+    },
+    "historical_evidence": "Existing Classic Red 20 to 8 step improvement was already selected in hosted Kaggle; no new improvement claim.",
+    "gpu_benchmark": {
+      "notebook": "notebooks/beautycore_generation_speed_benchmark.ipynb",
+      "working_demo_replaced": false,
+      "private": true,
+      "server_or_tunnel_started": false,
+      "requires_api_secrets": false,
+      "approved_source_bundle": "capstone_train002_20260928_v1.bin",
+      "bundle_sha256": "f0d1fed52e00b6c5a1da2cade3731237675cdebbfc0b2cde3b2dbda99a4019ac",
+      "scope": "Worker-only fixed inputs, Nails single localized crop; no full-hand/browser timing",
+      "three_paired_cases": [
+        "Crew Cut",
+        "Natural Makeup",
+        "Classic Red"
+      ],
+      "single_pair_adapter_coverage": [
+        "Bun",
+        "Glossy Black"
+      ],
+      "result_received": false,
+      "automatic_enablement": false
+    }
+  },
+  "boundaries": {
+    "render_deployed": false,
+    "github_pushed": false,
+    "live_database_mutated": false,
+    "demo_notebook_replaced": false,
+    "existing_demo_bundles_rebuilt": false,
+    "models_or_steps_changed": false,
+    "native_contract_or_display_changed": false
+  },
+  "needs_verification": [
+    "New matched GPU before/after report and pixel/visual review",
+    "Full-hand geometry/compositing and all expected nails; renderer and cross-feature/Consultation application rehearsal",
+    "Actual client-device visual acceptance",
+    "Authoritative Makeup and unmapped service prices; special Nail Art add-on rules",
+    "Native display follow-up for authoritative pricing; existing numeric demo fields preserved"
+  ],
+  "source_hashes": {
+    "notebooks/beautycore_generation_speed_benchmark.ipynb": "4dcc629c0f532be386a5bb12207bb873eef7327d77678a7424fd4012da73f11b",
+    "notebooks/beautycore_generation_speed_benchmark_cell.py": "d545addde5dba591c5556f844c9fdef979dc3395aa71513d1bd079373263c9d9",
+    "scripts/inference_performance.py": "85bdf65eae8661627d555402495af0332f4b90a0a39118f367ed87e991f8db61",
+    "scripts/benchmark_generation_performance.py": "22d8f5aa96637d24ae7a514cfcf5604da79744e6913aa7a07bd58ba5c7dcc1d2",
+    "scripts/generation_performance_bootstrap.py": "bb02dca1556fc35b33f46faf93242956be88d2164cf8a2f62d28760610eaab8b",
+    "beautycore/db/migrations/0004_look_details.sql": "b48aa38faf90d97cacb9f01d2f88ae3a6ef81962297fb6a4681f74e7933f38ce",
+    "beautycore/lib/business/style-catalog.json": "b762538f4c9fc651382a1cc6419dc4e97f19cb1c24060559e282a2d40512fdee"
+  },
+  "guide": "docs/guides/generation-improvements-local-review.md"
+}

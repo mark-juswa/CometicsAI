@@ -85,3 +85,5 @@ The new GPU worker report and exact-output comparison have now been reviewed: Cr
 ## Completed worker benchmark — no rerun needed for this review
 
 The user supplied `beautycore-speed-results.zip`; independent CRC, inventory, timing-summary and all22 image-hash checks passed. The separate experiment record preserves the raw report. The dominant measured worker phase remains the model image-generation loop (about73–85% in diagnostic warm-ups). The candidate improves repeated-prompt worker cases while preserving their exact outputs; first-use performance is not consistently faster. It remains disabled in the working system pending the narrower full application rehearsal. No further27-generation benchmark is required merely to confirm this artifact.
+
+The next full-hand/Consultation generation rehearsal is now prepared in a **separate private notebook**. See [exact steps and workload](application-rehearsal-20261018.md). It requires both existing private datasets, no Secrets or public endpoint, and remains a test rather than an enabled demo optimization.

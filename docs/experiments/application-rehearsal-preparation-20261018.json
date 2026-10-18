@@ -1,0 +1,120 @@
+{
+  "date": "2026-10-18",
+  "timezone": "Asia/Manila",
+  "authorization": "CONFIRMED: Supervisor proceed to the focused isolated rehearsal; no Render deployment",
+  "preparation_status": "DONE; offline verification VERIFIED",
+  "real_kaggle_application_run": "NEEDS VERIFICATION: user-run notebook/results pending",
+  "source_base_commit": "4015ad9",
+  "artifact": {
+    "path": "artifacts/application-rehearsal-20261018/beautycore_application_rehearsal.ipynb",
+    "sha256": "327525ed585df9be91923cedd6650e758194de5e79d19dd14c5608ee87e2b9a2",
+    "bytes": 957721,
+    "private": true,
+    "ignored_by_git": true,
+    "includes_weights": false,
+    "includes_customer_photos": false,
+    "includes_api_keys": false,
+    "includes_approved_hand_fixture": true,
+    "hand_sha256": "c483244132e74ffc6e492271e742c17dce4ce694050abab78c43bc306dd4fd98",
+    "hand_resolution": [
+      1600,
+      1200
+    ],
+    "source_hashes": {
+      "scripts/inference_performance.py": "85bdf65eae8661627d555402495af0332f4b90a0a39118f367ed87e991f8db61",
+      "scripts/unified_gate3_server.py": "3ccfd73745147af617331b18ce95e5024a2426bec06a054b96526e5b831fc77f",
+      "scripts/application_rehearsal_worker.py": "1674f085a9c2fa4bf8cfa13c4ed036aff0ed4129edba774f55a4bb2b2a7235c9",
+      "scripts/application_rehearsal.py": "68f150113e4effda016782e5e09cf730eb6b5b3744176bf5b299dea3e0a11ab4",
+      "scripts/application_rehearsal_bootstrap.py": "8de1a19d7fa3e56f62a687609770c2e26412de178d2b85fcfa7492911f30192b"
+    }
+  },
+  "existing_bundle_checks": [
+    {
+      "name": "capstone_train002_20260928_v1.bin",
+      "sha256": "f0d1fed52e00b6c5a1da2cade3731237675cdebbfc0b2cde3b2dbda99a4019ac",
+      "status": "VERIFIED unchanged"
+    },
+    {
+      "name": "render_kaggle_cpu_20261009.bin",
+      "sha256": "f391050851519e9cc1080830b615a6cc457b6dd1e21fde156522bb959fad9ede",
+      "status": "VERIFIED unchanged"
+    }
+  ],
+  "plan": {
+    "application_results": 20,
+    "model_calls": 30,
+    "modes": [
+      "baseline",
+      "candidate"
+    ],
+    "hair_consultation": [
+      "bob_hair",
+      "bun",
+      "crew_cut"
+    ],
+    "standalone_makeup": "natural_makeup",
+    "hair_restoration": "crew_cut after Makeup",
+    "nails_consultation": [
+      "classic_red",
+      "french_tip",
+      "glossy_black"
+    ],
+    "other_renderers": [
+      "nude_pink",
+      "pink_ombre"
+    ],
+    "paired_observations_per_case": 1,
+    "public_tunnel": false,
+    "website_registration": false,
+    "ephemeral_loopback_worker": true,
+    "gemini_called": false
+  },
+  "checks": [
+    "Actual CPU API and authenticated async gateway; job polling, missing key, wrong owner and competing busy admission",
+    "Actual original-resolution MediaPipe/YOLO/refinement/localized model crops/renderer/final compositor on real run",
+    "Five expected finger edits and zero changed pixels outside actual final masks",
+    "Exact RGB/mask equality for ten pairs; PNG hashes; Hair restoration; one foundation",
+    "Separate CPU environments, without-ensurepip pip bootstrap, Matplotlib Agg, exact GPU/runtime/model pins",
+    "Progress streaming and partial failure ZIP; owned worker cleanup; test control routes excluded from demo packages",
+    "CPU model preflight before GPU load; fail immediately on reported unready worker; bounded cleanup verified"
+  ],
+  "local_verification": {
+    "command": "python -m pytest tests -q",
+    "working_directory": "backend",
+    "passed": 484,
+    "failed": 0,
+    "warnings": 1,
+    "warning": "Existing python_multipart pending deprecation",
+    "seconds": 156.78,
+    "log": ".tmp/application-rehearsal-python-tests.log",
+    "new_tests": 8,
+    "scope": "Actual gateway/Consultation orchestration with synthetic model/vision; not a real GPU application result",
+    "source_compilation": "PASSED",
+    "generated_payload_and_known_credential_scan": "PASSED",
+    "private_image_committed": false,
+    "full_suite_timing": "Full484-test suite passed before final bootstrap failure/cleanup guard additions; final focused suite rechecked all changed rehearsal paths.",
+    "final_focused": {
+      "passed": 8,
+      "failed": 0,
+      "seconds": 4.78,
+      "command": "python -m pytest tests/test_application_rehearsal.py -q",
+      "log": ".tmp/application-rehearsal-focused-tests.log"
+    }
+  },
+  "limitations": [
+    "Single pair per case; baseline first, warm-up/order effects possible",
+    "No Next.js/browser, Render/network/device or saved-look database acceptance",
+    "Consultation uses existing deterministic provider; Gemini conversation and three-look Makeup Consultation not exercised",
+    "One hand only; real full-hand output/quality/timing evidence pending",
+    "Consultation first/all intervals include local checks and polling between requests"
+  ],
+  "boundaries": {
+    "render_deployed": false,
+    "github_pushed": false,
+    "live_database_changed": false,
+    "existing_demo_notebook_or_bundle_changed": false,
+    "production_runtime_flags_enabled": false,
+    "new_gpu_run_performed_here": false
+  },
+  "guide": "docs/guides/application-rehearsal-20261018.md"
+}

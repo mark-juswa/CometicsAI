@@ -2,6 +2,8 @@
 
 2026-10-20, Asia/Manila. User explicitly authorized release to Render and Kaggle. This supersedes the prior no-deployment boundary for this release only. Automatic endpoint registration, existing credentials, models and private input datasets remain in use.
 
+GitHub release source **8965f79** is verified on **codex/render-kaggle-demo**. At the handoff probe, health=200 and the new performance route=404: the old website is available, but the release still needs a Render dashboard deploy. Kaggle remains stopped.
+
 ## Current release contents
 
 The web release includes saved descriptions/catalog estimates, Market Trends removal, selected-look booking, both home dashboard previews, controlled service completion/products, client reviews and admin stylist performance. It reuses existing generations, appointments and inventory.

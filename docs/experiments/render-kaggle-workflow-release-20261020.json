@@ -1,7 +1,7 @@
 {
   "date": "2026-10-20",
   "timezone": "Asia/Manila",
-  "status": "SCHEMA_APPLIED; RELEASE_PUBLICATION_IN_PROGRESS; RENDER_AND_KAGGLE_OPERATOR_STEPS_PENDING",
+  "status": "SCHEMA_APPLIED; GITHUB_RELEASE_VERIFIED; RENDER_MANUAL_DEPLOY_AND_KAGGLE_START_PENDING",
   "user_authorization": "lets deploy it on render and kaggle together with the optimization we have done in generating the images",
   "kaggle_session_before_release": "Stopped, confirmed by user",
   "database": {
@@ -42,17 +42,28 @@
       "failed": 0,
       "warning": "Existing Starlette python_multipart deprecation"
     },
-    "git_diff_check": "PASS"
+    "git_diff_check": "PASS",
+    "final_historical_and_optimized_notebook_tests": {
+      "passed": 8,
+      "failed": 0
+    }
   },
   "publication": {
     "repository": "mark-juswa/CometicsAI",
     "deployment_branch": "codex/render-kaggle-demo",
-    "pushed": false
+    "pushed": true,
+    "verified_remote_sha": "8965f794500b6447ee45abe9388ad54fb8cb0bbf",
+    "release_commit": "8965f794500b6447ee45abe9388ad54fb8cb0bbf"
   },
   "limitations": [
     "No Render/Kaggle API credentials or supported browser-control runtime available in this session",
     "Render live revision and feature flag require operator confirmation",
     "Fresh optimized GPU/browser generation acceptance pending"
   ],
-  "guide": "docs/guides/render-kaggle-release-20261020.md"
+  "guide": "docs/guides/render-kaggle-release-20261020.md",
+  "website_probe": {
+    "health": 200,
+    "new_protected_performance_route": 404,
+    "meaning": "Existing website is up; new release is not live at probe time"
+  }
 }

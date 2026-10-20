@@ -74,3 +74,5 @@ The Supervisor authorized and supplied acceptance criteria for the System MVP af
 
 
 2026-10-20 Render+Kaggle combined release IN PROGRESS / authorized. Configured Neon0004/0005schema applied/verified without record export. New separate Nails-only optimized starter ready; baseline Hair/Makeup and original datasets/notebook preserved. Web47tests/build and scoped44tests pass; full backend regression and GitHub publication being finalized. Render Live/flags and new Kaggle GPU startup remain operator gates. [Guide](../guides/render-kaggle-release-20261020.md).
+
+2026-10-20 combined release publication VERIFIED:8965f79on confirmed Render branch;0004/0005schema applied.493backend+47business tests and production build pass. Render old-site health200/new-route404; manual dashboard deploy and optimized private Kaggle start remain PENDING. No cloud-ready/real-GPU claim. [Receipt](../experiments/render-kaggle-workflow-release-20261020.json).

@@ -13,7 +13,9 @@
     "db:seed": "tsx db/seed.ts",
     "db:studio": "drizzle-kit studio",
     "test:business": "node --experimental-test-module-mocks --import tsx --test tests/business-workflows.test.ts tests/business-ui.test.mjs tests/finance-stats.test.mjs tests/saved-look-migrations.test.ts tests/look-information.test.ts tests/service-completion.test.ts",
-    "db:check:saved-looks": "tsx scripts/apply-saved-looks.ts --check"
+    "db:check:saved-looks": "tsx scripts/apply-saved-looks.ts --check",
+    "test:guest-trial": "node --experimental-test-module-mocks --import tsx --test tests/guest-trial.test.ts tests/guest-trial-ui.test.mjs",
+    "db:check:guest-trial": "tsx scripts/apply-guest-trial.ts --check"
   },
   "dependencies": {
     "@google/genai": "^1.31.0",

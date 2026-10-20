@@ -154,3 +154,18 @@ Later startup automation: **CONFIRMED scope; LOCAL VERIFIED implementation; fres
 ## Combined release authorization, 2026-10-20
 
 **CONFIRMED:** Supervisor explicitly says deploy on Render and Kaggle together with generation optimization; this supersedes the earlier no-deploy boundary for this release. Apply additive workflow migrations and publish existing verified web changes. Use only measured model-Nails prompt reuse, preserve baseline Hair/Makeup and original notebook/datasets/model parameters. User confirms no GPU session running. Schema-only verification is used after automatic review rejected optional local record-derived hash export; no new record-export permission inferred. Actual Render trigger/Kaggle startup require operator in absence of control credentials/runtime.
+
+
+## Guest trial review boundary, 2026-10-20
+
+**CONFIRMED:** Supervisor requests actual-code feasibility and a minimal plan before implementation, defers current-release testing, and requires existing registered consultation/limits preserved. No coding/migration/deployment/GPU action authorized by this request. **PROPOSED:** separate public one-selected-image consultation, narrow guest gateway and durable atomic Neon allowance, preserving member auth and Kaggle inference. One-admitted-attempt policy, trial window/budgets, signup image carryover and public anti-abuse exposure remain review items; no strict lifetime one-human promise. [Plan](../docs/specs/0013-guest-consultation-trial.md).
+
+
+## Guest consultation development approval, 2026-10-20
+
+**CONFIRMED:** Supervisor approves the recommendation with "lets start with your recommendation". Proceed with local development, preserving existing running Render/Kaggle and registered flow. Adopt configurable30-day browser allowance, one admitted attempt, conservative abuse limits, fresh full consultation after signup and flag OFF. No release/live schema/GPU authorization inferred. Exact guest-image carryover, CAPTCHA/person verification, new member quotas and priority queue remain outside this slice. Actual proxy configuration requires verification before later enablement. [Guide](../docs/guides/guest-consultation-trial.md).
+
+
+## Guest trial production release authorized, 2026-10-20
+
+**CONFIRMED authorization / IN PROGRESS.** Supervisor requests Render+Kaggle deployment. Additive0006 table/function applied to existing configured Neon and independently schema-only verified; no client/account/booking records exported or changed.24guest tests and production build/TypeScript pass. New availability probe returns only booleans for trusted-ingress verification, no auth/storage/inference. Kaggle active lease=false; operator asked to restart existing optimized notebook. No notebook/model/data/secret changes. Guest flag must stay off through web deployment/proxy test. GitHub publication being finalized; manual Render trigger/config requires operator because no supported control runtime/credentials.

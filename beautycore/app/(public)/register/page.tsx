@@ -34,7 +34,9 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       const user = await register(name.trim(), email.trim(), password);
-      router.push(roleHome[user.role]);
+      const continuation = new URLSearchParams(window.location.search).get('continue');
+      router.push(user.role === 'client' && continuation === 'consultation'
+        ? '/client/ai-consultation' : roleHome[user.role]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to create your account.');
     } finally {

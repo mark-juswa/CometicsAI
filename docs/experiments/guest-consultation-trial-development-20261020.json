@@ -1,0 +1,109 @@
+{
+  "date": "2026-10-20",
+  "sourceBase": "ccd17d55233be292dbb6e21d12cca52880dc730e",
+  "authorization": "User: lets start with your recommendation. Local development only; no deployment inferred.",
+  "development": "DONE",
+  "localVerification": "VERIFIED",
+  "deployment": "NOT STARTED",
+  "enabledByDefault": false,
+  "policy": {
+    "allowanceDays": 30,
+    "oneAdmittedAttempt": true,
+    "successGuaranteed": false,
+    "exactImageAccountHandoff": false,
+    "networkIssues24h": 2,
+    "globalIssues24h": 12,
+    "globalGenerationAdmissions24h": 4,
+    "perTrial": {
+      "consultationStarts": 2,
+      "photos": 2,
+      "preferenceUpdates": 4,
+      "turns": 6,
+      "recommendations": 2,
+      "generationSubmissions": 8
+    },
+    "conservativeGlobalActivity24h": {
+      "starts": 6,
+      "turns": 24,
+      "recommendations": 12
+    }
+  },
+  "verification": {
+    "guestDatabaseAndApi": 18,
+    "guestDom": 5,
+    "existingAi": 58,
+    "existingBusinessAndDom": 47,
+    "totalTests": 128,
+    "failed": 0,
+    "productionBuild": true,
+    "typescriptInBuild": true,
+    "migrationTest": "Isolated PGlite, applied twice; no live Neon use",
+    "syntheticOnly": true,
+    "actualRenderProxyVerified": false,
+    "realGpuOrGeminiRehearsal": false
+  },
+  "changes": [
+    "public guest page and restricted API",
+    "shared presentation and transport with unchanged member defaults",
+    "opaque secure cookie and atomic Neon admission function",
+    "guest-specific handle purpose and server-derived bound owner",
+    "known-busy-only release and same-ticket replay",
+    "bounded issuance/chat/start/generation submissions",
+    "fixed consultation signup/login continuation"
+  ],
+  "unchanged": [
+    "registered generation limits and three-image behavior",
+    "model settings and weights",
+    "Kaggle notebook and dynamic registration",
+    "saved-look and booking schema/permissions",
+    "live Render configuration"
+  ],
+  "actions": {
+    "liveSchemaApplied": false,
+    "liveDatabaseQueried": false,
+    "cloudChanged": false,
+    "gpuInvoked": false,
+    "credentialsDisplayedOrChanged": false,
+    "githubPushed": false,
+    "newDependencies": false
+  },
+  "limitations": [
+    "Per-browser identity is bypassable by cookie/device/network changes; conservative abuse budgets only",
+    "Trusted production proxy headers must be independently verified before enablement",
+    "Temporary result loss or unknown admission can consume credit without a deliverable image",
+    "Interrupted preparation fails closed; no staff refund endpoint",
+    "Guest shares one generation slot; no member priority",
+    "Exact result is not transferred on signup; new full consultation",
+    "Existing demo credentials/email verification were not changed"
+  ],
+  "guide": "docs/guides/guest-consultation-trial.md",
+  "sourceFilesSha256": {
+    "beautycore/lib/ai/adapter-core.ts": "3147efa81d32b3de1b5402a11ce5b54ad102623851e1ab1c3613c4d15656901f",
+    "beautycore/lib/ai/consultation-handle.ts": "491f7a1571405cec70c98d9000086195945773f48a79a38f07f10c8eea5134f9",
+    "beautycore/lib/ai/browser-client.ts": "abdc9a3b98aea9acfa2b4b465be69357f5b08219126a07d57eb44d673c9612c7",
+    "beautycore/lib/ai/studio-consultation-api.ts": "9e906660a48f53bec0504e96d36fa294f652e728ecea1c74da82fc17829937da",
+    "beautycore/lib/ai/guest-trial.ts": "6d3d77b01785e4f15bf48398f305ecced2ce4c59b4d5fed5ad9b808e9c2bcddd",
+    "beautycore/lib/ai/guest-trial-client.ts": "4904a6bf07da2dd1dff22ef4167b1688c093d1cff221c9be217344224acb2542",
+    "beautycore/lib/ai/guest-trial-store.ts": "65a8bad7db959f97d2a9f86b70f5e76a58552e0b2467dd786845429501d3970c",
+    "beautycore/components/consultation.tsx": "08aac85e687eb83b96a5832ae1fac8b3fd803f5d1d27d25f79896a508a1ea8f8",
+    "beautycore/components/ai-studio.tsx": "0492ad71e2a4fbc7d1a20db8488b937a2a2ea9bbb7885965f4884cf7dd59adbc",
+    "beautycore/app/client/ai-consultation/page.tsx": "b0603dbad2f2d17cc9d0023dcb0e9957fdd512804d3b9e00f655bce8af7994e4",
+    "beautycore/app/(public)/try-consultation/page.tsx": "4e85ac17cb76e22fd13e24fb0eb28eabef197198b18b41bd034036b2458be580",
+    "beautycore/app/api/ai-trial/[...path]/route.ts": "7c51732eba6ad94489068372e6cf2ac7cf41340fb62c5d5a98fb6095ca283294",
+    "beautycore/app/(public)/page.tsx": "24a80346c3bbcf390a594d08ffbdb684596d551102f5373d3a7691e581fd3c37",
+    "beautycore/app/(public)/login/login-form.tsx": "d7d7d2ad1661fa8bf1b4d55e0cb15a0120edbc77c95bcd8679646a1745e96e08",
+    "beautycore/app/(public)/register/page.tsx": "79165def4a8957ec5cd8a9f18e6bd83825364466e862f3d61dc4ddd421c0de13",
+    "beautycore/db/schema.ts": "5bba227007bf67bd6b90a623bdc30ede46def7e4a9653df82f61f4f58f3b5de2",
+    "beautycore/db/migrations/0006_guest_consultation_trial.sql": "3f55e159982ac4887feadb871f8dfd925a32a008795e473f6a1b9488c4e46412",
+    "beautycore/scripts/apply-guest-trial.ts": "2941e34b2e8385c62b8f703221822d6c4c9f14c4901ab894e82f00b9f41b61e0",
+    "beautycore/scripts/guest-trial-migration.ts": "cec53aa5fadd3c9caa2f9dcb364935f2b973355d8850badef165fb4324c50557",
+    "beautycore/tests/guest-trial.test.ts": "6ca62b2d619a0e1c92ea479e4eac6f33413d40566b2698cb63290cd84832bcf2",
+    "beautycore/tests/guest-trial-ui.test.mjs": "cee1eed8c8e2d4ed374b60127961b0a4578e40211d4f3c5b6f087f08f387ff38",
+    "beautycore/package.json": "f144e186a2531802d687d5869afcb6fd3453f62044e3528dcfd37405639a75d4",
+    "beautycore/.env.local.example": "e14c3a9254df67f78b3ea57fb34b232805de1c687adbed232f1dd8193962a682"
+  },
+  "localLogs": [
+    "artifacts/guest-trial-development-20261020/guest-tests.log",
+    "artifacts/guest-trial-development-20261020/ai-regressions.log"
+  ]
+}

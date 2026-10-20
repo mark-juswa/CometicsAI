@@ -33,7 +33,7 @@ function json(status: number, message: string, code?: 'AI_BUSY'): Response {
 
 // Only recognize the facade's known pre-admission rejection. Never expose raw
 // upstream errors or treat an arbitrary provider 429 as proof of non-admission.
-async function isDemoBusy(upstream: Response): Promise<boolean> {
+export async function isDemoBusy(upstream: Response): Promise<boolean> {
   if (!upstream.headers.get('content-type')?.toLowerCase().includes('application/json') || !upstream.body) return false;
   const reader = upstream.body.getReader();
   let bytes = new Uint8Array(0);
@@ -106,7 +106,7 @@ export function validBaseUrl(value: string, remote = false): URL | null {
 
 // Use a server-configured public origin behind TLS-terminating proxies.
 // Request-controlled Host/forwarding headers must never choose the CSRF origin.
-function applicationOrigin(request: Request, configured?: string): string | null {
+export function applicationOrigin(request: Request, configured?: string): string | null {
   if (configured === undefined) return new URL(request.url).origin;
   try {
     const url = new URL(configured);
@@ -165,6 +165,14 @@ export async function handleAiRequest(request: Request, parts: string[], deps: A
   catch { return json(503, 'Authentication is temporarily unavailable.'); }
   if (!user) return json(401, 'Sign in to continue.');
   if (user.role !== 'client') return json(403, 'Client access is required.');
+  return forwardAiRequest(request, parts, deps, user.id);
+}
+
+/** Server forwarding primitive; caller must establish its own principal and policy. */
+export async function forwardAiRequest(request: Request, parts: string[], deps: Omit<AiDependencies, 'currentUser'>,
+  ownerId: string, audience = 'beautycore-client-consultation'): Promise<Response> {
+  const op = operation(request.method, parts);
+  if (!op || new URL(request.url).search) return json(404, 'AI operation not found.');
   if (request.method !== 'GET') {
     const expectedOrigin = applicationOrigin(request, deps.publicOrigin);
     if (!expectedOrigin) return json(503, 'Application origin is not configured correctly.');
@@ -185,7 +193,7 @@ export async function handleAiRequest(request: Request, parts: string[], deps: A
   if (op.consultation) {
     const token = request.headers.get('x-ai-consultation-handle');
     if (!token) return json(403, 'Consultation access is invalid or expired.');
-    const id = await verifyConsultationHandle(token, user.id, deps.handleSecret, deps.now?.());
+    const id = await verifyConsultationHandle(token, ownerId, deps.handleSecret, deps.now?.(), audience);
     if (!id) return json(403, 'Consultation access is invalid or expired.');
     upstreamPath = upstreamPath.replace('{id}', id);
   }
@@ -197,7 +205,7 @@ export async function handleAiRequest(request: Request, parts: string[], deps: A
   const headers = new Headers({ Accept: 'application/json' });
   if (deps.remoteBackend) {
     headers.set('x-ai-backend-key', deps.backendKey!);
-    headers.set('x-ai-user-id', user.id);
+    headers.set('x-ai-user-id', ownerId);
   }
   if (op.body === 'json') headers.set('Content-Type', 'application/json');
   let upstream: Response;
@@ -234,7 +242,7 @@ export async function handleAiRequest(request: Request, parts: string[], deps: A
     if (!isConsultationId(data.id) || typeof data.expires_at !== 'string')
       return json(502, 'AI service returned an invalid response.');
     try {
-      const handle = await signConsultationHandle(user.id, data.id, data.expires_at, deps.handleSecret, deps.now?.());
+      const handle = await signConsultationHandle(ownerId, data.id, data.expires_at, deps.handleSecret, deps.now?.(), audience);
       const { id: _upstreamId, ...browserState } = data;
       return new Response(JSON.stringify({ ...browserState, handle }), { status: upstream.status, headers: PRIVATE_HEADERS });
     } catch { return json(502, 'AI service returned an invalid consultation state.'); }

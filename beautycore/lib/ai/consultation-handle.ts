@@ -20,6 +20,7 @@ export async function signConsultationHandle(
   upstreamExpiresAt: string,
   secret: string,
   now = Date.now(),
+  audience = AUDIENCE,
 ): Promise<string> {
   if (!userId || !isConsultationId(consultationId)) throw new Error('Invalid consultation state');
   const nowSeconds = Math.floor(now / 1000);
@@ -30,7 +31,7 @@ export async function signConsultationHandle(
   return new SignJWT({ cid: consultationId })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuer(ISSUER)
-    .setAudience(AUDIENCE)
+    .setAudience(audience)
     .setSubject(userId)
     .setIssuedAt(nowSeconds)
     .setExpirationTime(expires)
@@ -42,12 +43,13 @@ export async function verifyConsultationHandle(
   currentUserId: string,
   secret: string,
   now = Date.now(),
+  audience = AUDIENCE,
 ): Promise<string | null> {
   try {
     const { payload } = await jwtVerify(token, key(secret), {
       algorithms: ['HS256'],
       issuer: ISSUER,
-      audience: AUDIENCE,
+      audience,
       currentDate: new Date(now),
     });
     if (payload.sub !== currentUserId || !isConsultationId(payload.cid)) return null;

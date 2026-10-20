@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-20",
+  "sourceCommit": "ccd17d55233be292dbb6e21d12cca52880dc730e",
+  "scope": "Guest consultation feasibility and minimum plan only",
+  "inspection": "DONE",
+  "evidence": "VERIFIED",
+  "design": "PROPOSED",
+  "implementation": "NOT STARTED",
+  "verified": {
+    "memberGatewayRequiresFreshClient": true,
+    "clientSubtreeProtected": true,
+    "recommendationsPerSet": 3,
+    "memberUiGeneratesSequentially": true,
+    "guestCreditLedgerFound": false,
+    "sharedGenerationSlots": 1,
+    "defaultRetainedJobs": 3,
+    "jobLifetimeSeconds": 1800,
+    "earlyEvictionPossible": true,
+    "consultationMaxSessions": 10,
+    "consultationSlidingLifetimeSeconds": 3600,
+    "conversationMessageBound": 12,
+    "hostedOwnerMustBeDatabaseUser": false,
+    "savedLookRequiresClientForeignKey": true,
+    "guestImageCarryoverExists": false,
+    "publicDemoAutofillExists": true,
+    "demoCredentialsLiveTested": false,
+    "registrationClientOnly": true,
+    "emailVerificationFound": false
+  },
+  "proposed": [
+    "public trial outside /client",
+    "narrow purpose-specific guest gateway",
+    "persistent opaque guest cookie and Neon allowance ledger",
+    "atomic pre-forward allowance reservation",
+    "own-job-only status recovery",
+    "bounded trial issuance/chat and global guest budget",
+    "default-off feature flag",
+    "preserve member/model/Kaggle architecture"
+  ],
+  "needsVerification": [
+    "trusted deployed proxy/IP chain",
+    "approved allowance lifetime and abuse budgets",
+    "admitted attempt versus successful-image/refund policy",
+    "exact image carryover after signup requirement",
+    "real-user current-release acceptance deferred by user",
+    "public versus controlled-demo exposure"
+  ],
+  "actions": {
+    "applicationSourceChanged": false,
+    "databaseRead": false,
+    "databaseChanged": false,
+    "cloudChanged": false,
+    "secretsRead": false,
+    "gpuInvoked": false,
+    "testsRun": false
+  },
+  "primaryWebReferences": [
+    "https://render.com/articles/how-render-handles-ddos-attacks",
+    "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Forwarded-For"
+  ],
+  "plan": "docs/specs/0013-guest-consultation-trial.md"
+}

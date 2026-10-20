@@ -38,7 +38,8 @@ export default function LoginForm() {
 
     try {
       const user = await login(email.trim(), password);
-      const redirect = searchParams.get('redirect') || roleHome[user.role];
+      const redirect = user.role === 'client' && searchParams.get('continue') === 'consultation'
+        ? '/client/ai-consultation' : searchParams.get('redirect') || roleHome[user.role];
       router.push(redirect);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to sign in.');

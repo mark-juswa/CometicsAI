@@ -83,30 +83,6 @@ function detail(value: unknown): GenerationDetail {
     throw new AiClientError('The generated image response is invalid.', 502, true);
   return value as GenerationDetail;
 }
-async function request(path: string, init: RequestInit = {}, handle?: string): Promise<unknown> {
-  const headers = new Headers(init.headers);
-  if (handle) headers.set('x-ai-consultation-handle', handle);
-  let response: Response;
-  try {
-    response = await fetch('/api/ai/' + path, { ...init, headers, cache: 'no-store' });
-  } catch {
-    throw new AiClientError('Connection interrupted. Check generation status before retrying.', 502, true);
-  }
-  if (!response.ok) {
-    let message = 'The AI request could not be completed.';
-    let rejectedBeforeAdmission = false;
-    try {
-      const error: unknown = await response.json();
-      if (object(error) && typeof error.error === 'string') message = error.error;
-      rejectedBeforeAdmission = object(error) && error.code === 'AI_BUSY' && response.status === 429 &&
-        init.method === 'POST' && (/^features\/(hairstyle|makeup|nails)\/generate$/.test(path) ||
-          /^consultations\/recommendations\/[A-Za-z0-9_-]{1,80}\/generation$/.test(path));
-    } catch { /* Never show upstream HTML or internal errors. */ }
-    throw new AiClientError(message, response.status, response.status >= 500 || response.status === 429 && !rejectedBeforeAdmission);
-  }
-  try { return await response.json(); }
-  catch { throw new AiClientError('The AI response could not be read.', 502, true); }
-}
 /** Both synchronous local responses and asynchronous hosted responses use the same UI contract. */
 export async function resolveGenerationJob(value: unknown, read: (path: string) => Promise<unknown>,
                                            pollMs = 2000): Promise<unknown> {
@@ -135,68 +111,99 @@ export async function resolveGenerationJob(value: unknown, read: (path: string) 
     status = await readAccepted(path);
   }
 }
-function jsonBody(value: unknown): RequestInit {
-  return { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value) };
+
+export function createBrowserClient(base: '/api/ai/' | '/api/ai-trial/' = '/api/ai/') {
+  async function request(path: string, init: RequestInit = {}, handle?: string): Promise<unknown> {
+    const headers = new Headers(init.headers);
+    if (handle) headers.set('x-ai-consultation-handle', handle);
+    let response: Response;
+    try {
+      response = await fetch(base + path, { ...init, headers, cache: 'no-store' });
+    } catch {
+      throw new AiClientError('Connection interrupted. Check generation status before retrying.', 502, true);
+    }
+    if (!response.ok) {
+      let message = 'The AI request could not be completed.';
+      let rejectedBeforeAdmission = false;
+      try {
+        const error: unknown = await response.json();
+        if (object(error) && typeof error.error === 'string') message = error.error;
+        rejectedBeforeAdmission = object(error) && error.code === 'AI_BUSY' && response.status === 429 &&
+          init.method === 'POST' && (/^features\/(hairstyle|makeup|nails)\/generate$/.test(path) ||
+            /^consultations\/recommendations\/[A-Za-z0-9_-]{1,80}\/generation$/.test(path));
+      } catch { /* Never show upstream HTML or internal errors. */ }
+      throw new AiClientError(message, response.status, response.status >= 500 || response.status === 429 && !rejectedBeforeAdmission);
+    }
+    try { return await response.json(); }
+    catch { throw new AiClientError('The AI response could not be read.', 502, true); }
+  }
+  function jsonBody(value: unknown): RequestInit {
+    return { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value) };
+  }
+  async function getMode(): Promise<'gemini' | 'deterministic'> {
+    const value = await request('mode');
+    if (!object(value) || (value.provider !== 'gemini' && value.provider !== 'deterministic'))
+      throw new AiClientError('Consultation mode is unavailable.', 502);
+    return value.provider;
+  }
+  async function createConsultation(service: FeatureId): Promise<{ handle: string; state: ConsultationView }> {
+    const value = await request('consultations', jsonBody({ primary_service: service }));
+    if (!object(value) || typeof value.handle !== 'string' || !value.handle)
+      throw new AiClientError('Consultation could not be created.', 502);
+    return { handle: value.handle, state: state(value) };
+  }
+  async function uploadPhoto(handle: string, file: File): Promise<ConsultationView> {
+    const body = new FormData(); body.append('image', file);
+    return state(await request('consultations/photo', { method: 'PUT', body }, handle));
+  }
+  async function updatePreferences(handle: string, preferences: Preferences): Promise<ConsultationView> {
+    return state(await request('consultations/state', {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ preferences }),
+    }, handle));
+  }
+  async function sendTurn(handle: string, message?: string): Promise<{
+    state: ConsultationView; status: 'more_information' | 'ready_for_recommendation'; recommendations: Recommendation[] | null;
+  }> {
+    const value = await request('consultations/turn', jsonBody(message === undefined ? {} : { message }), handle);
+    if (!object(value) || (value.status !== 'more_information' && value.status !== 'ready_for_recommendation'))
+      throw new AiClientError('The consultant response is incomplete.', 502);
+    return { state: state(value.state), status: value.status,
+      recommendations: value.recommendations ? recommendations(value.recommendations) : null };
+  }
+  async function getRecommendations(handle: string): Promise<Recommendation[]> {
+    return recommendations(await request('consultations/recommendations', { method: 'POST' }, handle));
+  }
+  async function generateRecommendation(handle: string, recommendationId: string): Promise<GenerationDetail> {
+    const value = await request('consultations/recommendations/' + encodeURIComponent(recommendationId) + '/generation',
+      { method: 'POST' }, handle);
+    return detail(await resolveGenerationJob(value, path => request(path)));
+  }
+  async function getGenerationStatus(handle: string, recommendationId: string): Promise<GenerationDetail> {
+    return detail(await resolveGenerationJob(await request('consultations/recommendations/' + encodeURIComponent(recommendationId) + '/generation',
+      {}, handle), path => request(path)));
+  }
+  async function selectRecommendation(handle: string, recommendationId: string): Promise<ConsultationView> {
+    return state(await request('consultations/recommendations/' + encodeURIComponent(recommendationId) + '/select',
+      { method: 'POST' }, handle));
+  }
+  async function getStyles(service: FeatureId): Promise<AiStyle[]> {
+    const value = await request('features/' + service + '/styles');
+    if (!Array.isArray(value) || value.some((row) => !object(row) || typeof row.id !== 'string' ||
+        typeof row.name !== 'string' || typeof row.status !== 'string'))
+      throw new AiClientError('Styles are unavailable.', 502);
+    return value as AiStyle[];
+  }
+  async function generateCustom(service: FeatureId, file: File, styleId: string): Promise<GeneratedResult> {
+    const body = new FormData(); body.append('image', file); body.append('style_id', styleId);
+    const initial = await request('features/' + service + '/generate', { method: 'POST', body });
+    const value = await resolveGenerationJob(initial, path => request(path));
+    if (!object(value) || !object(value.image) || typeof value.image.data_url !== 'string' ||
+        !/^data:image\/(png|jpeg);base64,/.test(value.image.data_url))
+      throw new AiClientError('The generated image response is invalid.', 502);
+    return value as GeneratedResult;
+  }
+
+  async function getConsultationState(handle: string): Promise<ConsultationView> { return state(await request('consultations/state', {}, handle)); }
+  return { getMode, createConsultation, uploadPhoto, updatePreferences, sendTurn, getRecommendations, generateRecommendation, getGenerationStatus, selectRecommendation, getStyles, generateCustom, getConsultationState };
 }
-export async function getMode(): Promise<'gemini' | 'deterministic'> {
-  const value = await request('mode');
-  if (!object(value) || (value.provider !== 'gemini' && value.provider !== 'deterministic'))
-    throw new AiClientError('Consultation mode is unavailable.', 502);
-  return value.provider;
-}
-export async function createConsultation(service: FeatureId): Promise<{ handle: string; state: ConsultationView }> {
-  const value = await request('consultations', jsonBody({ primary_service: service }));
-  if (!object(value) || typeof value.handle !== 'string' || !value.handle)
-    throw new AiClientError('Consultation could not be created.', 502);
-  return { handle: value.handle, state: state(value) };
-}
-export async function uploadPhoto(handle: string, file: File): Promise<ConsultationView> {
-  const body = new FormData(); body.append('image', file);
-  return state(await request('consultations/photo', { method: 'PUT', body }, handle));
-}
-export async function updatePreferences(handle: string, preferences: Preferences): Promise<ConsultationView> {
-  return state(await request('consultations/state', {
-    method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ preferences }),
-  }, handle));
-}
-export async function sendTurn(handle: string, message?: string): Promise<{
-  state: ConsultationView; status: 'more_information' | 'ready_for_recommendation'; recommendations: Recommendation[] | null;
-}> {
-  const value = await request('consultations/turn', jsonBody(message === undefined ? {} : { message }), handle);
-  if (!object(value) || (value.status !== 'more_information' && value.status !== 'ready_for_recommendation'))
-    throw new AiClientError('The consultant response is incomplete.', 502);
-  return { state: state(value.state), status: value.status,
-    recommendations: value.recommendations ? recommendations(value.recommendations) : null };
-}
-export async function getRecommendations(handle: string): Promise<Recommendation[]> {
-  return recommendations(await request('consultations/recommendations', { method: 'POST' }, handle));
-}
-export async function generateRecommendation(handle: string, recommendationId: string): Promise<GenerationDetail> {
-  const value = await request('consultations/recommendations/' + encodeURIComponent(recommendationId) + '/generation',
-    { method: 'POST' }, handle);
-  return detail(await resolveGenerationJob(value, path => request(path)));
-}
-export async function getGenerationStatus(handle: string, recommendationId: string): Promise<GenerationDetail> {
-  return detail(await request('consultations/recommendations/' + encodeURIComponent(recommendationId) + '/generation',
-    {}, handle));
-}
-export async function selectRecommendation(handle: string, recommendationId: string): Promise<ConsultationView> {
-  return state(await request('consultations/recommendations/' + encodeURIComponent(recommendationId) + '/select',
-    { method: 'POST' }, handle));
-}
-export async function getStyles(service: FeatureId): Promise<AiStyle[]> {
-  const value = await request('features/' + service + '/styles');
-  if (!Array.isArray(value) || value.some((row) => !object(row) || typeof row.id !== 'string' ||
-      typeof row.name !== 'string' || typeof row.status !== 'string'))
-    throw new AiClientError('Styles are unavailable.', 502);
-  return value as AiStyle[];
-}
-export async function generateCustom(service: FeatureId, file: File, styleId: string): Promise<GeneratedResult> {
-  const body = new FormData(); body.append('image', file); body.append('style_id', styleId);
-  const initial = await request('features/' + service + '/generate', { method: 'POST', body });
-  const value = await resolveGenerationJob(initial, path => request(path));
-  if (!object(value) || !object(value.image) || typeof value.image.data_url !== 'string' ||
-      !/^data:image\/(png|jpeg);base64,/.test(value.image.data_url))
-    throw new AiClientError('The generated image response is invalid.', 502);
-  return value as GeneratedResult;
-}
+export const { getMode, createConsultation, uploadPhoto, updatePreferences, sendTurn, getRecommendations, generateRecommendation, getGenerationStatus, selectRecommendation, getStyles, generateCustom, getConsultationState } = createBrowserClient();

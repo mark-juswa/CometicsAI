@@ -15,19 +15,19 @@ const features: { id: FeatureId | "consultation"; label: string; href: string }[
   { id: "nails", label: "Nails", href: "/client/nail-studio" },
 ];
 
-export function StudioShell({ feature, eyebrow, title, emphasis, description, badge, children }: {
+export function StudioShell({ feature, eyebrow, title, emphasis, description, badge, children, guest = false }: {
   feature: FeatureId | "consultation"; eyebrow: string; title: string; emphasis: string;
-  description: string; badge?: string; children: ReactNode;
+  description: string; badge?: string; children: ReactNode; guest?: boolean;
 }) {
   return <div className={`studio-page studio-page-${feature}`}>
     <header className="studio-header">
       <div className="studio-header-inner">
-        <Link href="/client/dashboard" className="studio-brand" aria-label="Andrea's Client dashboard">
+        <Link href={guest ? "/" : "/client/dashboard"} className="studio-brand" aria-label={guest ? "Andrea's home" : "Andrea's Client dashboard"}>
           <span className="studio-brand-mark" aria-hidden="true">✦</span>
           <span><strong>ANDREA&apos;S</strong><small>AESTHETIC &amp; WELLNESS CLINIC</small></span>
         </Link>
         <nav aria-label="Features" className="studio-nav">
-          {features.map((item) => item.id === feature
+          {guest ? <><Link href="/register?continue=consultation">Sign up</Link><Link href="/login?continue=consultation">Log in</Link></> : features.map((item) => item.id === feature
             ? <span key={item.id} aria-current="page" className="studio-nav-active">{item.label}</span>
             : <Link key={item.id} href={item.href}>{item.label}</Link>)}
         </nav>

@@ -286,3 +286,29 @@ export const aiRuntimeEndpoints = pgTable('ai_runtime_endpoints', {
   leaseExpiresAt: timestamp('lease_expires_at', { withTimezone: true }).notNull(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 });
+
+/** Guest allowance metadata only. Explicit migration 0006 also installs atomic admission. */
+export const aiGuestTrials = pgTable('ai_guest_trials', {
+  tokenHash: text('token_hash').primaryKey(),
+  ownerId: text('owner_id').notNull().unique(),
+  networkTag: text('network_tag').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+  state: text('state').default('available').notNull(),
+  counters: jsonb('counters').default({}).notNull(),
+  operationId: uuid('operation_id'),
+  consultationId: uuid('consultation_id'),
+  consultationExpiresAt: timestamp('consultation_expires_at', { withTimezone: true }),
+  recommendationId: text('recommendation_id'),
+  jobId: uuid('job_id'),
+  attemptAt: timestamp('attempt_at', { withTimezone: true }),
+}, t => [
+  index('ai_guest_trials_network_created_idx').on(t.networkTag, t.createdAt),
+  index('ai_guest_trials_updated_idx').on(t.updatedAt),
+  index('ai_guest_trials_attempt_idx').on(t.attemptAt).where(sql`${t.attemptAt} IS NOT NULL`),
+  check('ai_guest_trials_token_hash_check', sql`${t.tokenHash} ~ '^[a-f0-9]{64}$'`),
+  check('ai_guest_trials_owner_id_check', sql`${t.ownerId} ~ '^guest_[a-f0-9]{32}$'`),
+  check('ai_guest_trials_network_tag_check', sql`${t.networkTag} ~ '^[a-f0-9]{64}$'`),
+  check('ai_guest_trials_state_check', sql`${t.state} IN ('available','reserved','spent')`),
+]);

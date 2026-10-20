@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Sparkles, Scissors, Hand, Flower2, ArrowRight } from 'lucide-react';
@@ -36,6 +38,14 @@ const highlights = [
 ];
 
 export default function HomePage() {
+  const { user } = useAuth();
+  const [trialEnabled, setTrialEnabled] = useState(false);
+  useEffect(() => { let active = true;
+    fetch('/api/ai-trial/availability', { cache: 'no-store' }).then(r => r.json())
+      .then(v => { if (active) setTrialEnabled(v?.enabled === true); }).catch(() => {});
+    return () => { active = false; };
+  }, []);
+  const consultationHref = !user && trialEnabled ? '/try-consultation' : '/client/ai-consultation';
   return (
     <>
       {/* ─── Hero ─────────────────────────────────────────────────────── */}
@@ -105,7 +115,7 @@ export default function HomePage() {
                 <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
-                href="/client/ai-consultation"
+                href={consultationHref}
                 className="flex items-center gap-2 border border-purple-light/40 px-7 py-3.5 text-[11px] font-semibold uppercase tracking-[2px] text-secondary transition-all hover:border-purple-light hover:text-white"
               >
                 <Sparkles size={14} />
@@ -240,7 +250,7 @@ export default function HomePage() {
             on your photo. The conversation does not analyze the image.
           </p>
           <Link
-            href="/client/ai-consultation"
+            href={consultationHref}
             className="group inline-flex items-center gap-2 bg-gold px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[2px] text-card transition-all hover:bg-gold-hover"
           >
             Start AI Consultation

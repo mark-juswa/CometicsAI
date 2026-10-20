@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-20",
+  "authorization": "User: can we deploy now on render and kaggle?",
+  "status": "MIGRATION_VERIFIED; PUBLICATION_IN_PROGRESS; RENDER_TRIGGER_AND_PROXY_CHECK_PENDING",
+  "database": {
+    "migration": "0006_guest_consultation_trial.sql",
+    "applied": true,
+    "independentReadOnlyCheck": true,
+    "existingAccountBookingSavedLookTablesChanged": false,
+    "applicationRecordsExported": false,
+    "trialRecordsCreated": false
+  },
+  "verification": {
+    "guestTestsPassed": 24,
+    "failed": 0,
+    "productionBuild": "PASS including TypeScript",
+    "previousUnchangedAiTestsPassed": 58,
+    "previousUnchangedBusinessTestsPassed": 47,
+    "previousRegressionEvidence": "guest-consultation-trial-development-20261020.json",
+    "proxyCheck": "Optional boolean-only availability probe; no raw IP/auth/storage/inference",
+    "liveProxyVerified": false
+  },
+  "publication": {
+    "repository": "mark-juswa/CometicsAI",
+    "deploymentBranch": "codex/render-kaggle-demo",
+    "pushed": false
+  },
+  "render": {
+    "site": "https://beautycore-demo.onrender.com",
+    "serviceId": "srv-db4ftmbbc2fs73blpkr0",
+    "managementRuntimeAvailable": false,
+    "managementCredentialsConfigured": false,
+    "guestFeaturePolicy": "Remain disabled until live proxy test passes"
+  },
+  "kaggle": {
+    "activeLeaseAtPreflight": false,
+    "notebook": "notebooks/render_kaggle_optimized_demo.ipynb",
+    "notebookOrDatasetsChanged": false,
+    "backendModelChanges": false,
+    "newSecretsNeeded": false,
+    "operatorRequested": "Restart existing optimized notebook and report CONNECTED TO WEBSITE"
+  },
+  "limitations": [
+    "Operator must trigger Render manual deployment and change environment settings; no supported control runtime here",
+    "Existing member and new guest real-image/device walkthrough remains pending",
+    "Proxy spoof test must pass before guest enablement",
+    "No Kaggle inference requests or client/account data changes performed by release checks"
+  ]
+}

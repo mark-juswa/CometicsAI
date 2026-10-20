@@ -112,3 +112,9 @@ Automatic registry acceptance, 2026-10-10: Live signed connection and changed-tu
 ## Guest web release and ingress verified, 2026-10-20
 
 **Render new routes/proxy protection VERIFIED; rollout IN PROGRESS.** Feature commit d77b823 pushed and independently matched on confirmed Render branch. Live health200, guest availability200/enabled=false, disabled guest session404 and member AI401. Normal request carries a valid CF client-IP value; four forged CF headers (reserved and public test values) receive Cloudflare403. Read-only verifier handles edge denial/overwriting and has5tests. User asked to add AI_GUEST_TRIAL_ENABLED=true and AI_GUEST_TRIAL_TRUSTED_IP_HEADER=cf-connecting-ip then rebuild. Kaggle active/recent lease still false; existing optimized notebook restart requested. No inference or guest/customer record created. Migration remains verified. Do not claim guest enabled or complete online generation until remaining checks pass.
+
+
+2026-10-20 post-enable operator report: website and signed Kaggle heartbeat ready, but guest availability remains false and page fallback visible after no-cache checks. Runtime environment/newest deploy review requested; no guest credit or inference used. Rollout remains IN PROGRESS; no app fix guessed. [Receipt](../experiments/guest-consultation-trial-release-20261020.json).
+
+
+2026-10-20 guest-limit UX development DONE / VERIFIED: contextual allowance, native dismissible signup/login dialog, locked recommendation labels, and distinct processing/unknown messages.76tests/build pass; no backend/model/schema change or GPU use. Existing live guest flag independently true; frontend update publication/deploy pending. [Evidence](../experiments/guest-trial-limit-feedback-20261020.json).

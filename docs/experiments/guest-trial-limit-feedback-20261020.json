@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-20",
+  "baseCommit": "ebc74e16ea74feb2220bf7bb5b69b180e6d91feb",
+  "authorization": "User requests a clear guest generation-limit modal and indicator beside the results.",
+  "development": "DONE",
+  "verification": "VERIFIED locally",
+  "publication": "PENDING",
+  "renderUiUpdate": "NOT DEPLOYED",
+  "changes": [
+    "Contextual allowance indicator near the recommendations",
+    "Automatic dismissible used-trial modal with Create account, Log in and Keep browsing",
+    "Unavailable recommendations labeled Account required, not Up next",
+    "Locked-card interaction reopens the modal without a generation request",
+    "Separate checking, processing, used and unresolved messages",
+    "Compact trial intro with collapsed privacy/attempt terms",
+    "Native dialog naming, Escape handling, focus return and body scroll restoration"
+  ],
+  "tests": {
+    "guestApiAndUiPassed": 29,
+    "businessAndDashboardPassed": 47,
+    "totalPassed": 76,
+    "failed": 0,
+    "productionBuildIncludingTypeScript": "PASS",
+    "dialogTestEnvironment": "JSDOM with native dialog method shim",
+    "newCases": [
+      "Modal dismiss/reopen and own-image preservation",
+      "Escape/focus and scroll restoration",
+      "In-flight does not show used modal",
+      "Unknown request status guidance",
+      "Failed accepted attempt does not claim delivery",
+      "Used allowance with expired temporary consultation"
+    ]
+  },
+  "unchanged": [
+    "Server quota/admission policy",
+    "Database schema",
+    "Kaggle notebook and models",
+    "Registered three-look and Save/Book flow",
+    "Existing guest identity/cookie and pricing data"
+  ],
+  "liveChecks": {
+    "existingGuestAvailabilityStatus": 200,
+    "existingGuestEnabled": true,
+    "newUiLive": false,
+    "gpuInvoked": false,
+    "trialCreditConsumed": false
+  },
+  "needsVerification": [
+    "New frontend Render deployment",
+    "Actual browser/mobile visual and native dialog behavior after deployment"
+  ],
+  "sourceSha256": {
+    "beautycore/components/consultation.tsx": "c093249fcb801e0b9b2d0797735b310d98cfa39a35c4d4b0974a3f443f653572",
+    "beautycore/components/guest-trial-feedback.tsx": "dbec79efc80969123a81f737208645d36bd4954d779e3b6cef87c2501c5c71f2",
+    "beautycore/app/ai-studio.css": "82c380fd1a22e1853029b1a107d31cb378ce1dbc49d3945d864fd857aa576c4e",
+    "beautycore/tests/guest-trial-ui.test.mjs": "2c0d7f7f2788dc2702be785ec894fb9551824fad65b6bf572911d079fd41da3a"
+  },
+  "testLog": "artifacts/guest-trial-development-20261020/trial-limit-feedback-tests.log"
+}

@@ -1,5 +1,7 @@
 "use client";
 import { LookInformation } from "@/components/look-information";
+import { GuestTrialIndicator, GuestTrialLimitDialog, type TrialFeedbackState } from "@/components/guest-trial-feedback";
+import { LockKeyhole } from "lucide-react";
 
 import Link from "next/link";
 import { SavedLookActions } from "@/components/saved-look-actions";
@@ -31,6 +33,8 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
     recommendConsultation, sendConsultationTurn, selectRecommendation, updateConsultation, uploadConsultationPhoto } = api;
   const [trialStatus, setTrialStatus] = useState<GuestTrialStatus | null>(null);
   const [trialLoading, setTrialLoading] = useState(trial);
+  const [trialLimitOpen, setTrialLimitOpen] = useState(false);
+  const trialUsedAnnounced = useRef(false);
   async function refreshTrial() {
     const state = await readTrialSession(); setTrialStatus(state); return state;
   }
@@ -125,6 +129,7 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
   }
 
   function changeService(next: FeatureId) {
+    if (trial && trialStatus && trialStatus.state !== "available") { setTrialLimitOpen(true); return; }
     setService(next);
     setServicePreference("");
     setCards([]);
@@ -342,6 +347,33 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
   const selected = cards.find((card) => card.recommendation.id === selectedId);
   const activeCard = cards.find((card) => card.recommendation.id === activeLookId) || cards[0];
   const activeIndex = cards.findIndex((card) => card.recommendation.id === activeCard?.recommendation.id);
+  const hasTrialPreview = cards.some(card => !!card.result);
+  const trialFeedback: TrialFeedbackState = trialLoading ? "checking"
+    : phase === "generating" || cards.some(card => card.status === "generating") ? "processing"
+    : !trialStatus || trialStatus.preparation_locked ? "unresolved"
+    : trialStatus.state === "available" ? "available"
+    : hasTrialPreview || trialStatus.state === "spent" && !cards.some(card => card.status === "unknown") ? "used"
+    : "unresolved";
+  useEffect(() => {
+    if (!trial) return;
+    if (trialFeedback === "available") { trialUsedAnnounced.current = false; setTrialLimitOpen(false); }
+    if (trialFeedback === "used" && !trialUsedAnnounced.current) {
+      trialUsedAnnounced.current = true; setTrialLimitOpen(true);
+    }
+  }, [trial, trialFeedback]);
+  function cardLabel(card: Card) {
+    if (card.status !== "pending") return card.status;
+    if (!trial) return "Up next";
+    return trialFeedback === "available" ? "Choose to preview" : trialFeedback === "used" ? "Account required" : "Not generated";
+  }
+  function switchLook(card: Card) {
+    setActiveLookId(card.recommendation.id);
+    if (trial && card.status === "pending" && (trialFeedback === "used" || trialFeedback === "unresolved")) setTrialLimitOpen(true);
+  }
+  const pendingPreviewMessage = !trial ? "Your preview is up next" : trialFeedback === "available"
+    ? "Choose this look for your free preview" : trialFeedback === "used"
+    ? "Sign up to preview this look" : trialFeedback === "processing"
+    ? "Your one trial preview is already in progress" : "Check your current trial request";
   const lastQuestion = [...chatMessages].reverse().find((item) => item.role === "assistant")?.content || "";
   const quickReplies = /maintenance|easy to maintain/i.test(lastQuestion) ? ["Easy to maintain", "Some styling is fine", "No preference"]
     : /intensity|natural|soft|bold/i.test(lastQuestion) ? ["Natural and subtle", "Soft and polished", "Bold and expressive"]
@@ -360,18 +392,17 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
         <span>{number === 1 ? "Service" : number === 2 ? "Direction" : "Your Looks"}</span>
       </div>)}
     </nav>
-    {trial && <section className="consult-selection" aria-label="Guest trial information">
-      <h2>{trialStatus?.state && trialStatus.state !== 'available' ? 'Your trial attempt has been used or is processing.' : 'Try one AI-generated look'}</h2>
-      <p>One generation attempt per browser during the trial period. Your allowance is reserved when you submit.
-        A confirmed busy response does not use it; an interrupted or failed accepted request may use it.</p>
-      <p>Your photo and preview are temporary on the AI server and can disappear when its session ends.
-        Signing up starts a fresh consultation; this preview is not automatically saved or transferred.</p>
-      {trialStatus?.preparation_locked && <p role="status">A previous trial request is unresolved. Sign in for the full experience.</p>}
-      <div className="consult-card-actions">
-        <Link className="studio-primary-button" href="/register?continue=consultation">Sign up for the full consultation</Link>
-        <Link className="studio-secondary-button" href="/login?continue=consultation">Log in</Link>
-      </div>
-    </section>}
+    {trial && <aside className="consult-trial-intro" aria-label="Guest trial information">
+      <p><strong>One free AI preview.</strong> Explore three recommendations and choose one to generate.</p>
+      <details><summary>About your guest preview</summary>
+        <p>Your photo and preview are temporary and can disappear when the AI session ends. Signing up starts a fresh consultation;
+          your guest preview is not automatically saved or transferred.</p>
+        <p>The trial includes one generation attempt per browser during the trial period. An accepted request may use it even if interrupted.
+          A confirmed busy response does not use it.</p>
+      </details>
+    </aside>}
+    {trial && step !== 3 && trialStatus?.state !== "available" && !trialLoading &&
+      <GuestTrialIndicator state={trialFeedback} onOpen={() => setTrialLimitOpen(true)} />}
     {error && <p role="alert" className="studio-alert">{error}</p>}
 
     {step === 1 && <section key="service" className="consult-stage consult-service-stage" aria-labelledby="consult-service-title">
@@ -478,8 +509,9 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
 
     {step === 3 && <section key="looks" className="consult-stage" aria-labelledby="consult-looks-title">
       <div className="consult-stage-heading"><span className="studio-eyebrow">03 / EXPLORE YOUR LOOKS</span>
-        <h2 id="consult-looks-title">{trial ? "Choose your one trial preview." : "Three looks, your direction."}</h2>
-        <p>{trial ? "View the three recommendations and choose one to generate. Nails can take several minutes." : "They’ll be generated one at a time. Nails can take longer; keep this page open."}</p></div>
+        <h2 id="consult-looks-title">{trial ? trialFeedback === "available" ? "Choose your one trial preview." : trialFeedback === "processing" ? "Creating your trial preview." : hasTrialPreview ? "Your trial preview." : "Your trial recommendations." : "Three looks, your direction."}</h2>
+        <p>{trial ? trialFeedback === "available" ? "View the three recommendations and choose one to generate. Nails can take several minutes." : trialFeedback === "processing" ? "Your chosen image is being generated. You can browse the recommendations while you wait." : "Browse your recommendations. Create an account to generate more previews." : "They’ll be generated one at a time. Nails can take longer; keep this page open."}</p></div>
+      {trial && <GuestTrialIndicator state={trialFeedback} onOpen={() => setTrialLimitOpen(true)} />}
       {cards.length === 3 && cards.every((card) => card.status === "pending") && (!trial || trialStatus?.state === "available") && <div className="consult-generate-intro">
         <div><strong>Your recommendations are ready.</strong><p>{trial ? "Use the recommendation cards below to choose your preview, then generate that one image." : "Generate three visual previews using your uploaded photo. Each look begins after the previous one finishes."}</p></div>
         <button type="button" className="studio-primary-button" disabled={busy} onClick={() => void generateLooks()}>{trial ? "Generate " + (activeCard?.recommendation.primary.style_name || "This Look") : "Generate My Looks"} <span aria-hidden="true">✦</span></button>
@@ -489,14 +521,14 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
           <div className="consult-featured-visual">{activeCard.result ? <StudioPhoto src={activeCard.result.image.data_url}
             alt={`Generated ${activeCard.recommendation.primary.style_name} preview`} />
             : <div className="consult-card-placeholder">{activeCard.status === "generating" && <span className="consult-spinner" />}
-              <span>{activeCard.status === "pending" ? "Your preview is up next" : activeCard.status === "generating" ? "Creating this look…" : activeCard.status === "unknown" ? "Checking request status" : "Preview unavailable"}</span></div>}
+              <span>{activeCard.status === "pending" ? pendingPreviewMessage : activeCard.status === "generating" ? "Creating this look…" : activeCard.status === "unknown" ? "Checking request status" : "Preview unavailable"}</span></div>}
             <span className="consult-featured-index">LOOK 0{activeIndex + 1} / 03</span></div>
-          <div className="consult-featured-copy"><div className="consult-card-top"><span>YOUR PERSONALIZED EDIT</span><span className={`consult-status consult-status-${activeCard.status}`}>{activeCard.status === "pending" ? "Up next" : activeCard.status}</span></div>
+          <div className="consult-featured-copy"><div className="consult-card-top"><span>YOUR PERSONALIZED EDIT</span><span className={`consult-status consult-status-${activeCard.status}`}>{cardLabel(activeCard)}</span></div>
             <h3>{activeCard.recommendation.primary.style_name}</h3><p className="consult-reason">{activeCard.recommendation.reason}</p>
             <LookInformation feature={activeCard.recommendation.primary.feature} styleId={activeCard.recommendation.primary.style_id} />
             {activeCard.recommendation.complements.length > 0 && <p className="consult-complements">Pairs with {activeCard.recommendation.complements.map((item) => item.style_name).join(", ")}. Complementary visuals are not generated.</p>}
             {activeCard.error && <p role="alert" className="consult-card-error">{activeCard.error}</p>}
-            <div className="consult-card-actions">{activeCard.status === "completed" && <>{!trial && <><button type="button" className="studio-primary-button"
+            <div className="consult-card-actions">{trial && activeCard.status !== "completed" && (trialFeedback === "used" || trialFeedback === "unresolved") && <button type="button" className="studio-primary-button" onClick={() => setTrialLimitOpen(true)}>{trialFeedback === "used" ? "Unlock this preview" : "View trial details"}</button>}{activeCard.status === "completed" && <>{!trial && <><button type="button" className="studio-primary-button"
               disabled={selectionBusy} onClick={() => void select(activeCard)}>{selectedId === activeCard.recommendation.id ? "Selected" : "Select This Look"}</button></>}
               <a className="studio-secondary-button" href={activeCard.result!.image.data_url}
                 download={`andreas-${activeCard.recommendation.primary.style_id}.${activeCard.result!.image.content_type === "image/jpeg" ? "jpg" : "png"}`}>Download</a></>}
@@ -510,11 +542,11 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
           className={`consult-look-tile ${activeCard?.recommendation.id === card.recommendation.id ? "is-active" : ""}`}
           aria-label={`Recommendation ${index + 1}: ${card.recommendation.primary.style_name}`}>
           <button type="button" className="consult-look-switch" aria-pressed={activeCard?.recommendation.id === card.recommendation.id}
-            onClick={() => setActiveLookId(card.recommendation.id)} aria-label={`View look ${index + 1}: ${card.recommendation.primary.style_name}`}>
+            onClick={() => switchLook(card)} aria-label={`View look ${index + 1}: ${card.recommendation.primary.style_name}`}>
             <span className="consult-look-thumb">{card.result ? <StudioPhoto src={card.result.image.data_url} alt="" /> : <span aria-hidden="true">0{index + 1}</span>}</span>
-            <span className="consult-look-summary"><small>LOOK 0{index + 1} · <span className={`consult-status consult-status-${card.status}`}>{card.status === "pending" ? "Up next" : card.status}</span></small>
+            <span className="consult-look-summary"><small>LOOK 0{index + 1} · <span className={`consult-status consult-status-${card.status}`}>{cardLabel(card)}</span></small>
               <strong>{card.recommendation.primary.style_name}</strong><span>{card.recommendation.reason}</span></span>
-            <span className="consult-look-chevron" aria-hidden="true">↗</span>
+            {trial && trialFeedback === "used" && card.status === "pending" ? <LockKeyhole className="consult-look-chevron" size={16} aria-hidden="true" /> : <span className="consult-look-chevron" aria-hidden="true">↗</span>}
           </button>
         </article>)}</div>
       </div>}
@@ -528,5 +560,6 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
       </section>}
       <div className="consult-stage-footer">{customLink}</div>
     </section>}
+    {trial && <GuestTrialLimitDialog state={trialFeedback} open={trialLimitOpen} hasPreview={hasTrialPreview} onClose={() => setTrialLimitOpen(false)} />}
   </StudioShell>;
 }

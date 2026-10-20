@@ -334,3 +334,18 @@ Highest-priority verification gaps: FLUX.2 Klein edit-LoRA compatibility, memory
 ## Guest web release and ingress verified, 2026-10-20
 
 **Render new routes/proxy protection VERIFIED; rollout IN PROGRESS.** Feature commit d77b823 pushed and independently matched on confirmed Render branch. Live health200, guest availability200/enabled=false, disabled guest session404 and member AI401. Normal request carries a valid CF client-IP value; four forged CF headers (reserved and public test values) receive Cloudflare403. Read-only verifier handles edge denial/overwriting and has5tests. User asked to add AI_GUEST_TRIAL_ENABLED=true and AI_GUEST_TRIAL_TRUSTED_IP_HEADER=cf-connecting-ip then rebuild. Kaggle active/recent lease still false; existing optimized notebook restart requested. No inference or guest/customer record created. Migration remains verified. Do not claim guest enabled or complete online generation until remaining checks pass.
+
+
+## Kaggle reconnected during guest rollout, 2026-10-20
+
+**Active operational Kaggle lease VERIFIED; guest enablement PENDING.** Final read-only check reports guest availability200/enabled=false and Kaggle connected=true. Do not rerun or restart the now-connected notebook. New web route and ingress checks remain verified; only the two requested Render environment settings/rebuild and subsequent real guest acceptance remain. No GPU job or customer record created by these checks. [Receipt](../docs/experiments/guest-consultation-trial-release-20261020.json).
+
+
+## Guest flag verification after operator Live report, 2026-10-20
+
+**Website/Kaggle readiness VERIFIED; guest enablement NEEDS VERIFICATION / IN PROGRESS.** Operator reports both settings deployed Live. Repeated cache-bypassing production availability GETs still return enabled=false; guest session404; public page displays disabled fallback rather than trial UI. Website health200, member AI401, active Kaggle lease and heartbeat within90seconds=true. Ingress spoof protection still passes. Source reads exact AI_GUEST_TRIAL_ENABLED=true; no tracked .env.local/Next env override found. Asked operator to verify exact non-secret flag value and latest environment-save deployment. No guest session, record, image request or credit consumed. Do not claim trial enabled or generation acceptance. [Receipt](../docs/experiments/guest-consultation-trial-release-20261020.json).
+
+
+## Guest trial limit feedback, 2026-10-20
+
+**UI development DONE / local verification VERIFIED; updated UI deployment PENDING.** Supervisor requests a clear used-limit modal and indicator beyond the top banner. Shared consultation now shows contextual allowance near recommendations, automatic dismissible account prompt after a settled used attempt, Account required labels/locked-card prompt, and distinct processing/unknown messages. Compact intro retains collapsed privacy/attempt terms. Native dialog includes named description, Escape/close and scroll restoration; preview and Download preserved.29guest +47business tests=76pass; production build/TypeScript pass. No quota, database, model, notebook or generation changes; no GPU job/credit used. Independent current live availability200/enabled=true resolves prior flag mismatch, but this new frontend is not deployed yet. Native browser/mobile visual acceptance remains Needs verification. [Evidence](../docs/experiments/guest-trial-limit-feedback-20261020.json).

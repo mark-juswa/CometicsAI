@@ -109,3 +109,10 @@ After Render is Live, run node scripts/probe-guest-trial.mjs from beautycore. It
 
 
 The first release d77b823 is now responding on Render and the live proxy check passes: normal requests carry a valid Cloudflare client address; all four forged CF headers receive Cloudflare403. Member AI remains protected (401). Guest access was still disabled at the last check. Set the two non-secret settings above and rebuild to enable. Kaggle has no active lease at the latest check; start the existing optimized notebook. No trial records, images or customer data were created by the release probes. [Current receipt](../experiments/guest-consultation-trial-release-20261020.json).
+
+
+## Trial-limit feedback UI update, 2026-10-20
+
+The existing live trial is independently enabled. The new frontend adds a contextual allowance counter and used-trial signup/login modal. It distinguishes in-flight and uncertain requests, labels other previews Account required after use, and preserves the current preview/download. Closing or reopening the dialog never sends another generation POST.29guest and47business tests plus production build pass; native dialog tests use JSDOM shims, so actual device visual acceptance is still required.
+
+After publishing this update, use Render Manual Deploy -> Deploy latest commit. Keep current settings and Kaggle running; no new secrets, dataset, notebook or migration is required. Reload the same browser that already used the trial. Confirm the used-trial modal opens, Keep browsing/Escape closes it, the allowance beside results shows0of1, and selecting another ungenerated look reopens the prompt. Confirm Create account/Log in point to the full consultation continuation. Do not clear cookies or spend another GPU generation just to test the UI. [Evidence](../experiments/guest-trial-limit-feedback-20261020.json).

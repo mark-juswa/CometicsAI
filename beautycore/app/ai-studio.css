@@ -280,3 +280,38 @@
 @media (max-width:900px) { .consult-direction-layout,.consult-look-layout { grid-template-columns:1fr; } .consult-direction-panel { order:2; } .consult-photo-panel { order:1; } .consult-look-list { grid-template-columns:repeat(3,minmax(0,1fr)); } .consult-look-switch { display:grid; } .consult-look-thumb { width:100%; height:120px; } .consult-look-chevron { display:none; } }
 @media (max-width:640px) { .studio-page-consultation .studio-hero { min-height:0; padding:36px 0 25px; } .consult-stage { min-height:0; padding:20px 16px; border-radius:17px; } .consult-step { gap:6px; padding:8px 5px; justify-content:center; font-size:10px; } .consult-step-number { width:24px; height:24px; font-size:9px; } .consult-service-grid,.consult-look-list { grid-template-columns:1fr; } .consult-service-card { min-height:0; flex-direction:row; align-items:center; } .consult-service-art { width:105px; height:115px; flex:none; } .consult-service-art > span { font-size:54px; } .consult-service-copy { padding:14px; } .consult-service-copy strong { font-size:21px; } .consult-service-arrow { display:none; } .consult-direction-panel,.consult-photo-panel { padding:16px; } .consult-photo-preview .studio-photo { height:300px; } .consult-stage-footer,.consult-generate-intro { align-items:stretch; flex-direction:column; } .consult-stage-footer .studio-primary-button,.consult-generate-intro .studio-primary-button { width:100%; } .consult-ready .studio-primary-button { width:100%; margin:0; } .consult-featured-visual .studio-photo,.consult-featured-visual .consult-card-placeholder { min-height:0; height:310px; } .consult-featured-copy h3 { font-size:27px; } .consult-look-switch { display:flex; } .consult-look-thumb { width:70px; height:78px; } }
 @media (prefers-reduced-motion:reduce) { .consult-stage,.consult-photo-preview,.consult-chat-message,.consult-extra-fields,.consult-ready,.consult-featured-look { animation:none; } }
+
+/* Guest allowance feedback lives beside the recommendations, with a native modal. */
+.consult-trial-intro { margin:0 0 24px; color:var(--secondary); font-size:13px; line-height:1.65; }
+.consult-trial-intro strong { color:var(--gold-light); }
+.consult-trial-intro details { margin-top:7px; color:var(--muted); font-size:12px; }
+.consult-trial-intro summary { width:fit-content; cursor:pointer; text-decoration:underline; text-underline-offset:3px; }
+.consult-trial-intro details p { max-width:850px; margin-top:8px; }
+.consult-trial-indicator { display:flex; align-items:center; gap:14px; margin:22px 0; padding:18px 20px; border:1px solid rgba(176,64,216,.4); border-radius:13px; background:rgba(54,24,74,.7); }
+.consult-trial-used { border-color:rgba(240,168,0,.7); background:linear-gradient(110deg,rgba(94,56,15,.35),rgba(54,24,74,.8)); }
+.consult-trial-indicator-icon { display:grid; place-items:center; flex:none; width:38px; height:38px; border:1px solid rgba(240,168,0,.3); border-radius:50%; color:var(--gold-light); }
+.consult-trial-indicator-icon .consult-spinner { width:17px; height:17px; }
+.consult-trial-indicator-copy { flex:1; min-width:0; }
+.consult-trial-indicator-copy strong { display:block; color:var(--gold-light); font-size:14px; }
+.consult-trial-indicator-copy p { margin:4px 0 0; color:var(--secondary); font-size:12px; line-height:1.6; }
+.consult-trial-indicator .studio-secondary-button { flex:none; }
+.consult-trial-dialog { position:fixed; inset:0; width:min(520px,calc(100% - 32px)); max-height:calc(100dvh - 32px); margin:auto; padding:0; border:1px solid rgba(240,168,0,.55); border-radius:20px; background:#1e0d30; color:white; box-shadow:0 30px 100px rgba(0,0,0,.65); overflow:auto; overscroll-behavior:contain; }
+.consult-trial-dialog::backdrop { background:rgba(8,2,18,.78); backdrop-filter:blur(7px); }
+.consult-trial-dialog-content { padding:32px; text-align:center; }
+.consult-trial-dialog-icon { display:grid; place-items:center; width:62px; height:62px; margin:0 auto 22px; border:1px solid rgba(240,168,0,.4); border-radius:50%; background:rgba(240,168,0,.09); color:var(--gold-light); }
+.consult-trial-dialog h2 { margin:14px 0; font:500 32px/1.2 Georgia,serif; text-wrap:balance; }
+.consult-trial-dialog p { color:var(--secondary); font-size:13px; line-height:1.7; }
+.consult-trial-dialog .studio-eyebrow { color:var(--gold); font-size:10px; }
+.consult-trial-dialog .consult-trial-dialog-count { margin:18px 0; padding:10px; border:1px solid rgba(240,168,0,.22); border-radius:9px; color:var(--gold-light); font-weight:650; }
+.consult-trial-dialog-actions { display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin:24px 0 18px; }
+.consult-trial-dialog-actions .studio-primary-button,.consult-trial-dialog-actions .studio-secondary-button { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:12px 24px; text-decoration:none; border-radius:9px; }
+.consult-trial-dialog .consult-trial-dialog-note { color:var(--muted); font-size:11px; }
+.consult-trial-dialog-dismiss { min-height:44px; margin-top:12px; }
+.consult-trial-dialog :focus-visible,.consult-trial-indicator :focus-visible { outline:2px solid var(--gold-light); outline-offset:4px; }
+@media (max-width:640px) {
+  .consult-trial-indicator { flex-wrap:wrap; padding:15px; }
+  .consult-trial-indicator .studio-secondary-button { width:100%; }
+  .consult-trial-dialog-content { padding:26px 20px; }
+  .consult-trial-dialog h2 { font-size:28px; }
+  .consult-trial-dialog-actions > * { flex:1; }
+}

@@ -1,7 +1,7 @@
 {
   "date": "2026-10-20",
   "authorization": "User: can we deploy now on render and kaggle?",
-  "status": "RENDER_NEW_ROUTES_LIVE; PROXY_CHECK_VERIFIED; GUEST_ENABLEMENT_AND_KAGGLE_START_PENDING",
+  "status": "EXISTING_GUEST_ENABLED_VERIFIED; LIMIT_FEEDBACK_UI_UPDATE_PENDING",
   "database": {
     "migration": "0006_guest_consultation_trial.sql",
     "applied": true,
@@ -70,14 +70,20 @@
         }
       ],
       "readyForCfConnectingIpConfiguration": true
-    }
+    },
+    "guestSessionCreated": false,
+    "imageCreditConsumed": false,
+    "localEnvTracked": false,
+    "newUiFeedbackEvidence": "guest-trial-limit-feedback-20261020.json",
+    "operatorScreenshot": "Operator supplies a completed Hair trial preview and requests clearer used-limit UI; no new GPU request executed by agent."
   },
   "publication": {
     "repository": "mark-juswa/CometicsAI",
     "deploymentBranch": "codex/render-kaggle-demo",
     "pushed": true,
     "verifiedDeploymentBranchSha": "d77b82340cab6a403138b6bf55c94a56797630c9",
-    "applicationReleaseCommit": "d77b82340cab6a403138b6bf55c94a56797630c9"
+    "applicationReleaseCommit": "d77b82340cab6a403138b6bf55c94a56797630c9",
+    "latestVerifiedDeploymentBranchSha": "ebc74e16ea74feb2220bf7bb5b69b180e6d91feb"
   },
   "render": {
     "site": "https://beautycore-demo.onrender.com",
@@ -86,16 +92,21 @@
     "managementCredentialsConfigured": false,
     "guestFeaturePolicy": "Remain disabled until live proxy test passes",
     "newRoutesRespond": true,
-    "operatorReport": "Building/deploying first release",
+    "operatorReport": "Live with both settings",
     "health": 200,
     "availability": 200,
-    "guestEnabledAtLastProbe": false,
+    "guestEnabledAtLastProbe": true,
     "guestSessionWhileDisabled": 404,
     "registeredAiWithoutLogin": 401,
     "pendingOperatorSettings": {
       "AI_GUEST_TRIAL_ENABLED": "true",
       "AI_GUEST_TRIAL_TRUSTED_IP_HEADER": "cf-connecting-ip"
-    }
+    },
+    "publicTrialDisabledMessagePresent": true,
+    "trialUiPresent": false,
+    "cacheBypassChecked": true,
+    "guestSessionWithoutCookieStatus": 404,
+    "configurationConflict": "Resolved: later independent live availability GET returned enabled=true."
   },
   "kaggle": {
     "activeLeaseAtPreflight": false,
@@ -104,7 +115,9 @@
     "backendModelChanges": false,
     "newSecretsNeeded": false,
     "operatorRequested": "Restart existing optimized notebook and report CONNECTED TO WEBSITE",
-    "activeLeaseAtLatestCheck": false
+    "activeLeaseAtLatestCheck": true,
+    "restartStillRequired": false,
+    "heartbeatRecentWithin90Seconds": true
   },
   "limitations": [
     "Operator must trigger Render manual deployment and change environment settings; no supported control runtime here",

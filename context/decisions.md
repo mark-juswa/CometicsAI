@@ -169,3 +169,8 @@ Later startup automation: **CONFIRMED scope; LOCAL VERIFIED implementation; fres
 ## Guest trial production release authorized, 2026-10-20
 
 **CONFIRMED authorization / IN PROGRESS.** Supervisor requests Render+Kaggle deployment. Additive0006 table/function applied to existing configured Neon and independently schema-only verified; no client/account/booking records exported or changed.24guest tests and production build/TypeScript pass. New availability probe returns only booleans for trusted-ingress verification, no auth/storage/inference. Kaggle active lease=false; operator asked to restart existing optimized notebook. No notebook/model/data/secret changes. Guest flag must stay off through web deployment/proxy test. GitHub publication being finalized; manual Render trigger/config requires operator because no supported control runtime/credentials.
+
+
+## Guest limit feedback request, 2026-10-20
+
+**CONFIRMED:** Supervisor requests a modal and contextual indicator when the guest generation allowance is used. Reuse current session/quota and account continuation; preserve completed image/download and member flow. This is a frontend correction in the authorized guest rollout; no new quota, migration, Kaggle restart or model scope. Modal distinguishes used allowance from processing/unresolved requests. [Evidence](../docs/experiments/guest-trial-limit-feedback-20261020.json).

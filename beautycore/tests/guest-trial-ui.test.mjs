@@ -11,6 +11,7 @@ for (const name of [
   "document",
   "HTMLElement",
   "HTMLInputElement",
+  "HTMLDialogElement",
   "Event",
   "MouseEvent",
   "getComputedStyle",
@@ -24,6 +25,17 @@ Object.defineProperty(globalThis, "navigator", {
   value: dom.window.navigator,
   configurable: true,
 });
+const modalReturnFocus = new WeakMap();
+HTMLDialogElement.prototype.showModal = function () {
+  modalReturnFocus.set(this, document.activeElement);
+  this.setAttribute("open", "");
+  this.querySelector("[autofocus]")?.focus();
+};
+HTMLDialogElement.prototype.close = function () {
+  this.removeAttribute("open");
+  modalReturnFocus.get(this)?.focus();
+  this.dispatchEvent(new Event("close"));
+};
 globalThis.self = window;
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 for (const path of ["next/image", "next/link"]) {
@@ -32,7 +44,7 @@ for (const path of ["next/image", "next/link"]) {
     defaultExport: module.default.default ?? module.default,
   });
 }
-const { render, screen, fireEvent, cleanup, waitFor } =
+const { render, screen, fireEvent, cleanup, waitFor, within, act } =
   await import("@testing-library/react");
 const { AppRouterContext } =
   await import("next/dist/shared/lib/app-router-context.shared-runtime.js");
@@ -41,7 +53,13 @@ const { default: Consultation } =
 const originalFetch = globalThis.fetch;
 const png =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/X1sAAAAASUVORK5CYII=";
-let calls, allowance, mode, hasConsultation, selectedRecommendation, provider;
+let calls,
+  allowance,
+  mode,
+  hasConsultation,
+  selectedRecommendation,
+  provider,
+  finishGeneration;
 const rows = ["crew_cut", "bob_hair", "bun"].map((id, index) => ({
   id: "look-" + (index + 1),
   primary: {
@@ -152,6 +170,10 @@ async function transport(input, init = {}) {
           { status: 429 },
         );
       }
+      if (mode === "processing")
+        await new Promise((resolve) => {
+          finishGeneration = resolve;
+        });
       selectedRecommendation = id;
       if (mode === "unknown") {
         allowance = "reserved";
@@ -161,7 +183,9 @@ async function transport(input, init = {}) {
         );
       }
       allowance = "spent";
-      return Response.json(detail(id));
+      return Response.json(
+        detail(id, mode === "failed" ? "failed" : "completed"),
+      );
     }
     if (mode === "unknown")
       return Response.json(
@@ -215,6 +239,7 @@ test.beforeEach(() => {
   provider = "deterministic";
   hasConsultation = false;
   selectedRecommendation = null;
+  finishGeneration = null;
   globalThis.fetch = transport;
   URL.createObjectURL = () => "blob:trial-fixture";
   URL.revokeObjectURL = () => {};
@@ -246,13 +271,30 @@ test("guest chooses recommendation two and generates only that image with signup
     null,
   );
   assert.equal(screen.queryByText(/Prefer to choose yourself/), null);
+  const dialog = await screen.findByRole("dialog", {
+    name: "Your free trial has been used",
+  });
   assert.equal(
-    screen
-      .getByRole("link", { name: "Sign up for the full consultation" })
+    within(dialog)
+      .getByRole("link", { name: "Create account" })
       .getAttribute("href"),
     "/register?continue=consultation",
   );
-  assert.ok(screen.getByText(/not automatically saved or transferred/));
+  assert.equal(
+    within(dialog).getByRole("link", { name: "Log in" }).getAttribute("href"),
+    "/login?continue=consultation",
+  );
+  assert.ok(within(dialog).getByText(/not automatically saved or transferred/));
+  fireEvent.click(
+    within(dialog).getByRole("button", { name: "Keep browsing" }),
+  );
+  await waitFor(() => assert.equal(screen.queryByRole("dialog"), null));
+  assert.ok(
+    within(screen.getByLabelText("Guest trial allowance")).getByText(
+      /0 of 1 previews remaining/,
+    ),
+  );
+  assert.ok(screen.getByRole("heading", { name: "Your trial preview." }));
   assert.ok(screen.getByText(/short-to-medium cut/));
   assert.ok(screen.getByText("\u20b1180"));
 });
@@ -273,10 +315,25 @@ test("reopening a spent trial restores the selected result through reads and can
     ),
   );
   assert.equal(screen.queryByRole("button", { name: /^Generate / }), null);
+  const initialDialog = await screen.findByRole("dialog", {
+    name: "Your free trial has been used",
+  });
+  fireEvent.click(
+    within(initialDialog).getByRole("button", { name: "Keep browsing" }),
+  );
+  await waitFor(() => assert.equal(screen.queryByRole("dialog"), null));
   fireEvent.click(
     screen.getByRole("button", { name: "View look 1: Crew Cut" }),
   );
+  await screen.findByRole("dialog", { name: "Your free trial has been used" });
+  assert.ok(screen.getAllByText("Account required").length > 0);
+  assert.equal(screen.queryByText("Your preview is up next"), null);
   assert.equal(screen.queryByRole("button", { name: /^Generate / }), null);
+  assert.equal(
+    calls.filter((c) => c.method === "POST" && c.path.endsWith("/generation"))
+      .length,
+    0,
+  );
 });
 test("confirmed busy keeps the allowance available for one deliberate retry", async () => {
   await prepare();
@@ -289,6 +346,12 @@ test("confirmed busy keeps the allowance available for one deliberate retry", as
     ),
   );
   assert.equal(allowance, "available");
+  assert.equal(screen.queryByRole("dialog"), null);
+  assert.ok(
+    within(screen.getByLabelText("Guest trial allowance")).getByText(
+      "1 free preview available",
+    ),
+  );
   assert.ok(screen.getByRole("alert"));
   fireEvent.click(screen.getByRole("button", { name: "Generate Crew Cut" }));
   await screen.findByRole("link", { name: "Download" });
@@ -349,5 +412,133 @@ test("guest conversational mode reaches recommendations and still generates only
     calls.filter((c) => c.method === "POST" && c.path.endsWith("/generation"))
       .length,
     1,
+  );
+});
+
+test("used-trial modal can be dismissed and reopened near the controls without another generation", async () => {
+  await prepare();
+  fireEvent.click(screen.getByRole("button", { name: "Generate Crew Cut" }));
+  const dialog = await screen.findByRole("dialog", {
+    name: "Your free trial has been used",
+  });
+  fireEvent.click(
+    within(dialog).getByRole("button", { name: "Keep browsing" }),
+  );
+  await waitFor(() => assert.equal(screen.queryByRole("dialog"), null));
+  assert.ok(screen.getByRole("link", { name: "Download" }));
+  const unlock = within(
+    screen.getByLabelText("Guest trial allowance"),
+  ).getByRole("button", { name: "Unlock more previews" });
+  unlock.focus();
+  fireEvent.click(unlock);
+  const reopened = await screen.findByRole("dialog", {
+    name: "Your free trial has been used",
+  });
+  fireEvent(reopened, new Event("cancel", { cancelable: true }));
+  await waitFor(() => assert.equal(screen.queryByRole("dialog"), null));
+  assert.equal(document.activeElement, unlock);
+  assert.equal(
+    calls.filter((c) => c.method === "POST" && c.path.endsWith("/generation"))
+      .length,
+    1,
+  );
+});
+
+test("in-flight generation shows processing and no used-trial modal until it settles", async () => {
+  await prepare();
+  mode = "processing";
+  fireEvent.click(screen.getByRole("button", { name: "Generate Crew Cut" }));
+  await waitFor(() => assert.equal(typeof finishGeneration, "function"));
+  assert.ok(
+    within(screen.getByLabelText("Guest trial allowance")).getByText(
+      "Your trial preview is in progress",
+    ),
+  );
+  assert.equal(screen.queryByRole("dialog"), null);
+  await act(async () => {
+    finishGeneration();
+  });
+  await screen.findByRole("dialog", { name: "Your free trial has been used" });
+  assert.equal(
+    calls.filter((c) => c.method === "POST" && c.path.endsWith("/generation"))
+      .length,
+    1,
+  );
+});
+
+test("unknown requests have status guidance without falsely declaring a successful preview or starting more work", async () => {
+  await prepare();
+  mode = "unknown";
+  fireEvent.click(screen.getByRole("button", { name: "Generate Crew Cut" }));
+  await screen.findByRole("button", { name: "Check status" });
+  assert.equal(screen.queryByRole("dialog"), null);
+  const indicator = screen.getByLabelText("Guest trial allowance");
+  assert.ok(within(indicator).getByText("Trial request unresolved"));
+  fireEvent.click(
+    within(indicator).getByRole("button", { name: "View trial details" }),
+  );
+  const dialog = await screen.findByRole("dialog", {
+    name: "Check your current trial request",
+  });
+  assert.ok(within(dialog).getByText(/may still be running/));
+  assert.equal(within(dialog).queryByText(/0 of 1 previews remaining/), null);
+  assert.equal(
+    calls.filter((c) => c.method === "POST" && c.path.endsWith("/generation"))
+      .length,
+    1,
+  );
+});
+
+test("an accepted failed attempt shows the used allowance without claiming an image was delivered", async () => {
+  await prepare();
+  mode = "failed";
+  fireEvent.click(screen.getByRole("button", { name: "Generate Crew Cut" }));
+  const dialog = await screen.findByRole("dialog", {
+    name: "Your free trial has been used",
+  });
+  assert.ok(within(dialog).getByText(/generation attempt has been used/));
+  assert.equal(
+    within(dialog).queryByText(/download your generated preview/),
+    null,
+  );
+  assert.equal(screen.queryByRole("link", { name: "Download" }), null);
+  assert.equal(screen.queryByRole("button", { name: "Retry this look" }), null);
+  assert.equal(
+    calls.filter((c) => c.method === "POST" && c.path.endsWith("/generation"))
+      .length,
+    1,
+  );
+});
+
+test("used allowance still has clear modal feedback when the temporary consultation is gone", async () => {
+  allowance = "spent";
+  hasConsultation = false;
+  mount();
+  const dialog = await screen.findByRole("dialog", {
+    name: "Your free trial has been used",
+  });
+  assert.equal(document.body.style.overflow, "hidden");
+  assert.ok(within(dialog).getByText(/0 of 1 previews remaining/));
+  assert.equal(
+    within(dialog).queryByText(/download your generated preview/),
+    null,
+  );
+  fireEvent.click(
+    within(dialog).getByRole("button", { name: "Keep browsing" }),
+  );
+  await waitFor(() => assert.equal(screen.queryByRole("dialog"), null));
+  assert.equal(document.body.style.overflow, "");
+  fireEvent.click(screen.getByRole("button", { name: /Hairstyle / }));
+  await screen.findByRole("dialog", { name: "Your free trial has been used" });
+  assert.equal(
+    calls.filter((c) => c.method === "POST" && c.path.endsWith("/generation"))
+      .length,
+    0,
+  );
+  assert.equal(
+    calls.filter(
+      (c) => c.method === "POST" && c.path.endsWith("/consultations"),
+    ).length,
+    0,
   );
 });

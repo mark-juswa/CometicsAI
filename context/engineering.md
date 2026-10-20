@@ -266,3 +266,8 @@ The inspected backend has Hair's `GenerationEngine`, `MockEngine`, Hair-only `Re
 ## Guest trial production release authorized, 2026-10-20
 
 **CONFIRMED authorization / IN PROGRESS.** Supervisor requests Render+Kaggle deployment. Additive0006 table/function applied to existing configured Neon and independently schema-only verified; no client/account/booking records exported or changed.24guest tests and production build/TypeScript pass. New availability probe returns only booleans for trusted-ingress verification, no auth/storage/inference. Kaggle active lease=false; operator asked to restart existing optimized notebook. No notebook/model/data/secret changes. Guest flag must stay off through web deployment/proxy test. GitHub publication being finalized; manual Render trigger/config requires operator because no supported control runtime/credentials.
+
+
+## Guest web release and ingress verified, 2026-10-20
+
+**Render new routes/proxy protection VERIFIED; rollout IN PROGRESS.** Feature commit d77b823 pushed and independently matched on confirmed Render branch. Live health200, guest availability200/enabled=false, disabled guest session404 and member AI401. Normal request carries a valid CF client-IP value; four forged CF headers (reserved and public test values) receive Cloudflare403. Read-only verifier handles edge denial/overwriting and has5tests. User asked to add AI_GUEST_TRIAL_ENABLED=true and AI_GUEST_TRIAL_TRUSTED_IP_HEADER=cf-connecting-ip then rebuild. Kaggle active/recent lease still false; existing optimized notebook restart requested. No inference or guest/customer record created. Migration remains verified. Do not claim guest enabled or complete online generation until remaining checks pass.

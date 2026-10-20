@@ -1,7 +1,7 @@
 {
   "date": "2026-10-20",
   "authorization": "User: can we deploy now on render and kaggle?",
-  "status": "MIGRATION_VERIFIED; PUBLICATION_IN_PROGRESS; RENDER_TRIGGER_AND_PROXY_CHECK_PENDING",
+  "status": "RENDER_NEW_ROUTES_LIVE; PROXY_CHECK_VERIFIED; GUEST_ENABLEMENT_AND_KAGGLE_START_PENDING",
   "database": {
     "migration": "0006_guest_consultation_trial.sql",
     "applied": true,
@@ -17,20 +17,85 @@
     "previousUnchangedAiTestsPassed": 58,
     "previousUnchangedBusinessTestsPassed": 47,
     "previousRegressionEvidence": "guest-consultation-trial-development-20261020.json",
-    "proxyCheck": "Optional boolean-only availability probe; no raw IP/auth/storage/inference",
-    "liveProxyVerified": false
+    "proxyCheck": "Normal request has valid CF address; all four spoofed CF header values rejected by Cloudflare403; booleans only",
+    "liveProxyVerified": true,
+    "readOnlyVerifierTestsPassed": 5,
+    "liveProxyResult": {
+      "website": "https://beautycore-demo.onrender.com",
+      "requests": [
+        {
+          "test": "baseline",
+          "status": 200,
+          "enabled": false,
+          "addressPresent": true,
+          "reservedTestAddressSeen": false,
+          "probeAvailable": true,
+          "edgeDenied": false
+        },
+        {
+          "test": "reserved-address-1",
+          "status": 403,
+          "enabled": false,
+          "addressPresent": false,
+          "reservedTestAddressSeen": false,
+          "probeAvailable": false,
+          "edgeDenied": true
+        },
+        {
+          "test": "reserved-address-2",
+          "status": 403,
+          "enabled": false,
+          "addressPresent": false,
+          "reservedTestAddressSeen": false,
+          "probeAvailable": false,
+          "edgeDenied": true
+        },
+        {
+          "test": "public-address-3",
+          "status": 403,
+          "enabled": false,
+          "addressPresent": false,
+          "reservedTestAddressSeen": false,
+          "probeAvailable": false,
+          "edgeDenied": true
+        },
+        {
+          "test": "public-address-4",
+          "status": 403,
+          "enabled": false,
+          "addressPresent": false,
+          "reservedTestAddressSeen": false,
+          "probeAvailable": false,
+          "edgeDenied": true
+        }
+      ],
+      "readyForCfConnectingIpConfiguration": true
+    }
   },
   "publication": {
     "repository": "mark-juswa/CometicsAI",
     "deploymentBranch": "codex/render-kaggle-demo",
-    "pushed": false
+    "pushed": true,
+    "verifiedDeploymentBranchSha": "d77b82340cab6a403138b6bf55c94a56797630c9",
+    "applicationReleaseCommit": "d77b82340cab6a403138b6bf55c94a56797630c9"
   },
   "render": {
     "site": "https://beautycore-demo.onrender.com",
     "serviceId": "srv-db4ftmbbc2fs73blpkr0",
     "managementRuntimeAvailable": false,
     "managementCredentialsConfigured": false,
-    "guestFeaturePolicy": "Remain disabled until live proxy test passes"
+    "guestFeaturePolicy": "Remain disabled until live proxy test passes",
+    "newRoutesRespond": true,
+    "operatorReport": "Building/deploying first release",
+    "health": 200,
+    "availability": 200,
+    "guestEnabledAtLastProbe": false,
+    "guestSessionWhileDisabled": 404,
+    "registeredAiWithoutLogin": 401,
+    "pendingOperatorSettings": {
+      "AI_GUEST_TRIAL_ENABLED": "true",
+      "AI_GUEST_TRIAL_TRUSTED_IP_HEADER": "cf-connecting-ip"
+    }
   },
   "kaggle": {
     "activeLeaseAtPreflight": false,
@@ -38,12 +103,17 @@
     "notebookOrDatasetsChanged": false,
     "backendModelChanges": false,
     "newSecretsNeeded": false,
-    "operatorRequested": "Restart existing optimized notebook and report CONNECTED TO WEBSITE"
+    "operatorRequested": "Restart existing optimized notebook and report CONNECTED TO WEBSITE",
+    "activeLeaseAtLatestCheck": false
   },
   "limitations": [
     "Operator must trigger Render manual deployment and change environment settings; no supported control runtime here",
     "Existing member and new guest real-image/device walkthrough remains pending",
     "Proxy spoof test must pass before guest enablement",
     "No Kaggle inference requests or client/account data changes performed by release checks"
+  ],
+  "sourceReferences": [
+    "https://developers.cloudflare.com/fundamentals/reference/http-headers/",
+    "https://render.com/articles/how-render-handles-ddos-attacks"
   ]
 }

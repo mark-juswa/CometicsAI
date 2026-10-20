@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-18",
+  "timezone": "Asia/Manila",
+  "scope": "Read-only workflow verification and proposed minimal web plan; no implementation",
+  "source_commit": "984ed46",
+  "branch": "codex/look-details-performance",
+  "checkout": "I:/HAIR",
+  "configured_database_metadata": {
+    "read_only_transaction": true,
+    "application_rows_read": false,
+    "tables": [
+      "ai_generations",
+      "ai_runtime_endpoints",
+      "appointments",
+      "client_profiles",
+      "inventory",
+      "users"
+    ],
+    "existing_appointment_look_fk": true,
+    "existing_original_save_function": true,
+    "look_details_column_present": false,
+    "snapshot_save_function_present": false,
+    "inventory_columns": [
+      "id",
+      "product_name",
+      "category",
+      "current_stock",
+      "minimum_threshold",
+      "unit_price",
+      "status",
+      "last_restocked",
+      "created_at"
+    ],
+    "completion_timestamp_present": false,
+    "reviews_or_usage_or_payments_or_expenses_tables": false,
+    "render_database_identity_independently_verified": false
+  },
+  "verified": {
+    "consultation": "Three sequential alternatives for selected feature; text-only complements",
+    "selection": "Completed recommendation selected in temporary consultation store; separate per-card Save/Book can target another displayed result",
+    "persistence": "Save-first Book and durable single generation reference exist; owner/assigned stylist/admin image access; hidden gallery reference preserved",
+    "dashboard_gap": "Client and Stylist detailed Appointments show preview; both Dashboard home pages lack it",
+    "booking": "Future timestamp, catalog/category, owner and stylist-role checks; optional stylist; no enforced overlap/schedule availability",
+    "completion": "Assigned stylist Complete button and generic status dropdown/API exist; terminal transitions, completed_at/by and atomic product recording absent",
+    "reviews_rankings": "No model/API/UI or aggregate present",
+    "finance": "Completed recorded amounts by scheduled Manila service day; no actual receipts/net-profit data",
+    "inventory": "Basic admin CRUD/manual stock/low-stock, staff read; no brand/unit/consumption link/history"
+  },
+  "proposed_minimum": [
+    "Consistent selected-completed-look Book action and reuse of existing dashboard preview component",
+    "Controlled idempotent completion, completion timestamp/actor and actual product lines",
+    "One unique completed-appointment review with server-derived owner/stylist and1-5rating",
+    "Admin computed completed count/average rating/sample count with approved clear ordering",
+    "Existing recorded-service financial reporting, explicitly excluding net profit"
+  ],
+  "proposed_schema_changes_not_implemented": [
+    "Nullable appointment completed_at and completed_by",
+    "appointment_reviews unique appointment FK plus rating/comment/attribution",
+    "appointment_product_usage child rows, optional existing inventory reference and historical product/brand/quantity/unit/cost snapshots",
+    "Optional inventory brand field; no new product master"
+  ],
+  "deferred": [
+    "Automatic stock deduction/unit conversion and movement/purchasing ledger",
+    "Payments, operating expenses, commissions and true net-profit accounting",
+    "Availability engine, realtime pushes, weighted/public reputation system, native parity"
+  ],
+  "verification": {
+    "command": "npm run test:business",
+    "working_directory": "beautycore",
+    "passed": 36,
+    "failed": 0,
+    "milliseconds": 42662.8021,
+    "log": "beautycore/.tmp/consultation-workflow-audit-tests.log",
+    "scope": "Existing disposable PGlite and DOM tests; no live mutations or new feature tests"
+  },
+  "no_changes": {
+    "application_source": true,
+    "database_schema_or_rows": true,
+    "models_or_ai_flags": true,
+    "render_or_kaggle_config": true,
+    "deployment": true,
+    "new_feature_implementation": true
+  },
+  "skill": "supabase-postgres-best-practices: relationship/index and batch aggregate review guidance; database remains Neon",
+  "needs_review": [
+    "Live Render revision/flags/database identity",
+    "Profit definition",
+    "Preferred stylist requirement and per-feature three-look scope",
+    "Product mandatory/optional and quantity/unit/cost semantics",
+    "Rank/tie/minimum-rating-sample and review editing/correction rules",
+    "Scheduled day versus actual completion day and historical nulls"
+  ],
+  "plan": "docs/specs/0012-consultation-booking-completion-reviews-products.md"
+}

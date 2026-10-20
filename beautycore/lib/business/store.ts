@@ -33,8 +33,10 @@ export function lookView(row: Record<string, unknown>) {
     imageUrl: `/api/saved-looks/${row.id}/image`,
   };
 }
-const appointmentFields = `a.id,a.client_id AS "clientId",a.stylist_id AS "stylistId",a.service_name AS "serviceName",a.service_type AS "serviceType",(a.appointment_date AT TIME ZONE 'UTC') AS "appointmentDate",a.status,a.total_price AS "totalPrice",a.notes,a.ai_generation_id AS "aiGenerationId"`;
+const appointmentFields = `a.id,a.client_id AS "clientId",a.stylist_id AS "stylistId",a.service_name AS "serviceName",a.service_type AS "serviceType",(a.appointment_date AT TIME ZONE 'UTC') AS "appointmentDate",a.status,a.total_price AS "totalPrice",a.notes,a.completed_at AS "completedAt",a.completed_by AS "completedBy",a.ai_generation_id AS "aiGenerationId"`;
 const lookJoin = `CASE WHEN g.id IS NULL THEN NULL ELSE json_build_object('id',g.id,'styleType',g.style_type,'styleName',g.style_name,'styleId',g.style_id,'lookDetails',g.look_details,'imageUrl','/api/saved-looks/'||g.id||'/image') END AS look`;
+const serviceRecords = `(SELECT json_build_object('rating',r.rating,'comment',r.comment,'createdAt',r.created_at) FROM appointment_reviews r WHERE r.appointment_id=a.id) AS review,
+ coalesce((SELECT json_agg(json_build_object('inventoryId',p.inventory_id,'productName',p.product_name,'brand',p.brand,'quantity',p.quantity,'unit',p.unit,'unitCost',CASE WHEN $1='client' THEN NULL ELSE p.unit_cost END) ORDER BY p.created_at,p.id) FROM appointment_product_usage p WHERE p.appointment_id=a.id),'[]'::json) AS products`;
 export function createBusinessStore(query: Query) {
   const getLook = async (identity: string, owner: string) =>
     (
@@ -109,14 +111,14 @@ export function createBusinessStore(query: Query) {
       )[0],
     appointments: async (actor: Actor, upcoming: boolean) =>
       query(
-        `SELECT ${appointmentFields},json_build_object('id',c.id,'name',c.name,'email',c.email) AS client,CASE WHEN s.id IS NULL THEN NULL ELSE json_build_object('id',s.id,'name',s.name) END AS stylist,${lookJoin} FROM appointments a JOIN users c ON c.id=a.client_id LEFT JOIN users s ON s.id=a.stylist_id LEFT JOIN ai_generations g ON g.id=a.ai_generation_id WHERE ($1='admin' OR ($1='client' AND a.client_id=$2) OR ($1='stylist' AND a.stylist_id=$2)) AND (NOT $3::boolean OR a.appointment_date >= (now() AT TIME ZONE 'UTC')) ORDER BY a.appointment_date DESC,a.id`,
+        `SELECT ${appointmentFields},json_build_object('id',c.id,'name',c.name,'email',c.email) AS client,CASE WHEN s.id IS NULL THEN NULL ELSE json_build_object('id',s.id,'name',s.name) END AS stylist,${lookJoin},${serviceRecords} FROM appointments a JOIN users c ON c.id=a.client_id LEFT JOIN users s ON s.id=a.stylist_id LEFT JOIN ai_generations g ON g.id=a.ai_generation_id WHERE ($1='admin' OR ($1='client' AND a.client_id=$2) OR ($1='stylist' AND a.stylist_id=$2)) AND (NOT $3::boolean OR (a.status IN ('pending','confirmed') AND a.appointment_date >= (now() AT TIME ZONE 'UTC'))) ORDER BY a.appointment_date DESC,a.id`,
         [actor.role, actor.id, upcoming],
       ),
     appointment: async (identity: string, actor: Actor) =>
       (
         await query(
-          `SELECT ${appointmentFields} FROM appointments a WHERE a.id=$1 AND ($2='admin' OR ($2='client' AND a.client_id=$3) OR ($2='stylist' AND a.stylist_id=$3))`,
-          [identity, actor.role, actor.id],
+          `SELECT ${appointmentFields},${serviceRecords} FROM appointments a WHERE a.id=$3 AND ($1='admin' OR ($1='client' AND a.client_id=$2) OR ($1='stylist' AND a.stylist_id=$2))`,
+          [actor.role, actor.id, identity],
         )
       )[0],
     createAppointment: async (input: Record<string, unknown>) =>
@@ -143,6 +145,9 @@ export function createBusinessStore(query: Query) {
         stylistId: 'stylist_id',
         totalPrice: 'total_price',
       };
+      const correction =
+        actor.role === 'admin' &&
+        Object.keys(updates).every((key) => ['totalPrice', 'notes'].includes(key));
       const values: unknown[] = [identity, actor.role, actor.id];
       const fields = Object.entries(updates).map(([key, value]) => {
         values.push(value);
@@ -150,13 +155,56 @@ export function createBusinessStore(query: Query) {
       });
       return (
         await query(
-          `UPDATE appointments SET ${fields.join(',')} WHERE id=$1 AND ($2='admin' OR ($2='client' AND client_id=$3) OR ($2='stylist' AND stylist_id=$3)) RETURNING id,status,notes,total_price AS "totalPrice",stylist_id AS "stylistId",appointment_date AT TIME ZONE 'UTC' AS "appointmentDate"`,
+          `UPDATE appointments SET ${fields.join(',')} WHERE id=$1 AND ($2='admin' OR ($2='client' AND client_id=$3) OR ($2='stylist' AND stylist_id=$3)) AND (status NOT IN ('completed','cancelled') ${correction ? "OR status='completed'" : ''}) RETURNING id,status,notes,total_price AS "totalPrice",stylist_id AS "stylistId",appointment_date AT TIME ZONE 'UTC' AS "appointmentDate"`,
           values,
         )
       )[0];
     },
     deleteAppointment: async (identity: string) =>
-      (await query('DELETE FROM appointments WHERE id=$1 RETURNING id', [identity]))[0],
+      (
+        await query("DELETE FROM appointments WHERE id=$1 AND status<>'completed' RETURNING id", [
+          identity,
+        ])
+      )[0],
+    complete: async (identity: string, actor: Actor, products: unknown[]) =>
+      (
+        await query('SELECT * FROM beautycore_complete_appointment($1,$2,$3,$4::jsonb)', [
+          identity,
+          actor.id,
+          actor.role,
+          JSON.stringify(products),
+        ])
+      )[0],
+    review: async (identity: string, actor: Actor, rating: number, comment: string | null) =>
+      (
+        await query('SELECT * FROM beautycore_review_appointment($1,$2,$3,$4)', [
+          identity,
+          actor.id,
+          rating,
+          comment,
+        ])
+      )[0],
+    stylistPerformance: async (from: string, to: string) =>
+      query(
+        `
+      WITH completed AS (
+        SELECT id,stylist_id,total_price FROM appointments
+        WHERE status='completed'
+        AND appointment_date>=($1::date::timestamp AT TIME ZONE 'Asia/Manila') AT TIME ZONE 'UTC'
+        AND appointment_date<(($2::date+1)::timestamp AT TIME ZONE 'Asia/Manila') AT TIME ZONE 'UTC'
+      ), counts AS (
+        SELECT stylist_id,count(*)::int AS completed,
+          count(*) FILTER(WHERE total_price IS NULL)::int AS unpriced,
+          coalesce(sum(total_price),0)::bigint AS amount FROM completed GROUP BY stylist_id
+      ), ratings AS (
+        SELECT r.stylist_id,count(*)::int AS reviews,round(avg(r.rating),2) AS rating
+        FROM appointment_reviews r JOIN completed a ON a.id=r.appointment_id GROUP BY r.stylist_id
+      ) SELECT s.id,s.name,coalesce(c.completed,0)::int AS completed,coalesce(c.unpriced,0)::int AS unpriced,
+        coalesce(c.amount,0)::bigint AS amount,coalesce(r.reviews,0)::int AS reviews,r.rating::float8 AS rating
+      FROM users s LEFT JOIN counts c ON c.stylist_id=s.id LEFT JOIN ratings r ON r.stylist_id=s.id
+      WHERE s.role='stylist' ORDER BY coalesce(c.completed,0) DESC,s.name,s.id`,
+        [from, to],
+      ),
     daily: async (
       from: string,
       to: string,

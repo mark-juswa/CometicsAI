@@ -38,6 +38,8 @@ export default function ConsultationPage() {
   const previewRef = useRef("");
   const inputRef = useRef<HTMLInputElement>(null);
   const running = useRef(false);
+  const selecting = useRef(false);
+  const [selectionBusy,setSelectionBusy] = useState(false);
   const [occasion, setOccasion] = useState("");
   const [vibe, setVibe] = useState("");
   const [avoids, setAvoids] = useState("");
@@ -270,12 +272,14 @@ export default function ConsultationPage() {
   }
 
   async function select(card: Card) {
-    if (!consultationId || card.status !== "completed") return;
+    if (!consultationId || card.status !== "completed" || selecting.current) return;
+    selecting.current=true;setSelectionBusy(true);
     try {
       const state = await selectRecommendation(consultationId, card.recommendation.id);
       setSelectedId(state.selected_recommendation_id || "");
       setError("");
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Selection could not be saved."); }
+    finally { selecting.current=false;setSelectionBusy(false); }
   }
 
   const serviceInfo = SERVICES.find((item) => item.id === service);
@@ -425,9 +429,8 @@ export default function ConsultationPage() {
             <LookInformation feature={activeCard.recommendation.primary.feature} styleId={activeCard.recommendation.primary.style_id} />
             {activeCard.recommendation.complements.length > 0 && <p className="consult-complements">Pairs with {activeCard.recommendation.complements.map((item) => item.style_name).join(", ")}. Complementary visuals are not generated.</p>}
             {activeCard.error && <p role="alert" className="consult-card-error">{activeCard.error}</p>}
-            {activeCard.status === "completed" && activeCard.result && <SavedLookActions feature={activeCard.recommendation.primary.feature} result={activeCard.result} sourceKind="consultation" />}
             <div className="consult-card-actions">{activeCard.status === "completed" && <><button type="button" className="studio-primary-button"
-              onClick={() => void select(activeCard)}>{selectedId === activeCard.recommendation.id ? "Selected" : "Select This Look"}</button>
+              disabled={selectionBusy} onClick={() => void select(activeCard)}>{selectedId === activeCard.recommendation.id ? "Selected" : "Select This Look"}</button>
               <a className="studio-secondary-button" href={activeCard.result!.image.data_url}
                 download={`andreas-${activeCard.recommendation.primary.style_id}.${activeCard.result!.image.content_type === "image/jpeg" ? "jpg" : "png"}`}>Download</a></>}
               {activeCard.canRetry && <button type="button" className="studio-secondary-button" disabled={busy}
@@ -451,8 +454,9 @@ export default function ConsultationPage() {
       {phase === "attention" && cards.some((card) => card.status === "pending") && !cards.some((card) => card.status === "unknown")
         && <button type="button" className="studio-secondary-button consult-continue" onClick={() => void continuePending()}>Continue remaining looks</button>}
       {selected && <section className="consult-selection" aria-label="Selected recommendation"><p className="studio-eyebrow">YOUR SELECTED LOOK</p>
-        <h2>{selected.recommendation.primary.style_name}</h2><p>Selected for this consultation. Use Save Look to keep it in your account, or Book This Look to arrange an appointment. No booking has been made.</p>
+        <h2>{selected.recommendation.primary.style_name}</h2><p>Selected for this consultation. Use Save Look to keep this selected result, or Book Selected Look to arrange an appointment. No booking has been made.</p>
         <LookInformation feature={selected.recommendation.primary.feature} styleId={selected.recommendation.primary.style_id} />
+        {selected.result && <SavedLookActions key={selected.recommendation.id} feature={selected.recommendation.primary.feature} result={selected.result} sourceKind="consultation" bookLabel="Book Selected Look" />}
         {selected.recommendation.complements.length > 0 && <p>Suggested complements: {selected.recommendation.complements.map((item) => item.style_name).join(", ")}</p>}
       </section>}
       <div className="consult-stage-footer">{customLink}</div>

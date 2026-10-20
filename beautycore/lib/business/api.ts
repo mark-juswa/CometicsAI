@@ -1,3 +1,4 @@
+import { PRODUCT_UNITS, type ProductUsage } from './workflow-types';
 import { allServices, parsePrice } from '../services';
 import {
   Actor,
@@ -11,6 +12,7 @@ import {
   id,
   mutationOrigin,
   paging,
+  object,
   salonDay,
   validateLook,
 } from './core';
@@ -247,7 +249,9 @@ export function bookingApi(
     if (request.method === 'GET') return json({ appointment: row });
     if (request.method === 'DELETE') {
       if (actor.role !== 'admin') fail('Admin access is required.', 403);
-      await deps.store.deleteAppointment(identity);
+      if (row.status === 'completed') fail('Completed service history cannot be deleted.', 409);
+      if (!(await deps.store.deleteAppointment(identity)))
+        fail('The appointment changed. Reload the page.', 409);
       return json({ success: true });
     }
     if (request.method !== 'PATCH') fail('Operation not found.', 404);
@@ -260,6 +264,24 @@ export function bookingApi(
           : ['status', 'notes', 'appointmentDate', 'stylistId', 'totalPrice'];
     if (!Object.keys(body).length || Object.keys(body).some((k) => !allowed.includes(k)))
       fail('These appointment details cannot be changed.', 403);
+    if (body.status === 'completed') {
+      if (actor.role === 'client')
+        fail('Only the assigned stylist or an admin can complete a service.', 403);
+      if (Object.keys(body).length !== 1)
+        fail('Complete the service separately from other changes.');
+      return completeResult(identity, actor, [], deps);
+    }
+    if (actor.role === 'client' && ['completed', 'cancelled'].includes(String(row.status)))
+      fail('Only an active booking can be cancelled.', 403);
+    if (
+      ['completed', 'cancelled'].includes(String(row.status)) &&
+      !(
+        row.status === 'completed' &&
+        actor.role === 'admin' &&
+        Object.keys(body).every((key) => ['totalPrice', 'notes'].includes(key))
+      )
+    )
+      fail('This appointment is closed. Its status and assignment cannot be changed.', 409);
     const update: Record<string, unknown> = {};
     if (body.status !== undefined) {
       if (typeof body.status !== 'string' || !statuses.includes(body.status))
@@ -310,6 +332,137 @@ export function dailyServices(request: Request, deps: Dependencies): Promise<Res
       pageSize: 12,
       timeZone: 'Asia/Manila',
       dateBasis: 'Scheduled service date',
+      amountBasis: 'Recorded completed-service amount',
+    });
+  });
+}
+
+function shortText(value: unknown, label: string, max: number, required = false) {
+  if (value === undefined || value === null || value === '') {
+    if (required) fail(`${label} is required.`);
+    return null;
+  }
+  if (typeof value !== 'string' || value.trim().length > max || (required && !value.trim()))
+    fail(`Enter a valid ${label.toLowerCase()} (up to ${max} characters).`);
+  return value.trim() || null;
+}
+function measured(value: unknown, label: string, decimals: number, positive: boolean) {
+  if (value === undefined || value === null) return null;
+  if (
+    typeof value !== 'number' ||
+    !Number.isFinite(value) ||
+    value > 1000000 ||
+    (positive ? value <= 0 : value < 0) ||
+    Math.abs(value * 10 ** decimals - Math.round(value * 10 ** decimals)) > 0.00001
+  )
+    fail(`Enter a valid ${label} with at most ${decimals} decimal places.`);
+  return value;
+}
+function productsInput(value: unknown): ProductUsage[] {
+  if (value === undefined) return [];
+  if (!Array.isArray(value) || value.length > 20) fail('Record up to 20 products.');
+  return value.map((item) => {
+    if (
+      !object(item) ||
+      Object.keys(item).some(
+        (key) =>
+          !['inventoryId', 'productName', 'brand', 'quantity', 'unit', 'unitCost'].includes(key),
+      )
+    )
+      fail('Invalid product record.');
+    const quantity = measured(item.quantity, 'quantity', 3, true);
+    const unitCost = measured(item.unitCost, 'cost per unit', 2, false);
+    const unit = shortText(item.unit, 'Unit', 32);
+    if (unit && !(PRODUCT_UNITS as readonly string[]).includes(unit))
+      fail('Choose a supported measurement unit.');
+    if (quantity !== null && !unit) fail('Choose the unit for the recorded quantity.');
+    if (unitCost !== null && (quantity === null || !unit))
+      fail('A material cost needs a quantity and its matching unit.');
+    return {
+      inventoryId: item.inventoryId ? id(item.inventoryId) : null,
+      productName: shortText(item.productName, 'Product name', 255, true)!,
+      brand: shortText(item.brand, 'Brand', 120),
+      quantity,
+      unit,
+      unitCost,
+    };
+  });
+}
+async function completeResult(
+  identity: string,
+  actor: Actor,
+  products: ProductUsage[],
+  deps: Dependencies,
+) {
+  const result = await deps.store.complete(identity, actor, products);
+  if (result.outcome === 'not_found') fail('Appointment not found.', 404);
+  if (result.outcome === 'terminal') fail('A cancelled appointment cannot be completed.', 409);
+  if (result.outcome === 'unassigned')
+    fail('Assign a stylist before completing this service.', 409);
+  if (result.outcome === 'invalid_product')
+    fail(
+      'An inventory product is no longer available. Reload or record it as an unlisted product.',
+      409,
+    );
+  return json({
+    appointment: await deps.store.appointment(identity, actor),
+    alreadyCompleted: result.outcome === 'existing',
+  });
+}
+export function completeAppointment(request: Request, identity: string, deps: Dependencies) {
+  return controlled(async () => {
+    const actor = await user(request, deps);
+    if (actor.role === 'client') fail('Stylist or admin access is required.', 403);
+    if (request.method !== 'POST') fail('Operation not found.', 404);
+    id(identity);
+    const body = await boundedJson(request);
+    if (Object.keys(body).some((key) => key !== 'products')) fail('Unexpected completion field.');
+    return completeResult(identity, actor, productsInput(body.products), deps);
+  });
+}
+export function appointmentReview(request: Request, identity: string, deps: Dependencies) {
+  return controlled(async () => {
+    const actor = await user(request, deps);
+    if (actor.role !== 'client') fail('Client access is required.', 403);
+    if (request.method !== 'POST') fail('Operation not found.', 404);
+    id(identity);
+    const body = await boundedJson(request);
+    if (
+      Object.keys(body).some((key) => !['rating', 'comment'].includes(key)) ||
+      typeof body.rating !== 'number' ||
+      !Number.isInteger(body.rating) ||
+      body.rating < 1 ||
+      body.rating > 5
+    )
+      fail('Choose a rating from 1 to 5.');
+    const comment = shortText(body.comment, 'Review', 1000);
+    const result = await deps.store.review(identity, actor, body.rating, comment);
+    if (result.outcome === 'not_found') fail('Appointment not found.', 404);
+    if (result.outcome === 'ineligible')
+      fail('Reviews are available after a service with an assigned stylist is completed.', 409);
+    if (result.outcome === 'conflict')
+      fail('A review has already been submitted for this appointment.', 409);
+    return json(
+      { appointment: await deps.store.appointment(identity, actor) },
+      result.outcome === 'created' ? 201 : 200,
+    );
+  });
+}
+export function stylistPerformance(request: Request, deps: Dependencies) {
+  return controlled(async () => {
+    const actor = await user(request, deps);
+    if (actor.role !== 'admin') fail('Admin access is required.', 403);
+    if (request.method !== 'GET') fail('Operation not found.', 404);
+    const params = new URL(request.url).searchParams;
+    const from = day(params.get('from') ?? salonDay());
+    const to = day(params.get('to') ?? from);
+    const span = (Date.parse(to) - Date.parse(from)) / 86400000;
+    if (span < 0 || span > 30) fail('Choose a date range of up to 31 days.');
+    return json({
+      stylists: await deps.store.stylistPerformance(from, to),
+      from,
+      to,
+      dateBasis: 'Scheduled service date (Asia/Manila)',
       amountBasis: 'Recorded completed-service amount',
     });
   });

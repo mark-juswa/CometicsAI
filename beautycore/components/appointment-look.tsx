@@ -34,6 +34,12 @@ export function AppointmentLookPreview({ look }: { look: AppointmentLook | null 
           <span className="text-sm text-secondary">View requested look</span>
         </span>
       </button>
+      <LookInformation
+        saved
+        feature={featureFromType(look.styleType)}
+        styleId={look.styleId ?? ''}
+        details={look.lookDetails}
+      />
       <dialog
         aria-label={`Requested ${look.styleName}`}
         ref={ref}

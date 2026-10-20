@@ -109,6 +109,7 @@ class ServingOwner(SharedExperiment):
         self.sequence += 1
         self.event('ownership_start', label=label, sequence=self.sequence)
         feature = adapter_key.split(':')[0]
+        performance = self.performance if self.performance and self.performance.applies_to(feature) else None
         try:
             self.switch(adapter_key)
             self.assert_active(adapter_key)
@@ -126,8 +127,8 @@ class ServingOwner(SharedExperiment):
             self.event('inference_start', feature=feature, label=label)
             emit('worker_inference_start', feature=feature, style_id=style_id)
             try:
-                scope = (self.performance.measure(self.pipe, identity=(adapter_key, expected['adapter_sha256'], gate.REVISION),
-                         allowed_prompts={expected['prompt'], ''}) if self.performance else nullcontext())
+                scope = (performance.measure(self.pipe, feature=feature, identity=(adapter_key, expected['adapter_sha256'], gate.REVISION),
+                         allowed_prompts={expected['prompt'], ''}) if performance else nullcontext())
                 with scope, gate.optional_runtime_telemetry(self.torch, []):
                     if feature == 'nails' and inference_steps != 20:
                         payload = self.views[feature].generate(image, style_id, inference_steps=inference_steps)
@@ -155,8 +156,8 @@ class ServingOwner(SharedExperiment):
                 'adapter_id': expected['adapter_id'], 'adapter_sha256': expected['adapter_sha256'],
                 'base_revision': gate.REVISION, 'inference_seconds': round(time.monotonic() - started, 3),
                 'http_status': 200, 'memory_after': self.measure()})
-            if self.performance:
-                self.audit[-1]['performance'] = self.performance.last
+            if performance:
+                self.audit[-1]['performance'] = performance.last
             del self.audit[:-30]
             emit('worker_inference_end', feature=feature, style_id=style_id,
                  adapter_id=expected['adapter_id'], inference_seconds=round(time.monotonic() - started, 3))

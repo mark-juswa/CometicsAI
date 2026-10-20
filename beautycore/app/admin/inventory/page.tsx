@@ -2,29 +2,14 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import {
-  Search,
-  Plus,
-  Minus,
-  Trash2,
-  Loader2,
-  Package,
-  X,
-  AlertTriangle,
-} from 'lucide-react';
-import {
-  PageHeader,
-  Card,
-  EmptyState,
-  Skeleton,
-  formatDate,
-  formatPeso,
-} from '@/components/ui';
+import { Search, Plus, Minus, Trash2, Loader2, Package, X, AlertTriangle } from 'lucide-react';
+import { PageHeader, Card, EmptyState, Skeleton, formatDate, formatPeso } from '@/components/ui';
 import type { ProductStatus } from '@/db/schema';
 
 interface Item {
   id: string;
   productName: string;
+  brand: string | null;
   category: string;
   currentStock: number;
   minimumThreshold: number;
@@ -55,6 +40,7 @@ export default function AdminInventoryPage() {
 
   const [form, setForm] = useState({
     productName: '',
+    brand: '',
     category: '',
     currentStock: '0',
     minimumThreshold: '10',
@@ -107,6 +93,7 @@ export default function AdminInventoryPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           productName: form.productName,
+          brand: form.brand || null,
           category: form.category,
           currentStock: Number(form.currentStock),
           minimumThreshold: Number(form.minimumThreshold),
@@ -115,7 +102,14 @@ export default function AdminInventoryPage() {
       });
       if (res.ok) {
         setShowAdd(false);
-        setForm({ productName: '', category: '', currentStock: '0', minimumThreshold: '10', unitPrice: '' });
+        setForm({
+          productName: '',
+          brand: '',
+          category: '',
+          currentStock: '0',
+          minimumThreshold: '10',
+          unitPrice: '',
+        });
         load();
       }
     } finally {
@@ -125,14 +119,14 @@ export default function AdminInventoryPage() {
 
   const categories = useMemo(
     () => ['all', ...Array.from(new Set(items.map((i) => i.category))).sort()],
-    [items]
+    [items],
   );
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return items.filter((i) => {
       if (category !== 'all' && i.category !== category) return false;
-      return !q || i.productName.toLowerCase().includes(q);
+      return !q || i.productName.toLowerCase().includes(q) || i.brand?.toLowerCase().includes(q);
     });
   }, [items, query, category]);
 
@@ -160,13 +154,18 @@ export default function AdminInventoryPage() {
           <Card className="mb-6">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="font-serif text-lg text-white">New Product</h3>
-              <button onClick={() => setShowAdd(false)} aria-label="Close" className="text-muted hover:text-white">
+              <button
+                onClick={() => setShowAdd(false)}
+                aria-label="Close"
+                className="text-muted hover:text-white"
+              >
                 <X size={16} />
               </button>
             </div>
             <form onSubmit={add} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
               {[
                 { key: 'productName', label: 'Product name', type: 'text', required: true },
+                { key: 'brand', label: 'Brand (optional)', type: 'text', required: false },
                 { key: 'category', label: 'Category', type: 'text', required: true },
                 { key: 'currentStock', label: 'Stock', type: 'number', required: true },
                 { key: 'minimumThreshold', label: 'Min threshold', type: 'number', required: true },
@@ -192,7 +191,11 @@ export default function AdminInventoryPage() {
                   disabled={busy === 'new'}
                   className="flex items-center gap-2 bg-gold px-5 py-2.5 text-[10px] font-semibold uppercase tracking-[1.5px] text-card transition-colors hover:bg-gold-hover disabled:opacity-50"
                 >
-                  {busy === 'new' ? <Loader2 size={13} className="animate-spin" /> : <Plus size={13} />}
+                  {busy === 'new' ? (
+                    <Loader2 size={13} className="animate-spin" />
+                  ) : (
+                    <Plus size={13} />
+                  )}
                   Add
                 </button>
               </div>
@@ -204,7 +207,10 @@ export default function AdminInventoryPage() {
       {/* Controls */}
       <div className="mb-6 flex flex-wrap gap-3">
         <div className="relative min-w-[240px] flex-1">
-          <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+          <Search
+            size={14}
+            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted"
+          />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -253,6 +259,7 @@ export default function AdminInventoryPage() {
                         {item.productName}
                       </h3>
                       <p className="text-[10px] uppercase tracking-wide text-muted">
+                        {item.brand ? `${item.brand} · ` : ''}
                         {item.category}
                       </p>
                     </div>
@@ -264,12 +271,12 @@ export default function AdminInventoryPage() {
                   </div>
 
                   <div className="mb-4 flex items-baseline gap-2">
-                    <span className={`font-serif text-3xl ${alert ? 'text-warning' : 'text-white'}`}>
+                    <span
+                      className={`font-serif text-3xl ${alert ? 'text-warning' : 'text-white'}`}
+                    >
                       {item.currentStock}
                     </span>
-                    <span className="text-[11px] text-muted">
-                      / min {item.minimumThreshold}
-                    </span>
+                    <span className="text-[11px] text-muted">/ min {item.minimumThreshold}</span>
                     {alert && <AlertTriangle size={13} className="text-warning" />}
                   </div>
 

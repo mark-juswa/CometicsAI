@@ -7,10 +7,12 @@ export function SavedLookActions({
   feature,
   result,
   sourceKind = 'manual',
+  bookLabel = 'Book This Look',
 }: {
   feature: FeatureId;
   result: GeneratedResult;
   sourceKind?: 'manual' | 'consultation';
+  bookLabel?: string;
 }) {
   const router = useRouter();
   const [saved, setSaved] = useState<SavedLook | null>(null);
@@ -60,7 +62,7 @@ export function SavedLookActions({
           disabled={busy}
           onClick={() => void run(true)}
         >
-          Book This Look
+          {bookLabel}
         </button>
       </div>
       {saved && <p role="status">Saved to your account. You can find it in My Saved Looks.</p>}

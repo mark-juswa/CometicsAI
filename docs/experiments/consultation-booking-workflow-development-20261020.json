@@ -1,0 +1,149 @@
+{
+  "date": "2026-10-20",
+  "timezone": "Asia/Manila",
+  "status": "Local development DONE; local verification VERIFIED; deployment NOT STARTED",
+  "authorization": "Supervisor lets start after workflow audit and minimum implementation proposal",
+  "source_base": "984ed4640a8ac87b99a4e1dde67ba601dc151679",
+  "branch": "codex/look-details-performance",
+  "implemented": [
+    "Selected completed consultation result is sole consultation Save/Book target",
+    "Shared image/description/estimate on both home dashboards and appointment views",
+    "Recently completed client visits, refresh on focus/visibility and completed review form",
+    "Atomic completion timestamp/actor/product rows; duplicate-safe retries and protected terminal history",
+    "One owner-only completed-appointment review with derived stylist/client and unique appointment key",
+    "Optional inventory brand and per-appointment product/brand/quantity/unit/PHP-unit-cost snapshots; no stock deduction",
+    "Admin scheduled-Manila-day completed counts, recorded amounts, unpriced counts, verified ratings/review counts and transparent sorts"
+  ],
+  "migration": {
+    "file": "beautycore/db/migrations/0005_service_completion.sql",
+    "prerequisite": "0004_look_details.sql after existing0002/0003",
+    "new_tables": [
+      "appointment_reviews",
+      "appointment_product_usage"
+    ],
+    "new_columns": [
+      "appointments.completed_at",
+      "appointments.completed_by",
+      "inventory.brand"
+    ],
+    "atomic_functions": [
+      "beautycore_complete_appointment",
+      "beautycore_review_appointment"
+    ],
+    "applied_to_live": false,
+    "rehearsed_repeatably_with_explicit_transaction_runner": true,
+    "readiness_checker_extended": true
+  },
+  "verification": {
+    "business_and_dom": {
+      "passed": 47,
+      "failed": 0,
+      "command": "npm run test:business"
+    },
+    "ai_regressions": {
+      "passed": 58,
+      "failed": 0,
+      "files": [
+        "ai-adapter.test.ts",
+        "ai-client-flow.test.ts",
+        "ai-jobs.test.ts",
+        "ai-runtime-registry.test.ts",
+        "ai-studio-integration.test.ts"
+      ]
+    },
+    "total_passed": 105,
+    "production_build": "PASS including TypeScript and41static pages",
+    "git_diff_check": "PASS",
+    "credential_literal_scan": "PASS on changed/new application/test/migration files",
+    "scope": "Disposable PGlite and DOM fixtures/synthetic AI; no live account rows or GPU calls"
+  },
+  "important_coverage": [
+    "SelectB/viewA booksB without regeneration or duplicate image",
+    "Both home dashboards share booked look and description",
+    "Completion/product validation rollback, concurrent completion/cancellation and retries",
+    "Owner/assigned-stylist/admin/Origin access restrictions",
+    "Closed history immutable; existing admin amount/notes correction retained",
+    "One review under retries; pending/cancelled/foreign/unassigned review refusal",
+    "Product rename/delete snapshots survive; internal cost redacted from client reads",
+    "No multiplication of completed counts/revenue by product rows",
+    "Manila midnight/unpriced/legacy no-time appointments"
+  ],
+  "preserved": [
+    "Existing stylist preference remains optional; assignment required at completion",
+    "Pending or confirmed service may complete",
+    "Unknown prices/costs/quantities stay unknown",
+    "Previous completed-service recorded-amount finance scope",
+    "Working Kaggle demo/bundles/models/registered discovery and current live website",
+    "Experimental global speed cache remains off"
+  ],
+  "not_changed": {
+    "live_database_schema_or_rows": true,
+    "render_deployment_or_config": true,
+    "kaggle_runtime_or_bundles": true,
+    "model_or_training": true,
+    "new_secrets": true,
+    "dependencies": true,
+    "git_push": true
+  },
+  "deferred": [
+    "Automated stock deduction/conversion/movements and full inventory statistics UI",
+    "Payment ledger/expenses/payroll/commissions/net-profit accounting",
+    "Advanced availability/scheduling/realtime",
+    "Review/product editing and completed appointment reopening/reassignment",
+    "Native app parity"
+  ],
+  "needs_verification": [
+    "Real browser/device layout and live GPU rehearsal",
+    "Independent Render revision/database identity and feature flags",
+    "Multi-connection Neon contention; PGlite tests verify atomic SQL and retry paths",
+    "Separate approved production schema-before-code rollout and recovery policy"
+  ],
+  "guide": "docs/guides/consultation-booking-workflow-testing.md",
+  "logs": {
+    "business": {
+      "path": "beautycore/.tmp/workflow-development-tests.log",
+      "sha256": "61c98ddc86177636045ae19b193e7953614e6b19ff0b213a000cfd08d9c6aab4"
+    },
+    "ai": {
+      "path": "beautycore/.tmp/workflow-ai-regressions.log",
+      "sha256": "8889e7d05adb059f308550d73ac882149dd8df713089e6a4d658a2744f7f8164"
+    },
+    "build": {
+      "path": "beautycore/.tmp/workflow-build.log",
+      "sha256": "7c21e4feae5e7852affb621eed5c5a68233951fcb8a6e1463fb113b6c389a9d8"
+    }
+  },
+  "file_sha256": {
+    "beautycore/app/admin/appointments/page.tsx": "50caee8f89b701ba029fc2ac346ec15db563333bfb6a96adb9d401db3317b73c",
+    "beautycore/app/admin/finance/page.tsx": "be1651feca608af86399f62bdb224931e9587d067f3e5bc81056c5ccaf6fb4c9",
+    "beautycore/app/admin/inventory/page.tsx": "4d661fcd7b6ab62e48a8cea33ee8de3514ed0fcc17007ff30c452c57767cdc74",
+    "beautycore/app/api/admin/stylist-performance/route.ts": "f90d23bd99131402a6a4bb03b4a9249d9c59c2b39cf17259d8b87dc0ae51bd36",
+    "beautycore/app/api/appointments/[id]/complete/route.ts": "51e49ff6e1e12f3000e26249d259f11d8786fba6fa08341d0f6574513c5fd594",
+    "beautycore/app/api/appointments/[id]/review/route.ts": "7dbbe962ff0af03fc937cbd336708f11c4a5a93e0246225c47a59b4e3a4aa21f",
+    "beautycore/app/api/inventory/route.ts": "da9684b6e0cda8d4ae4e13a0cfd6bbe9b0c2c28d25a23965692476162479867e",
+    "beautycore/app/business.css": "5dd248c47deff2ed0e60ab38e1ae9d013abd9131300e70ecd6f6bcdd3789ee9a",
+    "beautycore/app/client/ai-consultation/page.tsx": "b04c743f613cbacc815e6ba936434eefc513b07111102dee70017e61de553b1d",
+    "beautycore/app/client/appointments/page.tsx": "e67fa78c044091d6f71fb476cbdf7b0ef3fe1b62c2d50411de2eec70a7500b7f",
+    "beautycore/app/client/dashboard/page.tsx": "cb6c362026b4d7cbd1d318abdc370b439cbed6ed8fef8e66e2ae1f0b438546bf",
+    "beautycore/app/stylist/appointments/page.tsx": "a60b15ba89113283d884974aaae425b766288e5a02be0fdd6e34dd663fe02195",
+    "beautycore/app/stylist/dashboard/page.tsx": "6c3c11105e560d4b1fe9b5e8924c4b5d28907be3db899c836b7198f8636ccc7e",
+    "beautycore/components/admin-booking-controls.tsx": "f5ce5fe70346e34a8ed566a2b6b805e17cfa9d9c31ed92cac6865f4ba1a5a1cc",
+    "beautycore/components/appointment-look.tsx": "3777caa7b0b9aeed8104e8ac6f05c0cea4a0d9e5b697c682177d9ce7913b5d46",
+    "beautycore/components/appointment-service-record.tsx": "2c4197788c69d45bcd4f5fd0b1f57dc9afc23874cf6c24ec3cd355016bb15698",
+    "beautycore/components/saved-look-actions.tsx": "2f0bd2becb6ac60c8f0151530f4ab2ee6fa6af144c21374f369bf434cc4573f3",
+    "beautycore/components/service-completion.tsx": "48913055e457bce92127335adce1ab3a36ade4ca0393c79b074c1444124c0c8d",
+    "beautycore/components/stylist-performance.tsx": "7875e3072cb3e9af08d0bc9dc0494791a27f7e4c67995005e8accdb5eb7dcae6",
+    "beautycore/db/migrations/0005_service_completion.sql": "aa9605708032ae423d1a5f8773783efc8642496befb788ad337593ee9e1e919a",
+    "beautycore/db/schema.ts": "fb33421c0196038262c89d4a1da5a37a239881f04197c5e0f4396afc7bf132e0",
+    "beautycore/lib/business/api.ts": "28a6a5bc28ddb8f21a073fa4d16525966883235cd4cb42917ed8f39393420f07",
+    "beautycore/lib/business/store.ts": "e5ec9973dc1bb25b9babb4748281177b3488143e0556628007e508e945d29bde",
+    "beautycore/lib/business/use-appointment-refresh.ts": "ced459eb64ef1d103c2b5724d68896baca8d9634926de77a72a9c4ef9170404d",
+    "beautycore/lib/business/workflow-types.ts": "63a9504556ad87725b8187f12dea2851f2bcb05a0891f1142008dc780bae0c3a",
+    "beautycore/package.json": "c9d6d4991bc0409e35b35f271d96cc08889d4c320be76584f359ed39cb3268fa",
+    "beautycore/scripts/apply-saved-looks.ts": "d7ca6f7eff5deca4a11662bedb2256305ee0282c47b39a053ac390bab1919641",
+    "beautycore/scripts/saved-look-migrations.ts": "967baa989ba9e72730f959c616f5f7f0dce03cb5a8c12c297e1ceec991da5e96",
+    "beautycore/tests/business-ui.test.mjs": "39fae9e753be15ed5ca0cb58a6c11028f30d70c53332d1e77855fb9b71cca29c",
+    "beautycore/tests/business-workflows.test.ts": "a71ff9c2c2136915b4a2ffde3e2d535cca44cfc056620c1831104c610207de34",
+    "beautycore/tests/service-completion.test.ts": "f77f3b6ec83bb65e6bd6d30f844933ac0df25174ddc11970c935131d4be7ac2a"
+  }
+}

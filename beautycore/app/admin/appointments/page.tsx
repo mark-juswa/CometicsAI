@@ -1,7 +1,12 @@
 'use client';
+import { AppointmentServiceRecord } from '@/components/appointment-service-record';
+import type { ServiceRecord } from '@/lib/business/workflow-types';
+import { useAppointmentRefresh } from '@/lib/business/use-appointment-refresh';
+
 import { AdminBookingControls } from '@/components/admin-booking-controls';
 import { AppointmentLookPreview, type AppointmentLook } from '@/components/appointment-look';
 
+import { ServiceCompletion } from '@/components/service-completion';
 import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Trash2, Loader2, CalendarDays, Clock } from 'lucide-react';
@@ -17,7 +22,7 @@ import {
 } from '@/components/ui';
 import { appointmentStatusEnum, type AppointmentStatus } from '@/db/schema';
 
-interface Row {
+interface Row extends ServiceRecord {
   look?: AppointmentLook | null;
   stylistId: string | null;
   id: string;
@@ -50,6 +55,7 @@ export default function AdminAppointmentsPage() {
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<AppointmentStatus | 'all'>('all');
   const [busy, setBusy] = useState<string | null>(null);
+  const [actionError, setActionError] = useState('');
 
   const load = () => {
     fetch('/api/appointments')
@@ -60,18 +66,23 @@ export default function AdminAppointmentsPage() {
   };
 
   useEffect(load, []);
+  useAppointmentRefresh(load);
 
   const setStatus = async (id: string, status: AppointmentStatus) => {
     setBusy(id);
+    setActionError('');
     try {
       const res = await fetch(`/api/appointments/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
       });
+      if (!res.ok) throw new Error((await res.json()).error || 'Could not update the appointment.');
       if (res.ok) {
         setRows((rs) => rs.map((r) => (r.id === id ? { ...r, status } : r)));
       }
+    } catch (cause) {
+      setActionError(cause instanceof Error ? cause.message : 'Could not update the appointment.');
     } finally {
       setBusy(null);
     }
@@ -80,9 +91,13 @@ export default function AdminAppointmentsPage() {
   const remove = async (id: string) => {
     if (!confirm('Delete this appointment permanently?')) return;
     setBusy(id);
+    setActionError('');
     try {
       const res = await fetch(`/api/appointments/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error((await res.json()).error || 'Could not update the appointment.');
       if (res.ok) setRows((rs) => rs.filter((r) => r.id !== id));
+    } catch (cause) {
+      setActionError(cause instanceof Error ? cause.message : 'Could not update the appointment.');
     } finally {
       setBusy(null);
     }
@@ -135,6 +150,7 @@ export default function AdminAppointmentsPage() {
         </select>
       </div>
 
+      {actionError && <p role="alert">{actionError}</p>}
       {loading ? (
         <div className="flex flex-col gap-3">
           {[0, 1, 2, 3].map((i) => (
@@ -183,13 +199,17 @@ export default function AdminAppointmentsPage() {
                     </span>
                   </p>
                   <AppointmentLookPreview look={r.look} />
-                  <AdminBookingControls
-                    id={r.id}
-                    stylistId={r.stylistId ?? r.stylist?.id ?? null}
-                    totalPrice={r.totalPrice}
-                    onUpdated={load}
-                    stylists={stylists}
-                  />
+                  <AppointmentServiceRecord record={r} />
+                  {r.status !== 'cancelled' && (
+                    <AdminBookingControls
+                      lockedAssignment={r.status === 'completed'}
+                      id={r.id}
+                      stylistId={r.stylistId ?? r.stylist?.id ?? null}
+                      totalPrice={r.totalPrice}
+                      onUpdated={load}
+                      stylists={stylists}
+                    />
+                  )}
                   {r.notes && (
                     <p className="mt-2 rounded-sm border border-purple-light/10 bg-surface/25 p-2.5 text-[12px] text-secondary">
                       {r.notes}
@@ -197,14 +217,25 @@ export default function AdminAppointmentsPage() {
                   )}
                 </div>
 
-                <div className="flex shrink-0 items-center gap-2">
+                <div className="flex w-full flex-col items-stretch gap-2 lg:max-w-lg">
+                  {['pending', 'confirmed'].includes(r.status) && (
+                    <ServiceCompletion id={r.id} onCompleted={load} />
+                  )}
                   <select
                     value={r.status}
                     onChange={(e) => setStatus(r.id, e.target.value as AppointmentStatus)}
-                    disabled={busy === r.id}
+                    disabled={busy === r.id || ['completed', 'cancelled'].includes(r.status)}
+                    aria-label="Appointment status"
                     className="rounded-sm border border-purple-light/20 bg-surface/40 px-3 py-2 text-[11px] text-white focus:border-purple-light focus:outline-none disabled:opacity-50"
                   >
-                    {appointmentStatusEnum.enumValues.map((s) => (
+                    {(
+                      [
+                        'pending',
+                        'confirmed',
+                        'cancelled',
+                        ...(r.status === 'completed' ? ['completed'] : []),
+                      ] as AppointmentStatus[]
+                    ).map((s) => (
                       <option key={s} value={s}>
                         {s.charAt(0).toUpperCase() + s.slice(1)}
                       </option>
@@ -213,7 +244,7 @@ export default function AdminAppointmentsPage() {
 
                   <button
                     onClick={() => remove(r.id)}
-                    disabled={busy === r.id}
+                    disabled={busy === r.id || r.status === 'completed'}
                     aria-label="Delete appointment"
                     className="rounded-sm border border-error/30 p-2 text-error transition-colors hover:bg-error/10 disabled:opacity-50"
                   >

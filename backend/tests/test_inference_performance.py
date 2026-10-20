@@ -130,3 +130,37 @@ def test_initial_gpu_sync_failure_does_not_leave_the_probe_locked():
     perf.synchronize=lambda:None
     with scope(perf,pipe):pipe.run()
     assert perf.last is not None
+
+
+def test_configured_cache_defaults_to_nails_and_bypasses_hair_makeup():
+    perf=configured_performance(lambda:None,{'AI_PROMPT_CACHE':'1'})
+    assert perf.applies_to('nails')
+    assert not perf.applies_to('hairstyle') and not perf.applies_to('makeup')
+    pipe=Pipe()
+    for feature in ('hairstyle','makeup'):
+        original=pipe.encode_prompt
+        if perf.applies_to(feature):
+            with perf.measure(pipe,feature=feature,identity=feature,allowed_prompts={'fixed',''}):pipe.run()
+        else:pipe.run()
+        assert pipe.encode_prompt==original and 'encode_prompt' not in vars(pipe)
+    for _ in range(5):
+        with perf.measure(pipe,feature='nails',identity='nails',allowed_prompts={'fixed',''}):pipe.run()
+    assert pipe.encodes==6  # Four uncached Hair/Makeup calls; two encodes for five nail crops.
+    assert perf.last['prompt_cache']['hits']==2
+
+
+def test_diagnostic_profiling_does_not_cache_non_nails_prompts():
+    perf=configured_performance(lambda:None,{'AI_PROMPT_CACHE':'1','AI_INFERENCE_PROFILE':'1','AI_PROMPT_CACHE_SCOPE':'nails'})
+    assert perf.applies_to('hairstyle') and not perf.cache_for('hairstyle')
+    pipe=Pipe()
+    with perf.measure(pipe,feature='hairstyle',identity='hair',allowed_prompts={'fixed',''}):
+        pipe.run();pipe.run()
+    assert pipe.encodes==4 and not perf.cache
+    assert perf.last['prompt_cache']['enabled'] is False
+
+
+def test_invalid_cache_scope_fails_closed_and_global_scope_requires_explicit_configuration():
+    with pytest.raises(ValueError,match='scope'):
+        configured_performance(lambda:None,{'AI_PROMPT_CACHE':'1','AI_PROMPT_CACHE_SCOPE':'invalid'})
+    explicit=configured_performance(lambda:None,{'AI_PROMPT_CACHE':'1','AI_PROMPT_CACHE_SCOPE':'all'})
+    assert explicit.applies_to('hairstyle') and explicit.applies_to('makeup')

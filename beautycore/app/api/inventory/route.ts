@@ -42,11 +42,13 @@ export async function POST(req: Request) {
     const body = await req.json();
     const productName = String(body.productName ?? '').trim();
     const category = String(body.category ?? '').trim();
+    if (body.brand != null && (typeof body.brand !== 'string' || body.brand.trim().length > 120))
+      return NextResponse.json({ error: 'Brand must be up to 120 characters.' }, { status: 400 });
 
     if (!productName || !category) {
       return NextResponse.json(
         { error: 'Product name and category are required.' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -61,6 +63,7 @@ export async function POST(req: Request) {
       .insert(inventory)
       .values({
         productName: productName.slice(0, 255),
+        brand: typeof body.brand === 'string' ? body.brand.trim() || null : null,
         category: category.slice(0, 100),
         currentStock,
         minimumThreshold,
@@ -99,17 +102,19 @@ export async function PATCH(req: Request) {
     }
 
     const updates: Partial<typeof inventory.$inferInsert> = {};
+    if (body.brand !== undefined) {
+      if (body.brand !== null && (typeof body.brand !== 'string' || body.brand.trim().length > 120))
+        return NextResponse.json({ error: 'Brand must be up to 120 characters.' }, { status: 400 });
+      updates.brand = typeof body.brand === 'string' ? body.brand.trim() || null : null;
+    }
 
     if (body.productName != null) updates.productName = String(body.productName).slice(0, 255);
     if (body.category != null) updates.category = String(body.category).slice(0, 100);
     if (body.unitPrice != null) updates.unitPrice = Number(body.unitPrice);
 
-    const stock =
-      body.currentStock != null ? Number(body.currentStock) : existing.currentStock;
+    const stock = body.currentStock != null ? Number(body.currentStock) : existing.currentStock;
     const threshold =
-      body.minimumThreshold != null
-        ? Number(body.minimumThreshold)
-        : existing.minimumThreshold;
+      body.minimumThreshold != null ? Number(body.minimumThreshold) : existing.minimumThreshold;
 
     if (body.currentStock != null) {
       if (!Number.isFinite(stock) || stock < 0) {

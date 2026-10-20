@@ -12,16 +12,24 @@ import time
 
 
 class InferencePerformance:
-    def __init__(self, synchronize, *, cache_enabled=False, max_entries=4, max_bytes=64*1024*1024, phase_timing=True, clock=time.monotonic):
+    def __init__(self, synchronize, *, cache_enabled=False, max_entries=4, max_bytes=64*1024*1024, phase_timing=True, clock=time.monotonic, cache_features=None):
         if not 1 <= max_entries <= 16 or not 1 <= max_bytes <= 128*1024*1024:
             raise ValueError('Invalid prompt cache bounds')
         self.synchronize, self.clock = synchronize, clock
         self.cache_enabled, self.max_entries, self.max_bytes = cache_enabled, max_entries, max_bytes
+        self.cache_features = None if cache_features is None else frozenset(cache_features)
         self.cache = OrderedDict()
         self.cache_bytes = 0
         self.phase_timing = phase_timing
         self.last = None
         self._measuring = False
+
+    def cache_for(self, feature):
+        return self.cache_enabled and (self.cache_features is None or feature in self.cache_features)
+
+    def applies_to(self, feature):
+        # Hair/Makeup bypass the wrapper and its synchronizations entirely in Nails-only serving.
+        return self.phase_timing or self.cache_for(feature)
 
     def clear(self):
         self.cache.clear()
@@ -45,7 +53,7 @@ class InferencePerformance:
         return (identity,sha256(prompt.encode()).hexdigest(),json.dumps(options,sort_keys=True))
 
     @contextmanager
-    def measure(self, pipe, *, identity, allowed_prompts):
+    def measure(self, pipe, *, identity, allowed_prompts, feature=None):
         if self._measuring:
             raise RuntimeError('Concurrent performance scope refused')
         self._measuring = True
@@ -66,7 +74,7 @@ class InferencePerformance:
                     self.synchronize()
                 started = self.clock()
                 try:
-                    if not prompt or not self.cache_enabled:
+                    if not prompt or not self.cache_for(feature):
                         return original(*args,**kwargs)
                     key = self._key(signature,args,kwargs,(identity,str(getattr(pipe,'dtype',None)),str(getattr(getattr(pipe,'text_encoder',None),'dtype',None)),id(getattr(pipe,'text_encoder',pipe)),str(getattr(pipe,'_execution_device',None))),allowed_prompts)
                     if key is None:
@@ -110,7 +118,7 @@ class InferencePerformance:
             self.synchronize()
             self.last = {'phase_seconds':{key:round(value,6) for key,value in phase_seconds.items()},
                          'phase_calls':counts,'runtime_seconds':round(self.clock()-started,6),
-                         'prompt_cache':{**stats,'enabled':self.cache_enabled,'entries':len(self.cache),'cpu_bytes':self.cache_bytes},
+                         'prompt_cache':{**stats,'enabled':self.cache_for(feature),'entries':len(self.cache),'cpu_bytes':self.cache_bytes},
                          'timing_kind':'synchronized_phase_diagnostic' if self.phase_timing else 'whole_runtime_synchronized_no_phase_barriers'}
         except BaseException:
             self.clear()
@@ -127,4 +135,7 @@ class InferencePerformance:
 def configured_performance(synchronize, env):
     if env.get('AI_INFERENCE_PROFILE')!='1' and env.get('AI_PROMPT_CACHE')!='1':
         return None
-    return InferencePerformance(synchronize,cache_enabled=env.get('AI_PROMPT_CACHE')=='1',phase_timing=env.get('AI_INFERENCE_PROFILE')=='1')
+    scope = env.get('AI_PROMPT_CACHE_SCOPE', 'nails')
+    if scope not in ('nails', 'all'):
+        raise ValueError('Unsupported prompt cache scope')
+    return InferencePerformance(synchronize,cache_enabled=env.get('AI_PROMPT_CACHE')=='1',phase_timing=env.get('AI_INFERENCE_PROFILE')=='1',cache_features={'nails'} if scope=='nails' else None)

@@ -4,11 +4,13 @@ import { businessRequest } from '../lib/business/client';
 export function AdminBookingControls({
   id,
   stylistId,
+  lockedAssignment = false,
   totalPrice,
   onUpdated,
   stylists,
 }: {
   id: string;
+  lockedAssignment?: boolean;
   stylistId: string | null;
   totalPrice: number | null;
   onUpdated: () => void;
@@ -32,11 +34,13 @@ export function AdminBookingControls({
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          stylistId: stylist || null,
+          ...(!lockedAssignment ? { stylistId: stylist || null } : {}),
           totalPrice: amount === '' ? null : Number(amount),
         }),
       });
-      setMessage('Assignment and recorded amount saved.');
+      setMessage(
+        lockedAssignment ? 'Recorded amount saved.' : 'Assignment and recorded amount saved.',
+      );
       onUpdated();
     } catch (cause) {
       setMessage(cause instanceof Error ? cause.message : 'Could not update booking.');
@@ -48,7 +52,11 @@ export function AdminBookingControls({
     <div className="booking-admin-controls">
       <label>
         Assigned stylist
-        <select value={stylist} onChange={(e) => setStylist(e.target.value)}>
+        <select
+          disabled={lockedAssignment}
+          value={stylist}
+          onChange={(e) => setStylist(e.target.value)}
+        >
           <option value="">Unassigned</option>
           {stylists.map((s) => (
             <option key={s.id} value={s.id}>
@@ -75,7 +83,7 @@ export function AdminBookingControls({
         disabled={busy}
         onClick={() => void save()}
       >
-        {busy ? 'Saving…' : 'Save assignment / amount'}
+        {busy ? 'Saving…' : lockedAssignment ? 'Save recorded amount' : 'Save assignment / amount'}
       </button>
       {message && (
         <p role="status" className="text-sm">

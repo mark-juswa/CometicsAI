@@ -24,3 +24,9 @@
 .look-information li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.25rem 1rem;padding:.25rem 0}
 .look-information li strong{font-weight:500;white-space:normal}
 .look-estimate-note{font-size:.75rem;margin:.5rem 0 0;color:var(--color-muted,#aaa)}
+
+.service-workflow-form{width:100%;min-width:0;margin-top:.75rem}
+.service-workflow-form h3{font-size:1.1rem;margin-bottom:.5rem;color:#fff}
+.service-workflow-form label{display:grid;gap:.35rem;min-width:0;margin:.5rem 0;font-size:.85rem;color:#d9cbe6}
+.service-workflow-form input,.service-workflow-form select,.service-workflow-form textarea{width:100%;min-width:0;max-width:100%;padding:.6rem;background:#22132e;color:#fff;border:1px solid #ac7cce66;border-radius:.2rem}
+.service-workflow-form :disabled{opacity:.6}

@@ -6,6 +6,7 @@ import {
   timestamp,
   varchar,
   integer,
+  numeric,
   jsonb,
   pgEnum,
   bigint,
@@ -74,6 +75,8 @@ export const appointments = pgTable(
     status: appointmentStatusEnum('status').notNull().default('pending'),
     totalPrice: integer('total_price'),
     notes: text('notes'),
+    completedAt: timestamp('completed_at', { withTimezone: true }),
+    completedBy: uuid('completed_by').references(() => users.id),
     aiGenerationId: uuid('ai_generation_id'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
   },
@@ -86,6 +89,7 @@ export const appointments = pgTable(
     index('appointments_stylist_date_idx').on(table.stylistId, table.appointmentDate),
     index('appointments_date_status_idx').on(table.appointmentDate, table.status),
     index('appointments_look_idx').on(table.aiGenerationId),
+    index('appointments_completed_by_idx').on(table.completedBy),
   ],
 );
 
@@ -93,6 +97,7 @@ export const appointments = pgTable(
 export const inventory = pgTable('inventory', {
   id: uuid('id').primaryKey().defaultRandom(),
   productName: varchar('product_name', { length: 255 }).notNull(),
+  brand: varchar('brand', { length: 120 }),
   category: varchar('category', { length: 100 }).notNull(),
   currentStock: integer('current_stock').notNull().default(0),
   minimumThreshold: integer('minimum_threshold').notNull().default(10),
@@ -150,6 +155,64 @@ export const aiGenerations = pgTable(
     check(
       'saved_look_integrity',
       sql`${table.resultHash} IS NULL OR (${table.resultHash} ~ '^[0-9a-f]{64}$' AND ${table.styleId} IS NOT NULL AND ${table.styleName} IS NOT NULL AND ${table.generatedImageUrl} IS NOT NULL AND ${table.imageBytes} IS NOT NULL AND ${table.imageBytes} BETWEEN 1 AND 8388608 AND ${table.sourceKind} IN ('manual','consultation'))`,
+    ),
+  ],
+);
+
+// Actual consumption is a service record, not an automatic stock adjustment.
+export const appointmentReviews = pgTable(
+  'appointment_reviews',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    appointmentId: uuid('appointment_id')
+      .notNull()
+      .unique()
+      .references(() => appointments.id, { onDelete: 'restrict' }),
+    clientId: uuid('client_id')
+      .notNull()
+      .references(() => users.id),
+    stylistId: uuid('stylist_id')
+      .notNull()
+      .references(() => users.id),
+    rating: integer('rating').notNull(),
+    comment: varchar('comment', { length: 1000 }),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    check('review_rating_range', sql`${t.rating} BETWEEN 1 AND 5`),
+    index('appointment_reviews_client_idx').on(t.clientId),
+    index('appointment_reviews_stylist_idx').on(t.stylistId),
+  ],
+);
+export const appointmentProductUsage = pgTable(
+  'appointment_product_usage',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    appointmentId: uuid('appointment_id')
+      .notNull()
+      .references(() => appointments.id, { onDelete: 'restrict' }),
+    inventoryId: uuid('inventory_id').references(() => inventory.id, { onDelete: 'set null' }),
+    productName: varchar('product_name', { length: 255 }).notNull(),
+    brand: varchar('brand', { length: 120 }),
+    quantity: numeric('quantity', { precision: 12, scale: 3, mode: 'number' }),
+    unit: varchar('unit', { length: 32 }),
+    unitCost: numeric('unit_cost', { precision: 12, scale: 2, mode: 'number' }),
+    recordedBy: uuid('recorded_by')
+      .notNull()
+      .references(() => users.id),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index('appointment_product_usage_appointment_idx').on(t.appointmentId),
+    index('appointment_product_usage_inventory_idx').on(t.inventoryId),
+    index('appointment_product_usage_recorder_idx').on(t.recordedBy),
+    check('usage_quantity_positive', sql`${t.quantity} > 0 AND ${t.quantity} <= 1000000`),
+    check('usage_cost_nonnegative', sql`${t.unitCost} >= 0 AND ${t.unitCost} <= 1000000`),
+    check('usage_quantity_unit', sql`${t.quantity} IS NULL OR ${t.unit} IS NOT NULL`),
+    check('usage_product_name', sql`length(trim(${t.productName})) > 0`),
+    check(
+      'usage_cost_basis',
+      sql`${t.unitCost} IS NULL OR (${t.quantity} IS NOT NULL AND ${t.unit} IS NOT NULL)`,
     ),
   ],
 );

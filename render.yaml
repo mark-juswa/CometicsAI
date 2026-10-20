@@ -24,6 +24,8 @@ services:
         value: kaggle
       - key: AI_ENDPOINT_MODE
         value: registered
+      - key: SAVED_LOOKS_ENABLED
+        value: "true"
       - key: AI_FASTAPI_URL
         sync: false
       - key: AI_BACKEND_API_KEY

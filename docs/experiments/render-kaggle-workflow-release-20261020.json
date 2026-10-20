@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-20",
+  "timezone": "Asia/Manila",
+  "status": "SCHEMA_APPLIED; RELEASE_PUBLICATION_IN_PROGRESS; RENDER_AND_KAGGLE_OPERATOR_STEPS_PENDING",
+  "user_authorization": "lets deploy it on render and kaggle together with the optimization we have done in generating the images",
+  "kaggle_session_before_release": "Stopped, confirmed by user",
+  "database": {
+    "migrations_applied": true,
+    "workflow_applied": true,
+    "verification_basis": "schema metadata only",
+    "application_records_exported": false,
+    "application_records_written": false,
+    "exact_live_record_fingerprints_verified": false,
+    "optional_record_fingerprint_export": "Rejected before execution by automatic approval review; no workaround used",
+    "previous_backup_waiver_retained": true
+  },
+  "optimization": {
+    "scope": "nails-only",
+    "worker_flags": {
+      "AI_PROMPT_CACHE": "1",
+      "AI_PROMPT_CACHE_SCOPE": "nails",
+      "AI_INFERENCE_PROFILE": "0"
+    },
+    "hair_makeup_wrapper_bypassed": true,
+    "model_settings_changed": false,
+    "new_live_gpu_comparison_performed": false,
+    "previous_comparison": "docs/experiments/application-rehearsal-20261018-review.json"
+  },
+  "notebook": {
+    "path": "notebooks/render_kaggle_optimized_demo.ipynb",
+    "sha256": "26ad683611f4fc16b073c787a68438c79b4988bd01d5845bb1964189ac8a342f",
+    "original_starter_and_datasets_changed": false,
+    "new_secrets_required": false,
+    "automatic_registration_retained": true
+  },
+  "verification": {
+    "business_tests_passed": 47,
+    "scoped_optimization_and_package_tests_passed": 44,
+    "production_build": "PASS including TypeScript and41static pages",
+    "python_full_suite": {
+      "passed": 493,
+      "failed": 0,
+      "warning": "Existing Starlette python_multipart deprecation"
+    },
+    "git_diff_check": "PASS"
+  },
+  "publication": {
+    "repository": "mark-juswa/CometicsAI",
+    "deployment_branch": "codex/render-kaggle-demo",
+    "pushed": false
+  },
+  "limitations": [
+    "No Render/Kaggle API credentials or supported browser-control runtime available in this session",
+    "Render live revision and feature flag require operator confirmation",
+    "Fresh optimized GPU/browser generation acceptance pending"
+  ],
+  "guide": "docs/guides/render-kaggle-release-20261020.md"
+}

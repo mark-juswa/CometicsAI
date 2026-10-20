@@ -1,9 +1,14 @@
 'use client';
-import { AppointmentLookPreview,type AppointmentLook } from '@/components/appointment-look';
+import { AppointmentServiceRecord } from '@/components/appointment-service-record';
+import type { ServiceRecord } from '@/lib/business/workflow-types';
+import { useAppointmentRefresh } from '@/lib/business/use-appointment-refresh';
 
+import { AppointmentLookPreview, type AppointmentLook } from '@/components/appointment-look';
+
+import { ServiceCompletion } from '@/components/service-completion';
 import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Search, CalendarDays, Clock, Loader2, Check } from 'lucide-react';
+import { Search, CalendarDays, Clock } from 'lucide-react';
 import {
   PageHeader,
   Card,
@@ -14,9 +19,9 @@ import {
   formatTime,
   formatPeso,
 } from '@/components/ui';
-import { appointmentStatusEnum, type AppointmentStatus } from '@/db/schema';
+import { type AppointmentStatus } from '@/db/schema';
 
-interface Row {
+interface Row extends ServiceRecord {
   look?: AppointmentLook | null;
   id: string;
   serviceName: string;
@@ -36,24 +41,31 @@ export default function StylistAppointmentsPage() {
   const [query, setQuery] = useState('');
   const [range, setRange] = useState<Range>('upcoming');
   const [busy, setBusy] = useState<string | null>(null);
+  const [actionError, setActionError] = useState('');
 
-  useEffect(() => {
+  const load = () => {
     fetch('/api/appointments')
       .then((r) => r.json())
       .then((d) => setRows(d.appointments ?? []))
       .catch(() => setRows([]))
       .finally(() => setLoading(false));
-  }, []);
+  };
+  useEffect(load, []);
+  useAppointmentRefresh(load);
 
   const setStatus = async (id: string, status: AppointmentStatus) => {
     setBusy(id);
+    setActionError('');
     try {
       const res = await fetch(`/api/appointments/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
       });
+      if (!res.ok) throw new Error((await res.json()).error || 'Could not update the appointment.');
       if (res.ok) setRows((rs) => rs.map((r) => (r.id === id ? { ...r, status } : r)));
+    } catch (cause) {
+      setActionError(cause instanceof Error ? cause.message : 'Could not update the appointment.');
     } finally {
       setBusy(null);
     }
@@ -65,19 +77,16 @@ export default function StylistAppointmentsPage() {
     return rows
       .filter((r) => {
         const t = new Date(r.appointmentDate).getTime();
-        if (range === 'upcoming') return t >= now && r.status !== 'cancelled';
-        if (range === 'past') return t < now || r.status === 'cancelled';
+        if (range === 'upcoming') return t >= now && ['pending', 'confirmed'].includes(r.status);
+        if (range === 'past') return t < now || ['cancelled', 'completed'].includes(r.status);
         return true;
       })
       .filter(
         (r) =>
-          !q ||
-          r.serviceName.toLowerCase().includes(q) ||
-          r.client?.name.toLowerCase().includes(q)
+          !q || r.serviceName.toLowerCase().includes(q) || r.client?.name.toLowerCase().includes(q),
       )
       .sort(
-        (a, b) =>
-          new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime()
+        (a, b) => new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime(),
       );
   }, [rows, query, range, now]);
 
@@ -123,6 +132,7 @@ export default function StylistAppointmentsPage() {
         </div>
       </div>
 
+      {actionError && <p role="alert">{actionError}</p>}
       {loading ? (
         <div className="flex flex-col gap-3">
           {[0, 1, 2, 3].map((i) => (
@@ -164,9 +174,12 @@ export default function StylistAppointmentsPage() {
                       <Clock size={11} />
                       {formatTime(r.appointmentDate)}
                     </span>
-                    <span className="text-white">{r.totalPrice === null ? 'Price to be confirmed' : formatPeso(r.totalPrice)}</span>
+                    <span className="text-white">
+                      {r.totalPrice === null ? 'Price to be confirmed' : formatPeso(r.totalPrice)}
+                    </span>
                   </p>
                   <AppointmentLookPreview look={r.look} />
+                  <AppointmentServiceRecord record={r} />
                   {r.notes && (
                     <p className="mt-2 rounded-sm border border-purple-light/10 bg-surface/25 p-2.5 text-[12px] leading-relaxed text-secondary">
                       {r.notes}
@@ -174,28 +187,25 @@ export default function StylistAppointmentsPage() {
                   )}
                 </div>
 
-                <div className="flex shrink-0 items-center gap-2">
-                  {r.status !== 'completed' && r.status !== 'cancelled' && (
-                    <button
-                      onClick={() => setStatus(r.id, 'completed')}
-                      disabled={busy === r.id}
-                      className="flex items-center gap-1.5 border border-success/30 px-3 py-2 text-[10px] font-semibold uppercase tracking-[1.5px] text-success transition-colors hover:bg-success/10 disabled:opacity-50"
-                    >
-                      {busy === r.id ? (
-                        <Loader2 size={11} className="animate-spin" />
-                      ) : (
-                        <Check size={11} />
-                      )}
-                      Complete
-                    </button>
+                <div className="flex w-full flex-col items-stretch gap-2 lg:max-w-lg">
+                  {['pending', 'confirmed'].includes(r.status) && (
+                    <ServiceCompletion id={r.id} onCompleted={load} />
                   )}
                   <select
                     value={r.status}
                     onChange={(e) => setStatus(r.id, e.target.value as AppointmentStatus)}
-                    disabled={busy === r.id}
+                    disabled={busy === r.id || ['completed', 'cancelled'].includes(r.status)}
+                    aria-label="Appointment status"
                     className="rounded-sm border border-purple-light/20 bg-surface/40 px-3 py-2 text-[11px] text-white focus:border-purple-light focus:outline-none disabled:opacity-50"
                   >
-                    {appointmentStatusEnum.enumValues.map((s) => (
+                    {(
+                      [
+                        'pending',
+                        'confirmed',
+                        'cancelled',
+                        ...(r.status === 'completed' ? ['completed'] : []),
+                      ] as AppointmentStatus[]
+                    ).map((s) => (
                       <option key={s} value={s}>
                         {s.charAt(0).toUpperCase() + s.slice(1)}
                       </option>

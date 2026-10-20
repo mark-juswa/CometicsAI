@@ -1,16 +1,13 @@
 'use client';
+import { AppointmentServiceRecord } from '@/components/appointment-service-record';
+import type { ServiceRecord } from '@/lib/business/workflow-types';
+import { useAppointmentRefresh } from '@/lib/business/use-appointment-refresh';
+import { AppointmentLookPreview, type AppointmentLook } from '@/components/appointment-look';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import {
-  CalendarDays,
-  Clock,
-  Users,
-  CheckCircle2,
-  ArrowRight,
-  Sun,
-} from 'lucide-react';
+import { CalendarDays, Clock, Users, CheckCircle2, ArrowRight, Sun } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import {
   Card,
@@ -21,10 +18,12 @@ import {
   formatTime,
   formatPeso,
 } from '@/components/ui';
+import { salonDay } from '@/lib/business/dates';
 import AnimatedCounter from '@/components/AnimatedCounter';
 import type { AppointmentStatus } from '@/db/schema';
 
-interface Row {
+interface Row extends ServiceRecord {
+  look?: AppointmentLook | null;
   id: string;
   serviceName: string;
   appointmentDate: string;
@@ -34,40 +33,35 @@ interface Row {
   client: { id: string; name: string; email: string } | null;
 }
 
-const isSameDay = (a: Date, b: Date) =>
-  a.getFullYear() === b.getFullYear() &&
-  a.getMonth() === b.getMonth() &&
-  a.getDate() === b.getDate();
+const isSameDay = (a: Date, b: Date) => salonDay(a) === salonDay(b);
 
 export default function StylistDashboard() {
   const { user } = useAuth();
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const load = () => {
     fetch('/api/appointments')
       .then((r) => r.json())
       .then((d) => setRows(d.appointments ?? []))
       .catch(() => setRows([]))
       .finally(() => setLoading(false));
-  }, []);
+  };
+  useEffect(load, []);
+  useAppointmentRefresh(load);
 
   const now = new Date();
   const today = rows
     .filter((r) => isSameDay(new Date(r.appointmentDate), now) && r.status !== 'cancelled')
-    .sort(
-      (a, b) =>
-        new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime()
-    );
+    .sort((a, b) => new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime());
 
   const upcoming = rows
     .filter(
-      (r) => new Date(r.appointmentDate).getTime() > now.getTime() && r.status !== 'cancelled'
+      (r) =>
+        new Date(r.appointmentDate).getTime() > now.getTime() &&
+        ['pending', 'confirmed'].includes(r.status),
     )
-    .sort(
-      (a, b) =>
-        new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime()
-    );
+    .sort((a, b) => new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime());
 
   const completed = rows.filter((r) => r.status === 'completed');
   const uniqueClients = new Set(rows.map((r) => r.client?.id).filter(Boolean)).size;
@@ -90,9 +84,7 @@ export default function StylistDashboard() {
         transition={{ duration: 0.5 }}
         className="mb-8"
       >
-        <h1 className="font-serif text-3xl text-white">
-          Good day{firstName && `, ${firstName}`}
-        </h1>
+        <h1 className="font-serif text-3xl text-white">Good day{firstName && `, ${firstName}`}</h1>
         <p className="mt-1.5 text-[13px] text-muted">
           {today.length > 0
             ? `You have ${today.length} appointment${today.length > 1 ? 's' : ''} today.`
@@ -177,10 +169,10 @@ export default function StylistDashboard() {
                     <p className="truncate text-[11px] text-muted">
                       {r.client?.name ?? 'Unknown client'}
                     </p>
+                    <AppointmentLookPreview look={r.look} />
+                    <AppointmentServiceRecord record={r} />
                     {r.notes && (
-                      <p className="mt-1.5 text-[11px] leading-relaxed text-secondary">
-                        {r.notes}
-                      </p>
+                      <p className="mt-1.5 text-[11px] leading-relaxed text-secondary">{r.notes}</p>
                     )}
                   </div>
                   <StatusBadge status={r.status} />
@@ -224,6 +216,7 @@ export default function StylistDashboard() {
                         {formatTime(r.appointmentDate)}
                       </span>
                     </p>
+                    <AppointmentLookPreview look={r.look} />
                   </div>
                   <span className="shrink-0 text-[12px] text-white">
                     {formatPeso(r.totalPrice)}

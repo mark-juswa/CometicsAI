@@ -1,16 +1,16 @@
 'use client';
+import {
+  AppointmentServiceRecord,
+  AppointmentReviewForm,
+} from '@/components/appointment-service-record';
+import type { ServiceRecord } from '@/lib/business/workflow-types';
+import { useAppointmentRefresh } from '@/lib/business/use-appointment-refresh';
+import { AppointmentLookPreview, type AppointmentLook } from '@/components/appointment-look';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import {
-  Sparkles,
-  CalendarDays,
-  Hand,
-  Scissors,
-  ArrowRight,
-  Clock,
-} from 'lucide-react';
+import { Sparkles, CalendarDays, Hand, Scissors, ArrowRight, Clock } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import {
   Card,
@@ -23,7 +23,8 @@ import {
 } from '@/components/ui';
 import type { AppointmentStatus } from '@/db/schema';
 
-interface AppointmentRow {
+interface AppointmentRow extends ServiceRecord {
+  look?: AppointmentLook | null;
   id: string;
   serviceName: string;
   serviceType: string;
@@ -65,24 +66,32 @@ export default function ClientDashboard() {
   const [appointments, setAppointments] = useState<AppointmentRow[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch('/api/appointments').then((r) => r.json())
+  const load = () => {
+    fetch('/api/appointments')
+      .then((r) => r.json())
       .then((value) => setAppointments(value.appointments ?? []))
       .catch(() => setAppointments([]))
       .finally(() => setLoading(false));
-  }, []);
+  };
+  useEffect(load, []);
+  useAppointmentRefresh(load);
 
   const now = Date.now();
   const upcoming = appointments
     .filter(
       (a) =>
-        new Date(a.appointmentDate).getTime() >= now &&
-        a.status !== 'cancelled'
+        new Date(a.appointmentDate).getTime() >= now && ['pending', 'confirmed'].includes(a.status),
     )
+    .sort((a, b) => new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime());
+
+  const completed = appointments
+    .filter((a) => a.status === 'completed')
     .sort(
       (a, b) =>
-        new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime()
-    );
+        Date.parse(b.completedAt ?? b.appointmentDate) -
+        Date.parse(a.completedAt ?? a.appointmentDate),
+    )
+    .slice(0, 4);
 
   const firstName = user?.name?.split(' ')[0] ?? '';
 
@@ -122,21 +131,40 @@ export default function ClientDashboard() {
                 <a.icon size={17} className="text-gold" />
               </div>
               <h3 className="mb-1.5 font-serif text-base text-white">{a.title}</h3>
-              <p className="mb-3 flex-1 text-[12px] leading-relaxed text-muted">
-                {a.body}
-              </p>
+              <p className="mb-3 flex-1 text-[12px] leading-relaxed text-muted">{a.body}</p>
               <span className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[1.5px] text-gold">
                 Open
-                <ArrowRight
-                  size={11}
-                  className="transition-transform group-hover:translate-x-1"
-                />
+                <ArrowRight size={11} className="transition-transform group-hover:translate-x-1" />
               </span>
             </Link>
           </motion.div>
         ))}
       </div>
 
+      {!loading && completed.length > 0 && (
+        <Card className="mb-6">
+          <h2 className="mb-4 font-serif text-xl text-white">Recently Completed</h2>
+          <Link href="/client/appointments" className="text-gold">
+            All appointments and reviews
+          </Link>
+          {completed.map((a) => (
+            <section key={a.id} className="my-4 border-t border-purple-light/20 pt-3">
+              <h3>{a.serviceName}</h3>
+              <StatusBadge status={a.status} />
+              <p>
+                {formatDate(a.appointmentDate)} at {formatTime(a.appointmentDate)} ·{' '}
+                {a.stylist?.name ?? 'Unassigned stylist'} · Recorded amount:{' '}
+                {a.totalPrice === null ? 'Price to be confirmed' : formatPeso(a.totalPrice)}
+              </p>
+              <AppointmentLookPreview look={a.look} />
+              <AppointmentServiceRecord record={a} />
+              {a.stylist && (
+                <AppointmentReviewForm id={a.id} review={a.review} onSubmitted={load} />
+              )}
+            </section>
+          ))}
+        </Card>
+      )}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Upcoming appointments */}
         <Card>
@@ -190,14 +218,13 @@ export default function ClientDashboard() {
                         <Clock size={11} />
                         {formatTime(a.appointmentDate)}
                       </span>
-                      {a.stylist && <span>with {a.stylist.name}</span>}
+                      <span>with {a.stylist?.name ?? 'Unassigned stylist'}</span>
                     </p>
+                    <AppointmentLookPreview look={a.look} />
                   </div>
                   <div className="flex shrink-0 flex-col items-end gap-1.5">
                     <StatusBadge status={a.status} />
-                    <span className="text-[11px] text-muted">
-                      {formatPeso(a.totalPrice)}
-                    </span>
+                    <span className="text-[11px] text-muted">{formatPeso(a.totalPrice)}</span>
                   </div>
                 </li>
               ))}
@@ -217,17 +244,24 @@ export default function ClientDashboard() {
             </Link>
           </div>
           <p className="mb-5 text-sm leading-relaxed text-secondary">
-            Start with a short consultation or choose an AI style yourself. Your photo stays in this session.
+            Start with a short consultation or choose an AI style yourself. Your photo stays in this
+            session.
           </p>
           <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-1">
             {[
               { href: '/client/hair-studio', name: 'Hairstyle' },
               { href: '/client/makeup-studio', name: 'Makeup' },
               { href: '/client/nail-studio', name: 'Nails' },
-            ].map((item) => <Link key={item.href} href={item.href}
-              className="flex items-center justify-between rounded-lg border border-purple-light/15 bg-surface/25 px-4 py-3 text-sm text-white transition-colors hover:border-gold/50">
-              {item.name}<ArrowRight size={15} className="text-gold" />
-            </Link>)}
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="flex items-center justify-between rounded-lg border border-purple-light/15 bg-surface/25 px-4 py-3 text-sm text-white transition-colors hover:border-gold/50"
+              >
+                {item.name}
+                <ArrowRight size={15} className="text-gold" />
+              </Link>
+            ))}
           </div>
         </Card>
       </div>

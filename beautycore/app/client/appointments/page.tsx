@@ -1,5 +1,12 @@
 'use client';
-import { AppointmentLookPreview,type AppointmentLook } from '@/components/appointment-look';
+import {
+  AppointmentServiceRecord,
+  AppointmentReviewForm,
+} from '@/components/appointment-service-record';
+import type { ServiceRecord } from '@/lib/business/workflow-types';
+import { useAppointmentRefresh } from '@/lib/business/use-appointment-refresh';
+
+import { AppointmentLookPreview, type AppointmentLook } from '@/components/appointment-look';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -17,7 +24,7 @@ import {
 } from '@/components/ui';
 import type { AppointmentStatus } from '@/db/schema';
 
-interface Row {
+interface Row extends ServiceRecord {
   look?: AppointmentLook | null;
   id: string;
   serviceName: string;
@@ -46,6 +53,7 @@ export default function ClientAppointmentsPage() {
   };
 
   useEffect(load, []);
+  useAppointmentRefresh(load);
 
   const cancel = async (id: string) => {
     if (!confirm('Cancel this appointment?')) return;
@@ -65,8 +73,8 @@ export default function ClientAppointmentsPage() {
   const now = Date.now();
   const filtered = rows.filter((r) => {
     const t = new Date(r.appointmentDate).getTime();
-    if (filter === 'upcoming') return t >= now && r.status !== 'cancelled';
-    if (filter === 'past') return t < now || r.status === 'cancelled';
+    if (filter === 'upcoming') return t >= now && ['pending', 'confirmed'].includes(r.status);
+    if (filter === 'past') return t < now || ['cancelled', 'completed'].includes(r.status);
     return true;
   });
 
@@ -144,7 +152,8 @@ export default function ClientAppointmentsPage() {
         <div className="flex flex-col gap-3">
           {filtered.map((r, i) => {
             const isUpcoming =
-              new Date(r.appointmentDate).getTime() >= now && r.status !== 'cancelled';
+              new Date(r.appointmentDate).getTime() >= now &&
+              ['pending', 'confirmed'].includes(r.status);
             return (
               <motion.div
                 key={r.id}
@@ -175,7 +184,11 @@ export default function ClientAppointmentsPage() {
                       )}
                     </p>
                     <AppointmentLookPreview look={r.look} />
-                  {r.notes && (
+                    <AppointmentServiceRecord record={r} />
+                    {r.status === 'completed' && r.stylist && (
+                      <AppointmentReviewForm id={r.id} review={r.review} onSubmitted={load} />
+                    )}
+                    {r.notes && (
                       <p className="mt-2 rounded-sm border border-purple-light/10 bg-surface/25 p-2.5 text-[12px] leading-relaxed text-secondary">
                         {r.notes}
                       </p>

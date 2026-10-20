@@ -141,3 +141,16 @@ Later startup automation: **CONFIRMED scope; LOCAL VERIFIED implementation; fres
 ## Application cache scope recommendation after real evidence, 2026-10-18
 
 **PROPOSED:** restrict future opt-in prompt reuse to model-based Nails, including Nails invoked by Consultation; preserve original Hair/Makeup paths and renderer behavior. The returned application artifact verifies exact preservation but shows new Hair/Makeup timing regressions alongside faster full-hand Red/Black. Therefore global cache activation does not satisfy the performance gate and remains disabled. This is an evidence-based next implementation recommendation, not a claim of a scoped patch, new user deployment approval or an enabled feature. The explicit no-Render-deploy boundary and current working fallback remain. [Review](../docs/experiments/application-rehearsal-20261018-review.md).
+
+## Consultation workflow scope review, 2026-10-19
+
+**CONFIRMED:** Supervisor requests inspection and a proposed plan only; do not implement, redesign, migrate or deploy. **PROPOSED:** reuse saved generation/appointment links and shared previews; controlled completion timestamp/actor; one verified appointment review; actual product/brand usage child records tied to completion and optional existing inventory; computed transparent counts/ratings. Keep existing completed-service recorded-amount reporting. Quantity/cost units and profit meaning require review; automatic stock deduction, full inventory/accounting, availability engine, realtime and native parity are outside the minimum. No proposal is implementation approval. [Review plan](../docs/specs/0012-consultation-booking-completion-reviews-products.md).
+
+## Minimum workflow development approval, 2026-10-20
+
+**CONFIRMED:** Supervisor “lets start” follows the completed audit/minimum implementation recommendation and authorizes local web development. Preserve the existing no-Render-deploy boundary and working Kaggle system; no live migration inferred. Implementation defaults preserve optional booking stylist (assignment required to complete), optional product/brand/quantity/unit/material cost, existing admin amount/notes correction and scheduled Manila reporting. One review per completed assigned appointment; no editing/reopening/reassignment after completion. Counts and rating sorts remain separate/explicit with review counts. No automated stock deduction, true-profit ledger, advanced availability, realtime or native expansion. Local verification does not authorize a production release. [Guide](../docs/guides/consultation-booking-workflow-testing.md).
+
+
+## Combined release authorization, 2026-10-20
+
+**CONFIRMED:** Supervisor explicitly says deploy on Render and Kaggle together with generation optimization; this supersedes the earlier no-deploy boundary for this release. Apply additive workflow migrations and publish existing verified web changes. Use only measured model-Nails prompt reuse, preserve baseline Hair/Makeup and original notebook/datasets/model parameters. User confirms no GPU session running. Schema-only verification is used after automatic review rejected optional local record-derived hash export; no new record-export permission inferred. Actual Render trigger/Kaggle startup require operator in absence of control credentials/runtime.

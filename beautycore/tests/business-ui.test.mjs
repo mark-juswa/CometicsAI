@@ -58,8 +58,20 @@ const { default: SavedLooksPage } = await import('../app/client/saved-looks/page
 const { default: BookingForm } = await import('../app/(public)/booking/booking-form.tsx');
 const { default: StylistPage } = await import('../app/stylist/appointments/page.tsx');
 const { DailyServices } = await import('../components/daily-services.tsx');
+const { default: ConsultationPage } = await import('../app/client/ai-consultation/page.tsx');
+const { default: ClientDashboard } = await import('../app/client/dashboard/page.tsx');
+const { default: StylistDashboard } = await import('../app/stylist/dashboard/page.tsx');
+const { default: ClientAppointments } = await import('../app/client/appointments/page.tsx');
+const { StylistPerformance } = await import('../components/stylist-performance.tsx');
 const { default: AdminAppointments } = await import('../app/admin/appointments/page.tsx');
-const { bookingApi, savedLooks, dailyServices } = await import('../lib/business/api.ts');
+const {
+  bookingApi,
+  savedLooks,
+  dailyServices,
+  completeAppointment,
+  appointmentReview,
+  stylistPerformance,
+} = await import('../lib/business/api.ts');
 const { createBusinessStore } = await import('../lib/business/store.ts');
 const { default: catalog } = await import('../lib/business/style-catalog.json', {
   with: { type: 'json' },
@@ -74,6 +86,29 @@ let db,
   png,
   calls = [],
   pushes = [];
+const consultationRows = Object.entries(catalog.nails)
+  .slice(0, 3)
+  .map(([id, info], index) => ({
+    id: 'look-' + (index + 1),
+    primary: {
+      feature: 'nails',
+      style_id: id,
+      style_name: info.name,
+      service: { name: 'Nail service' },
+    },
+    reason: 'Fixture preference match',
+    complements: [],
+  }));
+const consultationState = {
+  primary_service: 'nails',
+  stage: 'recommended',
+  conversation_status: 'ready_for_recommendation',
+  photo: null,
+  messages: [],
+  recommendations: { recommendations: consultationRows },
+  generations: [],
+  selected_recommendation_id: null,
+};
 const originalFetch = globalThis.fetch;
 const router = {
   push: (path) => pushes.push(path),
@@ -124,6 +159,32 @@ async function transport(input, init = {}) {
         status: 'available',
       })),
     );
+  if (url.pathname === '/api/ai/mode') return Response.json({ provider: 'deterministic' });
+  if (url.pathname === '/api/ai/consultations')
+    return Response.json({ ...consultationState, handle: 'fixture-handle' });
+  if (['/api/ai/consultations/photo', '/api/ai/consultations/state'].includes(url.pathname))
+    return Response.json(consultationState);
+  if (url.pathname === '/api/ai/consultations/recommendations')
+    return Response.json({ recommendations: consultationRows });
+  if (url.pathname.startsWith('/api/ai/consultations/recommendations/')) {
+    const row = consultationRows.find((item) => item.id === url.pathname.split('/')[5]);
+    if (!row) throw new Error('Unexpected recommendation fixture');
+    if (url.pathname.endsWith('/select'))
+      return Response.json({ ...consultationState, selected_recommendation_id: row.id });
+    return Response.json({
+      generation: {
+        recommendation_id: row.id,
+        status: 'completed',
+        attempts: 1,
+        error: null,
+        result_available: true,
+      },
+      result: {
+        ...result,
+        style: { ...result.style, id: row.primary.style_id, name: row.primary.style_name },
+      },
+    });
+  }
   if (url.pathname === '/api/ai/features/nails/generate') return Response.json(result);
   const headers = new Headers(init.headers);
   if (method !== 'GET') headers.set('origin', 'http://localhost:3000');
@@ -132,6 +193,15 @@ async function transport(input, init = {}) {
     const parts = url.pathname.split('/').filter(Boolean);
     return savedLooks(req, parts[2], parts[3] === 'image', deps);
   }
+  if (url.pathname.endsWith('/complete'))
+    return completeAppointment(req, url.pathname.split('/')[3], deps);
+  if (url.pathname.endsWith('/review'))
+    return appointmentReview(req, url.pathname.split('/')[3], deps);
+  if (url.pathname === '/api/admin/stylist-performance') return stylistPerformance(req, deps);
+  if (url.pathname === '/api/inventory')
+    return Response.json({
+      inventory: await query('SELECT id,product_name AS \"productName\",brand FROM inventory'),
+    });
   if (url.pathname.startsWith('/api/appointments'))
     return bookingApi(req, url.pathname.split('/')[3], deps);
   if (url.pathname === '/api/admin/daily-services') return dailyServices(req, deps);
@@ -144,6 +214,7 @@ test.before(async () => {
     '0002_saved_looks.sql',
     '0003_saved_look_admission.sql',
     '0004_look_details.sql',
+    '0005_service_completion.sql',
   ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   png = await sharp({ create: { width: 64, height: 64, channels: 3, background: '#e1c9c2' } })
@@ -295,7 +366,8 @@ test('look-aware booking and assigned stylist preview complete against the same 
   fireEvent.click(screen.getByRole('button', { name: /View requested look/ }));
   assert.ok(screen.getByRole('dialog').hasAttribute('open'));
   assert.match(screen.getByRole('dialog').textContent, /Nude Pink Gloss/);
-  fireEvent.click(screen.getByRole('button', { name: 'Complete' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Mark as Completed' }));
+  fireEvent.click(await screen.findByRole('button', { name: 'Confirm completion' }));
   await waitFor(async () =>
     assert.equal((await query('SELECT status FROM appointments'))[0].status, 'completed'),
   );
@@ -403,4 +475,120 @@ test('admin navigation removes Market Trends and keeps Finance and Dashboard', a
   assert.equal(screen.queryByRole('link', { name: 'Market Trends' }), null);
   assert.ok(screen.getByRole('link', { name: 'Finance' }));
   assert.ok(screen.getByRole('link', { name: 'Dashboard' }));
+});
+
+test('consultation books selected look B while look A is displayed, with one saved result and no regeneration', async () => {
+  mount(ConsultationPage);
+  fireEvent.click(screen.getByRole('button', { name: /Nails —/ }));
+  fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
+  fireEvent.change(screen.getByLabelText('Upload consultation photo'), {
+    target: { files: [new File([png], 'hand.png', { type: 'image/png' })] },
+  });
+  fireEvent.click(await screen.findByRole('button', { name: 'Find my looks' }));
+  fireEvent.click(await screen.findByRole('button', { name: 'Explore My Looks' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Generate My Looks' }));
+  await waitFor(() =>
+    assert.equal(
+      calls.filter((c) => c.path.endsWith('/generation') && c.method === 'POST').length,
+      3,
+    ),
+  );
+  fireEvent.click(
+    screen.getByRole('button', { name: `View look 2: ${consultationRows[1].primary.style_name}` }),
+  );
+  fireEvent.click(await screen.findByRole('button', { name: 'Select This Look' }));
+  await screen.findByRole('button', { name: 'Book Selected Look' });
+  fireEvent.click(
+    screen.getByRole('button', { name: `View look 1: ${consultationRows[0].primary.style_name}` }),
+  );
+  fireEvent.click(screen.getByRole('button', { name: 'Book Selected Look' }));
+  await waitFor(() => assert.equal(pushes.length, 1));
+  const saved = (await query('SELECT id,style_id,source_kind,look_details FROM ai_generations'))[0];
+  assert.equal(saved.style_id, consultationRows[1].primary.style_id);
+  assert.equal(saved.source_kind, 'consultation');
+  assert.ok(saved.look_details.description);
+  assert.equal(pushes[0], '/booking?look=' + saved.id);
+  assert.equal(
+    calls.filter((c) => c.path.endsWith('/generation') && c.method === 'POST').length,
+    3,
+  );
+  assert.equal(calls.filter((c) => c.path === '/api/saved-looks' && c.method === 'POST').length, 1);
+});
+
+test('both home dashboards share the booked look; product completion enables a client review and accurate admin performance', async () => {
+  const saved = await transport('/api/saved-looks', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({
+      feature: 'nails',
+      styleId: result.style.id,
+      image: result.image.data_url,
+      status: 'completed',
+      sourceKind: 'consultation',
+    }),
+  });
+  const lookId = (await saved.json()).look.id;
+  await transport('/api/appointments', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({
+      serviceName: 'Gel Manicure',
+      serviceType: 'nail',
+      appointmentDate: '2030-10-17T02:00:00Z',
+      stylistId: S,
+      lookId,
+    }),
+  });
+  mount(ClientDashboard, {}, '', true);
+  assert.ok(await screen.findByAltText('Requested Nude Pink Gloss'));
+  assert.match(document.body.textContent, /Stylist One/);
+  cleanup();
+  actor = S;
+  mount(StylistDashboard, {}, '', true);
+  assert.ok(await screen.findByAltText('Requested Nude Pink Gloss'));
+  assert.match(document.body.textContent, /Client One/);
+  cleanup();
+  mount(StylistPage);
+  fireEvent.click(await screen.findByRole('button', { name: 'Mark as Completed' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Add product used' }));
+  fireEvent.change(screen.getByLabelText('Product name'), { target: { value: 'Top coat' } });
+  fireEvent.change(screen.getByLabelText('Brand'), { target: { value: 'Brand Demo' } });
+  fireEvent.change(screen.getByLabelText('Quantity used'), { target: { value: '2.5' } });
+  fireEvent.change(screen.getByLabelText('Unit', { exact: true }), { target: { value: 'ml' } });
+  fireEvent.change(screen.getByLabelText('Material cost per selected unit (PHP)'), {
+    target: { value: '1.50' },
+  });
+  fireEvent.click(screen.getByRole('button', { name: 'Confirm completion' }));
+  await waitFor(async () =>
+    assert.equal((await query('SELECT status FROM appointments'))[0].status, 'completed'),
+  );
+  cleanup();
+  actor = C;
+  mount(ClientDashboard, {}, '', true);
+  await screen.findByRole('heading', { name: 'Recently Completed' });
+  assert.ok(await screen.findByText(/Top coat.*Brand Demo/));
+  assert.equal(screen.queryByText(/PHP 1.5 per ml/), null);
+  fireEvent.change(screen.getByLabelText('Rating'), { target: { value: '5' } });
+  fireEvent.change(screen.getByLabelText('Review (optional)'), {
+    target: { value: 'Loved the booked look' },
+  });
+  fireEvent.click(screen.getByRole('button', { name: 'Submit review' }));
+  await screen.findByText('Client rating: 5/5');
+  assert.equal(screen.queryByRole('button', { name: 'Submit review' }), null);
+  cleanup();
+  mount(ClientAppointments);
+  fireEvent.click(screen.getByRole('button', { name: 'Past' }));
+  await screen.findByText('Loved the booked look');
+  cleanup();
+  actor = A;
+  mount(StylistPerformance);
+  fireEvent.change(screen.getByLabelText('Performance from'), { target: { value: '2030-10-17' } });
+  fireEvent.change(screen.getByLabelText('Performance through'), {
+    target: { value: '2030-10-17' },
+  });
+  const row = (await screen.findByText('Stylist One', { selector: 'td' })).closest('tr');
+  await waitFor(() => assert.match(row.textContent, /5.00 \/ 5/));
+  assert.match(row.textContent, /₱350/);
+  assert.equal((await query('SELECT count(*)::int AS n FROM appointment_reviews'))[0].n, 1);
+  assert.equal((await query('SELECT count(*)::int AS n FROM appointment_product_usage'))[0].n, 1);
 });

@@ -157,10 +157,13 @@ def valid_env(monkeypatch):
 
 
 def ready_report():
+    from app.hair_profiles import worker_capabilities
+    from app.style_capabilities import model_styles
     return {'status': 'ready', 'gpu_runtime_ready': True, 'base_model_loaded': True,
             'foundation_load_count': 1, 'base_model_revision': deployment.MODEL_REVISION,
             'supported_features': ['hairstyle', 'makeup', 'nails'], 'gpu_busy': False,
-            'diagnostics_version': 'deployment-01', 'nails_inference_steps': [8, 12, 20]}
+            'diagnostics_version': 'deployment-01', 'nails_inference_steps': [8, 12, 20],
+            'style_capabilities': worker_capabilities(model_styles())}
 
 
 @pytest.mark.parametrize('change', [None, 'wrong_key', 'busy', 'wrong_base_count', 'missing_feature', 'old_worker'])

@@ -1,0 +1,147 @@
+{
+  "schema": "beautycore-hair-expansion-validation-v1",
+  "experiment": "HAIR-EXP-002",
+  "production_enabled": false,
+  "automatic_promotion": false,
+  "training": false,
+  "expected_calls": 21,
+  "inference": {
+    "width": 512,
+    "height": 512,
+    "steps": 20,
+    "guidance": 4.0,
+    "seed": 1977,
+    "adapter_weight": 1.0
+  },
+  "registry_sha256": "7269377d360eb24f7f354614472dabae9e13d5294312ac4d663fbfdcb785f706",
+  "adapter_hashes": {
+    "train001": "7e3991f8a4e502573d3e82e9ac34c89fdf3f0b66fb337abb026a5b4c9ad080ff",
+    "train002": "59d527217a68139bc2aaa4eedbfcd2d5789ef115f8ecb924410eea24a952939b"
+  },
+  "source_archive_filename": "FaceSketches-HairStyle40.zip",
+  "source_archive_sha256": "46ce34e9de676b5fabee03dee5b52d815133c5d8bd73dceaaebada297c8f6d13",
+  "subjects": [
+    {
+      "id": "d2_wavy_hair_25jpg",
+      "filename": "d2_wavy_hair_25jpg.jpg",
+      "sha256": "b458de12bd218fba278bb5a11f7a19cbeb1e822b200a1076b018e3f1c0cb90ea",
+      "source_member": "FaceSketches-HairStyle40/image/WaveHair/25.jpg",
+      "historical_split": "val",
+      "usage": "Historical validation now reused for private diagnostic development, not untouched final evaluation.",
+      "suitability_review": "Long loose lengths visible; used for length/layer/bob comparison.",
+      "source_repository": "yikaiwang/FaceSketches-HairStyle40",
+      "source_revision": "45de974926fe64551fc2d0b80973335e20ca10e2",
+      "source_license_declared": "apache-2.0",
+      "rights_limit": "Original photo rights not independently verified. Preserve historical private research-use limits; do not publish notebook/photos."
+    },
+    {
+      "id": "d2_wavy_hair_27jpg",
+      "filename": "d2_wavy_hair_27jpg.jpg",
+      "sha256": "47a4b3b95c054b692b89e258ac329f2108eb2bfcc72911a49374fc5b7c7a494e",
+      "source_member": "FaceSketches-HairStyle40/image/WaveHair/27.jpg",
+      "historical_split": "val",
+      "usage": "Historical validation now reused for private diagnostic development, not untouched final evaluation.",
+      "suitability_review": "Long loose lengths visible; used for length/layer/bob comparison.",
+      "source_repository": "yikaiwang/FaceSketches-HairStyle40",
+      "source_revision": "45de974926fe64551fc2d0b80973335e20ca10e2",
+      "source_license_declared": "apache-2.0",
+      "rights_limit": "Original photo rights not independently verified. Preserve historical private research-use limits; do not publish notebook/photos."
+    },
+    {
+      "id": "d2_side_part_undercut_28jpg",
+      "filename": "d2_side_part_undercut_28jpg.jpg",
+      "sha256": "97899322d425187deb89f028f8f4b6fa56107f2bd8364da73409ef5aebb450bc",
+      "source_member": "FaceSketches-HairStyle40/image/undercutSidepart/28.jpg",
+      "historical_split": "val",
+      "usage": "Historical validation now reused for private diagnostic development, not untouched final evaluation.",
+      "suitability_review": "Three-quarter view with visible side/lower haircut; one source is grayscale. Color fidelity cannot be assessed on grayscale input.",
+      "source_repository": "yikaiwang/FaceSketches-HairStyle40",
+      "source_revision": "45de974926fe64551fc2d0b80973335e20ca10e2",
+      "source_license_declared": "apache-2.0",
+      "rights_limit": "Original photo rights not independently verified. Preserve historical private research-use limits; do not publish notebook/photos."
+    },
+    {
+      "id": "d2_side_part_undercut_9jpg",
+      "filename": "d2_side_part_undercut_9jpg.jpg",
+      "sha256": "58c67afd9644413b101da40c515b977a7f19de25b37d24795879cb08746598d3",
+      "source_member": "FaceSketches-HairStyle40/image/undercutSidepart/9.jpg",
+      "historical_split": "val",
+      "usage": "Historical validation now reused for private diagnostic development, not untouched final evaluation.",
+      "suitability_review": "Three-quarter view with visible side/lower haircut; one source is grayscale. Color fidelity cannot be assessed on grayscale input.",
+      "source_repository": "yikaiwang/FaceSketches-HairStyle40",
+      "source_revision": "45de974926fe64551fc2d0b80973335e20ca10e2",
+      "source_license_declared": "apache-2.0",
+      "rights_limit": "Original photo rights not independently verified. Preserve historical private research-use limits; do not publish notebook/photos."
+    }
+  ],
+  "groups": [
+    {
+      "style_id": "exp_butterfly_cut",
+      "baseline_style_id": "layered_hair",
+      "adapter": "train001",
+      "subject_ids": [
+        "d2_wavy_hair_25jpg",
+        "d2_wavy_hair_27jpg"
+      ],
+      "baseline_prompt": "Change the person's hairstyle to layered hair while preserving their identity, facial features, expression, pose, clothing, lighting, framing, and background.",
+      "candidate_prompt": "Change the hairstyle to a butterfly cut: retain long lower lengths, create shorter pronounced face-framing upper layers and voluminous curved layers sweeping away from the face. Keep the same person, recognizable face, facial proportions, expression, skin tone, clothing, pose, background, lighting and framing. Preserve the original hair color. Change hairstyle only.",
+      "acceptance": "Retain long lower lengths; shorter face-framing upper layers must be clear and differ from Layered Hair."
+    },
+    {
+      "style_id": "exp_french_bob_wispy",
+      "baseline_style_id": "bob_hair",
+      "adapter": "train001",
+      "subject_ids": [
+        "d2_wavy_hair_25jpg",
+        "d2_wavy_hair_27jpg"
+      ],
+      "baseline_prompt": "Change the person's hairstyle to a bob hairstyle while preserving their identity, facial features, expression, pose, clothing, lighting, framing, and background.",
+      "candidate_prompt": "Change the hairstyle to a textured French bob ending around the jaw, with a softly broken outline and thin, airy, separated wispy bangs above the eyes. Keep the fringe light rather than a heavy blunt curtain. Keep the same person, recognizable facial proportions, expression, natural skin tone, original hair color, clothing, pose, lighting, framing and background. Change hairstyle only.",
+      "acceptance": "Jaw-length textured outline and airy separated fringe; distinct from baseline Bob Hair."
+    },
+    {
+      "style_id": "exp_wolf_cut",
+      "baseline_style_id": "shag_hair",
+      "adapter": "train002",
+      "subject_ids": [
+        "d2_wavy_hair_25jpg",
+        "d2_wavy_hair_27jpg"
+      ],
+      "baseline_prompt": "Change the person's hairstyle to a shag haircut while preserving their identity, facial features, expression, pose, clothing, lighting, framing, and background.",
+      "candidate_prompt": "Change the hairstyle to a wolf cut with a short, choppy, voluminous crown, feathered face-framing layers and a distinctly longer, wispy back. Keep a visible contrast between the shorter upper layers and longer lower lengths, rather than a uniform shag. Keep the same person, recognizable facial proportions, expression, natural skin tone, original hair color, clothing, pose, lighting, framing and background. Change hairstyle only.",
+      "acceptance": "Shorter choppy crown and longer wispy back; distinct from baseline Shag Hair."
+    },
+    {
+      "style_id": "exp_korean_two_block",
+      "baseline_style_id": "side_part_undercut",
+      "adapter": "train002",
+      "subject_ids": [
+        "d2_side_part_undercut_28jpg",
+        "d2_side_part_undercut_9jpg"
+      ],
+      "baseline_prompt": "Change the person's hairstyle to a side-part undercut while preserving their identity, facial features, expression, pose, clothing, lighting, framing, and background.",
+      "candidate_prompt": "Change the hairstyle to a Korean two-block haircut with a visibly shorter lower section at the sides and nape and a distinctly longer fuller upper section with a soft natural fringe. Show the two lengths clearly. Keep the same person, recognizable face, facial proportions, expression, skin tone, clothing, pose, background, lighting and framing. Preserve the original hair color. Change hairstyle only.",
+      "acceptance": "Longer upper section visibly separated from shorter sides/nape; not merely a straight fringe."
+    },
+    {
+      "style_id": "exp_comma_hair",
+      "baseline_style_id": "curtain_hair",
+      "adapter": "train002",
+      "subject_ids": [
+        "d2_side_part_undercut_28jpg",
+        "d2_side_part_undercut_9jpg"
+      ],
+      "baseline_prompt": "Change the person's hairstyle to a curtain hairstyle with a center part while preserving their identity, facial features, expression, pose, clothing, lighting, framing, and background.",
+      "candidate_prompt": "Style the hair into Korean comma hair with a side part and a softly swept fringe clear of the eyes. Curve the ends of a broad front fringe inward as natural individual hair strands into a soft C shape above one brow, blending into the top. Avoid a detached curled lock, closed ring or painted loop. Keep the same person, recognizable facial proportions, expression, natural skin tone, original hair color, clothing, pose, lighting, framing and background. Change hairstyle only.",
+      "acceptance": "Natural curved fringe strands, not an isolated ring/U loop; distinct from baseline Curtain Hair; eyes and hair color retained."
+    }
+  ],
+  "limits": [
+    "Five candidates, two suitable existing source photos each, one profile per style; no adapter/strength sweep.",
+    "10 candidates +10 nearest-existing-style controls +1 adapter-restoration control. No Makeup or Nail inference.",
+    "Prior Butterfly/Two-Block prompts retained; Comma receives one explicit strand/geometry correction; Wolf/French Bob are first tests.",
+    "No held style is approved or enabled by running this notebook; visual review and compatible production profiles are still required.",
+    "No new training data/checkpoint, services, public tunnel, API Secrets, website registration or production changes."
+  ],
+  "registry_hash_source": "Exact original GPU archive member bytes; local Windows line endings are not an artifact revision."
+}

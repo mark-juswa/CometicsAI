@@ -4,6 +4,7 @@ import numpy as np
 from PIL import Image, ImageFilter
 
 from app.nails.geometry import HandGeometry, nail_components
+from app.nails.expanded import STYLE_IDS as EXPANDED_STYLE_IDS, render_expanded
 
 
 COLORS = {
@@ -16,6 +17,8 @@ COLORS = {
 def render_target(source: Image.Image, mask_image: Image.Image, style_id: str,
                   hand: HandGeometry, *, production_palette: bool = False) -> Image.Image:
     """Keep all pixels outside the mask bit identical to the source."""
+    if style_id in EXPANDED_STYLE_IDS:
+        return render_expanded(source, mask_image, style_id)
     if style_id not in (*COLORS, "french_tip", "pink_ombre"):
         raise ValueError("Unknown nail style")
     source_array = np.asarray(source.convert("RGB")).copy()

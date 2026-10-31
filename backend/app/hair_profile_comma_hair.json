@@ -1,0 +1,28 @@
+{
+  "schema": "beautycore-hair-profile-v1",
+  "profile_id": "hair-comma-hair-v1",
+  "style_id": "exp_comma_hair",
+  "adapter_id": "train002",
+  "adapter_sha256": "59d527217a68139bc2aaa4eedbfcd2d5789ef115f8ecb924410eea24a952939b",
+  "base_model_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+  "prompt": "Style the hair into Korean comma hair with a side part and a softly swept fringe clear of the eyes. Curve the ends of a broad front fringe inward as natural individual hair strands into a soft C shape above one brow, blending into the top. Avoid a detached curled lock, closed ring or painted loop. Keep the same person, recognizable facial proportions, expression, natural skin tone, original hair color, clothing, pose, lighting, framing and background. Change hairstyle only.",
+  "settings": {
+    "width": 512,
+    "height": 512,
+    "steps": 20,
+    "guidance": 4.0,
+    "seed": 1977,
+    "adapter_weight": 1.0
+  },
+  "limitations": [
+    "A side-parted, inward-curved fringe inspired by Korean comma hair. Preview may resemble curtain hair, cover eyes or change hair color."
+  ],
+  "validation": {
+    "experiment": "HAIR-EXP-002",
+    "results_sha256": "3e3474b98823247b471964de173223ae6eb314af34cdaafc486012ee88cae1db",
+    "subject_ids": [
+      "d2_side_part_undercut_28jpg",
+      "d2_side_part_undercut_9jpg"
+    ]
+  }
+}

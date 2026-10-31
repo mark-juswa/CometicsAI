@@ -1,0 +1,28 @@
+{
+  "schema": "beautycore-hair-profile-v1",
+  "profile_id": "hair-wolf-cut-v1",
+  "style_id": "exp_wolf_cut",
+  "adapter_id": "train002",
+  "adapter_sha256": "59d527217a68139bc2aaa4eedbfcd2d5789ef115f8ecb924410eea24a952939b",
+  "base_model_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+  "prompt": "Change the hairstyle to a wolf cut with a short, choppy, voluminous crown, feathered face-framing layers and a distinctly longer, wispy back. Keep a visible contrast between the shorter upper layers and longer lower lengths, rather than a uniform shag. Keep the same person, recognizable facial proportions, expression, natural skin tone, original hair color, clothing, pose, lighting, framing and background. Change hairstyle only.",
+  "settings": {
+    "width": 512,
+    "height": 512,
+    "steps": 20,
+    "guidance": 4.0,
+    "seed": 1977,
+    "adapter_weight": 1.0
+  },
+  "limitations": [
+    "A bold, spiky interpretation of a choppy wolf cut with a longer back. Preview may change hair color."
+  ],
+  "validation": {
+    "experiment": "HAIR-EXP-002",
+    "results_sha256": "3e3474b98823247b471964de173223ae6eb314af34cdaafc486012ee88cae1db",
+    "subject_ids": [
+      "d2_wavy_hair_25jpg",
+      "d2_wavy_hair_27jpg"
+    ]
+  }
+}

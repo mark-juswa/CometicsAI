@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-31",
+  "release": {
+    "release_id": "styles-20261031-02",
+    "manifest_sha256": "6bbabcbc1a1364dc571036a404c7757f258d9fd2a1b9414ac39b4c9a10bf1db2",
+    "enabled_style_ids": [
+      "exp_butterfly_cut",
+      "exp_comma_hair",
+      "exp_french_bob_wispy",
+      "exp_korean_two_block",
+      "exp_negative_space_microdots",
+      "exp_pink_aura",
+      "exp_raspberry_jelly",
+      "exp_wolf_cut"
+    ]
+  },
+  "status": "VERIFIED_LOCAL_AWAITING_PUBLICATION_AND_OPERATOR_ROLLOUT",
+  "scope": "Five approved Hair additions and three tested Nail additions; existing Makeup unchanged, new Makeup held",
+  "catalog_counts": {
+    "hairstyle": 18,
+    "makeup": 10,
+    "nails": 8
+  },
+  "package": {
+    "cpu": {
+      "name": "render_kaggle_cpu_hair_nails_20261031_02.bin",
+      "bytes": 27929492,
+      "sha256": "dfb5fc35f2c9c446fb8fdcc4439650c5f8a72941db864db1e9045cadae73082f"
+    },
+    "gpu": {
+      "name": "capstone_train002_20260928_v1.bin",
+      "sha256": "f0d1fed52e00b6c5a1da2cade3731237675cdebbfc0b2cde3b2dbda99a4019ac",
+      "unchanged": true
+    },
+    "notebook": {
+      "path": "notebooks/render_kaggle_all_hair_nails_demo.ipynb",
+      "bytes": 116942,
+      "sha256": "574d8a144b90ee2a2a10c74ab1f6d8d46dd3d3891d1e9c74d5ee1bc01368ab84"
+    }
+  },
+  "checks": {
+    "focused_release_backend_passed": 61,
+    "backend_full_passed": 826,
+    "backend_full_failure": "One stale historical pilot assertion; corrected to allow later explicit approval, affected test batch53passed",
+    "affected_tests_after_correction_passed": 53,
+    "render_registration_release_passed": 33,
+    "business_passed": 55,
+    "guest_passed": 29,
+    "production_build": "PASS including TypeScript",
+    "catalog_and_generated_release": "PASS",
+    "original_makeup_pipeline_and_catalog_unchanged": true,
+    "original_worker_and_optimization_sources_unchanged": true,
+    "archive_crc_inventory_and_current_source_parity": "PASS",
+    "live_generation": "NEEDS VERIFICATION"
+  },
+  "unshipped_preparation_draft": "artifacts/all-hair-nails-20261031/preparation-attempt-01",
+  "runtime_settings": {
+    "AI_PROMPT_CACHE": "1",
+    "AI_PROMPT_CACHE_SCOPE": "nails",
+    "AI_INFERENCE_PROFILE": "0",
+    "AI_ENDPOINT_MODE": "registered"
+  },
+  "database_migration_required": false,
+  "secrets_changed": false,
+  "gpu_started": false,
+  "render_deployed": false,
+  "deployment_branch": "codex/render-kaggle-demo",
+  "repository": "mark-juswa/CometicsAI",
+  "control_limit": "No Render API key/control connector, Kaggle CLI/config or node_repl computer-use runtime; operator starts deployment and notebook.",
+  "guide": "docs/guides/all-hair-nails-release-20261031.md"
+}

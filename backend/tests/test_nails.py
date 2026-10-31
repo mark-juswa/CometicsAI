@@ -26,8 +26,10 @@ def photo_bytes() -> bytes:
 def test_nail_catalog_and_placeholder_are_isolated():
     catalog = client.get("/nails/styles")
     assert catalog.status_code == 200
-    assert [row["id"] for row in catalog.json()] == [style.id for style in NAIL_STYLES]
-    assert {row["status"] for row in catalog.json()} == {"prototype"}
+    assert [row["id"] for row in catalog.json()] == [style.id for style in NAIL_STYLES] + [
+        "exp_raspberry_jelly", "exp_pink_aura", "exp_negative_space_microdots"]
+    assert {row["status"] for row in catalog.json()[:len(NAIL_STYLES)]} == {"prototype"}
+    assert {row["status"] for row in catalog.json()[len(NAIL_STYLES):]} == {"available"}
     response = client.post("/nails/generate", data={"style_id": "classic_red"},
                            files={"image": ("hand.png", photo_bytes(), "image/png")})
     assert response.status_code == 200

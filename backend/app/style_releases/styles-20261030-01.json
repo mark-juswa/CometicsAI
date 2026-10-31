@@ -1,0 +1,297 @@
+{
+  "schema": "beautycore-style-release-v1",
+  "release_id": "styles-20261030-01",
+  "candidates": [
+    {
+      "feature": "hairstyle",
+      "id": "exp_butterfly_cut",
+      "name": "Butterfly Cut",
+      "description": "Long hair with pronounced face-framing layers and a shorter-looking upper outline.",
+      "route": "hair_prompt",
+      "profile_id": null,
+      "profile_sha256": null,
+      "review_status": "held",
+      "enabled": false,
+      "tags": [
+        "experimental"
+      ],
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry"
+      ],
+      "input_constraints": [],
+      "evidence": [
+        "docs/experiments/style-release-validation-20261025-review.md"
+      ]
+    },
+    {
+      "feature": "hairstyle",
+      "id": "exp_wolf_cut",
+      "name": "Wolf Cut",
+      "description": "A choppy crown with a longer back and a distinctly shaggy outline.",
+      "route": "hair_prompt",
+      "profile_id": null,
+      "profile_sha256": null,
+      "review_status": "untested",
+      "enabled": false,
+      "tags": [
+        "experimental"
+      ],
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry"
+      ],
+      "input_constraints": [],
+      "evidence": []
+    },
+    {
+      "feature": "hairstyle",
+      "id": "exp_korean_two_block",
+      "name": "Korean Two-Block",
+      "description": "A longer upper section visibly separated from shorter sides and nape.",
+      "route": "hair_prompt",
+      "profile_id": null,
+      "profile_sha256": null,
+      "review_status": "held",
+      "enabled": false,
+      "tags": [
+        "experimental"
+      ],
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry"
+      ],
+      "input_constraints": [],
+      "evidence": [
+        "docs/experiments/style-release-validation-20261025-review.md"
+      ]
+    },
+    {
+      "feature": "hairstyle",
+      "id": "exp_comma_hair",
+      "name": "Korean Comma Hair",
+      "description": "A styled front section curved inward into a comma-shaped fringe.",
+      "route": "hair_prompt",
+      "profile_id": null,
+      "profile_sha256": null,
+      "review_status": "held",
+      "enabled": false,
+      "tags": [
+        "experimental"
+      ],
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry"
+      ],
+      "input_constraints": [],
+      "evidence": [
+        "docs/experiments/style-release-validation-20261025-review.md"
+      ]
+    },
+    {
+      "feature": "hairstyle",
+      "id": "exp_french_bob_wispy",
+      "name": "Textured French Bob with Wispy Bangs",
+      "description": "A short textured bob with a soft, separated fringe.",
+      "route": "hair_prompt",
+      "profile_id": null,
+      "profile_sha256": null,
+      "review_status": "untested",
+      "enabled": false,
+      "tags": [
+        "experimental"
+      ],
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry"
+      ],
+      "input_constraints": [],
+      "evidence": []
+    },
+    {
+      "feature": "makeup",
+      "id": "exp_cloud_berry_lips",
+      "name": "Cloud-Skin Makeup with Blurred Berry Lips",
+      "description": "A soft base with diffused berry lip edges and restrained cheek color.",
+      "route": "makeup_profile",
+      "profile_id": null,
+      "profile_sha256": null,
+      "review_status": "held",
+      "enabled": false,
+      "tags": [
+        "experimental"
+      ],
+      "services": [
+        "Makeup Application"
+      ],
+      "input_constraints": [],
+      "evidence": [
+        "docs/experiments/style-release-validation-20261025-review.md"
+      ]
+    },
+    {
+      "feature": "makeup",
+      "id": "exp_manga_lash",
+      "name": "Manga-Lash Makeup",
+      "description": "Separated lash clusters with delicate liner, soft blush, and a restrained lip.",
+      "route": "makeup_profile",
+      "profile_id": null,
+      "profile_sha256": null,
+      "review_status": "untested",
+      "enabled": false,
+      "tags": [
+        "experimental"
+      ],
+      "services": [
+        "Makeup Application"
+      ],
+      "input_constraints": [],
+      "evidence": []
+    },
+    {
+      "feature": "makeup",
+      "id": "exp_icy_silver",
+      "name": "Icy Silver Eye Makeup",
+      "description": "Localized silver-blue eyelid shimmer balanced with subdued cheeks and lips.",
+      "route": "makeup_profile",
+      "profile_id": null,
+      "profile_sha256": null,
+      "review_status": "held",
+      "enabled": false,
+      "tags": [
+        "experimental"
+      ],
+      "services": [
+        "Makeup Application"
+      ],
+      "input_constraints": [],
+      "evidence": [
+        "docs/experiments/style-release-validation-20261025-review.md"
+      ]
+    },
+    {
+      "feature": "nails",
+      "id": "exp_raspberry_jelly",
+      "name": "Raspberry Jelly",
+      "description": "A translucent raspberry tint that retains the photographed nail detail.",
+      "route": "nails_renderer",
+      "profile_id": "nails-expanded-v1",
+      "profile_sha256": "af052baf93de67493b39624463943b0a4b052e39c4df2e0804f4cdb5bc82e7c4",
+      "review_status": "accepted",
+      "enabled": true,
+      "tags": [
+        "raspberry",
+        "jelly",
+        "translucent"
+      ],
+      "services": [
+        "Classic Manicure",
+        "Gel Manicure",
+        "Nail Art (per nail)"
+      ],
+      "input_constraints": [],
+      "evidence": [
+        "docs/experiments/style-release-validation-20261025-review.md",
+        "docs/experiments/expanded-nails-approval-20261030.json"
+      ]
+    },
+    {
+      "feature": "nails",
+      "id": "exp_pink_aura",
+      "name": "Pink Aura Ombré",
+      "description": "A soft pink base with deeper pink concentrated near the nail centre.",
+      "route": "nails_renderer",
+      "profile_id": "nails-expanded-v1",
+      "profile_sha256": "af052baf93de67493b39624463943b0a4b052e39c4df2e0804f4cdb5bc82e7c4",
+      "review_status": "accepted",
+      "enabled": true,
+      "tags": [
+        "pink",
+        "aura",
+        "ombre"
+      ],
+      "services": [
+        "Classic Manicure",
+        "Gel Manicure",
+        "Nail Art (per nail)"
+      ],
+      "input_constraints": [],
+      "evidence": [
+        "docs/experiments/style-release-validation-20261025-review.md",
+        "docs/experiments/expanded-nails-approval-20261030.json"
+      ]
+    },
+    {
+      "feature": "nails",
+      "id": "exp_negative_space_microdots",
+      "name": "Negative-Space Micro-Dots",
+      "description": "Sparse dark micro-dots over a lightly tinted natural nail.",
+      "route": "nails_renderer",
+      "profile_id": "nails-expanded-v1",
+      "profile_sha256": "af052baf93de67493b39624463943b0a4b052e39c4df2e0804f4cdb5bc82e7c4",
+      "review_status": "accepted",
+      "enabled": true,
+      "tags": [
+        "dots",
+        "minimal",
+        "negative_space"
+      ],
+      "services": [
+        "Classic Manicure",
+        "Gel Manicure",
+        "Nail Art (per nail)"
+      ],
+      "input_constraints": [],
+      "evidence": [
+        "docs/experiments/style-release-validation-20261025-review.md",
+        "docs/experiments/expanded-nails-approval-20261030.json"
+      ]
+    },
+    {
+      "feature": "nails",
+      "id": "exp_milky_pearl_chrome",
+      "name": "Milky Pearl Chrome",
+      "description": "A pale base with a subtle pearlescent reflective overlay.",
+      "route": "nails_renderer",
+      "profile_id": null,
+      "profile_sha256": null,
+      "review_status": "untested",
+      "enabled": false,
+      "tags": [
+        "pearl",
+        "chrome",
+        "milky"
+      ],
+      "services": [
+        "Classic Manicure",
+        "Gel Manicure",
+        "Nail Art (per nail)"
+      ],
+      "input_constraints": [],
+      "evidence": []
+    },
+    {
+      "feature": "nails",
+      "id": "exp_dark_red_velvet_cat_eye",
+      "name": "Dark-Red Velvet Cat-Eye",
+      "description": "A deep red base with a narrow reflective band and a soft luminous finish.",
+      "route": "nails_renderer",
+      "profile_id": null,
+      "profile_sha256": null,
+      "review_status": "untested",
+      "enabled": false,
+      "tags": [
+        "red",
+        "velvet",
+        "cat_eye"
+      ],
+      "services": [
+        "Classic Manicure",
+        "Gel Manicure",
+        "Nail Art (per nail)"
+      ],
+      "input_constraints": [],
+      "evidence": []
+    }
+  ]
+}

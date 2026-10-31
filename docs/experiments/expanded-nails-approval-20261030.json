@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-30",
+  "decision": "CONFIRMED",
+  "evidence_status": "VERIFIED",
+  "approval_quote": "I approve the design it looks good",
+  "scope": "The three Nail designs in the repaired four-hand review gallery only.",
+  "accepted_style_ids": [
+    "exp_negative_space_microdots",
+    "exp_pink_aura",
+    "exp_raspberry_jelly"
+  ],
+  "gallery": {
+    "path": "artifacts/expanded-nails-release-review-20261030/review-self-contained.html",
+    "sha256": "c7fa14554e5c6d7425b6ea0d9687b046a27e8f981919d42cda8b2f27072ac3ff"
+  },
+  "release_id": "styles-20261030-01",
+  "limits": [
+    "Appearance approval covers the reviewed examples, not every possible hand/photo.",
+    "Hair, Makeup and the other two Nail candidates are not approved by this message.",
+    "Local enablement is not proof of cloud deployment or end-to-end rehearsal."
+  ]
+}

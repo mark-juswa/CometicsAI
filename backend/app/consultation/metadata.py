@@ -61,3 +61,9 @@ STYLE_TAGS: dict[FeatureId, dict[str, tuple[str, ...]]] = {
         "pink_ombre": ("pink", "ombre", "soft"),
     },
 }
+
+
+# Tags alone never enable a style: active_catalog uses the actual feature loader.
+from app.style_release import RELEASE as _STYLE_RELEASE
+for _candidate in _STYLE_RELEASE.candidates:
+    STYLE_TAGS[_candidate.feature][_candidate.id] = _candidate.tags

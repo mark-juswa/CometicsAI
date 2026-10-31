@@ -56,7 +56,10 @@ async def check_readiness(engine, makeup_engine, nails_pipeline=None):
                     and FEATURES <= set(value.get('supported_features', [])) for value in (h, s))
         valid = valid and h.get('diagnostics_version') == 'deployment-01' and not h.get('gpu_busy', True)
         valid = valid and steps in h.get('nails_inference_steps', [])
+        from app.style_capabilities import checked_capabilities
+        capabilities = checked_capabilities(h, s) if valid else None
         return {'ready': bool(valid), 'reason': 'ready' if valid else 'remote_unready_busy_or_wrong_version',
+                **({'style_capabilities': capabilities} if capabilities else {}),
                 'foundation_load_count': h.get('foundation_load_count'),
                 'supported_features': sorted(FEATURES & set(h.get('supported_features', []))),
                 'nails_inference_steps': steps, 'diagnostics_version': h.get('diagnostics_version')}

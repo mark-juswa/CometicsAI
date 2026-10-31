@@ -88,10 +88,22 @@ class FakeView:
 
 
 @pytest.fixture
-def fake_server(tmp_path,monkeypatch):
+def fake_server(tmp_path,monkeypatch,request):
+    configuration = getattr(request, "param", None)
+    if isinstance(configuration, dict):
+        import json
+        from app import styles
+        registry = json.loads((ROOT / "backend/app/style_registry_train002_smoke.json").read_text(encoding="utf-8"))
+        monkeypatch.setattr(styles, "REGISTRY", registry)
+        monkeypatch.setattr(sys.modules[__name__], "server", configuration["factory"]())
+    elif callable(configuration):
+        monkeypatch.setattr(sys.modules[__name__], "server", configuration())
     pipe=FakePipe()
     paths={}
-    for key in ('hairstyle:train001','makeup','nails'):
+    keys = ['hairstyle:train001', 'makeup', 'nails']
+    if isinstance(configuration, dict):
+        keys.append('hairstyle:train002')
+    for key in keys:
         folder=tmp_path/key.replace(':','_')
         folder.mkdir()
         path=folder/'adapter.safetensors'
@@ -101,6 +113,16 @@ def fake_server(tmp_path,monkeypatch):
                      {'checkpoint_sha256':gate.digest(paths['hairstyle:train001']),
                       'training_steps':250,'experiment':'TRAIN-001','supported_style_ids':list(server.HAIR_STYLES),
                       'base_model_id':gate.MODEL_ID,'base_model_revision':gate.REVISION})}
+    if isinstance(configuration, dict):
+        from app.registry import styles_for_adapter
+        for adapter in ('train001', 'train002'):
+            path = paths['hairstyle:' + adapter]
+            info = server.REGISTRY['adapters'][adapter]
+            hair[adapter] = (path.parent, {
+                'checkpoint_sha256': gate.digest(path),
+                'training_steps': info['training_steps'], 'experiment': info['experiment'],
+                'supported_style_ids': sorted(styles_for_adapter(server.REGISTRY, adapter)),
+                'base_model_id': gate.MODEL_ID, 'base_model_revision': gate.REVISION})
     specs={key:{'path':path,'verify':lambda:None,
                 'expected':{'adapter_sha256':gate.digest(path)}} for key,path in paths.items()}
     views={feature:FakeView(feature,pipe,paths) for feature in server.FEATURES}

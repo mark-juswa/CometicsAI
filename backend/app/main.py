@@ -26,7 +26,7 @@ from app.generation.remote_flux import RemoteFluxEngine, RemoteGenerationError, 
 from app.styles import STYLE_BY_ID, STYLES, REAL_STYLE_BY_ID, REAL_STYLES, Style
 from app.makeup_styles import MAKEUP_STYLE_BY_ID, MAKEUP_STYLES
 from app.generation.remote_makeup import MakeupGenerationError, RemoteMakeupEngine, configured_makeup_engine
-from app.nails.styles import NAIL_STYLE_BY_ID, NAIL_STYLES
+from app.nails.styles import NAIL_STYLE_BY_ID, NAIL_STYLES, active_nail_styles, active_nail_style_by_id
 from app.nails.contract import MODEL_STYLES
 from app.nails.geometry import MediaPipeHandLocalizer, UnusableHand
 from app.nails.hybrid import HybridNailsPipeline
@@ -169,9 +169,12 @@ async def deployment_snapshot():
     return await diagnose(None)
 
 
+from app.hair_profiles import active_hair_styles, active_hair_style_by_id
+
+
 @app.get("/styles", response_model=list[StyleResponse])
 async def styles() -> list[StyleResponse]:
-    catalog = REAL_STYLES if isinstance(engine, RemoteFluxEngine) else STYLES
+    catalog = active_hair_styles() if isinstance(engine, RemoteFluxEngine) else STYLES
     return [style_response(style) for style in catalog]
 
 
@@ -219,7 +222,7 @@ async def generate_makeup(
 async def nail_styles() -> list[StyleResponse]:
     live = os.getenv("NAILS_PREVIEW_MODE", "mock").strip().lower() == "hybrid"
     return [StyleResponse(id=style.id, name=style.name, description=style.description,
-                          status="available" if live else style.status) for style in NAIL_STYLES]
+                          status="available" if live else style.status) for style in active_nail_styles()]
 
 
 def configured_nails_pipeline() -> HybridNailsPipeline:
@@ -258,7 +261,7 @@ async def generate_nails(
     style_id: Annotated[str, Form()],
 ) -> GenerateResponse:
     request_started = time.monotonic()
-    style = NAIL_STYLE_BY_ID.get(style_id)
+    style = active_nail_style_by_id().get(style_id)
     if style is None:
         raise HTTPException(status_code=400, detail="Please choose a valid nail style.")
     photo = await validated_image(image)
@@ -290,6 +293,11 @@ async def generate_nails(
             from app.nails.contract import ADAPTER_ID, ADAPTER_SHA256
             metadata.update({"adapter_id": ADAPTER_ID, "adapter_sha256": ADAPTER_SHA256})
             metadata["inference_steps"] = getattr(nails_pipeline().model, "inference_steps", 20)
+        from app.style_release import RELEASE
+        for addition in RELEASE.enabled("nails"):
+            if addition.id == style.id:
+                metadata.update(renderer_profile=addition.profile_id,
+                                style_release_id=RELEASE.release_id, trained_model=False)
         metadata["timing_seconds"]["total_request"] = round(time.monotonic() - request_started, 3)
         return GenerateResponse(
             status="completed", generator="nails_hybrid",
@@ -316,7 +324,7 @@ async def generate(
     image: Annotated[UploadFile, File()],
     style_id: Annotated[str, Form()],
 ) -> GenerateResponse:
-    catalog = REAL_STYLE_BY_ID if isinstance(engine, RemoteFluxEngine) else STYLE_BY_ID
+    catalog = active_hair_style_by_id() if isinstance(engine, RemoteFluxEngine) else STYLE_BY_ID
     style = catalog.get(style_id)
     if style is None:
         raise HTTPException(status_code=400, detail="Please choose a valid hairstyle.")

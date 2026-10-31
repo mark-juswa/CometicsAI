@@ -1,0 +1,28 @@
+{
+  "schema": "beautycore-hair-profile-v1",
+  "profile_id": "hair-butterfly-cut-v1",
+  "style_id": "exp_butterfly_cut",
+  "adapter_id": "train001",
+  "adapter_sha256": "7e3991f8a4e502573d3e82e9ac34c89fdf3f0b66fb337abb026a5b4c9ad080ff",
+  "base_model_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+  "prompt": "Change the hairstyle to a butterfly cut: retain long lower lengths, create shorter pronounced face-framing upper layers and voluminous curved layers sweeping away from the face. Keep the same person, recognizable face, facial proportions, expression, skin tone, clothing, pose, background, lighting and framing. Preserve the original hair color. Change hairstyle only.",
+  "settings": {
+    "width": 512,
+    "height": 512,
+    "steps": 20,
+    "guidance": 4.0,
+    "seed": 1977,
+    "adapter_weight": 1.0
+  },
+  "limitations": [
+    "Butterfly-inspired layers; reviewed previews can appear shorter and bob-like. Preview may change hair color."
+  ],
+  "validation": {
+    "experiment": "HAIR-EXP-002",
+    "results_sha256": "3e3474b98823247b471964de173223ae6eb314af34cdaafc486012ee88cae1db",
+    "subject_ids": [
+      "d2_wavy_hair_25jpg",
+      "d2_wavy_hair_27jpg"
+    ]
+  }
+}

@@ -7,6 +7,7 @@ import { bookingApi, dailyServices, savedLooks, type Dependencies } from '../lib
 import { createBusinessStore } from '../lib/business/store';
 import { validateLook, MAX_SAVE_BODY, salonDateTime, salonDay } from '../lib/business/core';
 import { allServices, parsePrice } from '../lib/services';
+import { publicStyle } from '../lib/business/look-information';
 const C = '11111111-1111-4111-8111-111111111111',
   OTHER = '22222222-2222-4222-8222-222222222222',
   S = '33333333-3333-4333-8333-333333333333',
@@ -706,4 +707,170 @@ test('previous save function remains compatible and old saved looks get a curren
     null,
   );
   assert.match(look.lookDetails.description, /short/);
+});
+
+for (const styleId of ['exp_raspberry_jelly', 'exp_pink_aura', 'exp_negative_space_microdots']) {
+  test('approved Nail design saves and books with shared private image/details: ' + styleId, async () => {
+    const response = await save({ ...saveBody('nails', styleId), sourceKind: 'consultation' });
+    assert.equal(response.status, 201, await response.clone().text());
+    const look = (await response.json()).look;
+    assert.equal(look.styleName, publicStyle('nails', styleId)!.name);
+    assert.equal(look.lookDetails.description, publicStyle('nails', styleId)!.description);
+    assert.ok(look.lookDetails.capturedAt);
+    assert.deepEqual(look.lookDetails.options.map((option: { amount: number }) => option.amount), [180, 350, 50]);
+    assert.equal(look.lookDetails.options[2].kind, 'per_nail');
+    const booked = await bookingApi(request('/api/appointments', 'POST', {
+      ...booking(look.id), serviceName: 'Gel Manicure', serviceType: 'nail', totalPrice: 1,
+    }), undefined, deps);
+    assert.equal(booked.status, 201, await booked.clone().text());
+    const identity = (await booked.json()).appointment.id;
+    const stored = (await query('SELECT total_price,ai_generation_id FROM appointments WHERE id=$1', [identity]))[0];
+    assert.equal(stored.total_price, 350);
+    assert.equal(stored.ai_generation_id, look.id);
+    // Separate store objects simulate a request after a server/runtime restart.
+    deps.store = createBusinessStore(query);
+    for (const viewer of [C, S]) {
+      actor = viewer;
+      const listed = await bookingApi(request('/api/appointments'), undefined, deps);
+      assert.equal(listed.status, 200);
+      const row = (await listed.json()).appointments.find((item: { id: string }) => item.id === identity);
+      assert.equal(row.look.styleId, styleId);
+      assert.equal(row.look.imageUrl, look.imageUrl);
+      assert.deepEqual(row.look.lookDetails, look.lookDetails);
+      assert.equal((await savedLooks(request(look.imageUrl), look.id, true, deps)).status, 200);
+    }
+    actor = S2;
+    assert.equal((await savedLooks(request(look.imageUrl), look.id, true, deps)).status, 404);
+  });
+}
+
+test('approved French Bob keeps its description and estimate through save, booking and both dashboards', async () => {
+  const response = await save({ ...saveBody('hairstyle', 'exp_french_bob_wispy'), sourceKind: 'consultation' });
+  assert.equal(response.status, 201, await response.clone().text());
+  const look = (await response.json()).look;
+  assert.equal(look.styleName, 'Textured French Bob with Wispy Bangs');
+  assert.match(look.lookDetails.description, /curly/);
+  assert.match(look.lookDetails.description, /change hair color/);
+  assert.deepEqual(look.lookDetails.options.map((s: { amount: number }) => s.amount), [180, 350]);
+  const responseBooking = await bookingApi(request('/api/appointments', 'POST', {
+    ...booking(look.id), serviceName: "Women's Cut & Blowdry", totalPrice: 1,
+  }), undefined, deps);
+  assert.equal(responseBooking.status, 201, await responseBooking.clone().text());
+  const appointment = (await responseBooking.json()).appointment;
+  assert.equal((await query('SELECT total_price FROM appointments WHERE id=$1', [appointment.id]))[0].total_price, 350);
+  deps.store = createBusinessStore(query);
+  for (const viewer of [C, S]) {
+    actor = viewer;
+    const listed = await bookingApi(request('/api/appointments'), undefined, deps);
+    const savedAppointment = (await listed.json()).appointments.find((a: { id: string }) => a.id === appointment.id);
+    assert.equal(savedAppointment.look.id, look.id);
+    assert.deepEqual(savedAppointment.look.lookDetails, look.lookDetails);
+    assert.equal((await savedLooks(request(look.imageUrl), look.id, true, deps)).status, 200);
+  }
+  actor = S2;
+  assert.equal((await savedLooks(request(look.imageUrl), look.id, true, deps)).status, 404);
+});
+
+test('approved exp_butterfly_cut keeps its description and estimate through save, booking and both dashboards', async () => {
+  const response = await save({ ...saveBody('hairstyle', 'exp_butterfly_cut'), sourceKind: 'consultation' });
+  assert.equal(response.status, 201, await response.clone().text());
+  const look = (await response.json()).look;
+  assert.equal(look.styleName, publicStyle('hairstyle', 'exp_butterfly_cut')!.name);
+  assert.match(look.lookDetails.description, /change hair color/);
+  assert.deepEqual(look.lookDetails.options.map((s: { amount: number }) => s.amount), [180, 350]);
+  const responseBooking = await bookingApi(request('/api/appointments', 'POST', {
+    ...booking(look.id), serviceName: "Women's Cut & Blowdry", totalPrice: 1,
+  }), undefined, deps);
+  assert.equal(responseBooking.status, 201, await responseBooking.clone().text());
+  const appointment = (await responseBooking.json()).appointment;
+  assert.equal((await query('SELECT total_price FROM appointments WHERE id=$1', [appointment.id]))[0].total_price, 350);
+  deps.store = createBusinessStore(query);
+  for (const viewer of [C, S]) {
+    actor = viewer;
+    const listed = await bookingApi(request('/api/appointments'), undefined, deps);
+    const savedAppointment = (await listed.json()).appointments.find((a: { id: string }) => a.id === appointment.id);
+    assert.equal(savedAppointment.look.id, look.id);
+    assert.deepEqual(savedAppointment.look.lookDetails, look.lookDetails);
+    assert.equal((await savedLooks(request(look.imageUrl), look.id, true, deps)).status, 200);
+  }
+  actor = S2;
+  assert.equal((await savedLooks(request(look.imageUrl), look.id, true, deps)).status, 404);
+});
+
+test('approved exp_wolf_cut keeps its description and estimate through save, booking and both dashboards', async () => {
+  const response = await save({ ...saveBody('hairstyle', 'exp_wolf_cut'), sourceKind: 'consultation' });
+  assert.equal(response.status, 201, await response.clone().text());
+  const look = (await response.json()).look;
+  assert.equal(look.styleName, publicStyle('hairstyle', 'exp_wolf_cut')!.name);
+  assert.match(look.lookDetails.description, /change hair color/);
+  assert.deepEqual(look.lookDetails.options.map((s: { amount: number }) => s.amount), [180, 350]);
+  const responseBooking = await bookingApi(request('/api/appointments', 'POST', {
+    ...booking(look.id), serviceName: "Women's Cut & Blowdry", totalPrice: 1,
+  }), undefined, deps);
+  assert.equal(responseBooking.status, 201, await responseBooking.clone().text());
+  const appointment = (await responseBooking.json()).appointment;
+  assert.equal((await query('SELECT total_price FROM appointments WHERE id=$1', [appointment.id]))[0].total_price, 350);
+  deps.store = createBusinessStore(query);
+  for (const viewer of [C, S]) {
+    actor = viewer;
+    const listed = await bookingApi(request('/api/appointments'), undefined, deps);
+    const savedAppointment = (await listed.json()).appointments.find((a: { id: string }) => a.id === appointment.id);
+    assert.equal(savedAppointment.look.id, look.id);
+    assert.deepEqual(savedAppointment.look.lookDetails, look.lookDetails);
+    assert.equal((await savedLooks(request(look.imageUrl), look.id, true, deps)).status, 200);
+  }
+  actor = S2;
+  assert.equal((await savedLooks(request(look.imageUrl), look.id, true, deps)).status, 404);
+});
+
+test('approved exp_korean_two_block keeps its description and estimate through save, booking and both dashboards', async () => {
+  const response = await save({ ...saveBody('hairstyle', 'exp_korean_two_block'), sourceKind: 'consultation' });
+  assert.equal(response.status, 201, await response.clone().text());
+  const look = (await response.json()).look;
+  assert.equal(look.styleName, publicStyle('hairstyle', 'exp_korean_two_block')!.name);
+  assert.match(look.lookDetails.description, /change hair color/);
+  assert.deepEqual(look.lookDetails.options.map((s: { amount: number }) => s.amount), [180, 350]);
+  const responseBooking = await bookingApi(request('/api/appointments', 'POST', {
+    ...booking(look.id), serviceName: "Women's Cut & Blowdry", totalPrice: 1,
+  }), undefined, deps);
+  assert.equal(responseBooking.status, 201, await responseBooking.clone().text());
+  const appointment = (await responseBooking.json()).appointment;
+  assert.equal((await query('SELECT total_price FROM appointments WHERE id=$1', [appointment.id]))[0].total_price, 350);
+  deps.store = createBusinessStore(query);
+  for (const viewer of [C, S]) {
+    actor = viewer;
+    const listed = await bookingApi(request('/api/appointments'), undefined, deps);
+    const savedAppointment = (await listed.json()).appointments.find((a: { id: string }) => a.id === appointment.id);
+    assert.equal(savedAppointment.look.id, look.id);
+    assert.deepEqual(savedAppointment.look.lookDetails, look.lookDetails);
+    assert.equal((await savedLooks(request(look.imageUrl), look.id, true, deps)).status, 200);
+  }
+  actor = S2;
+  assert.equal((await savedLooks(request(look.imageUrl), look.id, true, deps)).status, 404);
+});
+
+test('approved exp_comma_hair keeps its description and estimate through save, booking and both dashboards', async () => {
+  const response = await save({ ...saveBody('hairstyle', 'exp_comma_hair'), sourceKind: 'consultation' });
+  assert.equal(response.status, 201, await response.clone().text());
+  const look = (await response.json()).look;
+  assert.equal(look.styleName, publicStyle('hairstyle', 'exp_comma_hair')!.name);
+  assert.match(look.lookDetails.description, /change hair color/);
+  assert.deepEqual(look.lookDetails.options.map((s: { amount: number }) => s.amount), [180, 350]);
+  const responseBooking = await bookingApi(request('/api/appointments', 'POST', {
+    ...booking(look.id), serviceName: "Women's Cut & Blowdry", totalPrice: 1,
+  }), undefined, deps);
+  assert.equal(responseBooking.status, 201, await responseBooking.clone().text());
+  const appointment = (await responseBooking.json()).appointment;
+  assert.equal((await query('SELECT total_price FROM appointments WHERE id=$1', [appointment.id]))[0].total_price, 350);
+  deps.store = createBusinessStore(query);
+  for (const viewer of [C, S]) {
+    actor = viewer;
+    const listed = await bookingApi(request('/api/appointments'), undefined, deps);
+    const savedAppointment = (await listed.json()).appointments.find((a: { id: string }) => a.id === appointment.id);
+    assert.equal(savedAppointment.look.id, look.id);
+    assert.deepEqual(savedAppointment.look.lookDetails, look.lookDetails);
+    assert.equal((await savedLooks(request(look.imageUrl), look.id, true, deps)).status, 200);
+  }
+  actor = S2;
+  assert.equal((await savedLooks(request(look.imageUrl), look.id, true, deps)).status, 404);
 });

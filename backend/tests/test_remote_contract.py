@@ -38,7 +38,8 @@ def test_real_style_catalog_and_local_to_gpu_contract(monkeypatch):
     monkeypatch.setattr(main, "engine", RemoteFluxEngine("https://example.trycloudflare.com", "secret-value-for-test-only"))
     client = TestClient(main.app)
     styles = client.get("/styles").json()
-    assert [style["id"] for style in styles] == ["crew_cut", "bob_hair", "layered_hair"]
+    assert [style["id"] for style in styles] == [
+        "crew_cut", "bob_hair", "layered_hair", "exp_butterfly_cut", "exp_french_bob_wispy"]
     assert client.post("/generate", data={"style_id": "pixie"}, files={"image": ("x.png", png(), "image/png")}).status_code == 400
     response = client.post("/generate", data={"style_id": "crew_cut"}, files={"image": ("x.png", png(), "image/png")})
     assert response.status_code == 200

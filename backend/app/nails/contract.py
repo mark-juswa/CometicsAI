@@ -5,7 +5,9 @@ from pathlib import Path
 
 
 MODEL_STYLES = frozenset(("classic_red", "glossy_black"))
-RENDERER_STYLES = frozenset(("nude_pink", "french_tip", "pink_ombre"))
+# Installed support is separate from public approval in style_release.json.
+from app.nails.expanded import STYLE_IDS as EXPANDED_RENDERER_STYLES
+RENDERER_STYLES = frozenset(("nude_pink", "french_tip", "pink_ombre")) | EXPANDED_RENDERER_STYLES
 ADAPTER_ID = "NAILS-001-LOCAL-v1"
 ADAPTER_SHA256 = "5bff16c67e0014c78a6d938813347685f914f8a608d76407b10f5b54b7a0eb1f"
 MODEL_ID = "black-forest-labs/FLUX.2-klein-base-4B"

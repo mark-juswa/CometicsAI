@@ -1,5 +1,6 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { validBaseUrl } from './adapter-core';
+import { compatibleStyleCapabilities } from './style-release';
 
 export const RUNTIME_SCHEMA = 'beautycore-runtime-v1';
 export const LEASE_SECONDS = 180;
@@ -76,7 +77,8 @@ export async function verifyFacade(endpoint: string, key: string, upstreamFetch:
     const features = r.supported_features;
     return r.ready === true && r.reason === 'ready' && r.foundation_load_count === 1 &&
       r.diagnostics_version === 'deployment-01' && r.nails_inference_steps === 8 &&
-      Array.isArray(features) && ['hairstyle', 'makeup', 'nails'].every(f => features.includes(f));
+      Array.isArray(features) && ['hairstyle', 'makeup', 'nails'].every(f => features.includes(f)) &&
+      compatibleStyleCapabilities(r);
   } catch { return false; }
 }
 export async function handleRuntimeRegistration(request: Request, deps: {

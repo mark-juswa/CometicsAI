@@ -2,7 +2,9 @@
 import ast
 import json
 from pathlib import Path
+import sys
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'backend'))
 expected = {'hairstyle': {}}
 for filename in ('style_registry.json','style_registry_train002_smoke.json'):
     registry = json.loads((ROOT/'backend/app'/filename).read_text(encoding='utf-8'))
@@ -14,7 +16,18 @@ for filename in ('style_registry.json','style_registry_train002_smoke.json'):
             raise SystemExit('Approved Hair catalogs disagree on a public style name.')
 for feature,source,constructor in [('makeup','backend/app/makeup_styles.py','MakeupStyle'),('nails','backend/app/nails/styles.py','NailStyle')]:
     tree = ast.parse((ROOT/source).read_text(encoding='utf-8'))
-    expected[feature] = {ast.literal_eval(n.args[0]):ast.literal_eval(n.args[1]) for n in ast.walk(tree) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id == constructor}
+    variable = 'MAKEUP_STYLES' if feature == 'makeup' else 'NAIL_STYLES'
+    baseline = next(n.value for n in tree.body if isinstance(n, ast.Assign)
+                    and any(isinstance(t, ast.Name) and t.id == variable for t in n.targets))
+    expected[feature] = {ast.literal_eval(n.args[0]): ast.literal_eval(n.args[1])
+                         for n in ast.walk(baseline) if isinstance(n, ast.Call)
+                         and isinstance(n.func, ast.Name) and n.func.id == constructor}
+from app.style_capabilities import installed_candidates
+from app.style_release import RELEASE
+installed_candidates()
+for candidate in RELEASE.candidates:
+    if candidate.review_status == "accepted":
+        expected[candidate.feature][candidate.id] = candidate.name
 actual = json.loads((ROOT/'beautycore/lib/business/style-catalog.json').read_text(encoding='utf-8'))
 if set(actual) != set(expected):
     raise SystemExit('Public feature catalog differs.')

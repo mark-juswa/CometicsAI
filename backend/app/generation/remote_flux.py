@@ -11,7 +11,7 @@ from PIL import Image, ImageOps, UnidentifiedImageError
 
 from app.generation.base import GeneratedImage
 from app.styles import Style
-from app.styles import REAL_STYLE_BY_ID
+from app.hair_profiles import active_hair_style_by_id, STYLE_IDS as PROFILE_STYLE_IDS, validate_remote_result
 from app.generation.remote_http import observed_request
 from app.generation.diagnostics import emit
 
@@ -31,7 +31,7 @@ class RemoteFluxEngine:
             raise RuntimeError("Remote FLUX needs an HTTPS FLUX_REMOTE_URL and FLUX_REMOTE_API_KEY.")
 
     async def generate(self, image: Image.Image, style: Style) -> GeneratedImage:
-        if style.id not in REAL_STYLE_BY_ID:
+        if style.id not in active_hair_style_by_id():
             raise RemoteGenerationError("This hairstyle is not supported by the trained adapter.")
         buffer = BytesIO()
         normalized = ImageOps.pad(image, (512, 512), method=Image.Resampling.LANCZOS,
@@ -58,6 +58,8 @@ class RemoteFluxEngine:
             raise RemoteGenerationError(f"Kaggle generation failed (HTTP {response.status_code}). Check its server log.")
         try:
             payload = response.json()
+            if style.id in PROFILE_STYLE_IDS:
+                validate_remote_result(payload, style.id)
             item = payload["image"]
             metadata = payload.get("metadata", {})
             if not isinstance(metadata, dict):

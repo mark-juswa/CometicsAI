@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-31",
+  "decision": "CONFIRMED",
+  "user_instruction": "i approve all of the expanded haircut and nails. then lets see the makeup now.",
+  "approved_hair_appearance_as_shown": [
+    "exp_butterfly_cut",
+    "exp_wolf_cut",
+    "exp_korean_two_block",
+    "exp_comma_hair",
+    "exp_french_bob_wispy"
+  ],
+  "approved_nail_design_scope": [
+    "exp_raspberry_jelly",
+    "exp_pink_aura",
+    "exp_negative_space_microdots",
+    "exp_milky_pearl_chrome",
+    "exp_dark_red_velvet_cat_eye"
+  ],
+  "reviewed_nail_appearance_approved": [
+    "exp_raspberry_jelly",
+    "exp_pink_aura",
+    "exp_negative_space_microdots"
+  ],
+  "nail_implementation_and_results_missing": [
+    "exp_milky_pearl_chrome",
+    "exp_dark_red_velvet_cat_eye"
+  ],
+  "supersedes": "The earlier French-only approval interpretation and Codex quality-based holds for the other four reviewed Hair looks.",
+  "known_limits_retained": [
+    "Butterfly output can resemble a bob; Wolf output is spiky; Two-Block/Comma can cover eyes or resemble other cuts.",
+    "Hair color may change. Approval does not establish improved style fidelity or preservation.",
+    "Pearl Chrome and Cat-Eye have no implemented/tested new renderer yet; no fabricated image acceptance is recorded."
+  ],
+  "next_release_work": "Add remaining approved Hair execution profiles and finish unimplemented Nail renderers in a new version. Do not mutate the existing immutable French+Nails package.",
+  "current_focus": "Review the actual existing and expanded Makeup results; complete the missing Manga Lash pilot without changing production.",
+  "makeup_approval_granted": false,
+  "production_changed": false
+}

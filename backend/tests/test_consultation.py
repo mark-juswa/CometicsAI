@@ -131,7 +131,9 @@ def test_catalog_uses_current_feature_styles_and_keeps_nail_execution_paths():
         assert all(item["tags"] for item in catalog["styles"][feature])
     nails = {item["style_id"]: item["nail_path"] for item in catalog["styles"]["nails"]}
     assert nails == {"classic_red": "model", "glossy_black": "model", "nude_pink": "renderer",
-                     "french_tip": "renderer", "pink_ombre": "renderer"}
+                     "french_tip": "renderer", "pink_ombre": "renderer",
+                     "exp_raspberry_jelly": "renderer", "exp_pink_aura": "renderer",
+                     "exp_negative_space_microdots": "renderer"}
     assert load_registry() == before_registry
     assert REAL_STYLE_PROMPTS == before_prompts
     assert {item["estimate_kind"] for item in catalog["services"]} == {"demo_only"}

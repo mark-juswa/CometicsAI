@@ -108,6 +108,46 @@
       "name": "Wavy Hair",
       "description": "Soft waves that add movement and texture through the hair.",
       "services": []
+    },
+    "exp_butterfly_cut": {
+      "name": "Butterfly Cut",
+      "description": "Butterfly-inspired layers; reviewed previews can appear shorter and bob-like. Preview may change hair color.",
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry"
+      ]
+    },
+    "exp_wolf_cut": {
+      "name": "Wolf Cut",
+      "description": "A bold, spiky interpretation of a choppy wolf cut with a longer back. Preview may change hair color.",
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry"
+      ]
+    },
+    "exp_korean_two_block": {
+      "name": "Korean Two-Block",
+      "description": "A full upper section and dense fringe inspired by the Korean two-block cut. Preview may cover eyes or change hair color.",
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry"
+      ]
+    },
+    "exp_comma_hair": {
+      "name": "Korean Comma Hair",
+      "description": "A side-parted, inward-curved fringe inspired by Korean comma hair. Preview may resemble curtain hair, cover eyes or change hair color.",
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry"
+      ]
+    },
+    "exp_french_bob_wispy": {
+      "name": "Textured French Bob with Wispy Bangs",
+      "description": "A curly, jaw-length textured bob with separated wispy bangs. Preview may change hair color.",
+      "services": [
+        "Men's Cut",
+        "Women's Cut & Blowdry"
+      ]
     }
   },
   "makeup": {
@@ -222,6 +262,33 @@
     "pink_ombre": {
       "name": "Pink Ombre",
       "description": "A soft pink gradient toward each tip.",
+      "services": [
+        "Classic Manicure",
+        "Gel Manicure",
+        "Nail Art (per nail)"
+      ]
+    },
+    "exp_raspberry_jelly": {
+      "name": "Raspberry Jelly",
+      "description": "A translucent raspberry tint that retains the photographed nail detail.",
+      "services": [
+        "Classic Manicure",
+        "Gel Manicure",
+        "Nail Art (per nail)"
+      ]
+    },
+    "exp_pink_aura": {
+      "name": "Pink Aura Ombré",
+      "description": "A soft pink base with deeper pink concentrated near the nail centre.",
+      "services": [
+        "Classic Manicure",
+        "Gel Manicure",
+        "Nail Art (per nail)"
+      ]
+    },
+    "exp_negative_space_microdots": {
+      "name": "Negative-Space Micro-Dots",
+      "description": "Sparse dark micro-dots over a lightly tinted natural nail.",
       "services": [
         "Classic Manicure",
         "Gel Manicure",

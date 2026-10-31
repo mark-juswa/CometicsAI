@@ -15,7 +15,8 @@
     "test:business": "node --experimental-test-module-mocks --import tsx --test tests/business-workflows.test.ts tests/business-ui.test.mjs tests/finance-stats.test.mjs tests/saved-look-migrations.test.ts tests/look-information.test.ts tests/service-completion.test.ts",
     "db:check:saved-looks": "tsx scripts/apply-saved-looks.ts --check",
     "test:guest-trial": "node --experimental-test-module-mocks --import tsx --test tests/guest-trial.test.ts tests/guest-trial-ui.test.mjs",
-    "db:check:guest-trial": "tsx scripts/apply-guest-trial.ts --check"
+    "db:check:guest-trial": "tsx scripts/apply-guest-trial.ts --check",
+    "test:style-release": "node --experimental-test-module-mocks --import tsx --test tests/style-release.test.ts tests/ai-runtime-registry.test.ts"
   },
   "dependencies": {
     "@google/genai": "^1.31.0",

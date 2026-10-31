@@ -1,0 +1,28 @@
+{
+  "schema": "beautycore-hair-profile-v1",
+  "profile_id": "hair-french-bob-v1",
+  "style_id": "exp_french_bob_wispy",
+  "adapter_id": "train001",
+  "adapter_sha256": "7e3991f8a4e502573d3e82e9ac34c89fdf3f0b66fb337abb026a5b4c9ad080ff",
+  "base_model_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+  "prompt": "Change the hairstyle to a textured French bob ending around the jaw, with a softly broken outline and thin, airy, separated wispy bangs above the eyes. Keep the fringe light rather than a heavy blunt curtain. Keep the same person, recognizable facial proportions, expression, natural skin tone, original hair color, clothing, pose, lighting, framing and background. Change hairstyle only.",
+  "settings": {
+    "width": 512,
+    "height": 512,
+    "steps": 20,
+    "guidance": 4.0,
+    "seed": 1977,
+    "adapter_weight": 1.0
+  },
+  "limitations": [
+    "Preview may change hair color and texture; the approved examples show a curly interpretation."
+  ],
+  "validation": {
+    "experiment": "HAIR-EXP-002",
+    "results_sha256": "3e3474b98823247b471964de173223ae6eb314af34cdaafc486012ee88cae1db",
+    "cases": [
+      6,
+      8
+    ]
+  }
+}

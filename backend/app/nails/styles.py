@@ -1,4 +1,4 @@
-"""Five public Nails styles with backend-only hybrid routing metadata."""
+"""Baseline Nails catalog plus explicitly accepted installed renderer additions."""
 
 from dataclasses import dataclass
 
@@ -22,3 +22,20 @@ NAIL_STYLES = (
     NailStyle("pink_ombre", "Pink Ombre", "A soft pink gradient toward each tip.", "Apply a soft pink ombre manicure to the visible fingernails while preserving the same hand, nail geometry, skin, jewelry, pose, and background.", "pink_ombre"),
 )
 NAIL_STYLE_BY_ID = {style.id: style for style in NAIL_STYLES}
+
+
+def active_nail_styles(release=None):
+    """Pending/held manifest entries never become public merely by existing."""
+    from app.style_release import RELEASE
+    from app.style_capabilities import installed_candidates
+
+    release = RELEASE if release is None else release
+    additions = installed_candidates(release)
+    return NAIL_STYLES + tuple(
+        NailStyle(c.id, c.name, c.description, "", "", status="available")
+        for c in additions if c.feature == "nails"
+    )
+
+
+def active_nail_style_by_id(release=None):
+    return {style.id: style for style in active_nail_styles(release)}

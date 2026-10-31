@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-31",
+  "decision": "CONFIRMED",
+  "approval_quote": "i APPROVE IT",
+  "scope": "French Bob, the sole candidate recommended for review in the preceding response. Other four Hair additions remain held.",
+  "style_id": "exp_french_bob_wispy",
+  "review": "docs/experiments/hair-expansion-results-20261031-review.md",
+  "known_limits": [
+    "Preview may change hair color and texture; the approved examples show a curly interpretation."
+  ],
+  "release_id": "styles-20261031-01"
+}

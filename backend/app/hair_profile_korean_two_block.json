@@ -1,0 +1,28 @@
+{
+  "schema": "beautycore-hair-profile-v1",
+  "profile_id": "hair-korean-two-block-v1",
+  "style_id": "exp_korean_two_block",
+  "adapter_id": "train002",
+  "adapter_sha256": "59d527217a68139bc2aaa4eedbfcd2d5789ef115f8ecb924410eea24a952939b",
+  "base_model_revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+  "prompt": "Change the hairstyle to a Korean two-block haircut with a visibly shorter lower section at the sides and nape and a distinctly longer fuller upper section with a soft natural fringe. Show the two lengths clearly. Keep the same person, recognizable face, facial proportions, expression, skin tone, clothing, pose, background, lighting and framing. Preserve the original hair color. Change hairstyle only.",
+  "settings": {
+    "width": 512,
+    "height": 512,
+    "steps": 20,
+    "guidance": 4.0,
+    "seed": 1977,
+    "adapter_weight": 1.0
+  },
+  "limitations": [
+    "A full upper section and dense fringe inspired by the Korean two-block cut. Preview may cover eyes or change hair color."
+  ],
+  "validation": {
+    "experiment": "HAIR-EXP-002",
+    "results_sha256": "3e3474b98823247b471964de173223ae6eb314af34cdaafc486012ee88cae1db",
+    "subject_ids": [
+      "d2_side_part_undercut_28jpg",
+      "d2_side_part_undercut_9jpg"
+    ]
+  }
+}

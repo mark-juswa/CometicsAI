@@ -22,11 +22,11 @@ def post(route: str, style_id: str):
                        files={"image": ("portrait.png", portrait(), "image/png")})
 
 
-def test_makeup_catalog_has_ten_distinct_prototype_styles():
+def test_makeup_catalog_has_thirteen_distinct_prototype_styles():
     result = client.get("/makeup/styles")
     assert result.status_code == 200
-    assert len(result.json()) == 10
-    assert len({item["id"] for item in result.json()}) == 10
+    assert len(result.json()) == 13
+    assert len({item["id"] for item in result.json()}) == 13
     assert {item["status"] for item in result.json()} == {"prototype"}
     assert {item["id"] for item in result.json()} == {style.id for style in MAKEUP_STYLES}
 

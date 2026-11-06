@@ -1,6 +1,6 @@
 {
   "schema": "beautycore-style-release-v1",
-  "release_id": "styles-20261031-02",
+  "release_id": "styles-20261106-01",
   "candidates": [
     {
       "feature": "hairstyle",
@@ -156,19 +156,23 @@
       "name": "Cloud-Skin Makeup with Blurred Berry Lips",
       "description": "A soft base with diffused berry lip edges and restrained cheek color.",
       "route": "makeup_profile",
-      "profile_id": null,
-      "profile_sha256": null,
-      "review_status": "held",
-      "enabled": false,
+      "profile_id": "makeup-corrective001-v1",
+      "profile_sha256": "e3f05d3267f6be08b01c5ef3fcc430e839c4868622b1e68e65211689a8e704b1",
+      "review_status": "accepted",
+      "enabled": true,
       "tags": [
-        "experimental"
+        "berry",
+        "soft",
+        "matte",
+        "everyday"
       ],
       "services": [
         "Makeup Application"
       ],
       "input_constraints": [],
       "evidence": [
-        "docs/experiments/style-release-validation-20261025-review.md"
+        "docs/experiments/makeup-corrective-model-results-20261106.md",
+        "docs/experiments/makeup-corrective-application-results-20261106.md"
       ]
     },
     {
@@ -177,19 +181,23 @@
       "name": "Manga-Lash Makeup",
       "description": "Separated lash clusters with delicate liner, soft blush, and a restrained lip.",
       "route": "makeup_profile",
-      "profile_id": null,
-      "profile_sha256": null,
-      "review_status": "held",
-      "enabled": false,
+      "profile_id": "makeup-corrective001-v1",
+      "profile_sha256": "e3f05d3267f6be08b01c5ef3fcc430e839c4868622b1e68e65211689a8e704b1",
+      "review_status": "accepted",
+      "enabled": true,
       "tags": [
-        "experimental"
+        "lashes",
+        "pink",
+        "defined",
+        "playful"
       ],
       "services": [
         "Makeup Application"
       ],
       "input_constraints": [],
       "evidence": [
-        "docs/experiments/makeup-expansion-results-20261031-review.md"
+        "docs/experiments/makeup-corrective-model-results-20261106.md",
+        "docs/experiments/makeup-corrective-application-results-20261106.md"
       ]
     },
     {
@@ -198,19 +206,23 @@
       "name": "Icy Silver Eye Makeup",
       "description": "Localized silver-blue eyelid shimmer balanced with subdued cheeks and lips.",
       "route": "makeup_profile",
-      "profile_id": null,
-      "profile_sha256": null,
-      "review_status": "held",
-      "enabled": false,
+      "profile_id": "makeup-corrective001-v1",
+      "profile_sha256": "e3f05d3267f6be08b01c5ef3fcc430e839c4868622b1e68e65211689a8e704b1",
+      "review_status": "accepted",
+      "enabled": true,
       "tags": [
-        "experimental"
+        "silver",
+        "cool",
+        "shimmer",
+        "evening"
       ],
       "services": [
         "Makeup Application"
       ],
       "input_constraints": [],
       "evidence": [
-        "docs/experiments/style-release-validation-20261025-review.md"
+        "docs/experiments/makeup-corrective-model-results-20261106.md",
+        "docs/experiments/makeup-corrective-application-results-20261106.md"
       ]
     },
     {

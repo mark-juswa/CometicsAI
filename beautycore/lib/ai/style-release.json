@@ -1,7 +1,7 @@
 {
   "schema": "beautycore-style-capabilities-v1",
-  "release_id": "styles-20261031-02",
-  "manifest_sha256": "6bbabcbc1a1364dc571036a404c7757f258d9fd2a1b9414ac39b4c9a10bf1db2",
+  "release_id": "styles-20261106-01",
+  "manifest_sha256": "f7f2e8cbb3d72b6a10dbe471e3e8081c4813c413529071359baae7291f3c625e",
   "baseline_model_catalogs": [
     {
       "hairstyle": [
@@ -16,6 +16,9 @@
         "bronze_golden_glam",
         "classic_red_lip",
         "dewy_peach",
+        "exp_cloud_berry_lips",
+        "exp_icy_silver",
+        "exp_manga_lash",
         "matte_nude",
         "natural_makeup",
         "no_makeup_makeup",
@@ -54,6 +57,9 @@
         "bronze_golden_glam",
         "classic_red_lip",
         "dewy_peach",
+        "exp_cloud_berry_lips",
+        "exp_icy_silver",
+        "exp_manga_lash",
         "matte_nude",
         "natural_makeup",
         "no_makeup_makeup",
@@ -222,6 +228,85 @@
         "pink_ombre"
       ],
       "model_profile": "hair-french-bob-v1"
+    },
+    {
+      "schema": "beautycore-style-capabilities-v1",
+      "release_id": "styles-20261031-02",
+      "manifest_sha256": "6bbabcbc1a1364dc571036a404c7757f258d9fd2a1b9414ac39b4c9a10bf1db2",
+      "baseline_model_catalogs": [
+        {
+          "hairstyle": [
+            "bob_hair",
+            "crew_cut",
+            "exp_butterfly_cut",
+            "exp_french_bob_wispy",
+            "layered_hair"
+          ],
+          "makeup": [
+            "bold_evening_glam",
+            "bronze_golden_glam",
+            "classic_red_lip",
+            "dewy_peach",
+            "matte_nude",
+            "natural_makeup",
+            "no_makeup_makeup",
+            "rosy_pink",
+            "smoky_glam",
+            "soft_glam"
+          ],
+          "nails": [
+            "classic_red",
+            "glossy_black"
+          ]
+        },
+        {
+          "hairstyle": [
+            "bob_hair",
+            "bun",
+            "crew_cut",
+            "curtain_hair",
+            "exp_butterfly_cut",
+            "exp_comma_hair",
+            "exp_french_bob_wispy",
+            "exp_korean_two_block",
+            "exp_wolf_cut",
+            "layered_hair",
+            "perm_curls",
+            "pixie_cut",
+            "pompadour_undercut",
+            "ponytail",
+            "shag_hair",
+            "shoulder_length_hair",
+            "side_part_undercut",
+            "wavy_hair"
+          ],
+          "makeup": [
+            "bold_evening_glam",
+            "bronze_golden_glam",
+            "classic_red_lip",
+            "dewy_peach",
+            "matte_nude",
+            "natural_makeup",
+            "no_makeup_makeup",
+            "rosy_pink",
+            "smoky_glam",
+            "soft_glam"
+          ],
+          "nails": [
+            "classic_red",
+            "glossy_black"
+          ]
+        }
+      ],
+      "renderer_styles": [
+        "exp_negative_space_microdots",
+        "exp_pink_aura",
+        "exp_raspberry_jelly",
+        "french_tip",
+        "nude_pink",
+        "pink_ombre"
+      ],
+      "model_profile": "hair-expanded-v1"
     }
   ]
 }

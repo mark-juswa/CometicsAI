@@ -298,7 +298,7 @@ def test_expanded_bun_switches_and_restores_on_same_fake_foundation(fake_server,
     foundation = dict(owner.foundation)
     async def sequence():
         async with httpx.AsyncClient(transport=httpx.ASGITransport(app=server.app), base_url='http://test') as client:
-            for feature, style, adapter in [('hairstyle','bun','train002'), ('makeup','natural_makeup','MAKEUP-001'),
+            for feature, style, adapter in [('hairstyle','bun','train002'), ('makeup','natural_makeup',server.MAKEUP_ID),
                                            ('nails','classic_red','NAILS-001-LOCAL-v1'), ('hairstyle','crew_cut','train001')]:
                 response = await client.post(f'/{feature}/generate', data={'style_id': style},
                     files={'image': ('input.png', png(Image.new('RGB',(512,512),'white')), 'image/png')},

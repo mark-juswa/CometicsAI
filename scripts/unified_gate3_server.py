@@ -192,7 +192,7 @@ class UnifiedRuntime:
                 (ROOT / 'docs/experiments/unified-kaggle-gate1-review.json').read_text())['base_model_index_sha256']:
             raise ValueError('Pinned Base revision/index mismatch')
         hair_adapters = adapter_configuration()
-        makeup = ROOT / 'gate1/adapters/makeup'
+        makeup = ROOT / 'gate1/adapters/makeup-corrective001'
         nails = ROOT / 'gate1/adapters/nails/nails001_local_v1.safetensors'
         verify_makeup(makeup)
         nails_verify(nails)
@@ -239,6 +239,7 @@ class UnifiedRuntime:
     def status(self):
         return {**self.health(), 'requests': list(self.owner.audit) if self.owner else [],
                 'http_requests': list(HTTP_RECORDS),
+                'active_adapter_verification': self.owner.active_state if self.owner else None,
                 'switch_events': sum(event['event'] == 'switch_end' for event in self.owner.events)
                     if self.owner else 0}
 

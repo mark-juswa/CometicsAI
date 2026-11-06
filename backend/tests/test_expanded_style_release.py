@@ -38,12 +38,12 @@ def raw():
     return json.loads(PATH.read_text(encoding="utf-8"))
 
 
-def test_only_three_tested_nails_and_five_approved_hair_are_enabled():
+def test_tested_hair_nails_and_three_corrective_makeup_profiles_are_enabled():
     assert len(RELEASE.candidates) == 13
-    assert {c.id for c in RELEASE.enabled()} == STYLE_IDS | __import__("app.hair_profiles", fromlist=["STYLE_IDS"]).STYLE_IDS
+    assert {c.id for c in RELEASE.enabled()} == STYLE_IDS | __import__("app.hair_profiles", fromlist=["STYLE_IDS"]).STYLE_IDS | {"exp_cloud_berry_lips", "exp_manga_lash", "exp_icy_silver"}
     assert all(c.review_status == "accepted" for c in RELEASE.enabled())
     assert len(active_nail_styles()) == 8
-    assert len(installed_candidates(approved_release())) == 5
+    assert len(installed_candidates(approved_release())) == 8
     assert {s.id for s in active_nail_styles(approved_release())} == (
         {s.id for s in NAIL_STYLES} | STYLE_IDS)
 

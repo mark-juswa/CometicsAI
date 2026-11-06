@@ -31,7 +31,7 @@ def model_catalogs(release=None):
             "hairstyle": sorted(s["style_id"] for s in registry["styles"]
                                 if s["support_status"] != "disabled"
                                 and registry["adapters"][s["adapter_id"]]["status"] == "enabled"),
-            "makeup": sorted(PROMPTS),
+            "makeup": sorted(PROMPTS) if release is not None and release.enabled("makeup") else sorted(s for s in PROMPTS if not s.startswith("exp_")),
             "nails": sorted(MODEL_STYLES),
         }
         if release is not None:

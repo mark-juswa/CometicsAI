@@ -14,6 +14,18 @@ def installed_candidates(release: StyleRelease = RELEASE):
     for candidate in release.candidates:
         if candidate.profile_id is None or candidate.feature == "hairstyle":
             continue
+        if candidate.feature == "makeup":
+            from app import makeup_contract
+            expected_ids = {"exp_cloud_berry_lips", "exp_manga_lash", "exp_icy_silver"}
+            if (candidate.route != "makeup_profile" or candidate.id not in expected_ids
+                    or candidate.profile_id != "makeup-corrective001-v1"
+                    or candidate.profile_sha256 != profile_digest(Path(makeup_contract.__file__))
+                    or makeup_contract.ADAPTER_SHA256 != "991a1037cc892c1a62e1a731be577ed1aec2f331d9568b4586ff3829a4ee32c3"
+                    or candidate.id not in makeup_contract.PROMPTS):
+                raise ValueError("Makeup release differs from the reviewed execution contract")
+            if candidate.enabled:
+                result.append(candidate)
+            continue
         if (candidate.feature != "nails" or candidate.route != "nails_renderer"
                 or candidate.id not in STYLE_IDS or candidate.profile_id != PROFILE_ID):
             raise ValueError("Style has no matching installed execution profile: " + candidate.id)
@@ -39,6 +51,9 @@ def baseline_model_styles():
 def model_styles(release=RELEASE):
     from app.hair_profiles import hair_candidates
     result = baseline_model_styles()
+    if not release.enabled("makeup"):
+        result["makeup"] = [sid for sid in result["makeup"] if not sid.startswith("exp_")]
+
     result["hairstyle"] = sorted(result["hairstyle"] + [c.id for c in hair_candidates(release)])
     return result
 

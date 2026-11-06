@@ -1,0 +1,38 @@
+{
+  "date": "2026-11-06",
+  "decision": "CONFIRMED",
+  "user_instruction": "Can we now deploy it?",
+  "release_id": "styles-20261106-01",
+  "release_manifest_sha256": "f7f2e8cbb3d72b6a10dbe471e3e8081c4813c413529071359baae7291f3c625e",
+  "catalog_counts": {
+    "hairstyle": 18,
+    "makeup": 13,
+    "nails": 8
+  },
+  "checkpoint_sha256": "991a1037cc892c1a62e1a731be577ed1aec2f331d9568b4586ff3829a4ee32c3",
+  "real_application_verified": {
+    "makeup_exact_accepted_raw_outputs": 13,
+    "total_real_requests": 16,
+    "base_loads": 1,
+    "active_tensors_verified": true
+  },
+  "checks": {
+    "makeup_api_runtime": 25,
+    "render_registration_release": 33,
+    "business_save_booking": 55,
+    "typecheck": "PASS",
+    "production_build": "PASS"
+  },
+  "notebook": "notebooks/render_kaggle_makeup_corrective_demo.ipynb",
+  "notebook_sha256": "b4a4e1c1482fd060d194f19f5570b6221131379e8214d18c064a713452ab08fd",
+  "cpu": {
+    "name": "beautycore_makeup_release_20261106.bin",
+    "sha256": "0c657ae4d2b62e11bd8c5728321330d5416fbfd1d36354d8482ac548f1449357",
+    "bytes": 75246586
+  },
+  "startup_correction": "Match enabled styles across renderer, Hair model and Makeup model catalogs; actual notebook regression covers each feature and wrong digest.",
+  "published": false,
+  "render_deployed": false,
+  "kaggle_registered": false,
+  "next": "Publish exact approved source, deploy Render, then import final serving notebook/new CPU on pinned Kaggle and verify live website."
+}

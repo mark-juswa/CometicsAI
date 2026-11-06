@@ -220,6 +220,27 @@
       "services": [
         "Makeup Application"
       ]
+    },
+    "exp_cloud_berry_lips": {
+      "name": "Cloud-Skin Makeup with Blurred Berry Lips",
+      "description": "A soft base with diffused berry lip edges and restrained cheek color.",
+      "services": [
+        "Makeup Application"
+      ]
+    },
+    "exp_manga_lash": {
+      "name": "Manga-Lash Makeup",
+      "description": "Separated lash clusters with delicate liner, soft blush, and a restrained lip.",
+      "services": [
+        "Makeup Application"
+      ]
+    },
+    "exp_icy_silver": {
+      "name": "Icy Silver Eye Makeup",
+      "description": "Localized silver-blue eyelid shimmer balanced with subdued cheeks and lips.",
+      "services": [
+        "Makeup Application"
+      ]
     }
   },
   "nails": {

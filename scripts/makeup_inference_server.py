@@ -54,6 +54,20 @@ class MakeupRuntime:
         LOGGER.info("Verified MAKEUP-001 loaded in %.1f seconds", self.load_seconds)
 
     def generate(self, portrait: Image.Image, style_id: str) -> dict:
+        import math
+        active = self.pipe.get_active_adapters()
+        if len(active) != 1:
+            raise RuntimeError("Corrective Makeup requires one active adapter")
+        name, layers = active[0], 0
+        for module in self.pipe.transformer.modules():
+            if hasattr(module, 'lora_A'):
+                layers += 1
+                expected = module.lora_alpha[name] / module.r[name]
+                if (module.disable_adapters or module.merged or list(module.active_adapters) != [name]
+                        or not math.isclose(float(module.scaling[name]), expected, rel_tol=1e-6)):
+                    raise RuntimeError("Corrective Makeup requires full loaded adapter scaling")
+        if not layers:
+            raise RuntimeError("Corrective Makeup has no active LoRA layers")
         source = ImageOps.pad(portrait, (512, 512), method=Image.Resampling.LANCZOS, color=(245, 245, 245))
         started = time.monotonic()
         try:

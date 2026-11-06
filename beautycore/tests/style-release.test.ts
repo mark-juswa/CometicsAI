@@ -93,8 +93,8 @@ test('protected facade verification enforces compatible capabilities and body bo
   assert.equal(await verify({ ...readiness(), padding: 'x'.repeat(8192) }), false);
 });
 
-test('preserved releases remain compatible without claiming new five-Hair support', () => {
-  assert.equal(expected.compatible_releases.length, 2);
+test('preserved releases retain their exact original catalogs', () => {
+  assert.equal(expected.compatible_releases.length, 3);
   for (const release of expected.compatible_releases) {
     const value = {
       schema: release.schema, release_id: release.release_id, manifest_sha256: release.manifest_sha256,

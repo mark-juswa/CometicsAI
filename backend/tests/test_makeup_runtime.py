@@ -137,7 +137,7 @@ def test_reviewed_prompts_cannot_silently_change(tmp_path):
     presets.write_text('{"styles": []}')
     with pytest.raises(ValueError, match="differ"):
         load_prompts(presets)
-    assert len(PROMPTS) == 10 and all("Change makeup only" in value for value in PROMPTS.values())
+    assert len(PROMPTS) == 13 and all("Change makeup only" in value for value in PROMPTS.values())
 
 
 def test_gpu_makeup_auth_style_readiness_and_busy_checks(monkeypatch):
@@ -207,9 +207,17 @@ def test_gpu_generation_survives_unavailable_cuda_memory_stats():
         cuda=FailingCudaStats(),
         Generator=lambda **kwargs: SimpleNamespace(manual_seed=lambda seed: seed),
     )
-    runtime.pipe = lambda **kwargs: (
-        calls.append(kwargs), SimpleNamespace(images=[Image.new("RGB", (512, 512), "pink")])
-    )[1]
+    layer = SimpleNamespace(lora_A={"test": object()}, disable_adapters=False, merged=False,
+                            active_adapters=["test"], lora_alpha={"test": 16},
+                            r={"test": 16}, scaling={"test": 1.0})
+    class Pipe:
+        transformer = SimpleNamespace(modules=lambda: [layer])
+        def get_active_adapters(self):
+            return ["test"]
+        def __call__(self, **kwargs):
+            calls.append(kwargs)
+            return SimpleNamespace(images=[Image.new("RGB", (512, 512), "pink")])
+    runtime.pipe = Pipe()
     result = runtime.generate(Image.new("RGB", (512, 512), "white"), "soft_glam")
     assert result["status"] == "completed"
     assert calls[0]["prompt"] == PROMPTS["soft_glam"]

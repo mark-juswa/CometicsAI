@@ -1,0 +1,215 @@
+{
+  "date": "2026-11-01",
+  "experiment": "MAKEUP-REFERENCE-001",
+  "variant": "v4.1",
+  "progress": "DONE_LOCAL_REFINEMENT_AND_VERIFICATION",
+  "decision_status": "CONFIRMED_LOCAL_REFINEMENT_AUTHORIZATION",
+  "technical_evidence": "VERIFIED",
+  "appearance_evidence": "EXPERIMENTAL",
+  "human_acceptance": "NOT_ACCEPTED_PASTED_COSMETICS_AND_UNNATURAL_APPEARANCE",
+  "production_promotion": "HOLD_REJECTED_APPEARANCE",
+  "user_feedback_on_prior": "Makeup remains too subtle. Preserve original person but make selected colors, intensity and placement recognizable without harsh edges or excessive drama.",
+  "reference_scope": "Natural Makeup, Classic Red Lip and Cloud/Berry Lips, each on the same two reused development portraits.",
+  "causes_verified": [
+    "Previous confidently detected reference-blush regions had median mask coverage0.404to0.561, attenuating pigment interiors rather than only their edges.",
+    "Adding residual pigment to warm source chroma produced orange hue drift in the stronger test.",
+    "Whole brow-to-eye support imported brow-bone shading and broad relative-lightness transfer darkened already shaded eyelids twice.",
+    "Actual source/reference equality failed on seven one-code pixels within1to2.2pixels of the warp boundary because reference smoothing read black padding. Domain-normalized smoothing fixes this regression."
+  ],
+  "changes": [
+    "Full cosmetic interiors with continuous edge transitions instead of a Gaussian intensity falloff through the whole cheek.",
+    "Selected cosmetic chroma plus source fine color detail, rather than adding warm source complexion to pigment hue.",
+    "Anatomical eyelid/crease support fades before the brow bone; actual reference pigment qualifies color placement.",
+    "Actual narrow selected lash/liner strokes are handled separately from the shadow mask. No procedural new lashes.",
+    "Source local eye depth stays; only additional selected cosmetic contrast is transferred. No broad skin brightening.",
+    "Brow density increases within original support while source hair hue stays and no RGB channel can brighten.",
+    "Already prominent lipstick and original lip geometry handling remain unchanged.",
+    "Both color references are smoothed over the same valid warp domain; no padded pixels contribute cosmetic color."
+  ],
+  "technical_checks": {
+    "focused_tests_passed": 34,
+    "new_variant_checks": 15,
+    "prior_variant_regressions": 19,
+    "latest_output_exact_reproductions": 6,
+    "original_eye_core_and_other_protected_regions": "PASS",
+    "unchanged_original_and_reference_inputs": "PASS",
+    "unchanged_lip_rgb_vs_previous_candidate": "PASS_ALL_SIX",
+    "identical_real_photo_noop": "PASS",
+    "warp_padding_regression": "PASS",
+    "browser": {
+      "images_loaded": 54,
+      "full_size_viewer": "PASS",
+      "original_toggle": "PASS",
+      "mobile390_overflow": false,
+      "component_masks": "PASS",
+      "script_errors": []
+    },
+    "serving_and_release_hashes_unchanged": true
+  },
+  "comparison_metrics": {
+    "experiment": "MAKEUP-REFERENCE-001",
+    "variant": "v4.1",
+    "cases": [
+      {
+        "id": "g4-054109-natural_makeup",
+        "reference_blush_pixels": 9282,
+        "blush_reference_chroma_error_previous": 12.267,
+        "blush_reference_chroma_error_latest": 1.027,
+        "blush_chroma_error_reduction_percent": 91.6,
+        "reference_blush_alpha_previous_median": 0.427,
+        "reference_blush_alpha_latest_median": 1.0,
+        "blush_mean_lightness_change_from_original": 0.0682,
+        "eyeshadow_mean_rgb_change_previous": 10.433,
+        "eyeshadow_mean_rgb_change_latest": 18.471,
+        "original_eye_core_changes": 0,
+        "lip_rgb_equal_to_previous": true
+      },
+      {
+        "id": "g4-054109-classic_red_lip",
+        "reference_blush_pixels": 5189,
+        "blush_reference_chroma_error_previous": 14.188,
+        "blush_reference_chroma_error_latest": 1.561,
+        "blush_chroma_error_reduction_percent": 89.0,
+        "reference_blush_alpha_previous_median": 0.404,
+        "reference_blush_alpha_latest_median": 1.0,
+        "blush_mean_lightness_change_from_original": 0.0686,
+        "eyeshadow_mean_rgb_change_previous": 6.296,
+        "eyeshadow_mean_rgb_change_latest": 21.473,
+        "original_eye_core_changes": 0,
+        "lip_rgb_equal_to_previous": true
+      },
+      {
+        "id": "g4-056266-natural_makeup",
+        "reference_blush_pixels": 15668,
+        "blush_reference_chroma_error_previous": 8.356,
+        "blush_reference_chroma_error_latest": 0.989,
+        "blush_chroma_error_reduction_percent": 88.2,
+        "reference_blush_alpha_previous_median": 0.482,
+        "reference_blush_alpha_latest_median": 1.0,
+        "blush_mean_lightness_change_from_original": 0.0652,
+        "eyeshadow_mean_rgb_change_previous": 10.419,
+        "eyeshadow_mean_rgb_change_latest": 10.573,
+        "original_eye_core_changes": 0,
+        "lip_rgb_equal_to_previous": true
+      },
+      {
+        "id": "g4-056266-classic_red_lip",
+        "reference_blush_pixels": 10528,
+        "blush_reference_chroma_error_previous": 9.795,
+        "blush_reference_chroma_error_latest": 1.244,
+        "blush_chroma_error_reduction_percent": 87.3,
+        "reference_blush_alpha_previous_median": 0.478,
+        "reference_blush_alpha_latest_median": 1.0,
+        "blush_mean_lightness_change_from_original": 0.0676,
+        "eyeshadow_mean_rgb_change_previous": 8.501,
+        "eyeshadow_mean_rgb_change_latest": 14.086,
+        "original_eye_core_changes": 0,
+        "lip_rgb_equal_to_previous": true
+      },
+      {
+        "id": "054109-exp_cloud_berry_lips",
+        "reference_blush_pixels": 9883,
+        "blush_reference_chroma_error_previous": 21.309,
+        "blush_reference_chroma_error_latest": 1.057,
+        "blush_chroma_error_reduction_percent": 95.0,
+        "reference_blush_alpha_previous_median": 0.471,
+        "reference_blush_alpha_latest_median": 1.0,
+        "blush_mean_lightness_change_from_original": 0.0675,
+        "eyeshadow_mean_rgb_change_previous": 9.208,
+        "eyeshadow_mean_rgb_change_latest": 23.96,
+        "original_eye_core_changes": 0,
+        "lip_rgb_equal_to_previous": true
+      },
+      {
+        "id": "056266-exp_cloud_berry_lips",
+        "reference_blush_pixels": 19611,
+        "blush_reference_chroma_error_previous": 15.912,
+        "blush_reference_chroma_error_latest": 1.001,
+        "blush_chroma_error_reduction_percent": 93.7,
+        "reference_blush_alpha_previous_median": 0.561,
+        "reference_blush_alpha_latest_median": 1.0,
+        "blush_mean_lightness_change_from_original": 0.0649,
+        "eyeshadow_mean_rgb_change_previous": 7.244,
+        "eyeshadow_mean_rgb_change_latest": 13.313,
+        "original_eye_core_changes": 0,
+        "lip_rgb_equal_to_previous": true
+      }
+    ],
+    "metric_limit": "Selected-reference aligned chroma error and edit magnitude are diagnostic proxies, not calibrated skin-tone accuracy, perceived cosmetic intensity or human realism scores. Region fixed using source labels and selected-reference red excess.",
+    "no_quality_promotion": true
+  },
+  "visual_review": {
+    "final_native_comparisons_inspected": 6,
+    "finding": "More visible reference-colored blush and eyelid pigment than the previous subtle application, with stronger selected lash detail and denser source brows. Original visible texture, geometry, expression, hair and scene remain.",
+    "remaining": "Perceived hue differs with the source lightness, especially a plum/mauve appearance on the darker portrait. Lash density/placement and brow shape are not exact selected-reference matches. Existing strong lip edges remain. Human realism and look-specific intensity acceptance are not established.",
+    "skin_limit": "Makeup areas change color and some cosmetic contrast by design. Protected source RGB is exact elsewhere; no calibrated identity or photometric accuracy score is claimed."
+  },
+  "intermediate_evidence": [
+    {
+      "path": "artifacts/makeup-reference-20261101/run-01",
+      "verdict": "REJECT",
+      "reason": "Visible pigment but orange hue drift and pale brow edges in inspected samples."
+    },
+    {
+      "path": "artifacts/makeup-reference-20261101/run-02",
+      "verdict": "REJECT",
+      "reason": "Selected chroma copied but brow-bone region still looked painted."
+    },
+    {
+      "path": "artifacts/makeup-reference-20261101/run-03",
+      "verdict": "SUPERSEDED",
+      "reason": "Eyelid geometry improved; first sample median color-core lightness shift minus6.94 indicated extra broad shadow."
+    },
+    {
+      "path": "artifacts/makeup-reference-20261101/run-04",
+      "verdict": "SUPERSEDED",
+      "reason": "Additional contrast handling improved; seven-pixel identical-photo padding regression then fixed."
+    },
+    {
+      "path": "artifacts/makeup-reference-20261101/run-05",
+      "verdict": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "reason": "Final source protection/reproduction checks pass; no automatic appearance acceptance."
+    }
+  ],
+  "new_diffusion_calls": 0,
+  "new_model_inference": false,
+  "new_training": false,
+  "new_models_or_dependencies": false,
+  "new_photo_acquisition": false,
+  "paid_requests": 0,
+  "serving_changed": false,
+  "database_changed": false,
+  "cloud_changed": false,
+  "git_published": false,
+  "implementation": {
+    "algorithm": "scripts/makeup_reference_application.py",
+    "evaluation": "scripts/evaluate_makeup_reference_application.py",
+    "tests": "backend/tests/test_makeup_reference_application.py",
+    "plan": "data/makeup/MAKEUP-REFERENCE-001/plan.json",
+    "gallery": "artifacts/makeup-reference-20261101/run-05/review-self-contained.html"
+  },
+  "source_sha256": {
+    "scripts/makeup_reference_application.py": "2c2c02e6f5f4c52dc8d0842e9c415c1859a05668eba433fe8f909a2344db698e",
+    "scripts/makeup_selected_cosmetics.py": "0974104e4092e7126384a0b812cdfc951ff3e63db21999af7a752742a43ee720",
+    "scripts/makeup_source_faithful_retouch.py": "d2c78ea9731dbda97d4ee5c1e1d11809a323e44ef6eac7a5c0ad7e76f5fb542b",
+    "scripts/makeup_source_render.py": "0471a37c01b4438dcf7c12389e0b044e7b7c81d6da3be67147b3eff742e8fb05",
+    "scripts/makeup_alignment_pilot.py": "4ef6f76606a657d4d4cd576c509efdd4f9d60ef4aeaca301725ece50fa332e95",
+    "scripts/evaluate_makeup_reference_application.py": "54d725c71f8dfc4b9d82f34bb2509c6d5b42656cc381f298842f4a3bc072e7e3"
+  },
+  "test_sha256": "d82a781ef21046074807f9b1e53507f4c537289aaa90303f393a76ac96d69275",
+  "unchanged_source_and_artifact_sha256": {
+    "backend/app/makeup_contract.py": "4253463a6a6c7afcd97384c0a5a4e0c25ba7ce9f9eb1d3f4411d2b8fec0a2fa1",
+    "backend/app/generation/remote_makeup.py": "4205e24f1864bde02dc75e60cd1a107a06ee29cf476ac001a8bcdf3fa26d5615",
+    "backend/app/makeup_styles.py": "c2ac1d40a4940e0335f8c382c1062148b54f0fa3dc07fec95e8ed33f1adaa6ba",
+    "scripts/makeup_inference_server.py": "ec9dd0c10a102a6bb13b4288994f18423c5164969cd131b02f2a4993ed570854",
+    "backend/app/style_release.json": "61cce06d4e76a6570550b2fee4c7ff4183323aea0ce1b3a1b63e191fced118b5",
+    "scripts/unified_gate3_server.py": "bb1d24159075f0592f491532080195f204f73c708e2a8e2fd095daac481723a2",
+    "scripts/inference_performance.py": "b69dd604baa6a09ba1a1d7598e979c66a81d26f70a8e9ae3db3bb790766030af",
+    "artifacts/render_kaggle_cpu_hair_nails_20261031_02.bin": "dfb5fc35f2c9c446fb8fdcc4439650c5f8a72941db864db1e9045cadae73082f",
+    "notebooks/render_kaggle_all_hair_nails_demo.ipynb": "574d8a144b90ee2a2a10c74ab1f6d8d46dd3d3891d1e9c74d5ee1bc01368ab84"
+  },
+  "next_gate": "User appearance review against the original, selected reference and previous subtle version. Production asset/runtime integration and broader fresh-photo/style/pose/Kaggle memory and latency checks remain required. No blanket deployment readiness.",
+  "latest_feedback_date": "2026-11-02",
+  "latest_feedback": "Use original canvas, preserve original eyebrows and facial geometry/detail. Fix lip boundary and natural cosmetic blending; do not repeat full face generation or global intensity changes.",
+  "latest_audit": "docs/experiments/makeup-realism-audit-20261102.md"
+}

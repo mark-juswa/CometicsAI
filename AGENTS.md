@@ -7,6 +7,7 @@ Read [current state](context/state.md) first, then the context relevant to the t
 - [AI/ML](context/ai-ml.md), [data](context/data.md), [evaluation](context/evaluation.md): intended methods and verification gaps.
 - [Decisions](context/decisions.md): approvals and superseded options.
 - [Engineering](context/engineering.md): repository and environment facts only.
+- [Client handoff](docs/guides/client-repository-handoff.md): current source access, development, private serving inputs and Render deployment instructions.
 - [Scope](docs/scope/roadmap.md): coarse build sequence. Future load-bearing specs belong in `docs/specs/`; experiment evidence belongs in `docs/experiments/`; detailed research may go in `docs/research/`.
 - Generic JSM workflow skills are installed in `.agents/skills/`. Read a skill's `SKILL.md` when using it. Use only the stages the task needs. The current project context was established before scaffolding by explicit Supervisor instruction; a later implementation audit must derive commands and layout from real files.
 

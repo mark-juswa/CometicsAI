@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-04",
+  "scope": "Documentation and retained-artifact checks only, no new application or GPU test",
+  "status": "PASS",
+  "local_markdown_links_checked": 31,
+  "mermaid_blocks": 3,
+  "diagram_validation": "Structural checks only, Mermaid renderer not exercised",
+  "private_values_scanned": 9,
+  "documents_scanned_for_private_values": 5,
+  "documents_with_private_matches": 0,
+  "documents_with_temporary_tunnel_urls": 0,
+  "required_topics_checked": 15,
+  "makeup_retained_summary": {
+    "success": true,
+    "exit_code": 0,
+    "highest_loss_step": 250,
+    "elapsed_seconds_including_load": 8623.0,
+    "final_save_logged_after_last_step": true
+  },
+  "makeup_loss_observations": 498,
+  "makeup_recorded_losses_all_finite": true,
+  "issues": [],
+  "handoff_words": 7982,
+  "handoff_lines": 529
+}

@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-25",
+  "status": "CONFIRMED",
+  "evidence_status": "VERIFIED_USER_SELECTION",
+  "selected_experiment": "MAKEUP-QA-003",
+  "selected_guidance": 2.5,
+  "user_evidence": [
+    "OKAY IT LOOKS MUCH BETTER",
+    "LATEST RESULT"
+  ],
+  "clarification": "Latest result explicitly identified as guidance2.5versus3.0 before user selected it.",
+  "selected_settings": {
+    "adapter_weight": 1.0,
+    "prompts": "original frozen Makeup prompts",
+    "steps": 20,
+    "seed": 1977,
+    "width": 512,
+    "height": 512
+  },
+  "reference_archive_sha256": "01832128682ba72b9f3935f4186ea413da154693fe516431f8fa7b04ba528c07",
+  "scope": "Human preferred visual candidate from this comparison; supersedes provisional preference for3.0.",
+  "limitations": "Does not establish all-user complexion preservation or eliminate earlier observed smoothing/whitening.",
+  "production_settings_changed": false,
+  "deployment_started": false,
+  "next": "Use2.5as selected candidate in any subsequently authorized rollout; serving contract/artifact updates and deployment still required."
+}

@@ -19,6 +19,12 @@ import threading
 import time
 from zipfile import ZIP_DEFLATED, ZipFile
 
+# Repository execution and the standalone training ZIP share the same gate.
+_repo_scripts = Path(__file__).resolve().parents[1] / "scripts"
+if _repo_scripts.is_dir():
+    sys.path.insert(0, str(_repo_scripts))
+from makeup_target_quality import validate_dataset_quality
+
 
 TOOLKIT_COMMIT = "a8dfcf7d7e2b38ccc7b2fb68ece9c6358e61e7a7"
 MODEL = "black-forest-labs/FLUX.2-klein-base-4B"
@@ -50,6 +56,9 @@ def validate_dataset(dataset: Path) -> dict:
     from PIL import Image
 
     qa = read_json(dataset / "reports" / "qa.json")
+    if qa.get("schema") == "DATA-M001-corrective-final-v1":
+        from makeup_corrective_data import validate_corrective_dataset
+        return validate_corrective_dataset(dataset)
     rows = read_json(dataset / "manifests" / "pairs.json")
     reviews = read_json(dataset / "manifests" / "reviews.json")
     selection = read_json(dataset / "manifests" / "selection.json")
@@ -94,19 +103,24 @@ def validate_dataset(dataset: Path) -> dict:
         raise ValueError("Identity split is not 10/2 and disjoint")
     if count != {"train": 50, "validation": 10}:
         raise ValueError(f"Pair counts changed: {count}")
+    quality = validate_dataset_quality(dataset)
     return {"qa_sha256": digest(dataset / "reports" / "qa.json"),
             "pairs_sha256": digest(dataset / "manifests" / "pairs.json"),
             "reviews_sha256": digest(dataset / "manifests" / "reviews.json"),
             "selection_sha256": digest(dataset / "manifests" / "selection.json"),
             "identity_counts": {split: len(values) for split, values in groups.items()},
-            "pair_counts": dict(count), "source_archive_sha256": SOURCE_ARCHIVE_SHA256}
+            "pair_counts": dict(count), "source_archive_sha256": SOURCE_ARCHIVE_SHA256,
+            "corrective_quality": quality}
 
 
 def training_config(dataset: Path, output: Path) -> str:
     """The proven TRAIN-001 T4 configuration with only job and dataset paths changed."""
+    qa_path = dataset / "reports/qa.json"
+    corrective = qa_path.is_file() and read_json(qa_path).get("schema") == "DATA-M001-corrective-final-v1"
+    run_name = f"makeup001_corrective001_{STEPS}step" if corrective else f"makeup001_{STEPS}step"
     return f'''job: "extension"
 config:
-  name: "makeup001_{STEPS}step"
+  name: "{run_name}"
   process:
     - type: "diffusion_trainer"
       training_folder: "{(output / 'checkpoints').as_posix()}"
@@ -145,7 +159,7 @@ config:
         quantize: true
         low_vram: true
 meta:
-  name: "makeup001_{STEPS}step"
+  name: "{run_name}"
   version: "1.0"
 '''
 
@@ -273,6 +287,31 @@ def execute(dataset: Path, output: Path, toolkit: Path) -> dict:
     return summary
 
 
+def evaluation_plan(dataset: Path, prompts_path: Path) -> dict:
+    """Resolve all evaluation conditioning before a GPU model is loaded."""
+    prompts = read_json(prompts_path)
+    styles = prompts["styles"]
+    corrective = read_json(dataset / "reports/qa.json").get("schema") == "DATA-M001-corrective-final-v1"
+    count = 13 if corrective else 10
+    if len(styles) != count or len({style["id"] for style in styles}) != count:
+        raise ValueError(f"Expected {count} unique inference prompt presets")
+    if corrective and digest(prompts_path) != digest(dataset / "catalog.json"):
+        raise ValueError("Corrective evaluation must use the exact training style catalog")
+    if any(not style.get("instruction") for style in styles) or not prompts.get("preservation_instruction"):
+        raise ValueError("Every style requires an instruction and a shared preservation instruction")
+    selection = read_json(dataset / "manifests/selection.json")
+    validation = selection["source_selection"]["validation_ids"] if corrective else selection["validation_ids"]
+    if len(validation) != 2:
+        raise ValueError("Expected two held out identities")
+    sources = {row["identity_id"]: dataset / row["reference"] for row in
+               read_json(dataset / "manifests/pairs.json") if row["split"] == "validation"}
+    if set(sources) != set(validation):
+        raise ValueError("Validation sources differ from frozen split")
+    captions = {s["id"]: s["caption"] if corrective else s["instruction"] + " " + prompts["preservation_instruction"] for s in styles}
+    return {"styles": styles, "validation": validation, "sources": sources, "prompts": captions,
+            "expected_outputs": 2 * len(validation) * len(styles), "corrective": corrective}
+
+
 def evaluate(dataset: Path, output: Path, checkpoint: Path, prompts_path: Path) -> dict:
     import torch
     from PIL import Image, ImageDraw, ImageOps
@@ -285,19 +324,8 @@ def evaluate(dataset: Path, output: Path, checkpoint: Path, prompts_path: Path) 
         raise ValueError("MAKEUP-001 checkpoint missing")
     if read_json(output / "dataset_evidence.json") != validate_dataset(dataset):
         raise ValueError("DATA-M001 changed since training")
-    prompts = read_json(prompts_path)
-    styles = prompts["styles"]
-    if len(styles) != 10 or len({style["id"] for style in styles}) != 10:
-        raise ValueError("Expected ten unique inference prompt presets")
-    if any(not style.get("instruction") for style in styles) or not prompts.get("preservation_instruction"):
-        raise ValueError("Every style requires an instruction and a shared preservation instruction")
-    validation = read_json(dataset / "manifests" / "selection.json")["validation_ids"]
-    if len(validation) != 2:
-        raise ValueError("Expected two held out identities")
-    sources = {row["identity_id"]: dataset / row["reference"] for row in
-               read_json(dataset / "manifests" / "pairs.json") if row["split"] == "validation"}
-    if set(sources) != set(validation):
-        raise ValueError("Validation sources differ from frozen split")
+    planned = evaluation_plan(dataset, prompts_path)
+    styles, validation, sources = planned["styles"], planned["validation"], planned["sources"]
     folder = output / "evaluation"
     if folder.exists() and any(folder.iterdir()):
         raise ValueError("Refusing to overwrite evaluation images")
@@ -316,7 +344,7 @@ def evaluate(dataset: Path, output: Path, checkpoint: Path, prompts_path: Path) 
                 destination = folder / mode / identity / f"{style['id']}.png"
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 start = time.monotonic()
-                prompt = style["instruction"] + " " + prompts["preservation_instruction"]
+                prompt = planned["prompts"][style["id"]]
                 result = pipe(prompt=prompt, image=source, width=512, height=512,
                               num_inference_steps=20, guidance_scale=4.0,
                               generator=torch.Generator(device="cuda").manual_seed(1977)).images[0]
@@ -331,7 +359,7 @@ def evaluate(dataset: Path, output: Path, checkpoint: Path, prompts_path: Path) 
                                 "runtime_seconds": round(time.monotonic() - start, 2),
                                 "review_state": "PENDING_HUMAN_REVIEW"})
     for identity in validation:
-        sheet = Image.new("RGB", (3 * 256, 10 * 285), "white")
+        sheet = Image.new("RGB", (3 * 256, len(styles) * 285), "white")
         draw = ImageDraw.Draw(sheet)
         for index, style in enumerate(styles):
             for column, path in enumerate((sources[identity], folder / "base" / identity / f"{style['id']}.png",
@@ -342,7 +370,7 @@ def evaluate(dataset: Path, output: Path, checkpoint: Path, prompts_path: Path) 
             draw.text((5, index * 285 + 260), f"{identity} {style['id']} | Original / Base / MAKEUP-001", fill="black")
         sheet.save(folder / f"comparison_{identity}.jpg", quality=93)
     metadata = {"status": "PENDING_HUMAN_REVIEW", "attempted": len(records),
-                "base_outputs": 20, "adapter_outputs": 20, "records": records,
+                "base_outputs": len(validation) * len(styles), "adapter_outputs": len(validation) * len(styles), "records": records,
                 "torch": torch.__version__, "diffusers": diffusers.__version__,
                 "prompt_presets_sha256": digest(prompts_path)}
     save_json(folder / "metadata.json", metadata)

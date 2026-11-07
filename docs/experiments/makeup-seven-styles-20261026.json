@@ -1,0 +1,768 @@
+{
+  "experiment": "MAKEUP-RENDER-002",
+  "date": "2026-10-26",
+  "evidence_status": "VERIFIED",
+  "quality_status": "EXPERIMENTAL",
+  "progress": "DONE_OFFLINE",
+  "plan_sha256": "16f684ec6809e5463e593a6fed1c3c5af7e5d1142ab26421bd5e411f4c6b92f9",
+  "runner_sha256": "ad8ff50a683e054dfa11c234e00cd447dee84fd62c46f9dd78c11a0800d0483c",
+  "report_sha256": "0c921b9f1c402a1f3f3692c149dd661af5192a25c20848e9ade445d5022e65c4",
+  "baseline_renderer_sha256": "0471a37c01b4438dcf7c12389e0b044e7b7c81d6da3be67147b3eff742e8fb05",
+  "summary": {
+    "new_previews": 28,
+    "new_existing_styles": 7,
+    "people": 4,
+    "retained_baseline_previews": 12,
+    "existing_styles_with_offline_examples": 10,
+    "total_distinct_preview_examples": 40,
+    "human_accepted_cases": 0
+  },
+  "cases": [
+    {
+      "subject_id": "054109",
+      "style_id": "no_makeup_makeup",
+      "output": "054109-no_makeup_makeup-rendered.png",
+      "sha256": "88fdd1118442d449d8c7f1103c7cfacb6e07c9aa516ec0914e8a6a5c8fcb90ab",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 11064,
+      "gamut_compressed_pixels": 0
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "smoky_glam",
+      "output": "054109-smoky_glam-rendered.png",
+      "sha256": "b2a82dcfa2295683e3f9d5b5d6923ee7d3108710ccbe2b184e87d27f57944331",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 16062,
+      "gamut_compressed_pixels": 74
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "dewy_peach",
+      "output": "054109-dewy_peach-rendered.png",
+      "sha256": "8ab8cfa1cec2803586a1d46f631210f75346dbb24a2e677ed59a4f80bc06af2c",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 24835,
+      "gamut_compressed_pixels": 213
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "rosy_pink",
+      "output": "054109-rosy_pink-rendered.png",
+      "sha256": "0d0dc6b8fb78cd3181b5cbc4ed7b9c8c8871a4ece8acd8205d975148c7ad2041",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 24965,
+      "gamut_compressed_pixels": 52
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "bronze_golden_glam",
+      "output": "054109-bronze_golden_glam-rendered.png",
+      "sha256": "d60859c0f57ec15aaed1a72f2c7ef10f79d109121e87ffaaf5f1c835b9eedfe8",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 11714,
+      "gamut_compressed_pixels": 164
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "matte_nude",
+      "output": "054109-matte_nude-rendered.png",
+      "sha256": "e6c3689880ae90cead6b5929fca13420ae536d115b6131cb6f65d2cdd4c17871",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 12899,
+      "gamut_compressed_pixels": 13
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "bold_evening_glam",
+      "output": "054109-bold_evening_glam-rendered.png",
+      "sha256": "af9b4057dbc35edcbdeec93692cae006f8d6e19a6a30de0b2854bc196b7bc4c9",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 25375,
+      "gamut_compressed_pixels": 1101
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "no_makeup_makeup",
+      "output": "056266-no_makeup_makeup-rendered.png",
+      "sha256": "f89bc4ecacef06d997dfe968f43fa3d5b8d80db7726df6d90f807f9ff678af2f",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 5883,
+      "gamut_compressed_pixels": 135
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "smoky_glam",
+      "output": "056266-smoky_glam-rendered.png",
+      "sha256": "ddcf43eb9d93fdaab559155c0cfb8808276834470920c24894ae3ed344c5934c",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 9761,
+      "gamut_compressed_pixels": 529
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "dewy_peach",
+      "output": "056266-dewy_peach-rendered.png",
+      "sha256": "52f42cc22af878b3b5c7dc1f03bc6a6c021a1ea416e6feeb619df97e63781399",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 28388,
+      "gamut_compressed_pixels": 347
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "rosy_pink",
+      "output": "056266-rosy_pink-rendered.png",
+      "sha256": "93bc874b3efcb199b5a07d701c7f806e028d8b5d414b1f457b949fd9962fd01a",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 25215,
+      "gamut_compressed_pixels": 278
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "bronze_golden_glam",
+      "output": "056266-bronze_golden_glam-rendered.png",
+      "sha256": "0c6b61f12dfe31434fc4861da51922f13f7b89452c0135590609537a2a573b85",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 26965,
+      "gamut_compressed_pixels": 653
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "matte_nude",
+      "output": "056266-matte_nude-rendered.png",
+      "sha256": "43d0ed870d823062f021d15239a8fba2b28ef5f8eeecb2f19d67cc238529f5f7",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 14625,
+      "gamut_compressed_pixels": 254
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "bold_evening_glam",
+      "output": "056266-bold_evening_glam-rendered.png",
+      "sha256": "5be15f5aa937843eeeffbdfbaf0b22718b06505c47f58137731d29ecbc501105",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 25440,
+      "gamut_compressed_pixels": 1068
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "no_makeup_makeup",
+      "output": "006553-no_makeup_makeup-rendered.png",
+      "sha256": "ceaac3bb09defb980369abc4db67189899757cbbbc76d2dfa88aa68a90815229",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 8414,
+      "gamut_compressed_pixels": 0
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "smoky_glam",
+      "output": "006553-smoky_glam-rendered.png",
+      "sha256": "0872aaf169fea2b8c7e2125cb49eb89926191d8f1b169897c528286e116bc71c",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 14595,
+      "gamut_compressed_pixels": 61
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "dewy_peach",
+      "output": "006553-dewy_peach-rendered.png",
+      "sha256": "99e72710d23a26e2d1ddb1fea4a46693480fe012124c5fdc4d2818e4512683a9",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 25329,
+      "gamut_compressed_pixels": 0
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "rosy_pink",
+      "output": "006553-rosy_pink-rendered.png",
+      "sha256": "4d581ba9b2cae29b27e91a96bff171af3921062f1c2df9e2bdc29bb306531d27",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 22288,
+      "gamut_compressed_pixels": 0
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "bronze_golden_glam",
+      "output": "006553-bronze_golden_glam-rendered.png",
+      "sha256": "cedd2ee00a3424e5c3a5001c227c2b8cb3494869c53d646b62b149c7a70db411",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 25328,
+      "gamut_compressed_pixels": 126
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "matte_nude",
+      "output": "006553-matte_nude-rendered.png",
+      "sha256": "312b7d271c746fd44b2b478fc51a07f1459a4d7e0cbca2ec6035ce28abf548eb",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 12217,
+      "gamut_compressed_pixels": 0
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "bold_evening_glam",
+      "output": "006553-bold_evening_glam-rendered.png",
+      "sha256": "3e83f26221b91d7d75ffa2efc66696e8b6caffe78939c92d476f98b7b63ce207",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 22523,
+      "gamut_compressed_pixels": 208
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "no_makeup_makeup",
+      "output": "035149-no_makeup_makeup-rendered.png",
+      "sha256": "bbabef803e9a41a40a0353e778b24fc1d90b89212f17e37895d857184554cc70",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 6057,
+      "gamut_compressed_pixels": 18
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "smoky_glam",
+      "output": "035149-smoky_glam-rendered.png",
+      "sha256": "7ece1c9c49fe4863a5790114c5bf49799808e341a1416ce6c33f0bf5490435cb",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 14605,
+      "gamut_compressed_pixels": 123
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "dewy_peach",
+      "output": "035149-dewy_peach-rendered.png",
+      "sha256": "203d1f6c944a5f389f694389f3ff18a6f20773c3f693fcf1b7523dc1464aab9b",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 19515,
+      "gamut_compressed_pixels": 164
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "rosy_pink",
+      "output": "035149-rosy_pink-rendered.png",
+      "sha256": "735ef605cc1f7189e95a0c20ab79e343faf10343c75d48133d187567a7963756",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 25239,
+      "gamut_compressed_pixels": 91
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "bronze_golden_glam",
+      "output": "035149-bronze_golden_glam-rendered.png",
+      "sha256": "6b03fc7ccfc59e716934ab7218fd283cae12dba0c3a6d222a81fbd66c9830a01",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 21914,
+      "gamut_compressed_pixels": 264
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "matte_nude",
+      "output": "035149-matte_nude-rendered.png",
+      "sha256": "baf7370fb48f50f36b6ee7775305b25acbd407a5b1665ab84498f08bdbb6e559",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 18244,
+      "gamut_compressed_pixels": 6
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "bold_evening_glam",
+      "output": "035149-bold_evening_glam-rendered.png",
+      "sha256": "f229ed2945094d8ed9be94854518d7967dd15a6d8339ca8a9922856c2ea8f773",
+      "reproduced_pixels_identical": true,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "forehead_patch_changed_pixels": 0,
+      "changed_pixels": 25035,
+      "gamut_compressed_pixels": 810
+    }
+  ],
+  "baseline_controls": [
+    {
+      "subject_id": "054109",
+      "style_id": "natural_makeup",
+      "png_sha256": "7a8fefe8a0f39ce177e666ed6ec918c9443ac2b3ab20718c7d56ceeb0cf04354",
+      "pixels_identical": true
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "soft_glam",
+      "png_sha256": "ebcf78d79128b040549af5018880203c34ca31c1834b978312f812054ae23abe",
+      "pixels_identical": true
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "classic_red_lip",
+      "png_sha256": "c853e1e527a32be324fe75cfc030fecbb6751fa800e564884a8a9bd1d0012582",
+      "pixels_identical": true
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "natural_makeup",
+      "png_sha256": "c8f3792cd2c3b1ab8e7609c0f86c1b86dc9f1a990c468ed59bbd04bca2190724",
+      "pixels_identical": true
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "soft_glam",
+      "png_sha256": "1bd3323f8d73dcc06f43107074daf42293f5ede1de13892107ca381624de132d",
+      "pixels_identical": true
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "classic_red_lip",
+      "png_sha256": "afcd610a2d2859aaf2f9108ae5a6d9f040b729dff160e2003d0464ae05e06ca2",
+      "pixels_identical": true
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "natural_makeup",
+      "png_sha256": "701b7a3c5dd3870fdee8a36ed92ea8aae7e9a1e6f23c8e354bbc59fab9895130",
+      "pixels_identical": true
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "soft_glam",
+      "png_sha256": "573aacfe5570427ce49fbaebb4ddc01c1bdcccce9c8ec1ff01edc61d9d6ba3d1",
+      "pixels_identical": true
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "classic_red_lip",
+      "png_sha256": "d47aa5ddea8667099acb7969d40ab88643bc4f7cc9af65abeea478add2dfccfc",
+      "pixels_identical": true
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "natural_makeup",
+      "png_sha256": "96246664b4c6999e68839fe41a8251f85281823e2cd71af22aeff649db058ce0",
+      "pixels_identical": true
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "soft_glam",
+      "png_sha256": "72415fc137732552c89c03f5c3ded0a7849ccce42575098d3c42069e333aa07b",
+      "pixels_identical": true
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "classic_red_lip",
+      "png_sha256": "c0fed82e1cdfeea4ab765f1c932af0fd34f68f640d88c0095b94cc3694beee3b",
+      "pixels_identical": true
+    }
+  ],
+  "visual_review": [
+    {
+      "subject_id": "054109",
+      "style_id": "no_makeup_makeup",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Very subtle relative to source; does not remove existing cosmetics or supply even-tone foundation.",
+      "unsupported_features": [
+        "Does not remove existing makeup, conceal blemishes or even the whole-face complexion."
+      ]
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "smoky_glam",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Deeper upper/lower-eye shading, but smoky effect remains restrained on some people; nude lip is modest.",
+      "unsupported_features": [
+        "Does not generate additional lashes or a new complexion base."
+      ]
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "dewy_peach",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Peach lip/blush visible; local highlights subtle. Existing forehead shine/skin unchanged.",
+      "unsupported_features": [
+        "Dewy finish is localized; forehead/base skin remains unchanged. Existing flash highlights are not removed."
+      ]
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "rosy_pink",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Rose lip and eyelid color distinct, sometimes strong contrast between upper/lower lips.",
+      "unsupported_features": []
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "bronze_golden_glam",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Warm golden eye tint and nude lip; sheen is limited and not full metallic/glitter makeup.",
+      "unsupported_features": [
+        "No whole-face bronzing or physically simulated glitter/metallic reflections."
+      ]
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "matte_nude",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Muted lip color; lip-only shine attenuation is subtle, with full facial shine intentionally retained.",
+      "unsupported_features": [
+        "Matte finish affects lips only; full-face shine, pores and original foundation remain unchanged."
+      ]
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "bold_evening_glam",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Berry lip and plum eye color distinct; strong lip edges/intensity and lack of added false lashes remain review issues.",
+      "unsupported_features": [
+        "Does not add full false lashes, contour the face or replace the foundation."
+      ]
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "no_makeup_makeup",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Very subtle relative to source; does not remove existing cosmetics or supply even-tone foundation.",
+      "unsupported_features": [
+        "Does not remove existing makeup, conceal blemishes or even the whole-face complexion."
+      ]
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "smoky_glam",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Deeper upper/lower-eye shading, but smoky effect remains restrained on some people; nude lip is modest.",
+      "unsupported_features": [
+        "Does not generate additional lashes or a new complexion base."
+      ]
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "dewy_peach",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Peach lip/blush visible; local highlights subtle. Existing forehead shine/skin unchanged.",
+      "unsupported_features": [
+        "Dewy finish is localized; forehead/base skin remains unchanged. Existing flash highlights are not removed."
+      ]
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "rosy_pink",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Rose lip and eyelid color distinct, sometimes strong contrast between upper/lower lips.",
+      "unsupported_features": []
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "bronze_golden_glam",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Warm golden eye tint and nude lip; sheen is limited and not full metallic/glitter makeup.",
+      "unsupported_features": [
+        "No whole-face bronzing or physically simulated glitter/metallic reflections."
+      ]
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "matte_nude",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Muted lip color; lip-only shine attenuation is subtle, with full facial shine intentionally retained.",
+      "unsupported_features": [
+        "Matte finish affects lips only; full-face shine, pores and original foundation remain unchanged."
+      ]
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "bold_evening_glam",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Berry lip and plum eye color distinct; strong lip edges/intensity and lack of added false lashes remain review issues.",
+      "unsupported_features": [
+        "Does not add full false lashes, contour the face or replace the foundation."
+      ]
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "no_makeup_makeup",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Very subtle relative to source; does not remove existing cosmetics or supply even-tone foundation.",
+      "unsupported_features": [
+        "Does not remove existing makeup, conceal blemishes or even the whole-face complexion."
+      ]
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "smoky_glam",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Deeper upper/lower-eye shading, but smoky effect remains restrained on some people; nude lip is modest.",
+      "unsupported_features": [
+        "Does not generate additional lashes or a new complexion base."
+      ]
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "dewy_peach",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Peach lip/blush visible; local highlights subtle. Existing forehead shine/skin unchanged.",
+      "unsupported_features": [
+        "Dewy finish is localized; forehead/base skin remains unchanged. Existing flash highlights are not removed."
+      ]
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "rosy_pink",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Rose lip and eyelid color distinct, sometimes strong contrast between upper/lower lips.",
+      "unsupported_features": []
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "bronze_golden_glam",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Warm golden eye tint and nude lip; sheen is limited and not full metallic/glitter makeup.",
+      "unsupported_features": [
+        "No whole-face bronzing or physically simulated glitter/metallic reflections."
+      ]
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "matte_nude",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Muted lip color; lip-only shine attenuation is subtle, with full facial shine intentionally retained.",
+      "unsupported_features": [
+        "Matte finish affects lips only; full-face shine, pores and original foundation remain unchanged."
+      ]
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "bold_evening_glam",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Berry lip and plum eye color distinct; strong lip edges/intensity and lack of added false lashes remain review issues.",
+      "unsupported_features": [
+        "Does not add full false lashes, contour the face or replace the foundation."
+      ]
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "no_makeup_makeup",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Very subtle relative to source; does not remove existing cosmetics or supply even-tone foundation.",
+      "unsupported_features": [
+        "Does not remove existing makeup, conceal blemishes or even the whole-face complexion."
+      ]
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "smoky_glam",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Deeper upper/lower-eye shading, but smoky effect remains restrained on some people; nude lip is modest.",
+      "unsupported_features": [
+        "Does not generate additional lashes or a new complexion base."
+      ]
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "dewy_peach",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Peach lip/blush visible; local highlights subtle. Existing forehead shine/skin unchanged.",
+      "unsupported_features": [
+        "Dewy finish is localized; forehead/base skin remains unchanged. Existing flash highlights are not removed."
+      ]
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "rosy_pink",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Rose lip and eyelid color distinct, sometimes strong contrast between upper/lower lips.",
+      "unsupported_features": []
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "bronze_golden_glam",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Warm golden eye tint and nude lip; sheen is limited and not full metallic/glitter makeup.",
+      "unsupported_features": [
+        "No whole-face bronzing or physically simulated glitter/metallic reflections."
+      ]
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "matte_nude",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Muted lip color; lip-only shine attenuation is subtle, with full facial shine intentionally retained.",
+      "unsupported_features": [
+        "Matte finish affects lips only; full-face shine, pores and original foundation remain unchanged."
+      ]
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "bold_evening_glam",
+      "reviewer": "Codex qualitative review of all4full sheets + selected native/detail views",
+      "human_approval": "PENDING",
+      "decision": "HOLD_FOR_VISUAL_AND_DESCRIPTION_REVIEW",
+      "observations": "Berry lip and plum eye color distinct; strong lip edges/intensity and lack of added false lashes remain review issues.",
+      "unsupported_features": [
+        "Does not add full false lashes, contour the face or replace the foundation."
+      ]
+    }
+  ],
+  "tests": {
+    "command": "python -m pytest backend/tests/test_makeup_source_styles.py backend/tests/test_makeup_source_render.py -q",
+    "passed": 51,
+    "new_extension_tests": 27,
+    "baseline_tests": 24
+  },
+  "timing": {
+    "min_render_seconds": 0.22202920000017912,
+    "max_render_seconds": 0.3509452999996938,
+    "median_render_seconds": 0.2554816000001665,
+    "limitation": "CPU render only; no parser/network/queue/file I/O. Not deployed latency."
+  },
+  "new_model_inference_calls": 0,
+  "new_gpu_calls": 0,
+  "new_training": false,
+  "production_changed": false,
+  "review_limits": [
+    "4reuseddevelopmentsubjects, no all-pose/all-lighting/generalization claim.",
+    "Allowed-region and protected-pixel checks use parser proposals; no calibrated boundary ground truth.",
+    "Localized dewy/matte/gold effects do not implement full foundation, full-face matte/dewy finishing or added lashes.",
+    "Both earlier3profile and current7profile appearance remain pending actual human review.",
+    "Expansion Berry/IcySilver/MangaLash not implemented by this7style run."
+  ],
+  "private_output": "artifacts/makeup-render-20261026/remaining-seven-01",
+  "next": "Human review of style visibility/boundaries and honest description coverage before any integration or deployment.",
+  "review_bundle": {
+    "path": "artifacts/makeup-render-20261026/beautycore-all-makeup-review.zip",
+    "bytes": 32204562,
+    "sha256": "632917e25c843cf00c3e05b935f3255062f323a7c2e53f810f9eb8999423fb69",
+    "members": 67,
+    "crc": "PASS",
+    "offline_gallery": "artifacts/makeup-render-20261026/all-ten-review/review.html",
+    "local_html_references_verified": 97
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "date_utc": "2026-10-09T15:41:49.622012+00:00",
+  "status": "PROPOSED; SOURCE_INSPECTION_VERIFIED; NO_RUNTIME_CHANGE",
+  "request": "Eliminate per-run manual Render AI_FASTAPI_URL edits and redeployments",
+  "observations": {
+    "current_bridge": "AI_FASTAPI_URL from process.env",
+    "database": "Existing Neon + Drizzle, no endpoint registry table",
+    "local_discovery": "HMAC signed expiring ntfy GPU endpoint; not reusable unchanged for CPU facade",
+    "kaggle_hook": "Protected public readiness succeeds before printing URL"
+  },
+  "recommendation": "Authenticated Kaggle facade registration and expiring session lease stored in existing Neon, resolved at request time by Render",
+  "prepared_spec": "docs/specs/0009-automatic-kaggle-registration.md",
+  "cloud_changes": "None",
+  "schema_changes": "None",
+  "application_changes": "None",
+  "acceptance": "Needs verification after implementation, additive migration and deployment"
+}

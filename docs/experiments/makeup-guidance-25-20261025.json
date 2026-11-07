@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-25",
+  "experiment": "MAKEUP-QA-003",
+  "status": "GPU_EXECUTION_VERIFIED_VISUAL_REVIEW_DONE_NO_RELEASE_SETTING_SELECTED",
+  "authorization": "Supervisor prefers guidance3.0 relative to matched-foundation results and approves a narrow3.0vs2.5comparison; confirms existing completed session is still running.",
+  "conditions": [
+    {
+      "id": "guidance_4_reference",
+      "guidance": 4.0,
+      "retained_images": 4
+    },
+    {
+      "id": "guidance_3_reference",
+      "guidance": 3.0,
+      "retained_images": 4
+    },
+    {
+      "id": "guidance_2_5",
+      "guidance": 2.5,
+      "new_images": 4
+    }
+  ],
+  "control": {
+    "new_calls": 1,
+    "guidance": 3.0,
+    "subject": "054109",
+    "style": "natural_makeup",
+    "acceptance": "Exact original guidance3.0 RGB hash; stop before candidates on mismatch."
+  },
+  "total_new_calls": 5,
+  "total_main_comparison_cases": 12,
+  "fixed": {
+    "adapter_weight": 1.0,
+    "prompts": "Original hash-pinned Natural Makeup and Classic Red Lip",
+    "steps": 20,
+    "seed": 1977,
+    "width": 512,
+    "height": 512,
+    "generation_context": "torch.no_grad"
+  },
+  "reference_report_sha256": "1df65af22e4281df9ce296bd7cb89ddb0dd611d4c6c7b2169cf07895e4668f7d",
+  "source_hashes": {
+    "scripts/makeup_guidance_diagnostic.py": "62ea7fad450f72fdec90ed9951f298fa2cb2bf881bad36e606e0943052aa1c27",
+    "scripts/package_makeup_guidance.py": "cec307057210c8431307101812c87b06ddbb483fc5f87c0cebbd765903674385",
+    "data/makeup/MAKEUP-QA-003/plan.json": "92216c5fc58e417f90cd699b124d5db7899cbe3f17f5356923794de3c17da950",
+    "notebooks/makeup_guidance_25_cell.py": "37473b0724f0b5d6c3448d5f7ab558273aa03269e8430a82c45d6487fa8762a2"
+  },
+  "tests": {
+    "new_passed": 15,
+    "focused_total_passed": 100,
+    "command": "python -m pytest backend/tests/test_makeup_guidance.py backend/tests/test_makeup_adjustment.py backend/tests/test_makeup_quality_diagnostic.py backend/tests/test_makeup_runtime.py backend/tests/test_style_expansion.py -q",
+    "scope": "Synthetic5call execution/one foundation, retained8byte preservation, original prompts, exactguidance3/2.5argument changes, restoration, mismatch/tamper failure, realCPUtorch no-grad materialization, cache/environment drift, package partialZIP, replay and competing-lock guards.",
+    "actual_reference_preflight": "PASS: reviewed report contract and all8retainedPNG/RGB/prompt/setting hashes.",
+    "package_payload_compile_and_hashes": "PASS",
+    "catalog_consistency": "PASS",
+    "git_diff_check": "PASS",
+    "local_cuda_generation": false
+  },
+  "runtime": "Existing Kaggle cache/packages reused; no reinstall or model download. Fresh child process.",
+  "prepared_cell": {
+    "path": "notebooks/makeup_guidance_25_cell.py",
+    "portraits_embedded": false,
+    "weights_embedded": false,
+    "secret_values_embedded": false
+  },
+  "time_estimate": "Around6to7minutes using prior roughly64seconds/call plus model loading; not measured for this experiment.",
+  "boundaries": "No production app/parameters/prompts/weights/catalog/Render changes, original file overwrite, new training, recoloring/blending/masks or automatic acceptance.",
+  "limits": [
+    "Relative human preference for3.0is not final complexion-preservation acceptance.",
+    "Two reused diagnostic people and2styles; no generalization claim.",
+    "Only the one3.0control is regenerated; all8old references are otherwise reused.",
+    "Guidance2.5may weaken makeup or fail preservation. No further sweep is authorized automatically."
+  ],
+  "next": "Run one new prepared cell in the same private session and return beautycore-makeup-guidance-results-<id>.zip.",
+  "gpu_followup": {
+    "archive_sha256": "01832128682ba72b9f3935f4186ea413da154693fe516431f8fa7b04ba528c07",
+    "new_calls_completed": 5,
+    "retained_images": 8,
+    "guidance3_control_pixel_identical": true,
+    "finding": "2.5keeps makeup visible; close to3.0without consistent additional preservation benefit.",
+    "review": "makeup-guidance-25-20261025-review.json"
+  }
+}

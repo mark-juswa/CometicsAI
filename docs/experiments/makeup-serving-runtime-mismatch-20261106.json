@@ -1,0 +1,25 @@
+{
+  "status": "VERIFIED",
+  "expected": {
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128",
+    "cuda": "12.8",
+    "gpu": "Tesla T4"
+  },
+  "observed_from_user_error": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "cuda": "13.0",
+    "gpu": "Tesla T4"
+  },
+  "matching_host_accepted": true,
+  "reported_host_rejected": true,
+  "error": "Kaggle image differs from the reviewed GPU image. Expected {\"python\": \"3.12.13\", \"torch\": \"2.10.0+cu128\", \"cuda\": \"12.8\", \"gpu\": \"Tesla T4\"}; observed {\"python\": \"3.13.16\", \"torch\": \"2.11.0+cu130\", \"cuda\": \"13.0\", \"gpu\": \"Tesla T4\"}. Use the tested pinned notebook; do not change the model guards.",
+  "notebook_sha256": "b4a4e1c1482fd060d194f19f5570b6221131379e8214d18c064a713452ab08fd",
+  "notebook_metadata_keys": [
+    "kernelspec"
+  ],
+  "kaggle_docker_image_pin_in_metadata": false,
+  "gpu_start_or_generation_performed": false,
+  "recovery_on_kaggle": "NEEDS VERIFICATION"
+}

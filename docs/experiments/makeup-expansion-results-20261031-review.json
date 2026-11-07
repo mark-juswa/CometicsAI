@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-31",
+  "experiment": "MAKEUP-EXP-002",
+  "progress": "DONE",
+  "technical_evidence": "VERIFIED",
+  "appearance_evidence": "EXPERIMENTAL",
+  "human_makeup_approval": "NOT RECORDED",
+  "codex_white_cast_goal_verdict": "FAIL",
+  "archive": {
+    "sha256": "581f1c2abb2ddfb4812e6829c3e8206b0e1c648320d79f3fbada238949f59478",
+    "bytes": 7955678,
+    "members": 39,
+    "crc": "PASS",
+    "safe_paths": true
+  },
+  "technical_verification": "artifacts/makeup-expansion-20261031/review-01/technical-verification.json",
+  "browser_verification": {
+    "images_loaded": 10,
+    "original_size_viewer": "PASS",
+    "mobile390px": "PASS",
+    "script_errors": []
+  },
+  "timing": {
+    "new_calls_seconds": [
+      62.81324132300006,
+      62.232016979000036,
+      63.95875979899995
+    ],
+    "sum_new_calls_seconds": 189.00401810100004,
+    "model_load_seconds": 43.961074693,
+    "peak_allocated_mib": 8304.30517578125
+  },
+  "new_outputs": [
+    {
+      "kind": "continuity",
+      "subject_id": "054109",
+      "style_id": "soft_glam",
+      "output": "01-054109-soft_glam.png",
+      "png_sha256": "272f5a18fff62f776f0b22f7bfc2a66b4a9332c404992ab305fa955e07d9f3a9",
+      "rgb_sha256": "5a2033fadf956f7690acffa1865d5e8eb4b1e6f98f9a0c23b06ce7ad71177ba3",
+      "wall_seconds": 62.81324132300006
+    },
+    {
+      "kind": "candidate",
+      "subject_id": "054109",
+      "style_id": "exp_manga_lash",
+      "output": "02-054109-exp_manga_lash.png",
+      "png_sha256": "38f6e15347adf55cf369e03d5a7a47130dc1bf31064b0c79a6fef5d55b08eb01",
+      "rgb_sha256": "47f2e5b3f9fb0d2c0a0b680f91dfd4f6bdb08776c43b814720c8465441d811e5",
+      "wall_seconds": 62.232016979000036
+    },
+    {
+      "kind": "candidate",
+      "subject_id": "056266",
+      "style_id": "exp_manga_lash",
+      "output": "03-056266-exp_manga_lash.png",
+      "png_sha256": "3888df43dfba3f6948e0e4ddaaad4ca6758627224d6115fc8b707d6f9a718303",
+      "rgb_sha256": "422b95cd01d317f72c894337226247e8f43ea7c718422d64ff566d86142d29ef",
+      "wall_seconds": 63.95875979899995
+    }
+  ],
+  "retained_outputs": 6,
+  "continuity": "EXACT PNG AND RGB MATCH",
+  "visual_observations": {
+    "054109": "Separated prominent lash spikes, pink lids/blush and rose lip are visible. Face is substantially paler and smoother than source; brows and facial details are retouched. White-cast goal fails.",
+    "056266": "Separated lash clusters and pink cheek/eye/lip colors are visible. Skin texture/freckling and facial details are strongly retouched; complexion is cooler/paler than source. White-cast goal fails."
+  },
+  "limits": [
+    "Two reused development portraits only, not untouched evaluation or calibrated skin-tone/identity metrics.",
+    "Six Soft Glam/Berry/Icy references are reused; only control plus two Manga outputs were newly generated.",
+    "Experimental guidance2.5; deployed contract remains4.0. No new training or whitening correction.",
+    "Reported GPU memory is peak allocated, not reserved/whole-system memory. Inference timing excludes setup and website overhead."
+  ],
+  "recommendation": "Hold new Makeup from public release pending explicit client review; no complexion-preserving fix demonstrated. Continue approved Hair/Nail integration independently. No automatic GPU/strength/model/rendering sweep.",
+  "gallery": "artifacts/makeup-expansion-20261031/review-01/results/review-self-contained.html",
+  "unchanged_artifact_sha256": {
+    "artifacts/render_kaggle_cpu_hair_nails_20261031_01.bin": "0bc2329cf1294c65082ae2de23159452842b56d63581fb13cae2a9065979d87f",
+    "notebooks/render_kaggle_hair_nails_demo.ipynb": "963d78b800d7100cc631e29249d73b48f9286c76111e796c1c1d1feb7e49eb5f",
+    "notebooks/makeup_expansion_completion.ipynb": "bbaa7ba06be6b6fed3bd4ebaafcab9aff0dd96b3e1c3ac5e8c5623bba943950e"
+  },
+  "production_changed": false,
+  "new_local_gpu_calls": 0
+}

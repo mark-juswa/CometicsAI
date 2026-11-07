@@ -1,0 +1,134 @@
+{
+  "schema": "beautycore-makeup-expansion-completion-v1",
+  "experiment": "MAKEUP-EXP-002",
+  "production_enabled": false,
+  "automatic_promotion": false,
+  "training": false,
+  "white_cast_fix_claimed": false,
+  "expected_new_calls": 3,
+  "retained_outputs": [
+    {
+      "style_id": "soft_glam",
+      "subject_id": "054109",
+      "filename": "reference-054109-soft_glam.png",
+      "original_output": "05-054109-soft_glam.png",
+      "png_sha256": "272f5a18fff62f776f0b22f7bfc2a66b4a9332c404992ab305fa955e07d9f3a9",
+      "rgb_sha256": "5a2033fadf956f7690acffa1865d5e8eb4b1e6f98f9a0c23b06ce7ad71177ba3",
+      "prompt_sha256": "6071510a74d3cdefdb752910d9ccbf12b61ff34574570290228c396ce60a5cae",
+      "guidance": 2.5,
+      "adapter_sha256": "f6f0419e4259a75102f08a450222ad806e3aec1c2ae50ff89f875139084ae510"
+    },
+    {
+      "style_id": "soft_glam",
+      "subject_id": "056266",
+      "filename": "reference-056266-soft_glam.png",
+      "original_output": "06-056266-soft_glam.png",
+      "png_sha256": "1bbc9c65c248cadf4adf62158dfefef3bbef14214f0dd9e464573d3e2a009d26",
+      "rgb_sha256": "672d14b55ee479d929d94b65806ffdc0c49e12de23566a5682c8dbac95bcc639",
+      "prompt_sha256": "6071510a74d3cdefdb752910d9ccbf12b61ff34574570290228c396ce60a5cae",
+      "guidance": 2.5,
+      "adapter_sha256": "f6f0419e4259a75102f08a450222ad806e3aec1c2ae50ff89f875139084ae510"
+    },
+    {
+      "style_id": "exp_cloud_berry_lips",
+      "subject_id": "054109",
+      "filename": "reference-054109-exp_cloud_berry_lips.png",
+      "original_output": "21-054109-exp_cloud_berry_lips.png",
+      "png_sha256": "3dcc30b86f4f422848ed726a49c8d2c5f5fb5c9602cc8a748a81e69b34d0cc62",
+      "rgb_sha256": "167d2d3c9cedff54259fd495399169d9cedb42f5aabc52dea75351f6bb38b961",
+      "prompt_sha256": "b4c0a6e75e0660ab5dfe7aed06369646b49ce5d2e198d5e8b2471f5a4195fac3",
+      "guidance": 2.5,
+      "adapter_sha256": "f6f0419e4259a75102f08a450222ad806e3aec1c2ae50ff89f875139084ae510"
+    },
+    {
+      "style_id": "exp_cloud_berry_lips",
+      "subject_id": "056266",
+      "filename": "reference-056266-exp_cloud_berry_lips.png",
+      "original_output": "22-056266-exp_cloud_berry_lips.png",
+      "png_sha256": "f0c85513c8aeba6381e63925c31a0b287159978198666fb4ae70970ff1512a19",
+      "rgb_sha256": "be2bc0ee274aaf7f9102ec606453e08a5f57ea56cd5d24a68b0f24c29f1c479f",
+      "prompt_sha256": "b4c0a6e75e0660ab5dfe7aed06369646b49ce5d2e198d5e8b2471f5a4195fac3",
+      "guidance": 2.5,
+      "adapter_sha256": "f6f0419e4259a75102f08a450222ad806e3aec1c2ae50ff89f875139084ae510"
+    },
+    {
+      "style_id": "exp_icy_silver",
+      "subject_id": "054109",
+      "filename": "reference-054109-exp_icy_silver.png",
+      "original_output": "23-054109-exp_icy_silver.png",
+      "png_sha256": "47cfae781919d3e21b97f775d7b32bdff64a2cbca4a0eb39e69b58a384f2ea5b",
+      "rgb_sha256": "3bc38e229ff2666ac3226681c20bf3ef01ad149eede314a15b88659b2454a23c",
+      "prompt_sha256": "59f2e5f089ff5b50a30a07becf3b638956a1696487a65fba8a6705c155fd6ae2",
+      "guidance": 2.5,
+      "adapter_sha256": "f6f0419e4259a75102f08a450222ad806e3aec1c2ae50ff89f875139084ae510"
+    },
+    {
+      "style_id": "exp_icy_silver",
+      "subject_id": "056266",
+      "filename": "reference-056266-exp_icy_silver.png",
+      "original_output": "24-056266-exp_icy_silver.png",
+      "png_sha256": "50d74e6b57f85d798192ff8aa33e08f4c93ee94c8ade6a1bbb7ed2166aa68d7c",
+      "rgb_sha256": "a46f23a20c4ae7713b63b8d7be655b74f12e262a7f679ba6c5c1e53132448ff5",
+      "prompt_sha256": "59f2e5f089ff5b50a30a07becf3b638956a1696487a65fba8a6705c155fd6ae2",
+      "guidance": 2.5,
+      "adapter_sha256": "f6f0419e4259a75102f08a450222ad806e3aec1c2ae50ff89f875139084ae510"
+    }
+  ],
+  "subjects": [
+    {
+      "id": "054109",
+      "filename": "054109.jpg",
+      "sha256": "81e57faca39e3989ed9920ebd6568efad563ae4f012f3fbb130918858d18e8ed",
+      "origin": "054109/bare.jpg",
+      "source_photo": {
+        "author": "Presidency Maldives",
+        "photo_title": "MK_NAIVAIDHOO1493",
+        "photo_url": "https://www.flickr.com/photos/presidencymaldives/5292667558/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Reused validation portrait for diagnostic development; private academic artifact, not new untouched final evaluation."
+    },
+    {
+      "id": "056266",
+      "filename": "056266.jpg",
+      "sha256": "d6b86be2fe5f505eb6ebe7f2b1c22a59f41ddef053953f55eba1ca0b859f1728",
+      "origin": "056266/bare.jpg",
+      "source_photo": {
+        "author": "Lori Thantos",
+        "photo_title": "IMG_1526.jpg",
+        "photo_url": "https://www.flickr.com/photos/lori_thantos/5121900493/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Reused validation portrait for diagnostic development; private academic artifact, not new untouched final evaluation."
+    }
+  ],
+  "reference_report_sha256": "b0e6ffa314284224d59c7111aa2d24d5e6c78f627da162d8ee618193a19499f5",
+  "reference_report_filename": "reference-report.json",
+  "adapter_sha256": "f6f0419e4259a75102f08a450222ad806e3aec1c2ae50ff89f875139084ae510",
+  "presets_sha256": "8e6e244f6174dc70f33cb15a037f5e67e2a245f15278967f4d2f85bc909cd5f5",
+  "inference": {
+    "width": 512,
+    "height": 512,
+    "steps": 20,
+    "seed": 1977,
+    "guidance": 2.5,
+    "adapter_weight": 1.0
+  },
+  "manga_prompt": "Apply manga-lash makeup with distinct separated upper-lash clusters, fine dark lash-line definition, restrained pink blush and a muted rose lip. Keep the eyes and eyelids in their original shape; use lash grouping rather than enlarging the eyes. Edit the supplied photo of the same person. Keep their recognizable identity, face shape, eyes, nose, mouth geometry, expression, natural skin tone and skin texture. Keep the original hairstyle, hair color, clothing, background, pose, framing and lighting. Change makeup only. Keep cosmetic color in plausible facial regions and avoid mask-like patches or plastic skin.",
+  "continuity": {
+    "subject_id": "054109",
+    "style_id": "soft_glam",
+    "rgb_sha256": "5a2033fadf956f7690acffa1865d5e8eb4b1e6f98f9a0c23b06ce7ad71177ba3"
+  },
+  "limits": [
+    "Only Manga Lash is newly tested; six verified Soft Glam/Berry/Icy outputs are retained without regeneration.",
+    "One Soft Glam control must reproduce its saved pixels before two Manga images.",
+    "Two reused development sources, not untouched final evaluation. Preserve original photo credits/private research limitations.",
+    "Guidance2.5 is an experimental prior selection, not the deployed4.0contract or a verified complexion correction.",
+    "No masks, tone correction, replacement model, new dataset/training, arbitrary parameter sweep or deployment."
+  ]
+}

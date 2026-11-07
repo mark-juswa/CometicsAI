@@ -1,5 +1,7 @@
 # BeautyCore — Andrea's Salon Management System
 
+**Current project entry point, 7 November 2026:** use [the repository handoff](../docs/guides/client-repository-handoff.md). Current Client AI uses the authenticated FastAPI/Kaggle FLUX workflow and text only Consultation. The Gemini vision and SD1.5/Colab sections below describe the inherited application and are not the current deployed AI setup. Use a development database for the seed command below, since it clears demo rows.
+
 An AI-assisted salon platform: clients upload a photo, Google Gemini analyses
 their current hair or nails and recommends styles grounded in what it actually
 sees. Staff manage bookings, inventory, and finances from role-scoped portals.

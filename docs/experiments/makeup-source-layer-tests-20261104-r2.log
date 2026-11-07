@@ -1,0 +1,6 @@
+..............                                                           [100%]
+14 passed in 2.25s
+Exception ignored in: <function Console.__del__ at 0x00000190EE9D6DE0>
+Traceback (most recent call last):
+  File "C:\Users\Gigabyte\AppData\Local\Programs\Python\Python311\Lib\site-packages\pyreadline3\console\console.py", line 255, in __del__
+OSError: [WinError -1073741816] Windows Error 0xc0000008

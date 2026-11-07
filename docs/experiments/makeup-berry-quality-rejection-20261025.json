@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-25",
+  "status": "CONFIRMED_USER_REJECTED_BERRY_QUALITY",
+  "evidence": "User supplies Berry output screenshot and explicitly says makeup is unnatural, too white and poorly blended with original skin tone.",
+  "affected_result": "STYLE-VAL-001 exp_cloud_berry_lips, subject054109, guidance2.5.",
+  "decision": "Hold new Makeup expansion release; do not present guidance2.5or successful29call execution as a complexion fix.",
+  "earlier_selection": "Earlier2.5relative preference is retained as historical evidence; it did not approve this new Berry look or establish skin-tone preservation.",
+  "verified_context": "Original/current/reduced and guidance/prompt comparisons already show complexion/texture drift. Existing paired-target audit notes retouching, while Base-only also over-edits.",
+  "causal_limit": "The exact cause and contribution of particular training examples are not isolated; corrected-data retraining is not guaranteed.",
+  "next_proposed": "Create concrete source/target keep-reject-replacement review before new GPU work; retain visible local cosmetics with unchanged natural complexion/texture/geometry. Review usable target coverage before designing bounded fine-tuning.",
+  "changes": "No production deactivation, parameter/prompt/model/catalog/deployment changes, new images or training."
+}

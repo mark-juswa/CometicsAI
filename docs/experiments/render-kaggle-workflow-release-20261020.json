@@ -1,7 +1,7 @@
 {
   "date": "2026-10-20",
   "timezone": "Asia/Manila",
-  "status": "SCHEMA_APPLIED; GITHUB_RELEASE_VERIFIED; RENDER_MANUAL_DEPLOY_AND_KAGGLE_START_PENDING",
+  "status": "RENDER_NEW_ROUTES_LIVE; KAGGLE_SIGNED_CONNECTION_VERIFIED; GENERATION_REHEARSAL_PENDING",
   "user_authorization": "lets deploy it on render and kaggle together with the optimization we have done in generating the images",
   "kaggle_session_before_release": "Stopped, confirmed by user",
   "database": {
@@ -24,7 +24,8 @@
     "hair_makeup_wrapper_bypassed": true,
     "model_settings_changed": false,
     "new_live_gpu_comparison_performed": false,
-    "previous_comparison": "docs/experiments/application-rehearsal-20261018-review.json"
+    "previous_comparison": "docs/experiments/application-rehearsal-20261018-review.json",
+    "fresh_session_policy": "Configured by optimized notebook; startup reported by operator; no new session GPU timing or diagnostic audit independently collected"
   },
   "notebook": {
     "path": "notebooks/render_kaggle_optimized_demo.ipynb",
@@ -46,24 +47,44 @@
     "final_historical_and_optimized_notebook_tests": {
       "passed": 8,
       "failed": 0
-    }
+    },
+    "live_authenticated_generation": "PENDING: signed-in browser rehearsal required",
+    "render_feature_flag": "Needs operator confirmation",
+    "connection_date": "2026-10-20",
+    "connection_timezone": "Asia/Manila"
   },
   "publication": {
     "repository": "mark-juswa/CometicsAI",
     "deployment_branch": "codex/render-kaggle-demo",
     "pushed": true,
     "verified_remote_sha": "8965f794500b6447ee45abe9388ad54fb8cb0bbf",
-    "release_commit": "8965f794500b6447ee45abe9388ad54fb8cb0bbf"
+    "release_commit": "8965f794500b6447ee45abe9388ad54fb8cb0bbf",
+    "latest_deployment_branch_sha": "ccd17d55233be292dbb6e21d12cca52880dc730e"
   },
   "limitations": [
-    "No Render/Kaggle API credentials or supported browser-control runtime available in this session",
-    "Render live revision and feature flag require operator confirmation",
-    "Fresh optimized GPU/browser generation acceptance pending"
+    "No supported Render/Kaggle browser control or management credentials in this session",
+    "Real signed-in generation, selected-look booking/completion/review and client-device rehearsal pending",
+    "SAVED_LOOKS_ENABLED and exact Render dashboard revision require operator confirmation",
+    "No fresh GPU timing/quality comparison for this running session; previous paired evidence and local scope tests remain the performance basis"
   ],
   "guide": "docs/guides/render-kaggle-release-20261020.md",
   "website_probe": {
     "health": 200,
-    "new_protected_performance_route": 404,
-    "meaning": "Existing website is up; new release is not live at probe time"
-  }
+    "stylist_performance": 401,
+    "saved_looks": 401,
+    "ai_features": 401,
+    "unauthenticated_completion_nonexistent_id": 401,
+    "unauthenticated_review_nonexistent_id": 401,
+    "meaning": "New workflow routes are live and correctly reject unauthenticated access; actual dashboard commit/flags and role walkthrough are not independently inspected"
+  },
+  "kaggle_probe": {
+    "active_signed_operational_lease": true,
+    "heartbeat_recent_within_seconds": 90,
+    "heartbeat_recent": true,
+    "endpoint_urls_or_secrets_returned": false,
+    "application_records_read": false,
+    "query_read_only": true,
+    "meaning": "Configured database has an active signed Kaggle registration with recent heartbeat; actual image generation and runtime cache timing were not exercised"
+  },
+  "operator_report": "Optimized Kaggle notebook shows CONNECTED TO WEBSITE."
 }

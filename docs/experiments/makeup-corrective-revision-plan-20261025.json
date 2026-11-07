@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-25",
+  "status": "PROPOSED_CORRECTIVE_PLAN_SOURCE_AUDIT_VERIFIED",
+  "scope": "Address deployed and expanded Makeup with one shared corrective revision.",
+  "next_deliverable": "Per-pair keep/reject/replacement review of existing60pairs, actual usable counts and target gaps before another GPU run.",
+  "not_yet_authorized_or_started": [
+    "New data acquisition",
+    "Training",
+    "Alternative regional edit architecture",
+    "Production changes/deactivation/deployment"
+  ],
+  "evidence": [
+    "makeup-complexion-audit-20261025.md",
+    "makeup-quality-diagnostic-20261025-review.md",
+    "makeup-guidance-25-20261025-review.md",
+    "style-release-validation-20261025-review.md",
+    "makeup-berry-quality-rejection-20261025.json"
+  ],
+  "root_cause_limits": "Raw full-framegeneration over-edits; data retouching plausible contributor; Base also over-edits. Do not promise fine-tuning alone solves all cases.",
+  "closed_experiments": "PreservationV3/V4,inpaintV1/V2must not be restarted unchanged.",
+  "plan": "makeup-corrective-revision-plan-20261025.md",
+  "production_changed": false,
+  "gpu_requests": 0
+}

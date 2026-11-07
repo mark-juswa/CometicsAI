@@ -1,0 +1,491 @@
+{
+  "experiment": "MAKEUP-RENDER-002",
+  "generator": "beautycore_makeup_render_styles_pilot_v1",
+  "production_enabled": false,
+  "training": false,
+  "lora_active": false,
+  "project_trained_generator_used": false,
+  "subjects": [
+    {
+      "id": "054109",
+      "source": ".tmp/data_m001/paired_selection/final_v1/validation/reference/054109_makeup_01.jpg",
+      "sha256": "81e57faca39e3989ed9920ebd6568efad563ae4f012f3fbb130918858d18e8ed",
+      "source_photo": {
+        "author": "Presidency Maldives",
+        "photo_title": "MK_NAIVAIDHOO1493",
+        "photo_url": "https://www.flickr.com/photos/presidencymaldives/5292667558/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Existing development portrait; not untouched final acceptance.",
+      "note": "Original photo may already contain cosmetics; no bare-skin ground-truth claim."
+    },
+    {
+      "id": "056266",
+      "source": ".tmp/data_m001/paired_selection/final_v1/validation/reference/056266_makeup_01.jpg",
+      "sha256": "d6b86be2fe5f505eb6ebe7f2b1c22a59f41ddef053953f55eba1ca0b859f1728",
+      "source_photo": {
+        "author": "Lori Thantos",
+        "photo_title": "IMG_1526.jpg",
+        "photo_url": "https://www.flickr.com/photos/lori_thantos/5121900493/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Existing development portrait; not untouched final acceptance.",
+      "note": "Original photo may already contain cosmetics; no bare-skin ground-truth claim."
+    },
+    {
+      "id": "006553",
+      "source": ".tmp/data_m001/paired_selection/final_v1/train/reference/006553_makeup_01.jpg",
+      "sha256": "64a84cfe4ccde31e01cc10edcbc6843211163fc006a279ce8c49ff75b1ca3098",
+      "source_photo": {
+        "author": "academy visavis",
+        "photo_title": "272_visavis_academy_0423_khs-1370823",
+        "photo_url": "https://www.flickr.com/photos/145889229@N04/40808745485/",
+        "license": "Attribution License",
+        "license_url": "https://creativecommons.org/licenses/by/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Existing development portrait; not untouched final acceptance.",
+      "note": "Original photo may already contain cosmetics; no bare-skin ground-truth claim."
+    },
+    {
+      "id": "035149",
+      "source": ".tmp/data_m001/paired_selection/final_v1/train/reference/035149_makeup_01.jpg",
+      "sha256": "65ff8f0ad1ca3dc416eb91733770669654d45d50a6aee9cf17beacd1a8be1e40",
+      "source_photo": {
+        "author": "Jack Donahue",
+        "photo_title": "Sheila's Graduation-0113",
+        "photo_url": "https://www.flickr.com/photos/jackflynndonahue/4651049950/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Existing development portrait; not untouched final acceptance.",
+      "note": "Original photo may already contain cosmetics; no bare-skin ground-truth claim."
+    }
+  ],
+  "profiles": {
+    "no_makeup_makeup": {
+      "pigment": {
+        "name": "No-Makeup Makeup",
+        "lip_rgb": [
+          156,
+          88,
+          89
+        ],
+        "lip_opacity": 0.12,
+        "lip_chroma_cap": 12,
+        "lip_lightness_cap": 3,
+        "shadow_rgb": [
+          125,
+          99,
+          83
+        ],
+        "shadow_opacity": 0.07,
+        "shadow_darkening": 1,
+        "liner_opacity": 0.1,
+        "liner_darkening": 14.0,
+        "blush_rgb": [
+          177,
+          98,
+          100
+        ],
+        "blush_opacity": 0.02
+      },
+      "eye_shape": "soft",
+      "lower_eye_opacity": 0,
+      "cheek_highlight": 0,
+      "lip_gloss": 0,
+      "lip_matte": 0,
+      "gold_sheen": 0,
+      "description": "Minimal lip tint and eye definition over the existing photograph.",
+      "unsupported_features": [
+        "Does not remove existing makeup, conceal blemishes or even the whole-face complexion."
+      ]
+    },
+    "smoky_glam": {
+      "pigment": {
+        "name": "Smoky Glam",
+        "lip_rgb": [
+          142,
+          91,
+          82
+        ],
+        "lip_opacity": 0.45,
+        "lip_chroma_cap": 22,
+        "lip_lightness_cap": 12,
+        "shadow_rgb": [
+          75,
+          65,
+          67
+        ],
+        "shadow_opacity": 0.75,
+        "shadow_darkening": 9.5,
+        "liner_opacity": 0.68,
+        "liner_darkening": 20.0,
+        "blush_rgb": [
+          159,
+          94,
+          96
+        ],
+        "blush_opacity": 0.035
+      },
+      "eye_shape": "smoky",
+      "lower_eye_opacity": 0.18,
+      "cheek_highlight": 0,
+      "lip_gloss": 0,
+      "lip_matte": 0,
+      "gold_sheen": 0,
+      "description": "Diffused charcoal-brown eye definition, lower lash-line shading and a restrained nude lip.",
+      "unsupported_features": [
+        "Does not generate additional lashes or a new complexion base."
+      ]
+    },
+    "dewy_peach": {
+      "pigment": {
+        "name": "Dewy Peach",
+        "lip_rgb": [
+          196,
+          107,
+          88
+        ],
+        "lip_opacity": 0.52,
+        "lip_chroma_cap": 27,
+        "lip_lightness_cap": 12,
+        "shadow_rgb": [
+          180,
+          120,
+          80
+        ],
+        "shadow_opacity": 0.28,
+        "shadow_darkening": 2.0,
+        "liner_opacity": 0.17,
+        "liner_darkening": 14.0,
+        "blush_rgb": [
+          210,
+          123,
+          97
+        ],
+        "blush_opacity": 0.11
+      },
+      "eye_shape": "soft",
+      "lower_eye_opacity": 0,
+      "cheek_highlight": 0.5,
+      "lip_gloss": 0.55,
+      "lip_matte": 0,
+      "gold_sheen": 0,
+      "description": "Peach lip and cheek pigment with localized cheek/lip highlight enhancement.",
+      "unsupported_features": [
+        "Dewy finish is localized; forehead/base skin remains unchanged. Existing flash highlights are not removed."
+      ]
+    },
+    "rosy_pink": {
+      "pigment": {
+        "name": "Rosy Pink",
+        "lip_rgb": [
+          185,
+          85,
+          119
+        ],
+        "lip_opacity": 0.54,
+        "lip_chroma_cap": 32,
+        "lip_lightness_cap": 12,
+        "shadow_rgb": [
+          176,
+          105,
+          137
+        ],
+        "shadow_opacity": 0.36,
+        "shadow_darkening": 2.5,
+        "liner_opacity": 0.24,
+        "liner_darkening": 14.0,
+        "blush_rgb": [
+          194,
+          92,
+          129
+        ],
+        "blush_opacity": 0.12
+      },
+      "eye_shape": "soft",
+      "lower_eye_opacity": 0,
+      "cheek_highlight": 0,
+      "lip_gloss": 0,
+      "lip_matte": 0,
+      "gold_sheen": 0,
+      "description": "Coordinated rose-pink lips, eyelids and light blush.",
+      "unsupported_features": []
+    },
+    "bronze_golden_glam": {
+      "pigment": {
+        "name": "Bronze / Golden Glam",
+        "lip_rgb": [
+          164,
+          106,
+          80
+        ],
+        "lip_opacity": 0.55,
+        "lip_chroma_cap": 26,
+        "lip_lightness_cap": 14,
+        "shadow_rgb": [
+          156,
+          110,
+          54
+        ],
+        "shadow_opacity": 0.58,
+        "shadow_darkening": 4.0,
+        "liner_opacity": 0.35,
+        "liner_darkening": 14.0,
+        "blush_rgb": [
+          175,
+          116,
+          80
+        ],
+        "blush_opacity": 0.075
+      },
+      "eye_shape": "soft",
+      "lower_eye_opacity": 0,
+      "cheek_highlight": 0,
+      "lip_gloss": 0,
+      "lip_matte": 0,
+      "gold_sheen": 0.4,
+      "description": "Warm bronze eye pigment, localized golden eyelid sheen and a warm nude lip.",
+      "unsupported_features": [
+        "No whole-face bronzing or physically simulated glitter/metallic reflections."
+      ]
+    },
+    "matte_nude": {
+      "pigment": {
+        "name": "Matte Nude",
+        "lip_rgb": [
+          146,
+          96,
+          83
+        ],
+        "lip_opacity": 0.55,
+        "lip_chroma_cap": 26,
+        "lip_lightness_cap": 14,
+        "shadow_rgb": [
+          124,
+          96,
+          76
+        ],
+        "shadow_opacity": 0.29,
+        "shadow_darkening": 3.0,
+        "liner_opacity": 0.24,
+        "liner_darkening": 14.0,
+        "blush_rgb": [
+          161,
+          107,
+          96
+        ],
+        "blush_opacity": 0.04
+      },
+      "eye_shape": "soft",
+      "lower_eye_opacity": 0,
+      "cheek_highlight": 0,
+      "lip_gloss": 0,
+      "lip_matte": 0.65,
+      "gold_sheen": 0,
+      "description": "Muted nude lip/neutral eye color with localized lip highlight attenuation.",
+      "unsupported_features": [
+        "Matte finish affects lips only; full-face shine, pores and original foundation remain unchanged."
+      ]
+    },
+    "bold_evening_glam": {
+      "pigment": {
+        "name": "Bold Evening Glam",
+        "lip_rgb": [
+          123,
+          28,
+          72
+        ],
+        "lip_opacity": 0.78,
+        "lip_chroma_cap": 42,
+        "lip_lightness_cap": 26,
+        "shadow_rgb": [
+          97,
+          54,
+          83
+        ],
+        "shadow_opacity": 0.68,
+        "shadow_darkening": 9.0,
+        "liner_opacity": 0.7,
+        "liner_darkening": 20.0,
+        "blush_rgb": [
+          158,
+          68,
+          99
+        ],
+        "blush_opacity": 0.105
+      },
+      "eye_shape": "evening",
+      "lower_eye_opacity": 0.15,
+      "cheek_highlight": 0,
+      "lip_gloss": 0,
+      "lip_matte": 0,
+      "gold_sheen": 0,
+      "description": "Deeper plum eyes, stronger liner and a berry statement lip.",
+      "unsupported_features": [
+        "Does not add full false lashes, contour the face or replace the foundation."
+      ]
+    }
+  },
+  "case_count": 28,
+  "baseline_plan": "data/makeup/MAKEUP-RENDER-001/plan-gamut-v2.json",
+  "baseline_plan_sha256": "0780f7d7063c35bb3eb1a03318793b08ce4eb4c75fcb8f24391cb60484297296",
+  "baseline_report": "artifacts/makeup-render-20261026/run-02/report.json",
+  "baseline_report_sha256": "f9d5eaf492d88656067e2e0911e1384e43d1871607bf4b421182cabd5bb59a70",
+  "baseline_renderer": "scripts/makeup_source_render.py",
+  "baseline_renderer_sha256": "0471a37c01b4438dcf7c12389e0b044e7b7c81d6da3be67147b3eff742e8fb05",
+  "cached_maps": [
+    {
+      "id": "054109",
+      "labels": "artifacts/makeup-render-20261026/run-02/054109-labels.png",
+      "labels_sha256": "93cfaaf691c744b47ca53cdc8028c9e2d33ab496260afab855312251b0204ffe",
+      "allowed": "054109-allowed.png",
+      "placements": [
+        {
+          "eye_label": 4,
+          "eye_center": [
+            318.85591397849464,
+            188.70322580645163
+          ],
+          "eye_width": 45,
+          "cheek_center": [
+            330.55591397849463,
+            258.6
+          ]
+        },
+        {
+          "eye_label": 5,
+          "eye_center": [
+            176.60068259385665,
+            188.14163822525597
+          ],
+          "eye_width": 44,
+          "cheek_center": [
+            165.16068259385665,
+            259.54
+          ]
+        }
+      ]
+    },
+    {
+      "id": "056266",
+      "labels": "artifacts/makeup-render-20261026/run-02/056266-labels.png",
+      "labels_sha256": "ece1aad22b396febb1b0dc6cea275b67f690ddae1529014d5a0372ea2d51b4fa",
+      "allowed": "056266-allowed.png",
+      "placements": [
+        {
+          "eye_label": 4,
+          "eye_center": [
+            328.5593635250918,
+            182.21542227662178
+          ],
+          "eye_width": 57,
+          "cheek_center": [
+            343.3793635250918,
+            258.31
+          ]
+        },
+        {
+          "eye_label": 5,
+          "eye_center": [
+            185.74751243781094,
+            182.14800995024876
+          ],
+          "eye_width": 54,
+          "cheek_center": [
+            171.70751243781095,
+            258.31
+          ]
+        }
+      ]
+    },
+    {
+      "id": "006553",
+      "labels": "artifacts/makeup-render-20261026/run-02/006553-labels.png",
+      "labels_sha256": "b1102e9dbe8e14a5483d6fe400db63dc6edaf59d186da25889579d4ff66b73b8",
+      "allowed": "006553-allowed.png",
+      "placements": [
+        {
+          "eye_label": 4,
+          "eye_center": [
+            338.2732558139535,
+            178.27325581395348
+          ],
+          "eye_width": 42,
+          "cheek_center": [
+            349.1932558139535,
+            243.83
+          ]
+        },
+        {
+          "eye_label": 5,
+          "eye_center": [
+            197.39242424242425,
+            178.85757575757575
+          ],
+          "eye_width": 55,
+          "cheek_center": [
+            183.09242424242424,
+            244.3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "035149",
+      "labels": "artifacts/makeup-render-20261026/run-02/035149-labels.png",
+      "labels_sha256": "5d7cdda621cea36e4ca680a61a45ce57e1cae353825590ecb54b83145a3fae23",
+      "allowed": "035149-allowed.png",
+      "placements": [
+        {
+          "eye_label": 4,
+          "eye_center": [
+            317.2120141342756,
+            189.72791519434628
+          ],
+          "eye_width": 64,
+          "cheek_center": [
+            333.8520141342756,
+            263.01
+          ]
+        },
+        {
+          "eye_label": 5,
+          "eye_center": [
+            181.07307307307306,
+            180.94794794794794
+          ],
+          "eye_width": 53,
+          "cheek_center": [
+            167.29307307307306,
+            259.25
+          ]
+        }
+      ]
+    }
+  ],
+  "parser": {
+    "directory": ".tmp/data_m001/parser_model",
+    "id": "jonathandinu/face-parsing",
+    "revision": "758b82e15a0178c9db39c1ff666a8b56e3a550c8",
+    "files": {
+      "config.json": "01d82e818569beda6aec804642e34ce187bed43326337d52ce370ff015964d68",
+      "model.safetensors": "c2bec795a8c243db71bd95be538fd62559003566466c71237e45c99b920f4b62",
+      "preprocessor_config.json": "e5a25d8fc054bf780be930e161b47d188bec1b0bf0a44fd5fdfb3f3312c0be0b"
+    }
+  },
+  "source_region_review": "Previously viewed4original automatic region proposals; added fields need new review.",
+  "limits": [
+    "Only4reuseddevelopmentpeople, not untouched generalization.",
+    "Previous3profile appearance not recorded as human ACCEPT by this extension authorization.",
+    "Profiles are not guarantees of full salon makeup; unsupported features are listed per style.",
+    "No new model inference/face reconstruction, datasets, training or cloud deployment.",
+    "Berry/IcySilver/MangaLash expansion candidates are not part of these7existing-style profiles."
+  ]
+}

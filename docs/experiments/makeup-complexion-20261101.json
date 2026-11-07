@@ -1,0 +1,83 @@
+{
+  "date": "2026-11-01",
+  "experiment": "MAKEUP-COMPLEXION-001",
+  "status": "DONE_OFFLINE_PROTOTYPE_HUMAN_REVIEW_PENDING",
+  "technical_evidence": "VERIFIED",
+  "appearance_evidence": "EXPERIMENTAL",
+  "human_acceptance": "NOT_RECORDED",
+  "goal": "Blend existing AI Makeup with the original person skin tone while retaining visible cosmetics.",
+  "new_diffusion_calls": 0,
+  "new_training": false,
+  "new_photo_acquisition": false,
+  "production_changed": false,
+  "checked_images": 10,
+  "unique_reused_people": 2,
+  "saved_guidance_matrix": {
+    "4.0_current_contract": 4,
+    "2.5_experimental": 6
+  },
+  "mechanism": "Source-only color-reference alignment; automatic neutral skin/neck samples; smooth spatial Lab correction across facial cosmetics and head/neck transitions. No displayed geometry warp.",
+  "development_receipt": [
+    "Boundary-only Poisson probe on six saved outputs improved warmth but left uneven internal tone; not adopted.",
+    "Initial spatial-field version matched color but hard-protected whole lips and semantic head edges, creating visible seams; rejected locally.",
+    "Revised spatial field includes cosmetic/head/neck transitions and uses narrow inner-eye/neutral-teeth protection. Previous failed outputs preserved."
+  ],
+  "visual_review": {
+    "cases_inspected": 10,
+    "finding": "White/pale cast visibly reduced, cosmetics remain visible and gross v1 lip/face cutout borders reduced.",
+    "remaining": "Warm/orange shading, lip/brow color shifts, some hairline/jaw/neck transitions and pre-existing smoothing/geometry changes remain possible. Not an accepted universal fix."
+  },
+  "protection_limit": "Only pixels outside actual edit influence are raw-identical. Lip, brow, neck, narrow hairline and nearby background pixels can change. Whole lips/whole semantic face boundaries are not hard protected.",
+  "checks": {
+    "focused_tests_passed": 23,
+    "exact_saved_output_reproductions": 10,
+    "browser": {
+      "images_loaded": 30,
+      "original_size_viewer": "PASS",
+      "mobile390px": "PASS",
+      "script_errors": []
+    },
+    "production_source_and_release_artifacts_unchanged": true
+  },
+  "performance": {
+    "correction_seconds_min": 0.16149729999960982,
+    "correction_seconds_max": 0.28098869999985254,
+    "correction_seconds_median": 0.17741040000032626,
+    "raw_parser_seconds": [
+      2.215016000000105,
+      2.0231168000000253,
+      2.0294739999999365,
+      1.997626599999876
+    ],
+    "parser_model_load_seconds": 0.7327500999999756,
+    "limit": "Local CPU only. Correction excludes parser/model loading/file IO. Original-source maps reused; full two-parser Kaggle latency/RAM not measured."
+  },
+  "environment": {
+    "numpy": "1.26.4",
+    "opencv": "4.13.0",
+    "scipy": "1.16.2",
+    "python": "3.11.5",
+    "torch": "2.10.0+cpu",
+    "transformers": "5.4.0"
+  },
+  "implementation": {
+    "algorithm": "scripts/makeup_complexion_field.py",
+    "evaluation": "scripts/evaluate_makeup_complexion.py",
+    "plan": "data/makeup/MAKEUP-COMPLEXION-001/review-plan.json",
+    "gallery": "artifacts/makeup-complexion-20261101/review/review-self-contained.html",
+    "algorithm_sha256": "6a8535e20fd9a6024502034c65769f9625e6c72d9fccfe80d45109b5f93cd276",
+    "evaluation_sha256": "bf5334767ab0119f2f566b8a4ad1a76cbfaa088feae2b8ff8cba75c4ccf651fb"
+  },
+  "unchanged_source_and_artifact_sha256": {
+    "backend/app/makeup_contract.py": "4253463a6a6c7afcd97384c0a5a4e0c25ba7ce9f9eb1d3f4411d2b8fec0a2fa1",
+    "backend/app/generation/remote_makeup.py": "4205e24f1864bde02dc75e60cd1a107a06ee29cf476ac001a8bcdf3fa26d5615",
+    "backend/app/makeup_styles.py": "c2ac1d40a4940e0335f8c382c1062148b54f0fa3dc07fec95e8ed33f1adaa6ba",
+    "scripts/makeup_inference_server.py": "ec9dd0c10a102a6bb13b4288994f18423c5164969cd131b02f2a4993ed570854",
+    "backend/app/style_release.json": "61cce06d4e76a6570550b2fee4c7ff4183323aea0ce1b3a1b63e191fced118b5",
+    "scripts/unified_gate3_server.py": "bb1d24159075f0592f491532080195f204f73c708e2a8e2fd095daac481723a2",
+    "scripts/inference_performance.py": "b69dd604baa6a09ba1a1d7598e979c66a81d26f70a8e9ae3db3bb790766030af",
+    "artifacts/render_kaggle_cpu_hair_nails_20261031_02.bin": "dfb5fc35f2c9c446fb8fdcc4439650c5f8a72941db864db1e9045cadae73082f",
+    "notebooks/render_kaggle_all_hair_nails_demo.ipynb": "574d8a144b90ee2a2a10c74ab1f6d8d46dd3d3891d1e9c74d5ee1bc01368ab84"
+  },
+  "next": "User reviews actual source/raw/corrected gallery. If appearance is useful, validate additional permitted inputs/pose/mask failure cases and actual Kaggle CPU memory/time before a separate versioned serving integration with unchanged raw-model provenance and fallback. No automatic promotion/sweep."
+}

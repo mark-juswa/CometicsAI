@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-25",
+  "status": "GPU_RECOVERY_VERIFIED_QUALITY_CORRECTION_NOT_ACCEPTED",
+  "tests": {
+    "focused_passed": 69,
+    "diagnostic_passed": 22,
+    "real_cpu_torch_reproduction": "Old context reproduces exact failure after8 simulated saved cases; corrected context completes12 and restores both groups.",
+    "resume_checks": "Retains old bytes; one control+four missing calls; mismatch stops after1; tamper rejected; cache/environment drift rejected.",
+    "limits": "The69tests are local CPU/synthetic coverage, not a local pinned CUDA model run. Subsequent returned GPU evidence is independently verified in gpu_followup and the completed review."
+  },
+  "artifacts": {
+    "old_notebook_unchanged_sha256": "d2f3a5dc47a413a1f29b5c28923a53a953661c99a8c1b30eb6aff739667b7e0d",
+    "corrected_v2_notebook": {
+      "path": "artifacts/makeup-quality-20261025/beautycore_makeup_quality_diagnostic_v2.ipynb",
+      "sha256": "604dbc498dd19e8b44d77e441098803196bcf1907fd348dd8b9dba9b716cbc4e",
+      "payload_compile_and_hash_checks": "PASSED"
+    },
+    "same_session_recovery": {
+      "path": "notebooks/makeup_quality_resume_cell.py",
+      "sha256": "87014ce54df4c138640623ec298723076ac87191b9f5bbc51180d4fe6c2bdc3a",
+      "private_portrait_payload": false
+    }
+  },
+  "sources": {
+    "scripts/makeup_quality_diagnostic.py": "00dcdc46116a3f2875c21c4df43daa6d4e6e2222f2800181ec856ae14c19b79a",
+    "scripts/makeup_quality_resume_bootstrap.py": "57c9254749aa37316aa3db53216a71b644b5117645c02b49116a03a1a23c2860",
+    "scripts/package_makeup_quality_diagnostic.py": "ab5a0cfaabfcef531a3ccefa2452d637d1819dd4b6c06fa0ef62c169263cc191"
+  },
+  "catalog_consistency": "PASSED",
+  "git_diff_check": "PASSED",
+  "production_or_cloud_changed": false,
+  "original_results_modified": false,
+  "technical_references": [
+    "https://docs.pytorch.org/docs/2.10/generated/torch.autograd.grad_mode.inference_mode.html",
+    "https://docs.pytorch.org/docs/2.10/generated/torch.no_grad.html"
+  ],
+  "gpu_followup": {
+    "status": "VERIFIED_ON_RETURNED_ARCHIVE",
+    "archive_sha256": "705953d79637dd149defabba4364e91247f67ea95547bf2e5afb8148f0c461c6",
+    "calls": 5,
+    "completed_cases": 12,
+    "control_pixel_identical": true,
+    "corrected_data_quality": "NOT_ACCEPTED; see completed diagnostic review",
+    "review": "makeup-quality-diagnostic-20261025-review.json"
+  }
+}

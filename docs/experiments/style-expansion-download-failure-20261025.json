@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-25",
+  "archive_sha256": "72637c1fc54f7ada5bd248600d22d85cbcd26582a90a0a077ee348d6f6fdae22",
+  "archive_bytes": 5498,
+  "zip_crc": "PASSED",
+  "source_inventory": {
+    "scripts/inference_performance.py": {
+      "sha256": "b69dd604baa6a09ba1a1d7598e979c66a81d26f70a8e9ae3db3bb790766030af"
+    },
+    "scripts/unified_gate3_server.py": {
+      "sha256": "bb1d24159075f0592f491532080195f204f73c708e2a8e2fd095daac481723a2"
+    },
+    "scripts/style_expansion_pilot.py": {
+      "sha256": "8e5dc547ef445c92790e004f4612d733ab80ae22e4325a245c72715d92976fa1"
+    },
+    "scripts/style_expansion_nails.py": {
+      "sha256": "e2b10af9b63582e3f22f62225f91eab616bddc80719c73d6a98ab7a722bebc04"
+    },
+    "scripts/style_expansion_bootstrap.py": {
+      "sha256": "3fe166cd70f1996f64cb615bc2bd3bd1e4e233a179e8d0b5276517d79f9a9a8e"
+    },
+    "backend/app/nails/geometry.py": {
+      "sha256": "af6d9bdea365fee4243c3b387c01be11adf356f904e4a2c1ef3ae6d3fab45f1a"
+    },
+    "data/style-expansion/STYLE-EXP-001/pilot.json": {
+      "sha256": "7325e06095ba33a60a5c2e64f44800bde972cf549404d30beb46961a3ebaac70"
+    }
+  },
+  "host": {
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128",
+    "cuda": "12.8",
+    "gpu": "Tesla T4"
+  },
+  "failure": "Base download failed: RuntimeError: Less than 30 GiB scratch available for pinned Base, no model download started",
+  "environment_stage_passed": true,
+  "artifact_preflight": "GATE_2_ARTIFACT_PREFLIGHT_OK (no model load)",
+  "result_files": [],
+  "diagnosis": "Pilot selected working-volume HF cache. Original downloader requires 30 GiB free and stopped before any model download or inference.",
+  "exact_free_space": "UNKNOWN: not captured in this first archive",
+  "model_quality": "NOT EVALUATED",
+  "supplied_archive_source_matches_v1": true,
+  "fix": {
+    "status": "LOCAL_VERIFIED_KAGGLE_RETRY_PENDING",
+    "scratch_candidates": [
+      "/tmp",
+      "/kaggle/temp"
+    ],
+    "minimum_free_bytes": 32212254720,
+    "original_downloader_unchanged": true,
+    "resume_reinstalls_packages": false,
+    "recovery_cell": "notebooks\\style_expansion_scratch_recovery.py",
+    "recovery_sha256": "83ad9ea2ca4892c5c8e34fc2edf96cd7a7af239932e1a899190ecb00be69f472",
+    "v2_notebook": "artifacts\\style-expansion-20261025\\beautycore_style_expansion_pilot_v2.ipynb",
+    "v2_sha256": "53522f0edf3c5821576b036578ddd0123c62c3cf591cd8f0e004ffe01fed0995",
+    "v2_payload_matches_current_source": true,
+    "focused_tests_passed": 49,
+    "render_or_demo_changed": false
+  }
+}

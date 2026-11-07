@@ -174,3 +174,264 @@ Later startup automation: **CONFIRMED scope; LOCAL VERIFIED implementation; fres
 ## Guest limit feedback request, 2026-10-20
 
 **CONFIRMED:** Supervisor requests a modal and contextual indicator when the guest generation allowance is used. Reuse current session/quota and account continuation; preserve completed image/download and member flow. This is a frontend correction in the authorized guest rollout; no new quota, migration, Kaggle restart or model scope. Modal distinguishes used allowance from processing/unresolved requests. [Evidence](../docs/experiments/guest-trial-limit-feedback-20261020.json).
+
+
+## Style expansion research direction, 2026-10-25
+
+**CONFIRMED:** Supervisor authorizes proceeding with staged expansion, then rejects generic initial examples and requests researched trendy Hair/Makeup/Nails options. Prepare a specific researched shortlist and isolated data/evaluation artifacts. **PROPOSED:** the13candidates in docs/specs/0014-style-expansion.md and pilot ordering; selection, salon mappings and actual generation quality are not approved/verified by trend evidence. Preserve current production IDs, reviewed model guards and demo fallback. No wholesale data scraping or production enablement from trend references.
+
+
+## First style expansion pilot authorized, 2026-10-25
+
+**CONFIRMED:** User requests proceeding based on the researched recommendation and confirms a separate Kaggle T4 session. Implement isolated feasibility tools for the recommended eight-style first batch; this authorizes testing, not a claim of model support or deployment. Existing training labels/adapter metadata, production Makeup hash guards, old public IDs and demo artifacts remain unchanged. Other five researched candidates remain PROPOSED. No new base model, architecture, public endpoint or automatic catalog promotion.
+
+
+## MAKEUP-QA-001 authorized, 2026-10-25
+
+**CONFIRMED:** Supervisor says proceed with the bounded complexion diagnostic, then confirms a fresh Kaggle notebook is needed. Test foundation-only/current/reduced adapter influence on2existing people and2existing presets, preserving original models/prompts and deployed systems.0.5is an experimental factor, not an approved live setting. No masking/compositing, failed old data-method revival, architecture replacement, training or production promotion authorized by these results alone.
+
+
+## 2026-10-25 — Limited Makeup adjustment comparison
+
+**CONFIRMED:** Supervisor says proceed with the proposed separate guidance and complexion/foundation prompt tests, then confirms the same completed diagnostic session remains running. Scope is experimental MAKEUP-QA-002 at adapter1.0/20steps/seed1977/512square, with prior controls and cached setup preserved. This authorizes preparing the9call comparison, not production parameter/prompt changes, training, masks, image blending/recoloring or deployment. Quality acceptance remains NEEDS VERIFICATION.
+
+
+## 2026-10-25 — Guidance 2.5 follow-up
+
+**CONFIRMED:** Supervisor prefers guidance3.0 relative to matched-foundation output and says proceed with the proposed3.0vs2.5comparison. Same session remains running. Scope is MAKEUP-QA-003:8retained4/3references, one3.0control plus4new2.5images, unchanged original prompts/adapter1.0/steps/seed/frame. This authorizes the bounded experiment, not automatic selection/deployment, training, new processing methods or a continuing guidance sweep.
+
+
+## 2026-10-25 — Preferred Makeup output: guidance 2.5
+
+**CONFIRMED:** Supervisor explicitly selects LATEST RESULT when asked2.5latestversus3.0after reporting visual improvement. Use2.5as selected candidate for a subsequently authorized rollout, retaining original prompts/full adapter and unchanged steps/seed/frame. This supersedes the earlier provisional3.0preference; no automatic deployment, contract alteration, new training or further parameter sweep follows. Live settings remain unchanged.
+
+
+## 2026-10-25 — First expanded release validation/integration phase
+
+**CONFIRMED:** Supervisor says proceed after the plan to validate selectedMakeup2.5,CommaHair and3Nailrenderers, integrate accepted entries then deploymatchingpackages withfallback. PriorGPUended; Supervisor explicitly requestsfreshnotebook. Prepareisolatedvalidation andlocalautomaticmaskchecks first; no publicstylepromotion beforeactualreview. Live rollout not started, oldartifacts retained. Versionedcompatiblecontracts are required; approval does not justify disabling ownership/hash checks or fabricating prices.
+
+
+## 2026-10-25 — Berry Makeup quality rejected
+
+**CONFIRMED:** Supervisor rejects suppliednewBerryoutput for whitening/unnaturalblend. Do not include it in expandedrelease or describe selected2.5as a complexionfix. Earlierrelative2.5preference is historical and not broadvisualacceptance. No authorization to disable liveMakeup, retrain or change architecture inferred. Targetreview/correctionplan precedes furtherGPUwork;Nails independent.
+
+
+## Corrective data audit and replacement research authorized, 2026-10-25
+
+**CONFIRMED:** Supervisor says proceed to the fix under the paired-target audit plan, then explicitly selects “Investigate replacement datasets” instead of salon photo collection. Scope covers immutable target review and primary-source replacement investigation. No external access inquiry has been sent, agreement accepted, replacement dataset selected for training, model architecture changed or live Makeup service disabled. **PROPOSED:** obtain reviewed paired samples and clarify applicable permissions before a bounded corrected-data trial. The zero-keep Codex screen is not fabricated human approval.
+
+
+## Replacement-data access phase, 2026-10-25
+
+**CONFIRMED:** Supervisor says “lets proceed” after the sample-access/review-first recommendation. Continue bounded noncommercial research intake and prepare provider inquiries, preserving existing models and artifacts. **No external message sent, agreement accepted, replacement source selected for training, or deployment performed.** Actual zero-image network-failed intake is recorded separately from prepared access request.
+
+
+## Offline tone experiment authorized, 2026-10-25
+
+**CONFIRMED:** Supervisor says “proceeed” to the bounded existing-photo skin-tone comparison proposal after clarifying that external training images are not required for an adjustment experiment. Scope is isolated CPU post-processing, exact original/raw preservation and appearance review. One implementation boundary defect was corrected without changing tone caps, model settings or case selection. No production integration, new training, architecture migration or deployment is inferred from this experiment. Actual results remain EXPERIMENTAL pending human review.
+
+
+## Tone correction mask rejected, 2026-10-26
+
+**CONFIRMED:** Supervisor rejects the shown MAKEUP-TONE-001 v2 Natural054109 output for a visible mask/poor blending. Supersedes its pending human acceptance for this case; preserve original output and prior partial-improvement observations as history. Do not promote this prototype, infer approval for other cases, or treat32technical checks as appearance acceptance. No automatic retraining or architecture replacement authorized by this feedback.
+
+
+## AI-assisted cosmetic rendering acceptable, 2026-10-26
+
+**CONFIRMED:** In response to whether Makeup must come from the trained generative model, Supervisor selects “AI-assisted cosmetic rendering is acceptable.” A source-based AI-region/custom-cosmetic rendering method is therefore acceptable in principle. This does not make unimplemented rendering successful, approve misleading trained-adapter labels, or authorize claiming all existing styles are supported. **PROPOSED:** bounded3style/4photo visual pilot before integration and coordinated deployment, as documented in the recovery plan. Preserve trained model/history and accurate method reporting.
+
+
+## Source-based rendering pilot authorized, 2026-10-26
+
+**CONFIRMED:** Supervisor says “proceeds” after the plan for a12preview source-based AI-assisted Makeup pilot. Implemented only this isolated pilot; one pigment gamut defect corrected with fixed sources/regions/opacities. No production/catalog/profile promotion or cloud rollout follows automatically. Appearance acceptance is pending; trained generative Makeup and render-only mode must remain accurately distinguished.
+
+
+## Seven remaining existing Makeup styles authorized, 2026-10-26
+
+**CONFIRMED:** Supervisor says “proceed to your plan” after the remaining7existingstyles and separate3expansioncandidates were explained. Proceed with28offlinepreview extension and honest feature limits. This authorizes implementation/evaluation, not recording blanket human appearance acceptance or live deployment. No-Makeup/Smoky/Dewy/Rosy/Bronze/Matte/Evening now have experimental source-renderer profiles; futurefull-facefinish/lashclaims and styleavailability need explicit resolution.
+
+
+## Makeup insufficiently visible beyond lips, 2026-10-26
+
+**CONFIRMED feedback:** Supervisor says source-renderer examples do not sufficiently look like makeup; lips are the noticeable change. This is not approval of all10profiles/deployment. Goal remains visible eye/cheek cosmetics without whitening/full-face reconstruction. MAKEUP-VISIBILITY-001 is a bounded implementation response; client acceptance pending. No new external-data/training/cloud decision.
+
+
+## Makeup visibility comparison not accepted, 2026-10-27
+
+**CONFIRMED user feedback:** latest source-rendered comparison still does not look sufficiently made up. MAKEUP-VISIBILITY-001 is not accepted as a solution; no per-case judgments inferred. Historical70technicalchecks/12exactreproductions do not prove appearance quality. Inspected current code implements localized pigment/darkening/finish; brows remain protected, full lash/foundation/contour capability is absent. Missing components are verified; their causal contribution to this rejection is not.
+
+**PROPOSED / NOT STARTED:** stop opacity-only sweeps. Establish an explicit visual target, ideally a user reference, then one complete Soft Glam prototype with shaped lid shading, defined lash line and coordinated cheek/lip effects. Brow/lash details require deliberate anatomy/protection review, not drawing over protected regions blindly. Preserve source complexion/identity. Validate a small comparison before all-style expansion or versioned integration. No new images, rendering code, dependencies, inference, training or cloud changes this turn. Current output is not release-ready. [Rejection](../docs/experiments/makeup-visibility-rejection-20261027.json).
+
+
+## Makeup visual target supplied, 2026-10-27
+
+**CONFIRMED:** Supervisor supplies a portrait as the approximate desired makeup appearance/strength. Warm rose-bronze lids, prominent lashes/brows, rosy blush, localized glow and glossy rose-brown lips are the implementation interpretation of visible elements, not exact product/color specifications. No complexion/identity copy or studio-light replication requirement inferred. Previous rejected previews are not approved. One complete-look test remains visually rejected by Codex; no new architecture/deployment decision.
+
+
+## Bounded Makeup alignment work authorized, 2026-10-30
+
+**CONFIRMED:** User says proceed to the proposed local alignment check and one Soft Glam correction on four existing photos, with method reassessment if still artificial. No approval of failed outputs, ten-style rollout or cloud deployment. Result fails Codex visual screen. Dedicated pretrained reference-conditioned Makeup is now PROPOSED for isolated feasibility review, not an approved/implemented production replacement.
+
+
+## Deadline and free-only Makeup triage, 2026-10-30
+
+**CONFIRMED constraints:** Supervisor's demo is within24hours; keep everything free. Paid image API route ruled out, no paid calls authorized/made. ExistingGemini integration verified TEXT ONLY; currenttrained Makeup response contract cannot become an image API by changing the text model name.
+
+**PROPOSED:** stop custom-lash/strength sweeps and training; one time-boxed isolated Kaggle pretrained reference-transfer trial after asset/dependency preflight. Official Stable-Makeup public folder visibly lists3expectedcheckpoint names; full downloads/auxiliary assets/terms/runtime/T4fit/appearance still unverified. Do not spend GPUquota until completepreflight. If it cannot pass quickly, freeze scope and present Makeup's limitation honestly; labeledreferenceexamples cannot masquerade as live clientgeneration. No newnotebook/runtime/provider/cloud change yet. [Triage](../docs/experiments/makeup-deadline-triage-20261030.json).
+
+
+## One free pretrained Makeup trial authorized, 2026-10-30
+
+**CONFIRMED:** Supervisor says proceed after the isolated four-photo/reference pretrained-model trial is explained. Authorizes preparation and that evaluation, not a production architecture/model replacement, paid API, new training or all-style rollout. Budget free, demo within24hours. No appearance approval inferred. Artifacts ready; actualKaggletrial remains next.
+
+
+## Supervisor resets Makeup scope to original white-cast problem, 2026-10-30
+
+**CONFIRMED correction and human rejection:** Supervisor says latest result looks worse and asks why work drifted from initial whiteness issue. Original goal remains reducing excessive pale/white skin in existing BeautyCore Makeup while retaining visible cosmetics and the same person. Codex acknowledges scope drift into replacement rendering/full-face reference generation. STABLE-MAKEUP-001 is now explicitly human-rejected, not only a Codex rejection.
+
+Stop the replacement/full-look expansion branch under the current task. Return to original deployed pipeline and accumulated diagnostic evidence before proposing a targeted white-cast correction. Do not restart GPU/parameter/model/training sweeps or deploy rejected candidates. Earlier skin-only MAKEUP-TONE-001 correction also failed with a visible mask; it is not a valid accepted fallback. No accepted fix exists yet, and no promise of a safe single-setting solution is justified. No code/images/GPU/deployment change in this reset. [Scope reset](../docs/experiments/makeup-scope-reset-20261030.json).
+
+
+## Full expansion target selected; release remains gated, 2026-10-30
+
+**CONFIRMED scope:** Supervisor wants all proposed Hair, Nails and Makeup expansion styles considered for use, with Makeup tested before rollout. This selects the target scope; it does not establish that previously failed or untested styles work or approve rejected appearances. Existing catalogs remain intact. **IN PROGRESS / NEEDS VERIFICATION:** complete per-style validation, compatible production catalog/consultation/renderer/model-profile integration, actual service-price mapping, save/book regressions, matching versioned Kaggle packages and application rehearsal. Makeup remains on the original white-cast correction scope. No blanket production enablement, new training or replacement-model adoption is inferred. Current expanded release is not deployment-ready; no production changes made by this clarification.
+
+
+## Expanded styles implementation authorized, 2026-10-30
+
+**CONFIRMED:** Supervisor says proceed after the versioned release architecture and first development milestone are presented. Implement release compatibility and three tested Nails integrations while preserving visual acceptance gates and current deployment. Subsequent response says they need to review images first; do not mark the three designs accepted or enable them. No new cloud rollout, replacement Makeup model or training decision is inferred.
+
+
+## Three reviewed Nail designs approved, 2026-10-30
+
+**CONFIRMED:** Supervisor says "I approve the design it looks good" after the repaired four-hand gallery. Accept Raspberry Jelly, Pink Aura Ombré and Negative-Space Micro-Dots only. This supersedes their pending visual review. Enable those installed profiles in the local release and prepare matching artifacts; it does not approve Hair/Makeup or the other two Nail finishes, nor establish cloud readiness. Existing original Makeup correction scope and free-only constraints remain. [Approval record](../docs/experiments/expanded-nails-approval-20261030.json).
+
+
+## Hair expansion validation resumed, 2026-10-30
+
+**CONFIRMED:** Supervisor requests proceeding to haircut after Nail approval. Continue the already approved gated release plan with a Hair-only comparison on suitable existing inputs. This does not accept held Comma/Butterfly/Two-Block outputs or enable untested Wolf/French Bob. No new architecture, model training, paid provider or cloud rollout is inferred. Prepared21fixedcalls with original adapters/settings, then per-style visual review before production profiles. Original Makeup correction remains separate.
+
+
+## French Bob appearance approved, 2026-10-31
+
+**CONFIRMED:** Supervisor says "i APPROVE IT" after the preceding response identified French Bob as the strongest candidate for review and explicitly held the other four Hair styles. Apply approval to French Bob only, including its actual curly interpretation and disclosed hair-color limitation. Continue the already approved production-profile/release plan. This is not approval of Butterfly/Wolf/Two-Block/Comma, a fix for recoloring, retraining or new cloud expenditure. [Approval](../docs/experiments/french-bob-approval-20261031.json).
+
+
+## All expanded Hair and Nail designs approved, 2026-10-31
+
+**CONFIRMED:** Supervisor says "i approve all of the expanded haircut and nails. then lets see the makeup now." This supersedes the French-only interpretation and quality-based holds for the four other reviewed Hair outputs. All five Hair appearances are accepted as shown, with known shape/color limits retained. All five Nail designs are approved scope; only three have reviewed/generated implementations, and Pearl Chrome/Cat-Eye still require implementation/testing. Do not fabricate unseen results or bypass runtime profile integrity. Remaining routes/finishes go into a new release; preserve existing immutable packages while focusing next on Makeup. No Makeup approval or white-cast fix is implied. [Approval](../docs/experiments/all-hair-nails-approval-20261031.json).
+
+
+## Deploy approved Hair/Nail expansion before Makeup, 2026-10-31
+
+**CONFIRMED:** Supervisor requests deploying Hair and Nails first while Makeup is fixed separately. They explicitly choose: "Integrate all five approved haircuts first, then deploy with the three tested Nail designs." This authorizes the five reviewed Hair production profiles and three tested Nail renderers, scoped publication and rollout. Keep existing Makeup settings/functionality, hold all new Makeup additions, and leave unbuilt Pearl Chrome/Cat-Eye out. No retraining, new paid provider, database migration or blanket approval of Makeup is inferred.
+
+
+## Original Makeup skin-tone blending reaffirmed, 2026-11-01
+
+**CONFIRMED:** Supervisor resumes Makeup and explicitly wants cosmetics to blend with the person's skin tone, rather than more offered styles or a replacement full-look method. Existing free-only and preservation constraints remain. The current work is a bounded offline correction using existing saved inputs/results, not an adopted new production architecture/model, accepted appearance or deployment approval. No new human acceptance is inferred from the request.
+
+
+## Subtle original-photo retouch priority, 2026-11-01
+
+**Superseded interpretation / later human rejection:** Source-only subtlety removed the required makeup. Preserve original person AND selected makeup together; see the latest correction below.
+
+**CONFIRMED:** Supervisor says skin-tone blending is better but the result is too regenerated/far from original. They explicitly request subtle complexion correction, source facial features/shape/expression/texture/imperfections/lighting/background/hair preserved, no overly perfect cosmetic details. This authorizes an offline source-primary refinement and supersedes stronger-makeover visibility as the priority for this specific prototype. It is not whole-image approval of MAKEUP-COMPLEXION-001, adoption of older rejected rendering/lash methods, or permission to silently replace every existing Makeup style in production.
+
+## Preserve makeup and original person together, 2026-11-01
+
+**CONFIRMED:** User rejects the source-only retouch because it removed desired cosmetics. Earlier wording that source subtlety superseded cosmetic visibility was an assistant misinterpretation and is **DEPRECATED**. User requires selected eyeshadow, liner, lashes, blush and lipstick style/intensity/color intact while complexion blends and original identity/texture/geometry/lighting/scene remain.
+
+User answers all to the three offered reference choices: Natural Makeup, Cloud/Berry Lips and Classic Red Lip. This authorizes checking those references together; no successful all-catalog implementation, replacement model, new training or production adoption is inferred. Offline cosmetic-layer v1/v2/v3 fail Codex visual review; none is adopted. [Evidence](../docs/experiments/makeup-selected-cosmetics-20261101.md).
+
+## Cosmetic separation repair authorized, 2026-11-01
+
+**CONFIRMED:** User asks to plan the fix and proceed. This authorizes the targeted offline separation repair and verification while preserving original person and selected makeup together. It does not approve a weaker generic look or production replacement. Three selected references on two reused people remain the bounded matrix. Final v2.1 is a partial candidate; source-protection/technical passes do not establish cosmetic intensity fidelity. No new user appearance acceptance or deployment is inferred. [Evidence](../docs/experiments/makeup-separation-20261101.md).
+
+## Selected cosmetics must be visibly recognizable, 2026-11-01
+
+**CONFIRMED:** User reviews the prior result as too subtle. They request closer selected color, intensity and placement with original identity/geometry/texture/light/hair/scene preserved and no harsh or overly dramatic makeup. This refines the same standing requirement. It does not authorize a generic palette, lower visibility as a fallback, replacement person or deployment. Latest local reference-application candidate is not human-approved. Lipstick is intentionally not intensified because it was already prominent. [Evidence](../docs/experiments/makeup-reference-visibility-20261101.md).
+
+
+## Original canvas and natural cosmetic boundaries required, 2026-11-02
+
+**CONFIRMED:** User explicitly rejects current pasted cosmetics and regenerated appearance. Original photo is the face canvas; selected makeup guides only cosmetic style/color/placement. Preserve source eyebrows, geometry, expression, texture and unrelated regions. Do not repeat global strength changes or full face generation. The latest v4.1 appearance is not accepted. Local audit records limitations before further rendering. Separate reference photograph identity is NEEDS VERIFICATION if different from the stored generated guides. No production change is approved by this review. [Evidence](../docs/experiments/makeup-realism-audit-20261102.md).
+
+
+## Implement source correction without promoting failed looks, 2026-11-02
+
+**CONFIRMED:** User requests implementation and testing after tracing the actual Makeup path, preserving the original person and working system. No major architecture replacement is approved by that request. Bounded lip correction is implemented offline. The new combined cheek/eye proof remains rejected; passing source preservation checks do not justify release. Lip only is a component test, not the user's desired finished look. **PROPOSED:** artist/salon approved explicit cosmetic layers to replace ambiguous extraction from generated faces, with one concrete full look validated before integration. No such approved layer set is claimed. [Evidence](../docs/experiments/makeup-source-surface-20261102.md).
+
+
+## Preserve the preferred lip correction, 2026-11-03
+
+**CONFIRMED:** User says the latest result is much better and clarifies that this means Lip correction ONLY. They authorize only necessary refinements after review, explicitly permitting no change if further work is not justified by the current method. The preferred local v4.1 result remains unchanged. The feedback does not approve full Makeup, the rejected combined proof, automatic catalog expansion or deployment. Safe future edge or shade work needs evidence beyond simply widening a mask or deepening a palette. [Review](../docs/experiments/makeup-retained-review-20261103.md).
+
+
+## Source fitted artist Makeup direction, 2026-11-04
+
+**CONFIRMED:** In response to the explicit source choice question, Supervisor selects artist/salon authored cosmetic layers fitted to the original portrait. This resolves the 2 November PROPOSED direction for isolated offline preparation. Preserve the preferred lip component, all ten serving plus three held styles, the existing FLUX/LoRA foundation and application contracts. Target preparation and future adapter behavior remain separate validation responsibilities. No artist asset approval, full look acceptance, corrective training or production integration follows from choosing this direction. Mandatory corrective quality admission implements the stated requirement that defective targets cannot automatically become training data. [Spec](../docs/specs/0016-makeup-source-layer-quality.md), [implementation and limits](../docs/experiments/makeup-architecture-review-20261104.md).
+
+
+## Artist prerequisite removed, automatic Makeup work resumed, 2026-11-04
+
+**CONFIRMED:** Supervisor has no available makeup artist and explicitly requests the original engineering task. **DEPRECATED:** external artist assets as a mandatory critical path from the preceding answer/spec0016. Retain useful source application and target quality gates; do not fabricate artist acceptance or ask the user to implement masks. Engineering implements a bounded automatic local feature/material correction under the original technical freedom. **PROPOSED:** adoption of this isolated pretrained CPU feature provider beyond local review; no production model replacement or training target approval is inferred. The confirmed FLUX/LoRA foundation and existing application contracts remain. Actual52casecomparison and documented quality gaps precede any target finalization, distinct corrective adapter training or integration. [Spec0017](../docs/specs/0017-makeup-automatic-local-features.md), [evidence](../docs/experiments/makeup-automatic-correction-20261104.md).
+
+## Guided inference fails visual gate, 2026-11-05
+
+**CONFIRMED engineering rejection / DEPRECATED promotion of this fixed guided inference attempt:** Returned two case real MAKEUP-001 test matches the prepared model, environment, inputs and settings but produces severe whitening on054109and plastic reconstructed faces on both. Do not extend to all13styles, admit targets or integrate this approach. Existing full Makeup requirement remains. **PROPOSED next correction:** reviewed complete photographic targets and a separately trained/evaluated corrective adapter on the existing FLUX/LoRA foundation; no training, target set or new production architecture is approved by the failed run. Existing Hair/Nails release, source data/checkpoints and positive teacher direction retained. [Evidence](../docs/experiments/makeup-guided-gpu-review-20261105.md).
+
+## Complete Makeup direction and bounded GPU check, 2026-11-05
+
+**CONFIRMED:** Supervisor accepts prepared external editor035149Bold Evening fourth panel as the complete makeup direction and can start the existing GPU notebook. This accepts direction only, not targets, model quality or release. Both new local whole look reviews were rejected as too weak; their new material/gradient methods are DEPRECATED for promotion. Preserve the existing lip component, all13styles, original datasets/models, and18Hair/8Nails prepared release.
+
+**PROPOSED production use, authorized bounded diagnosis:** reuse existing MAKEUP-001 with the original and a different training identity cosmetic guide as separate conditioning images. The pinned pipeline supports this input; visual behavior is unverified. Two private raw output calls precede any wider run or serving change. External editor guides are truthfully synthetic, not our model output, artist assets or accepted training pairs. Individual data admission, corrective training, Base comparison and production integration remain separate. [Spec0018](../docs/specs/0018-makeup-complexion-release.md), [evidence](../docs/experiments/makeup-complete-direction-20261105.md).
+
+## Proceed with bounded material defects, 2026-11-05
+
+**CONFIRMED:** Supervisor says proceed after identification of remaining lip, lash, metallic and finish gaps. Extend the same automatic source application and reuse cached neural fields; no artist prerequisite or speculative Kaggle spend. Original positive lip helper/default baseline remain reproducible. Existing user photo supplies foreground material detail for local review; its unknown author/license is retained rather than treated as a training permission. **PROPOSED:** any use of new source materials beyond isolated review. The52casecomparison improves lip hue/coverage and visible detail but leaves documented lash/Manga/metal/finish gaps. No human catalog acceptance, target admission, corrective training or production approval follows from passing119checks. Existing FLUX/LoRA model architecture and Hair/Nails contracts remain. [Spec0017](../docs/specs/0017-makeup-automatic-local-features.md), [evidence](../docs/experiments/makeup-material-refinement-20261105.md).
+
+
+## Corrected Makeup supervision and target appearance approvals, 2026-11-05
+
+**CONFIRMED:** User authorizes developing the fix and accepts13representativepreparedtargetappearances,10fromhashboundexportand3specificrevisionsviachat. Keep those image/caption bytes and the complete13stylecatalog. Corrective data uses explicit style supervision rather than the historical one-caption60pair set. Author new photographic synthetic targets fitted to original identity/scene; no artist prerequisite and no inference-only claimed training solution.
+
+**CONFIRMED engineering data correction under existing scope:** Add audited originals003025and027921to training for broader complexion coverage, without moving either existing validation identity. The planned dataset remains52train/26validationpairs, now12train/2validationidentities. v4sourcebrowrelativecontrastreplaces the failed absolute RGB stamp for additional targets;13approvedimages remain unchanged. Existing FLUX/LoRA foundation retained, fresh corrective candidate rather than continuation/overwrite of old weights. Production adoption remains PROPOSED pending a complete admitted dataset, actual new model evaluation and project lead review.
+
+## Corrective full candidate review boundary, 5 November 2026
+
+**CONFIRMED:** Preserve all13explicitappearanceapprovals and their exact targets/captions. Added65identity/styleappearancesrequire actual review, not representative approval propagation. Existing individual quality policy remains mandatory before DATA finalization/packaging/training. 78preparedpairsare candidates, not an accepted dataset.
+
+**DEPRECATED for new candidate preparation:** v4 scalar brow density after full batch exposes flat/gray plates. **CONFIRMED engineering correction within the existing source-fit scope:** v5 retains original RGB brow gradients and fits their boundary colour to foundation using existing OpenCV, without a new model/provider/dependency. The13approvedv3targetsremain untouched. Neither a cap sweep nor the RGB ratio probe is adopted. Production integration remains PROPOSED pending admitted DATA, actual corrected adapter evaluation and Project Lead review.
+
+## Full corrective DATA approval, 6 November 2026
+
+**CONFIRMED:** Supervisor explicitly confirms reviewing all 78 candidates and accepting them on all eight criteria after the uploaded export recorded only six acceptances. Preserve both the original return and exact chat clarification, bound to existing images/captions. All 78 unchanged targets are admitted; do not request their appearance approval again. Finalize a separate DATA copy and proceed to the existing authorized fresh Base corrective adapter run. This is training DATA acceptance, not model or production approval. The same pinned FLUX/LoRA foundation and bounded 250 step configuration remain. Production adoption is PROPOSED until actual new adapter quality and application validation pass.
+
+
+## Corrective RAW model acceptance, 6 November 2026
+
+CONFIRMED: Supervisor returns `makeup-corrective-model-review.json`, SHA256 `7db6666beb345275462d3358bac1e3db8f431f441caeb2db6f4235c0b573f3df`, and says the corrective RAW real generations look great. All 26 bound cases accept application validation across 13 styles. Its production approval flag remains false.
+
+Advance the existing controlled application milestone with the new checkpoint and exact successful captions. No further target audit or training by default. Candidate retains 18 Hair/8 Nails and exposes all 13 Makeup styles only in the isolated test. Preserve old artifacts/contracts; do not register a production endpoint in this validation notebook. Fresh application/website evidence and project lead production review remain open. [Evidence](../docs/experiments/makeup-corrective-model-results-20261106.md).
+
+
+## Application acceptance and proposed production rollout, 6 November 2026
+
+VERIFIED: every one of 13 real application Makeup outputs is the exact PNG already accepted by the Supervisor in the model review. Do not request another visual audit of identical pixels. All 16 feature requests and active tensor checks pass; fresh identity/website acceptance remains separate.
+
+PROPOSED production action: apply and publish the prepared `styles-20261106-01` source/metadata and matching immutable CPU/notebook candidate, then deploy the matched Render/Kaggle release. Retain the same tested model/generation code, 18 Hair/13 Makeup/8 Nails and all three truthful older fallbacks. Original task explicitly reserves production integration for project lead review. Candidate is reviewable and locally checked; no production approval, source application, publication or cloud deployment inferred from receiving this ZIP. [Review](../docs/guides/makeup-corrective001-release.md).
+
+
+## Production rollout authorized and web release deployed, 6 November 2026
+
+CONFIRMED: “Can we now deploy it?” authorizes applying/publishing the presented styles-20261106-01 release and matched Render/Kaggle rollout. No further production permission question is needed within that exact scope. Existing source/runtime verification remains required. The final serving notebook's missing Makeup startup membership was corrected without changing generation. VERIFIED publication578330d and actual Render Live deployment; Kaggle authentication/connection remains open. Preserve all previous inputs and compatible fallback catalogs. [Evidence](../docs/experiments/makeup-corrective-deployment-20261106.md).
+
+
+## User manual browser control, 6 November 2026
+
+CONFIRMED: user asks “CAN I JUST DO IT MYSELF”; stop browser control and hand over final startup steps. Do not resume browser actions merely because the user asks a subsequent packaging question. Existing deployment authorization persists. A complete local client handoff may be prepared; no client message/file transmission is authorized by saying they will send it themselves. Current question establishes intended client delivery by the user. [Evidence](../docs/experiments/makeup-corrective-client-handoff-20261106.md).
+
+## Complete public source handoff, 7 November 2026
+
+CONFIRMED: Supervisor requests pushing all project work for client use and modification, then specifies accessible to all. Publish the complete source and development evidence, retaining previous history and private local originals. The existing repository is already public. Include the reviewed deployment history on default `main` and align the serving source branch through normal fast forwards. Keep credentials, image datasets and model packages outside public Git. Direct pushes require a collaborator account; public users may fork and contribute through pull requests. This does not authorize sending client messages, disclosing secrets, transferring provider ownership or claiming unresolved Kaggle startup has passed. [Record](../docs/experiments/client-source-publication-20261107.md).

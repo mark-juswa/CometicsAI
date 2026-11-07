@@ -1,0 +1,89 @@
+{
+  "experiment_id": "MAKEUP-CORRECTION-001-INTAKE",
+  "date": "2026-10-25",
+  "progress": "IN PROGRESS",
+  "evidence_status": "VERIFIED",
+  "request_preparation": "DONE",
+  "sample_acquisition": "NOT COMPLETE",
+  "source": {
+    "repository": "lulululululululululu/Bare-Makeup-Synthesis-Dataset",
+    "revision": "47f245b2d1181eab71f76ef0b829d94fd4edf760",
+    "official_link": "https://github.com/CyberAgentAILab/BeautyBank",
+    "files": [
+      {
+        "name": "Bare-Makeup-Synthesis-Dataset.part-aa",
+        "bytes": 48318382080,
+        "publisher_sha256": "a0c95575a63ce7e3e1f5b1898db2db6ed7a9e663ca24ab788d933fd3811a64f9"
+      },
+      {
+        "name": "Bare-Makeup-Synthesis-Dataset.part-ab",
+        "bytes": 48318382080,
+        "publisher_sha256": "2780c399f26a296408313436d02fb506b5f8f8bab8ea1d051a093d0bfde68c94"
+      },
+      {
+        "name": "Bare-Makeup-Synthesis-Dataset.part-ac",
+        "bytes": 28777456831,
+        "publisher_sha256": "650e758d0dff0d5a2c8bfd1eef7960203b74ddd4186fcdab67c0a5b9628caf9d"
+      }
+    ],
+    "publisher_checksums_independently_verified": false
+  },
+  "range_probe": {
+    "status": 206,
+    "exact_content_range_checked": true,
+    "tail_bytes": 128,
+    "initial_central_directory_bytes_read": 65536,
+    "zip64_reported_entries": 639034,
+    "zip64_central_directory_bytes": 124457084,
+    "zip64_central_directory_offset": 125289763809,
+    "note": "Reported ZIP64 counts; whole central directory was not obtained or independently enumerated."
+  },
+  "observed_filename_examples": [
+    "image_26983_Artistic expression makeup with abstract splashes of color_Silver.png",
+    "image_33765_Vintage Victorian makeup with pale foundations and rosy cheeks_Maroon.png",
+    "image_39686_make it red carpet glamour makeup_Purple.png"
+  ],
+  "labels_are_quality_evidence": false,
+  "attempts": [
+    {
+      "directory": "artifacts/makeup-correction-20261025/bms-intake-01",
+      "stage": "central_directory_range_read",
+      "outcome": "FAILED",
+      "error": "Socket read timeout",
+      "response_body_bytes_received": "UNKNOWN",
+      "images_downloaded": 0
+    },
+    {
+      "directory": "artifacts/makeup-correction-20261025/bms-intake-02",
+      "stage": "tail_range_dns",
+      "outcome": "FAILED",
+      "error": "getaddrinfo failed (11001)",
+      "images_downloaded": 0
+    }
+  ],
+  "last_connection_check": {
+    "public_host": "huggingface.co",
+    "dns": "FAILED",
+    "web_tool": "connection failed: error sending request"
+  },
+  "verified_contact": {
+    "name": "Qianwen Lu",
+    "email": "luqianwenxa@cyberagent.co.jp",
+    "source": "https://arxiv.org/html/2411.11231v2",
+    "deliverability": "NEEDS VERIFICATION"
+  },
+  "contact_draft": "docs/research/makeup-data-access-request-20261025.md",
+  "message_sent": false,
+  "sample_images_obtained": 0,
+  "accepted_new_pairs": 0,
+  "human_sample_approval": "PENDING",
+  "new_training": false,
+  "production_changed": false,
+  "next_actions": [
+    "Owner can send the prepared BMS request from their chosen email account.",
+    "Resume bounded public sample intake after connectivity returns; no full archive download.",
+    "Check true source correspondence, appearance and applicable permissions before training.",
+    "No new Kaggle GPU run until reviewed targets exist."
+  ],
+  "limitation": "Archive labels and metadata are not visual acceptance or a proven replacement. Intake scripts are private experimental attempts, not validated production utilities."
+}

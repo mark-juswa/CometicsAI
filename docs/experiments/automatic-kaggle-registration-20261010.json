@@ -66,5 +66,13 @@
       "automatic-registration-url-change.jpg",
       "automatic-registration-kaggle-connected.jpg"
     ]
+  },
+  "latest_availability_check": {
+    "checked_at_utc": "2026-10-10T00:57:49.044466+00:00",
+    "website_health": 200,
+    "kaggle_lease": "expired; no current active registered endpoint",
+    "last_tunnel_public_health": "unreachable in current probe; cause not established",
+    "meaning": "Prior connection and rotation acceptance remains valid historical evidence; AI is currently unavailable until a fresh tested notebook session connects.",
+    "client_handover": "Client-account access, fresh provider restart and real all-feature results still Needs verification."
   }
 }

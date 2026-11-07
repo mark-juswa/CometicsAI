@@ -1,2 +1,11 @@
 docs/data/DATA-002-manifest.json text eol=lf
 docs/data/DATA-002-manifest.sha256 text eol=lf
+
+# Reviewed Makeup contracts and handoff manifests use exact byte hashes.
+# Preserve their original bytes across Windows/Linux checkout and Git archive.
+data/makeup/DATA-M001-paired/inference_presets.json -text
+data/makeup/DATA-M001-corrective/inference_presets.json -text
+data/makeup/MAKEUP-CORRECTION-001/quality-policy.json -text
+data/makeup/DATA-M001-CORRECTIVE-001/catalog.json -text
+notebooks/render_kaggle_makeup_corrective_demo.ipynb -text
+client/render_kaggle_makeup_corrective_demo.ipynb -text

@@ -1,0 +1,61 @@
+{
+  "experiment_id": "MAKEUP-CORRECTION-001",
+  "date": "2026-10-25",
+  "evidence_status": "VERIFIED",
+  "qualitative_status": "EXPERIMENTAL",
+  "ledger": "data/makeup/MAKEUP-CORRECTION-001/review.json",
+  "ledger_sha256": "6b915dd3f3015d2e31693e3237f2758a7a7c14b6ead77c2068dbd06683c2ef5a",
+  "original_manifest_sha256": "d75bbb096ca2dcc797dd26c9782104dde1952f637c4947246752b0acc4a802f4",
+  "summary": {
+    "decisions": {
+      "REJECT": 60
+    },
+    "by_split": {
+      "train": {
+        "REJECT": 50
+      },
+      "validation": {
+        "REJECT": 10
+      }
+    },
+    "training_allowed": false,
+    "reviewed_pairs": 60,
+    "people": 12,
+    "keep": 0,
+    "reject": 60,
+    "needs_replacement_decision": 0,
+    "replacements_needed": 60,
+    "unchanged_targets_usable_under_this_screen": 0
+  },
+  "private_evidence": "artifacts/makeup-correction-20261025/review-01",
+  "native_detail_checks": [
+    {
+      "file": "003681_makeup_04-detail.png",
+      "sha256": "20e7c327c91db07513b9f6e302f772ee41efd12341f0e959e255969a102a5297"
+    },
+    {
+      "file": "022625_makeup_05-detail.png",
+      "sha256": "51e4054efd2eec37a92c07e85b6224f07e013e0dee914a98c80b9ef2bbee1b8e"
+    },
+    {
+      "file": "054109_makeup_01-detail.png",
+      "sha256": "d59d44b39350d0e96bcab8ab82f6a2022d1b4f48e01d80309713fd10a3ec0b5b"
+    },
+    {
+      "file": "056266_makeup_04-detail.png",
+      "sha256": "bac1c688efbe27d907fa94c1f665fadc54a46ed8a018d6cb8cf5ab072f91ff3a"
+    },
+    {
+      "file": "059106_makeup_05-detail.png",
+      "sha256": "c7ecb14f392645be3b0dcc32c100e7523325db573159cb38b0ded3f55a8f5d1c"
+    }
+  ],
+  "historical_reviews_preserved": true,
+  "training_started": false,
+  "production_changed": false,
+  "limitation": "Codex screen against new criteria; independent human approval pending. Does not prove causal attribution or reject the entire upstream dataset.",
+  "tests": {
+    "command": "python -m pytest backend/tests/test_makeup_corrective_review.py -q",
+    "passed": 18
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "schema": "beautycore-makeup-adjustment-v1",
+  "experiment": "MAKEUP-QA-002",
+  "production_enabled": false,
+  "automatic_promotion": false,
+  "new_training": false,
+  "subjects": [
+    {
+      "id": "054109",
+      "filename": "054109.jpg",
+      "sha256": "81e57faca39e3989ed9920ebd6568efad563ae4f012f3fbb130918858d18e8ed",
+      "origin": "054109/bare.jpg",
+      "source_photo": {
+        "author": "Presidency Maldives",
+        "photo_title": "MK_NAIVAIDHOO1493",
+        "photo_url": "https://www.flickr.com/photos/presidencymaldives/5292667558/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Reused validation portrait for diagnostic development; private academic artifact, not new untouched final evaluation."
+    },
+    {
+      "id": "056266",
+      "filename": "056266.jpg",
+      "sha256": "d6b86be2fe5f505eb6ebe7f2b1c22a59f41ddef053953f55eba1ca0b859f1728",
+      "origin": "056266/bare.jpg",
+      "source_photo": {
+        "author": "Lori Thantos",
+        "photo_title": "IMG_1526.jpg",
+        "photo_url": "https://www.flickr.com/photos/lori_thantos/5121900493/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Reused validation portrait for diagnostic development; private academic artifact, not new untouched final evaluation."
+    }
+  ],
+  "styles": [
+    "natural_makeup",
+    "classic_red_lip"
+  ],
+  "conditions": [
+    {
+      "id": "current_reference",
+      "adapter_weight": 1.0,
+      "guidance": 4.0,
+      "prompt_variant": "original"
+    },
+    {
+      "id": "lower_guidance",
+      "adapter_weight": 1.0,
+      "guidance": 3.0,
+      "prompt_variant": "original"
+    },
+    {
+      "id": "matched_foundation",
+      "adapter_weight": 1.0,
+      "guidance": 4.0,
+      "prompt_variant": "matched_foundation"
+    }
+  ],
+  "inference": {
+    "width": 512,
+    "height": 512,
+    "steps": 20,
+    "seed": 1977
+  },
+  "foundation_instruction": "Foundation and concealer must match this person's original visible skin depth and undertone. Keep the same skin depth, undertone, exposure and natural skin texture as the supplied photo. Keep the requested lip color, eye definition and cheek color clearly visible.",
+  "reference_report_sha256": "b2a0ffee3a45468c13bb551a7e97fcc68aa3a0245806fac26ad5df6829c95b2d",
+  "reference_plan_sha256": "d79f1bd6864a79abd76bce19616034a0ad0229bac73225fa3e215dbbff29e84b",
+  "retained_cases": 4,
+  "new_inference_calls": 9,
+  "expected_comparison_cases": 12,
+  "human_quality_review": "REQUIRED",
+  "limits": [
+    "Two reused diagnostic people, not an untouched final test.",
+    "No blending, masks, recoloring, training or production changes.",
+    "Lower guidance/prompt revision may fail or weaken makeup; no guaranteed correction."
+  ]
+}

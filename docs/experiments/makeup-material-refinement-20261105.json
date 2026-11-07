@@ -1,0 +1,104 @@
+{
+  "date": "2026-11-05",
+  "implementation": "DONE_BOUNDED",
+  "source_preservation": "VERIFIED_52_EXISTING_CASES",
+  "appearance": "EXPERIMENTAL",
+  "complete_makeup_realism": "IN PROGRESS",
+  "production_integration": "NOT STARTED",
+  "canonical_review": "artifacts/makeup-refinement-20261105/catalog-review",
+  "complete_inventory": [
+    "natural_makeup",
+    "no_makeup_makeup",
+    "soft_glam",
+    "smoky_glam",
+    "dewy_peach",
+    "rosy_pink",
+    "bronze_golden_glam",
+    "matte_nude",
+    "classic_red_lip",
+    "bold_evening_glam",
+    "exp_cloud_berry_lips",
+    "exp_manga_lash",
+    "exp_icy_silver"
+  ],
+  "active_styles": 10,
+  "held_styles": 3,
+  "subjects": 4,
+  "cases": 52,
+  "new_accepted_training_pairs": 0,
+  "corrective_data_finalization": "BLOCKED_BY_TARGET_ACCEPTANCE",
+  "corrective_adapter_training": "NOT STARTED",
+  "source_separate_identity_splits_retained": true,
+  "new_package_installs": 0,
+  "new_weight_downloads": 0,
+  "new_diffusion_calls": 0,
+  "new_gpu_calls": 0,
+  "new_training_calls": 0,
+  "additional_elegant_calls": 0,
+  "preparation": {
+    "cpu_parser_calls": 5,
+    "cpu_donor_face_detection_calls": 1,
+    "cpu_donor_spiga_passes": 2
+  },
+  "checks": {
+    "existing_focused": 70,
+    "new_material": 22,
+    "existing_mocked_runtime_api_package": 27,
+    "distinct_total": 119,
+    "exact_current_helper_reproductions": 3,
+    "independent_png_rgb_scope_checks": 52
+  },
+  "browser": {
+    "images": 208,
+    "cases": 52,
+    "desktop": {
+      "overflow": false
+    },
+    "mobile": {
+      "overflow": false
+    },
+    "nativeViewer": true,
+    "errors": []
+  },
+  "historical_freeze": {
+    "files": 94,
+    "unchanged": 92,
+    "intended_modified_existing_files": [
+      "scripts/evaluate_makeup_automatic.py",
+      "scripts/makeup_source_layers.py"
+    ],
+    "captured_serving_release_controls": 8,
+    "unexpected_changes": []
+  },
+  "all_skin_median_deltaL_zero": true,
+  "eye_core_outside_scope_protected_changes": 0,
+  "skin_finish_max_requested_abs_deltaL": 3,
+  "selected_mascara_may_occlude_one_pixel_lid_rim": true,
+  "current_implementation_sha256": {
+    "scripts/makeup_materials.py": "921e5ea54660c87a9b54905d5f08d03fb90561143023d969a40554a37dd72517",
+    "scripts/makeup_source_layers.py": "558f3321ad5e143bdb96beac85083649f20fa2beda8cd509329ff63f6cf4cee2",
+    "scripts/evaluate_makeup_automatic.py": "b161c6eef0ff0717ce49374859bca5b8547b9bdac8f33e37d3dbb1fa3e63262b",
+    "backend/tests/test_makeup_materials.py": "26c9007c676e8751344758f64baddb6d6a041e72a37515c2773b2829059b0190"
+  },
+  "render_snapshot_note": "Canonical render snapshots precede final invalid-input guards, gallery wording and source application documentation only. Current helper reproduces three selected PNGs exactly. verified-source preserves final inspected code.",
+  "evidence_sha256": {
+    "artifacts/makeup-refinement-20261105/catalog-review/plan.json": "0fecdbe9d7da796a6074ab319d0b00bc461ab96bfc7a4fa3f861baa352327465",
+    "artifacts/makeup-refinement-20261105/catalog-review/report.json": "84c533ec8273c58cefdd74042fb2b9c12a921eaae754d859241deeb1bdc54f85",
+    "artifacts/makeup-refinement-20261105/catalog-review/independent-source-checks.json": "50f2531ed61e52756b125469dcf12e9152b9734cf45b9872ebdd1801b5c6a43b",
+    "artifacts/makeup-refinement-20261105/visual-review.json": "130d008454e4779459761ed933ca76d521e4f25a25b7137bf4b05b7b80610f49",
+    "artifacts/makeup-refinement-20261105/baseline.json": "e6696a811dc6064ac1a69684ae86c623d97cf46a9e3bc37f28401d8ef63a8d7d",
+    "artifacts/makeup-refinement-20261105/detail-reference/report.json": "1698cc5561c9fcab31dd6444b97e4b4d7154510a1d2d0245b981b128171c48a3",
+    "artifacts/makeup-refinement-20261105/lip-probabilities/report.json": "aa7ae70432f8d24a6b7cf0c478a23741f58da0be2857f16d2421e64e92afa286"
+  },
+  "training_source_rights": "Detail donor author/license UNKNOWN; no training/production permission inferred. Existing provider/source license provenance retained.",
+  "remaining_unverified": [
+    "natural lash attachment and convergent Manga clusters",
+    "consistent metallic texture",
+    "clear Dewy/Matte/Cloud finish distinctions",
+    "fresh identities/complexions and poses",
+    "runtime fitting and full latency",
+    "target acceptance and training source rights",
+    "own adapter behavior after new training",
+    "production real generation integration"
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "status": "ORIGIN FIX LOCAL VERIFIED; RENDER REDEPLOY PENDING; AUTHENTICATED LIVE RETEST PENDING",
+  "status": "ORIGIN FIX DEPLOYED AND AUTHENTICATED CONSULTATION LIVE VERIFIED; IMAGE GENERATION ACCEPTANCE PENDING",
   "reported_error": "Same-origin request required, HTTP 403 on Consultation and manual AI generation after first Render deployment.",
   "live_service": {
     "url": "https://beautycore-demo.onrender.com",
@@ -26,5 +26,30 @@
     "https://render.com/docs/web-services#connect-from-the-public-internet",
     "https://render.com/docs/environment-variables#render_external_url"
   ],
-  "limits": "Local upstream responses are fixtures; new real GPU images and authenticated deployed POST success remain unverified."
+  "limits": "This verifies the origin fix, live authenticated bridge/upload and Gemini opening turn. It does not verify real generated output, all styles, mobile cloud cookies, maximum payload memory or restart behavior.",
+  "publication": {
+    "commit": "ddd5961",
+    "branch": "codex/render-kaggle-demo",
+    "pushed": true,
+    "render_manual_deploy_started": true,
+    "render_deploy_status": "Live",
+    "render_deploy_duration": "1m50s",
+    "render_deployment_id": "dep-db4g4vcs728c73alnhgg"
+  },
+  "authentication": "Existing application-provided demo Client sign-in succeeded through the browser; no credential values read or recorded.",
+  "live_retest": {
+    "deployed_commit": "ddd5961",
+    "service_health": {
+      "GET /api/health": 200,
+      "GET /api/ai/features anonymous": 401,
+      "Kaggle GET /health": 200
+    },
+    "browser": "Existing demo Client session; actual app UI, no intercepted responses.",
+    "fixture": "New synthetic plain grey 512x512 PNG; no personal image. Upload through normal visible chooser.",
+    "workflow": "Selected Hairstyle and Continue, attached synthetic photo, clicked Start AI consultation. Actual UI calls create POST, photo PUT and Gemini turn POST. UI displayed a consultant question and reply controls without error; console error logs were empty.",
+    "consultant_question": "What is your hair length, and how much time do you prefer to spend on maintenance?",
+    "generation_requests": 0,
+    "limits": "This verifies the origin fix, live authenticated bridge/upload and Gemini opening turn. It does not verify real generated output, all styles, mobile cloud cookies, maximum payload memory or restart behavior.",
+    "proof": "C:/Users/Gigabyte/.codex/visualizations/2026/10/04/01a10467-9143-7b43-bdb4-601adcb49233/render-origin-fixed-consultation.jpg"
+  }
 }

@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-09",
+  "status": "COMPATIBLE_KAGGLE_IMAGE_REQUIRED",
+  "notebook": "https://www.kaggle.com/code/cosmetics100/render-kaggle-demo/edit",
+  "browser_recovery": "Initial Firebase auth/internal-error prevented code execution; fresh tab recovered after Supervisor enabled secrets and started a session.",
+  "secrets": {
+    "AI_BACKEND_API_KEY": {
+      "accessible": true,
+      "minimum_length_ok": true
+    },
+    "AI_REMOTE_API_KEY": {
+      "accessible": true,
+      "minimum_length_ok": true
+    },
+    "GEMINI_API_KEY": {
+      "accessible": true,
+      "minimum_length_ok": true
+    }
+  },
+  "host_ram_gib": 31.35,
+  "bundle_verification": "Both outer hashes, inventory, ZIP CRC and every member hash passed; bundles extracted.",
+  "observed_host": {
+    "python": "3.13.15",
+    "machine": "x86_64",
+    "torch": "2.11.0+cu128",
+    "torchvision": "0.26.0+cu128",
+    "diffusers": "0.40.0",
+    "transformers": "5.16.1",
+    "numpy": "2.1.3",
+    "gpus": [
+      "Tesla T4 15360 MiB",
+      "Tesla T4 15360 MiB"
+    ],
+    "driver": "580.178.04"
+  },
+  "failed_stage": "backend-env-create",
+  "failure_log": "Error: Command '['/kaggle/working/render-kaggle/backend-env/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.",
+  "gpu_model_load_attempted": false,
+  "public_tunnel_started": false,
+  "model_or_environment_guards_relaxed": false,
+  "recovery_in_progress": "Use Copy & Edit from a saved working notebook to preserve its original Kaggle Docker image; verify actual host before installing or loading.",
+  "render": "Free configuration draft, not deployed; Supervisor requested help entering database/session credentials."
+}

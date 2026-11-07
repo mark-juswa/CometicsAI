@@ -1,0 +1,113 @@
+{
+  "date": "2026-10-31",
+  "status": "DONE_LOCAL_PREPARATION",
+  "rollout": "NOT_STARTED",
+  "approval": "French Bob only; preceding response singled it out for review. Actual curly interpretation and hair-color limitation retained.",
+  "approval_record": "docs/experiments/french-bob-approval-20261031.json",
+  "release": {
+    "release_id": "styles-20261031-01",
+    "manifest_sha256": "fd6c4db8adc180b7040a04e220b4f7816855bd8a50ca90da11ff947dc3cce817",
+    "enabled_style_ids": [
+      "exp_french_bob_wispy",
+      "exp_negative_space_microdots",
+      "exp_pink_aura",
+      "exp_raspberry_jelly"
+    ]
+  },
+  "local_metadata_counts": {
+    "hairstyle": 14,
+    "makeup": 10,
+    "nails": 8
+  },
+  "tests": {
+    "backend_full": {
+      "passed": 809,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 189.6
+    },
+    "french_bob_profile_worker_package": {
+      "passed": 20
+    },
+    "render_registration_release": {
+      "passed": 33
+    },
+    "business": {
+      "passed": 51
+    },
+    "guest_trial": {
+      "passed": 29
+    },
+    "typescript": "PASS",
+    "next_production_build": "PASS",
+    "generated_release": "PASS",
+    "catalog": "PASS",
+    "package_cpu_crc_member_hashes_and_current_source_parity": "PASS",
+    "scoped_diff_whitespace": "PASS"
+  },
+  "verified_behaviors": [
+    "Exact approved HAIR-EXP-002 French Bob prompt/TRAIN-001/settings; no training-label/checkpoint rewrite.",
+    "Strict worker/facade profile match; old/missing/tampered profile evidence and wrong output provenance rejected.",
+    "Original shared HTTP adapter switching/lock/failure behavior; new profile uses no_grad/full-scale validation.",
+    "Actual original GPU extraction, new seven-file overlay and checkpoint metadata validated in a fresh Python process, with no GPU/model load.",
+    "French Bob description/price snapshot survives saving and booking; client and assigned stylist see the same private image; another stylist is denied.",
+    "Current and exact preserved Nail-only release both recognized truthfully by Render; old bundles/notebooks remain byte-unchanged."
+  ],
+  "source_sha256": {
+    "backend/app/hair_profiles.py": "4a02b057f6f2bea067effe0fc1c9b6f4cfa3986376bb01e2428137682ee9b1a5",
+    "backend/app/hair_profile.json": "fec43c31a04e1cea7b18766026f088d63534429ddfc6aed9d2723b4a86a18d0d",
+    "backend/app/style_release.json": "da1c11b35585400ac0f5877faffc5c0eb906acf9a7600de746d0a39b197baf60",
+    "backend/app/style_releases/styles-20261030-01.json": "29b6fcf3bbf237a8a87a4ea93ac1309ef88a2fb16a65cd9ee82be44d7beacc49",
+    "backend/app/style_capabilities.py": "52ae9446ba572f5630713bfd0b71872a8b3b139b15eea66860177dcb9ea269a5",
+    "backend/app/main.py": "dc2ce111c5159627d47dcfac6c4eacf7a50c64028f213199c19bbfb96c582f83",
+    "backend/app/generation/remote_flux.py": "dd09507a812be795550cf6342921d03fd2a22b2bc7e261f03669706796fd9cd6",
+    "backend/app/consultation/metadata.py": "bd6ee4912611845a8e33fa265db07e67daed94481725240ac4a19aad6a5834b6",
+    "scripts/hair_release_worker.py": "e70fa48130775c67e21769910c96fffc9b89403f9216b7a0f500eac101ce1acc",
+    "scripts/hair_nails_release_overlay.py": "ffefcf3e7f3ff7a6285a82051dcc75a8481511262c09c8b5083ba4018c6cab99",
+    "scripts/package_hair_nails_release.py": "f086d83aecf29eeb6342f06d9204dabcc16e559fb26075673012e93a3c3ac6c9",
+    "scripts/generate_style_release.py": "2769ae659374aa18042fb3ee3a5908093bd9644a9d486ed2a94b8b3809825d82",
+    "beautycore/lib/ai/style-release.ts": "08dad4409a43f72d08c1b90d2092f4dd53327fe82a5eca61e8ab5dc745970f8c",
+    "beautycore/lib/ai/style-release.json": "73fa1bf06c03e776407df0966c696b20607982dda197edf35a75e1a4721f4710",
+    "beautycore/lib/business/style-catalog.json": "9235ef47c099d46e3fdb59b5639459799460c941cd5b1422f5f858e6bb270ea4",
+    "backend/tests/test_french_bob_release.py": "7e8ee5794fe3463b1c645ac80ec445d260c205896e6bec6f8a50a5f07e8988c3",
+    "backend/tests/test_remote_contract.py": "a971a99ec4792855d8d43148833bc406150d24f5fab98a3e07b12ddfba985baf",
+    "beautycore/tests/business-workflows.test.ts": "994d2f74112367f9ff3fd0f28ac46fc0d468c7b3c9e8f18890786be7f5feeb2f",
+    "beautycore/tests/style-release.test.ts": "2cf45ca71207f481d00a96645cc84e3e189cea9fde91e3f3e9d424c7080b9d22",
+    "docs/guides/hair-nails-release-20261031.md": "a827bc6dc90c0acbcb79815905219497d5a5b073802d6a486693f1b83eaa40b7"
+  },
+  "preserved": {
+    "backend/app/makeup_contract.py": true,
+    "backend/app/style_registry.json": true,
+    "backend/app/style_registry_train002_smoke.json": true,
+    "scripts/unified_gate3_server.py": true,
+    "scripts/inference_performance.py": true,
+    "notebooks/render_kaggle_optimized_demo.ipynb": true,
+    "notebooks/render_kaggle_client_demo.ipynb": true,
+    "notebooks/render_kaggle_expanded_nails_demo.ipynb": true,
+    "artifacts/render_kaggle_cpu_20261009.bin": true,
+    "artifacts/render_kaggle_cpu_styles_20261030_01.bin": true
+  },
+  "cpu": {
+    "name": "render_kaggle_cpu_hair_nails_20261031_01.bin",
+    "bytes": 27922576,
+    "sha256": "0bc2329cf1294c65082ae2de23159452842b56d63581fb13cae2a9065979d87f"
+  },
+  "gpu": {
+    "name": "capstone_train002_20260928_v1.bin",
+    "sha256": "f0d1fed52e00b6c5a1da2cade3731237675cdebbfc0b2cde3b2dbda99a4019ac",
+    "unchanged": true
+  },
+  "notebook": {
+    "path": "notebooks/render_kaggle_hair_nails_demo.ipynb",
+    "bytes": 104871,
+    "sha256": "963d78b800d7100cc631e29249d73b48f9286c76111e796c1c1d1feb7e49eb5f"
+  },
+  "limits": [
+    "No new live GPU inference/application pixel comparison has run since the serving integration.",
+    "Color preservation is not fixed. Approved French Bob preview may change source hair color and texture.",
+    "Butterfly, Wolf, Two-Block and Comma remain held; Makeup expansion/correction remains unresolved.",
+    "Old three-style public catalog assertions were updated to include French Bob; final complete suite passes.",
+    "No commit/push, Render deployment, Kaggle startup or production database migration performed."
+  ],
+  "next": "Publish/deploy matching Render source, then run the new pinned Kaggle notebook and complete live website/pixel/save-book rehearsal."
+}

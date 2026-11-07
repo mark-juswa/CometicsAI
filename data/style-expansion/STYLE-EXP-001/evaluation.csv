@@ -1,0 +1,1 @@
+case_id,feature,candidate_id,input_sample_id,baseline_style_id,adapter_id,adapter_sha256,prompt_sha256,seed,steps,guidance,output_path,elapsed_seconds,peak_gpu_mib,style_fidelity,identity_or_geometry_preserved,outside_region_preserved,distinct_from_baseline,reviewer,verdict,notes

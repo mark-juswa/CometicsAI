@@ -1,0 +1,110 @@
+{
+  "schema": "beautycore-style-release-validation-v1",
+  "experiment": "STYLE-VAL-001",
+  "production_enabled": false,
+  "automatic_promotion": false,
+  "training": false,
+  "makeup_subjects": [
+    {
+      "id": "054109",
+      "filename": "054109.jpg",
+      "sha256": "81e57faca39e3989ed9920ebd6568efad563ae4f012f3fbb130918858d18e8ed",
+      "origin": "054109/bare.jpg",
+      "source_photo": {
+        "author": "Presidency Maldives",
+        "photo_title": "MK_NAIVAIDHOO1493",
+        "photo_url": "https://www.flickr.com/photos/presidencymaldives/5292667558/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Reused validation portrait for diagnostic development; private academic artifact, not new untouched final evaluation."
+    },
+    {
+      "id": "056266",
+      "filename": "056266.jpg",
+      "sha256": "d6b86be2fe5f505eb6ebe7f2b1c22a59f41ddef053953f55eba1ca0b859f1728",
+      "origin": "056266/bare.jpg",
+      "source_photo": {
+        "author": "Lori Thantos",
+        "photo_title": "IMG_1526.jpg",
+        "photo_url": "https://www.flickr.com/photos/lori_thantos/5121900493/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Reused validation portrait for diagnostic development; private academic artifact, not new untouched final evaluation."
+    }
+  ],
+  "hair_subjects": [
+    {
+      "id": "d2_curtain_hair_4jpg",
+      "filename": "d2_curtain_hair_4jpg.jpg",
+      "sha256": "b222215758528b013ee67e23f3c41db0991d519811d964d748e81fabfece8d51",
+      "origin": "FaceSketches-HairStyle40/image/CurtainedHair/4.jpg",
+      "split": "historical validation now reused for development",
+      "source_repository": "yikaiwang/FaceSketches-HairStyle40",
+      "source_revision": "45de974926fe64551fc2d0b80973335e20ca10e2",
+      "source_license_declared": "apache-2.0",
+      "limits": "Original photo rights not independently verified; private historical research reuse, not a new training example."
+    },
+    {
+      "id": "d2_side_part_undercut_28jpg",
+      "filename": "d2_side_part_undercut_28jpg.jpg",
+      "sha256": "97899322d425187deb89f028f8f4b6fa56107f2bd8364da73409ef5aebb450bc",
+      "origin": "FaceSketches-HairStyle40/image/undercutSidepart/28.jpg",
+      "split": "historical validation now reused for development",
+      "source_repository": "yikaiwang/FaceSketches-HairStyle40",
+      "source_revision": "45de974926fe64551fc2d0b80973335e20ca10e2",
+      "source_license_declared": "apache-2.0",
+      "limits": "Original photo rights not independently verified; private historical research reuse, not a new training example."
+    }
+  ],
+  "makeup_styles": [
+    "natural_makeup",
+    "no_makeup_makeup",
+    "soft_glam",
+    "smoky_glam",
+    "dewy_peach",
+    "rosy_pink",
+    "bronze_golden_glam",
+    "matte_nude",
+    "classic_red_lip",
+    "bold_evening_glam"
+  ],
+  "makeup_guidance": 2.5,
+  "hair_guidance": 4.0,
+  "adapter_weight": 1.0,
+  "inference": {
+    "width": 512,
+    "height": 512,
+    "steps": 20,
+    "seed": 1977
+  },
+  "candidate_prompts": {
+    "exp_comma_hair": "Change the hairstyle to Korean comma hair with a softly parted medium-length top and a distinct front lock curved inward into a comma shape over the forehead. Keep the same person, recognizable face, facial proportions, expression, skin tone, clothing, pose, background, lighting and framing. Preserve the original hair color. Change hairstyle only.",
+    "exp_cloud_berry_lips": "Apply cloud-skin makeup with soft natural-texture complexion coverage and a muted berry lip stain with visibly diffused edges within the existing lip outline. Keep the eyes understated and add restrained soft berry cheek color. Edit the supplied photo of the same person. Preserve facial proportions, eye and lip geometry, natural skin tone and texture, expression, hair, clothing, background, lighting and framing. Change makeup only; keep pigment in plausible cosmetic regions.",
+    "exp_icy_silver": "Apply icy silver eye makeup with a visible cool silver-blue shimmer localized to the upper eyelids, fine charcoal lash-line definition, restrained neutral cheeks and a subtle natural lip. Edit the supplied photo of the same person. Preserve facial proportions, eye and lip geometry, natural skin tone and texture, expression, hair, clothing, background, lighting and framing. Change makeup only; keep pigment in plausible cosmetic regions."
+  },
+  "hair_baseline_prompt": "Change the person's hairstyle to a curtain hairstyle with a center part while preserving their identity, facial features, expression, pose, clothing, lighting, framing, and background.",
+  "adapter_hashes": {
+    "makeup": "f6f0419e4259a75102f08a450222ad806e3aec1c2ae50ff89f875139084ae510",
+    "train002": "59d527217a68139bc2aaa4eedbfcd2d5789ef115f8ecb924410eea24a952939b"
+  },
+  "presets_sha256": "8e6e244f6174dc70f33cb15a037f5e67e2a245f15278967f4d2f85bc909cd5f5",
+  "expected_prior_pixels": {
+    "054109/natural_makeup": "e5952a3c9ed9bfb6c7d9d12a5b6c23bc36e5d674aaa64b8d22d3fe0ebba1d13c",
+    "054109/classic_red_lip": "cef8768150f4e51fd5e36e603b5d4c82237e8abb09643c68e58f01b2cfbf0e5e",
+    "056266/natural_makeup": "3e635cdb27142f6bc92d73715a25632e7a5ab19e8fdf0618aefbe3b651cf762a",
+    "056266/classic_red_lip": "9f2a1ff9fd5b8e4bf1e31eb2fe9d3445a5d4d92625ce797e2240b61482d04956"
+  },
+  "expected_calls": 29,
+  "requires_visual_review": true,
+  "limits": [
+    "Two reused Makeup subjects and two historical Hair validation sources, not untouched final tests.",
+    "New Makeup prompts are experimental and not enabled in application catalogs.",
+    "Compare visible style and complexion/geometry preservation; no automatic quality promotion.",
+    "Nails automatic-mask validation runs separately on the existing local CPU runtime.",
+    "No new weights/training data/Render deployment/server/tunnel/secrets."
+  ]
+}

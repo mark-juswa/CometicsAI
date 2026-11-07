@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-26",
+  "experiment": "MAKEUP-TONE-001",
+  "variant": "mask-boundary-correction-v2",
+  "evidence_status": "VERIFIED",
+  "decision": "CONFIRMED",
+  "human_visual_verdict": "REJECT",
+  "case": "054109-natural_makeup",
+  "user_feedback": "the new look does not blend well in the face, we can clearly see the mask.",
+  "raw": {
+    "path": "artifacts/style-expansion-20261025/release-review-01/results/01-054109-natural_makeup.png",
+    "sha256": "a300937dabc97ef2d852adf44daf7f63af5159b8daebcd53f741fd5f567101ae"
+  },
+  "corrected": {
+    "path": "artifacts/makeup-tone-20261025/run-02/054109-natural_makeup-corrected.png",
+    "sha256": "7220ad794e6d1d898f14da24c8cee622fd44074b83a422862e7d353706de280f"
+  },
+  "attachment": {
+    "path": "C:\\Users\\Gigabyte\\AppData\\Local\\Temp\\codex-clipboard-21a4b77d-b1c4-4568-8407-748cb8b371cd.png",
+    "sha256": "3166ba583bbe89b6e455d01c613e1ee0df4091428bf9209993549128e72726ce"
+  },
+  "inspection": [
+    "Raw output already has uniform retouched facial skin, strong blush and a source-complexion mismatch before tone correction.",
+    "Corrected output is darker/warmer, but pale areas around brows/eyes and mouth remain visually separated from adjusted skin.",
+    "Implementation changes only parser skin/nose labels while protected features and neck are unchanged; spatially differing adjustment can increase perceived separation.",
+    "Exact protected/outside-mask pixels and fitted neutral patch statistics do not establish natural appearance."
+  ],
+  "causal_limit": "Qualitative raw/corrected comparison and inspected mask support the transition explanation; no numerical perceptual-quality metric or exclusive root-cause attribution.",
+  "disposition": "FAIL_VISUAL_ACCEPTANCE_HOLD_SERVING_INTEGRATION",
+  "other_cases": "No explicit human acceptance/rejection inferred for the other five cases.",
+  "production_changed": false,
+  "new_processing": false,
+  "new_gpu_calls": 0,
+  "training_started": false,
+  "next": "Do not promote this skin-only color correction or continue an automatic mask/strength sweep. Any next method must address source-face reconstruction and cosmetic-region transitions together and distinguish itself from earlier failed preservation/inpaint routes before implementation."
+}

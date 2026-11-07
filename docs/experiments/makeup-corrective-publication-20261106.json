@@ -1,0 +1,62 @@
+{
+  "date": "2026-11-06",
+  "status": "RENDER_LIVE_KAGGLE_SIGNIN_PENDING",
+  "release_id": "styles-20261106-01",
+  "repository": "mark-juswa/CometicsAI",
+  "branch": "codex/render-kaggle-demo",
+  "commit": "578330d34019e593fbb4b8fb4eaed898da3ff09d",
+  "source_files": 22,
+  "render": {
+    "service_id": "srv-db4ftmbbc2fs73blpkr0",
+    "deployment_id": "dep-dbmotdjm8hqs73b2bmrg",
+    "status": "LIVE",
+    "trigger": "AUTHORIZED_MANUAL_DEPLOY_BY_CODEX",
+    "duration_seconds": 149,
+    "live_time_manila": "2026-11-06 16:26:51",
+    "commit": "578330d34019e593fbb4b8fb4eaed898da3ff09d",
+    "proof": "render-live.png"
+  },
+  "kaggle": {
+    "status": "SIGNIN_REQUIRED",
+    "new_runtime_started_by_codex": false,
+    "production_registered": false
+  },
+  "validation": {
+    "makeup_api_runtime": 25,
+    "release_hair_shared_worker_and_startup": 56,
+    "render_registration_release": 33,
+    "business_save_booking": 55,
+    "typecheck": "PASS",
+    "production_build": "PASS"
+  },
+  "startup_correction": "Final notebook includes renderer + Hair + Makeup model IDs in readiness guard; both missing-feature and digest failures remain refused.",
+  "database_changed": false,
+  "secrets_changed": false,
+  "existing_model_results_and_archives_preserved": true,
+  "local_git_branch_and_shared_index_preserved": true,
+  "handoff": {
+    "zip": "artifacts\\beautycore-makeup-deploy-20261106.zip",
+    "sha256": "7bcd1d34d94e8921d23923b18cddd684b9aaaf5a593be3fe13781e063864b3d6",
+    "notebook": "notebooks\\render_kaggle_makeup_corrective_demo.ipynb",
+    "notebook_sha256": "b4a4e1c1482fd060d194f19f5570b6221131379e8214d18c064a713452ab08fd",
+    "cpu": {
+      "name": "beautycore_makeup_release_20261106.bin",
+      "sha256": "0c657ae4d2b62e11bd8c5728321330d5416fbfd1d36354d8482ac548f1449357",
+      "bytes": 75246586
+    }
+  },
+  "public_checks": {
+    "/api/health": {
+      "http_status": 200,
+      "body": {
+        "status": "ok",
+        "service": "beautycore"
+      },
+      "seconds": 0.53
+    },
+    "/api/ai/features": {
+      "http_status": 401,
+      "seconds": 0.31
+    }
+  }
+}

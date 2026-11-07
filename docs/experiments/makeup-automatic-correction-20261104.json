@@ -1,0 +1,541 @@
+{
+  "date": "2026-11-04",
+  "progress": "IN PROGRESS",
+  "bounded_implementation": "DONE",
+  "appearance": "EXPERIMENTAL",
+  "artist_required": false,
+  "production_integrated": false,
+  "accepted_training_targets": 0,
+  "cases": 52,
+  "people": 4,
+  "styles": 13,
+  "serving_styles": 10,
+  "held_expanded_styles": 3,
+  "test_results": {
+    "focused": 95,
+    "unchanged_runtime_contract": 27,
+    "total_distinct": 122
+  },
+  "source_checks": {
+    "case_count": 52,
+    "subjects": {
+      "054109": {
+        "distinct_output_hashes": 13,
+        "cases": 13,
+        "eye_crop_box": [
+          135,
+          107,
+          373,
+          207
+        ],
+        "lip_crop_box": [
+          156,
+          316,
+          351,
+          423
+        ]
+      },
+      "056266": {
+        "distinct_output_hashes": 13,
+        "cases": 13,
+        "eye_crop_box": [
+          146,
+          122,
+          377,
+          204
+        ],
+        "lip_crop_box": [
+          171,
+          316,
+          349,
+          388
+        ]
+      },
+      "006553": {
+        "distinct_output_hashes": 13,
+        "cases": 13,
+        "eye_crop_box": [
+          151,
+          120,
+          380,
+          198
+        ],
+        "lip_crop_box": [
+          190,
+          291,
+          341,
+          355
+        ]
+      },
+      "035149": {
+        "distinct_output_hashes": 13,
+        "cases": 13,
+        "eye_crop_box": [
+          140,
+          128,
+          369,
+          212
+        ],
+        "lip_crop_box": [
+          179,
+          314,
+          341,
+          398
+        ]
+      }
+    },
+    "cases": [
+      {
+        "id": "054109-natural_makeup",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 6885
+      },
+      {
+        "id": "054109-no_makeup_makeup",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 6925
+      },
+      {
+        "id": "054109-soft_glam",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 8825
+      },
+      {
+        "id": "054109-smoky_glam",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 11202
+      },
+      {
+        "id": "054109-dewy_peach",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 8820
+      },
+      {
+        "id": "054109-rosy_pink",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 17428
+      },
+      {
+        "id": "054109-bronze_golden_glam",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 11482
+      },
+      {
+        "id": "054109-matte_nude",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 8442
+      },
+      {
+        "id": "054109-classic_red_lip",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 6598
+      },
+      {
+        "id": "054109-bold_evening_glam",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 15084
+      },
+      {
+        "id": "054109-exp_cloud_berry_lips",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 6628
+      },
+      {
+        "id": "054109-exp_manga_lash",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 8602
+      },
+      {
+        "id": "054109-exp_icy_silver",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 12904
+      },
+      {
+        "id": "056266-natural_makeup",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 11687
+      },
+      {
+        "id": "056266-no_makeup_makeup",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 10566
+      },
+      {
+        "id": "056266-soft_glam",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 17052
+      },
+      {
+        "id": "056266-smoky_glam",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 13779
+      },
+      {
+        "id": "056266-dewy_peach",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 18212
+      },
+      {
+        "id": "056266-rosy_pink",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 19425
+      },
+      {
+        "id": "056266-bronze_golden_glam",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 22574
+      },
+      {
+        "id": "056266-matte_nude",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 15439
+      },
+      {
+        "id": "056266-classic_red_lip",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 7460
+      },
+      {
+        "id": "056266-bold_evening_glam",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 19097
+      },
+      {
+        "id": "056266-exp_cloud_berry_lips",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 7220
+      },
+      {
+        "id": "056266-exp_manga_lash",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 13124
+      },
+      {
+        "id": "056266-exp_icy_silver",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 11455
+      },
+      {
+        "id": "006553-natural_makeup",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 9962
+      },
+      {
+        "id": "006553-no_makeup_makeup",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 9105
+      },
+      {
+        "id": "006553-soft_glam",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 11194
+      },
+      {
+        "id": "006553-smoky_glam",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 9312
+      },
+      {
+        "id": "006553-dewy_peach",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 15939
+      },
+      {
+        "id": "006553-rosy_pink",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 21366
+      },
+      {
+        "id": "006553-bronze_golden_glam",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 16042
+      },
+      {
+        "id": "006553-matte_nude",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 9930
+      },
+      {
+        "id": "006553-classic_red_lip",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 7562
+      },
+      {
+        "id": "006553-bold_evening_glam",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 13633
+      },
+      {
+        "id": "006553-exp_cloud_berry_lips",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 8856
+      },
+      {
+        "id": "006553-exp_manga_lash",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 13160
+      },
+      {
+        "id": "006553-exp_icy_silver",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 11169
+      },
+      {
+        "id": "035149-natural_makeup",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 3237
+      },
+      {
+        "id": "035149-no_makeup_makeup",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 2944
+      },
+      {
+        "id": "035149-soft_glam",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 3771
+      },
+      {
+        "id": "035149-smoky_glam",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 5339
+      },
+      {
+        "id": "035149-dewy_peach",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 4531
+      },
+      {
+        "id": "035149-rosy_pink",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 7682
+      },
+      {
+        "id": "035149-bronze_golden_glam",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 4812
+      },
+      {
+        "id": "035149-matte_nude",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 4084
+      },
+      {
+        "id": "035149-classic_red_lip",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 3025
+      },
+      {
+        "id": "035149-bold_evening_glam",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 5764
+      },
+      {
+        "id": "035149-exp_cloud_berry_lips",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 3114
+      },
+      {
+        "id": "035149-exp_manga_lash",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 3890
+      },
+      {
+        "id": "035149-exp_icy_silver",
+        "outside_cosmetic_changed_pixels": 0,
+        "protected_semantic_changed_pixels": 0,
+        "cheek_red_channel_increases": 0,
+        "changed_pixels": 5791
+      }
+    ],
+    "metric_limits": "Technical source preservation and pixel variation, not cosmetic realism scores."
+  },
+  "browser": {
+    "images": 182,
+    "cases": 52,
+    "desktop": {
+      "overflow": false
+    },
+    "mobile": {
+      "overflow": false
+    },
+    "nativeViewer": true,
+    "errors": []
+  },
+  "preservation": {
+    "files": 40,
+    "all_unchanged": true,
+    "checks": {
+      ".tmp\\data_m001\\paired_selection\\final_v1\\validation\\reference\\054109_makeup_01.jpg": true,
+      ".tmp\\data_m001\\paired_selection\\final_v1\\validation\\reference\\056266_makeup_01.jpg": true,
+      "artifacts/render_kaggle_cpu_hair_nails_20261031_02.bin": true,
+      "artifacts\\makeup-complexion-20261101\\serving-controls\\g4-054109-classic_red_lip-labels.png": true,
+      "artifacts\\makeup-complexion-20261101\\serving-controls\\g4-054109-natural_makeup-labels.png": true,
+      "artifacts\\makeup-complexion-20261101\\serving-controls\\g4-056266-classic_red_lip-labels.png": true,
+      "artifacts\\makeup-complexion-20261101\\serving-controls\\g4-056266-natural_makeup-labels.png": true,
+      "artifacts\\makeup-cosmetic-layers-20261101\\source-054109-landmarks.json": true,
+      "artifacts\\makeup-cosmetic-layers-20261101\\source-056266-landmarks.json": true,
+      "artifacts\\makeup-quality-20261025\\guidance-review-d2f303a097\\results\\054109-classic_red_lip-current_adapter.png": true,
+      "artifacts\\makeup-quality-20261025\\guidance-review-d2f303a097\\results\\054109-natural_makeup-current_adapter.png": true,
+      "artifacts\\makeup-quality-20261025\\guidance-review-d2f303a097\\results\\056266-classic_red_lip-current_adapter.png": true,
+      "artifacts\\makeup-quality-20261025\\guidance-review-d2f303a097\\results\\056266-natural_makeup-current_adapter.png": true,
+      "artifacts\\makeup-reference-20261101\\run-05\\054109-exp_cloud_berry_lips-corrected.png": true,
+      "artifacts\\makeup-reference-20261101\\run-05\\056266-exp_cloud_berry_lips-corrected.png": true,
+      "artifacts\\makeup-reference-20261101\\run-05\\g4-054109-classic_red_lip-corrected.png": true,
+      "artifacts\\makeup-reference-20261101\\run-05\\g4-054109-natural_makeup-corrected.png": true,
+      "artifacts\\makeup-reference-20261101\\run-05\\g4-056266-classic_red_lip-corrected.png": true,
+      "artifacts\\makeup-reference-20261101\\run-05\\g4-056266-natural_makeup-corrected.png": true,
+      "artifacts\\makeup-tone-20261025\\run-02\\054109-exp_cloud_berry_lips-labels.png": true,
+      "artifacts\\makeup-tone-20261025\\run-02\\056266-exp_cloud_berry_lips-labels.png": true,
+      "artifacts\\makeup-tone-20261025\\run-02\\source-054109-labels.png": true,
+      "artifacts\\makeup-tone-20261025\\run-02\\source-056266-labels.png": true,
+      "artifacts\\style-expansion-20261025\\release-review-01\\results\\21-054109-exp_cloud_berry_lips.png": true,
+      "artifacts\\style-expansion-20261025\\release-review-01\\results\\22-056266-exp_cloud_berry_lips.png": true,
+      "backend/app/generation/remote_makeup.py": true,
+      "backend/app/makeup_contract.py": true,
+      "backend/app/makeup_styles.py": true,
+      "backend/app/style_release.json": true,
+      "data/makeup/MAKEUP-CORRECTION-001/review.json": true,
+      "notebooks/render_kaggle_all_hair_nails_demo.ipynb": true,
+      "scripts/evaluate_makeup_reference_application.py": true,
+      "scripts/inference_performance.py": true,
+      "scripts/makeup_alignment_pilot.py": true,
+      "scripts/makeup_inference_server.py": true,
+      "scripts/makeup_reference_application.py": true,
+      "scripts/makeup_selected_cosmetics.py": true,
+      "scripts/makeup_source_faithful_retouch.py": true,
+      "scripts/makeup_source_render.py": true,
+      "scripts/unified_gate3_server.py": true
+    }
+  },
+  "initial_cpu_forward_seconds": {
+    "min": 0.7663754999998673,
+    "median": 0.8251871499999197,
+    "max": 1.446197100000063,
+    "limit": "Offline CPU provider times, excludes standalone parsing/landmarks, queue/network and full application work"
+  },
+  "new_diffusion_calls": 0,
+  "kaggle_gpu_used": false,
+  "new_training": false,
+  "pretrained_cpu_provider": {
+    "revision": "d033d3398751684eb8c4b5aef54c74b84f3a3ef8",
+    "checkpoint_sha256": "71473aa3abad4f66536cef89ab179851547811f1153e846333fa167655776737",
+    "bytes": 41123601,
+    "our_trained_adapter": false
+  },
+  "all_reapplication_used_saved_neural_fields": true,
+  "canonical_review": "artifacts/makeup-local-transfer-20261104/catalog-review",
+  "latest_implementation_sha256": {
+    "scripts/makeup_source_layers.py": "860af69251b6679d0937df96740cf47f0f74ea3e0e4a256402c3028a49a9618e",
+    "scripts/makeup_local_features.py": "c889d93f87a7e787c3afbd2d3eae9bfe11649eedb67123c3259d463875a51a1d",
+    "scripts/evaluate_makeup_automatic.py": "349a1cb6fefd362fcfaec61b797e0f467ab1ef296d560dba2fa29f7b03a1395f",
+    "scripts/makeup_surface_application.py": "2ab6db53b34d3ae3474f8d49b9fb0209699b41151055af49ba88723bddcaf574",
+    "scripts/makeup_alignment_pilot.py": "4ef6f76606a657d4d4cd576c509efdd4f9d60ef4aeaca301725ece50fa332e95",
+    "scripts/makeup_selected_cosmetics.py": "0974104e4092e7126384a0b812cdfc951ff3e63db21999af7a752742a43ee720",
+    "scripts/makeup_source_faithful_retouch.py": "d2c78ea9731dbda97d4ee5c1e1d11809a323e44ef6eac7a5c0ad7e76f5fb542b",
+    "scripts/makeup_source_render.py": "0471a37c01b4438dcf7c12389e0b044e7b7c81d6da3be67147b3eff742e8fb05"
+  },
+  "next_gate": "Review completed automatic full look comparisons; resolve documented style fidelity/edge gaps before data admission. No artist prerequisite."
+}

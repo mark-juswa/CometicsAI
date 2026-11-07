@@ -1,0 +1,358 @@
+{
+  "date": "2026-10-25",
+  "archive": "D:\\Downloads\\beautycore-release-validation-results.zip",
+  "archive_bytes": 10369659,
+  "archive_sha256": "52aa504b1d5fd91d43fef65460bd4c5d3c3e2a8c7e3ff9218b0cfb1d84d58302",
+  "status": "GPU_EXECUTION_PROVENANCE_AND_CONTROLS_VERIFIED_VISUAL_REVIEW_DONE",
+  "checks": "PASS:CRC/paths/29orderedcases/source-plan-prompt-adapter-PNG-RGB-sourcepixels/env hashes;4priorcontrols and finalrestorationexact;onefoundation/100layerstateverified.",
+  "completed_calls": 29,
+  "existing_makeup_outputs": 20,
+  "new_makeup_outputs": 4,
+  "hair_outputs": 4,
+  "restoration_outputs": 1,
+  "timings": {
+    "sum_forward_wall_seconds": 1863.7679966430005,
+    "min_seconds": 60.37793259800003,
+    "median_seconds": 64.23921900799996,
+    "max_seconds": 67.48692463900011,
+    "foundation_load_seconds": 44.48353685999996,
+    "max_allocated_gpu_tensor_mib": 8304.30517578125
+  },
+  "scratch": {
+    "cache_home": "/tmp/beautycore-style-pilot-hf/beautycore-release-validation-f6eb2e33a6c1",
+    "volumes": [
+      {
+        "base": "/tmp",
+        "usable": true,
+        "free_bytes": 1125780381696
+      }
+    ]
+  },
+  "private_directory": "I:\\HAIR\\artifacts\\style-expansion-20261025\\release-review-01",
+  "additional_prior_control_check": "All four selected earlier2.5PNG files also match byte-for-byte, independently of stored report flags.",
+  "visual_review": {
+    "method": "Codex reviewed all4returned per-person contact sheets containing all29outputs, plus full512pximages for both Comma outputs and054109Berry/Icy candidates. No standardized numerical face/skin/style score.",
+    "observations": [
+      {
+        "feature": "makeup",
+        "subject_id": "054109",
+        "style_id": "natural_makeup",
+        "kind": "existing",
+        "output": "01-054109-natural_makeup.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Matches the selected earlier2.5control exactly for both people. Visible lip/lash/blush; skin smoothing and complexion drift remain as previously disclosed."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "056266",
+        "style_id": "natural_makeup",
+        "kind": "existing",
+        "output": "02-056266-natural_makeup.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Matches the selected earlier2.5control exactly for both people. Visible lip/lash/blush; skin smoothing and complexion drift remain as previously disclosed."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "054109",
+        "style_id": "no_makeup_makeup",
+        "kind": "existing",
+        "output": "03-054109-no_makeup_makeup.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Generates conspicuous lipstick, lashes, blush and retouching; not an extremely subtle no-makeup result on these inputs."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "056266",
+        "style_id": "no_makeup_makeup",
+        "kind": "existing",
+        "output": "04-056266-no_makeup_makeup.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Generates conspicuous lipstick, lashes, blush and retouching; not an extremely subtle no-makeup result on these inputs."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "054109",
+        "style_id": "soft_glam",
+        "kind": "existing",
+        "output": "05-054109-soft_glam.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Visible blended warm eye/lip styling; retains glossy retouched face and strong cheeks."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "056266",
+        "style_id": "soft_glam",
+        "kind": "existing",
+        "output": "06-056266-soft_glam.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Visible blended warm eye/lip styling; retains glossy retouched face and strong cheeks."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "054109",
+        "style_id": "smoky_glam",
+        "kind": "existing",
+        "output": "07-054109-smoky_glam.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Distinct dark smoky eyelid/liner direction on both inputs; smoothing/complexion and broad cheek effects remain."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "056266",
+        "style_id": "smoky_glam",
+        "kind": "existing",
+        "output": "08-056266-smoky_glam.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Distinct dark smoky eyelid/liner direction on both inputs; smoothing/complexion and broad cheek effects remain."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "054109",
+        "style_id": "dewy_peach",
+        "kind": "existing",
+        "output": "09-054109-dewy_peach.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Distinct peach/coral eye/cheek/lip color; stronger saturation and coverage than a sheer fresh look."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "056266",
+        "style_id": "dewy_peach",
+        "kind": "existing",
+        "output": "10-056266-dewy_peach.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Distinct peach/coral eye/cheek/lip color; stronger saturation and coverage than a sheer fresh look."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "054109",
+        "style_id": "rosy_pink",
+        "kind": "existing",
+        "output": "11-054109-rosy_pink.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Clearly pink eye/cheek/lip direction, but blush/pigment is strong."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "056266",
+        "style_id": "rosy_pink",
+        "kind": "existing",
+        "output": "12-056266-rosy_pink.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Clearly pink eye/cheek/lip direction, but blush/pigment is strong."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "054109",
+        "style_id": "bronze_golden_glam",
+        "kind": "existing",
+        "output": "13-054109-bronze_golden_glam.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Warm bronze/gold eyelid direction is visible; glossy skin and reconstruction remain."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "056266",
+        "style_id": "bronze_golden_glam",
+        "kind": "existing",
+        "output": "14-056266-bronze_golden_glam.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Warm bronze/gold eyelid direction is visible; glossy skin and reconstruction remain."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "054109",
+        "style_id": "matte_nude",
+        "kind": "existing",
+        "output": "15-054109-matte_nude.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Neutral lip/eye direction visible, but face still has bright glossy highlights, so matte fidelity is partial."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "056266",
+        "style_id": "matte_nude",
+        "kind": "existing",
+        "output": "16-056266-matte_nude.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Neutral lip/eye direction visible, but face still has bright glossy highlights, so matte fidelity is partial."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "054109",
+        "style_id": "classic_red_lip",
+        "kind": "existing",
+        "output": "17-054109-classic_red_lip.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Matches selected earlier2.5control exactly; red lip obvious, with extra cheek/highlight/face changes."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "056266",
+        "style_id": "classic_red_lip",
+        "kind": "existing",
+        "output": "18-056266-classic_red_lip.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Matches selected earlier2.5control exactly; red lip obvious, with extra cheek/highlight/face changes."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "054109",
+        "style_id": "bold_evening_glam",
+        "kind": "existing",
+        "output": "19-054109-bold_evening_glam.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Rich darker lip and dramatic eye direction visible; still retouched and strongly pigmented."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "056266",
+        "style_id": "bold_evening_glam",
+        "kind": "existing",
+        "output": "20-056266-bold_evening_glam.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "EXISTING_SELECTED_PROFILE_RUNTIME_VERIFIED_WITH_RECORDED_LIMITS",
+        "notes": "Rich darker lip and dramatic eye direction visible; still retouched and strongly pigmented."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "054109",
+        "style_id": "exp_cloud_berry_lips",
+        "kind": "candidate",
+        "output": "21-054109-exp_cloud_berry_lips.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "CANDIDATE_REQUIRES_CLIENT_VISUAL_REVIEW",
+        "notes": "Distinct berry lip/cheek color on both inputs. Lip contour is defined/glossy rather than a clear diffused stain; cheeks and eye treatment exceed understated request."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "056266",
+        "style_id": "exp_cloud_berry_lips",
+        "kind": "candidate",
+        "output": "22-056266-exp_cloud_berry_lips.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "CANDIDATE_REQUIRES_CLIENT_VISUAL_REVIEW",
+        "notes": "Distinct berry lip/cheek color on both inputs. Lip contour is defined/glossy rather than a clear diffused stain; cheeks and eye treatment exceed understated request."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "054109",
+        "style_id": "exp_icy_silver",
+        "kind": "candidate",
+        "output": "23-054109-exp_icy_silver.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "CANDIDATE_REQUIRES_CLIENT_VISUAL_REVIEW",
+        "notes": "Distinct blue/silver metallic lids on both inputs. Adds vivid pink/red lips rather than requested subtle natural lip; eye effect is stronger/wider than restrained localized accents."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "056266",
+        "style_id": "exp_icy_silver",
+        "kind": "candidate",
+        "output": "24-056266-exp_icy_silver.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "CANDIDATE_REQUIRES_CLIENT_VISUAL_REVIEW",
+        "notes": "Distinct blue/silver metallic lids on both inputs. Adds vivid pink/red lips rather than requested subtle natural lip; eye effect is stronger/wider than restrained localized accents."
+      },
+      {
+        "feature": "hairstyle",
+        "subject_id": "d2_curtain_hair_4jpg",
+        "style_id": "curtain_hair",
+        "kind": "existing",
+        "output": "25-d2_curtain_hair_4jpg-curtain_hair.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "BASELINE_LIMITS_RECORDED",
+        "notes": "Curtain style generates longer dark hair, changes source auburn color and smooths face. Existing baseline also has preservation limits."
+      },
+      {
+        "feature": "hairstyle",
+        "subject_id": "d2_curtain_hair_4jpg",
+        "style_id": "exp_comma_hair",
+        "kind": "candidate",
+        "output": "26-d2_curtain_hair_4jpg-exp_comma_hair.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "HOLD_NEW_COMMA",
+        "notes": "Thick outlined U/loop shapes drawn across forehead rather than plausible comma-shaped hair strands; source auburn hair becomes black. Not ready."
+      },
+      {
+        "feature": "hairstyle",
+        "subject_id": "d2_side_part_undercut_28jpg",
+        "style_id": "curtain_hair",
+        "kind": "existing",
+        "output": "27-d2_side_part_undercut_28jpg-curtain_hair.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "BASELINE_LIMITS_RECORDED",
+        "notes": "Center-part/long fringe visible with recognizable beard/clothing, but face partly obscured."
+      },
+      {
+        "feature": "hairstyle",
+        "subject_id": "d2_side_part_undercut_28jpg",
+        "style_id": "exp_comma_hair",
+        "kind": "candidate",
+        "output": "28-d2_side_part_undercut_28jpg-exp_comma_hair.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "HOLD_NEW_COMMA",
+        "notes": "Rounded parted fringe stays close to Curtain baseline; no reliably distinct comma lock, and fringe covers the eyes."
+      },
+      {
+        "feature": "makeup",
+        "subject_id": "054109",
+        "style_id": "natural_makeup",
+        "kind": "restoration",
+        "output": "29-054109-natural_makeup.png",
+        "reviewer": "Codex qualitative image inspection; salon acceptance not supplied",
+        "disposition": "RESTORATION_VERIFIED",
+        "notes": "Final output byte-identical to first Natural image after Makeup->TRAIN002->Makeup switch."
+      }
+    ],
+    "makeup_profile": "All10existing presets run successfully at selected2.5with original full adapter. User's explicit2.5choice remains confirmed; this is runtime/regression evidence, not new approval of every preset's realism/fidelity.",
+    "new_makeup": "Berry and IcySilver are visually distinct and technically generated. Original blurred-lip/subtle-lip style details are only partly followed; client visual acceptance and truthful labeling required before adding them.",
+    "new_hair": "Hold Comma on this evidence: visible graphic-loop artifact on one input and weak distinction from Curtain on the other. Do not call it reliable new haircut support.",
+    "nails_context": "Prior separate local automatic-mask4hand/12outputevidence remains valid; not part of this29portraitZIP. Client design/edge acceptance remains pending."
+  },
+  "recommended_release_subset": {
+    "confirmed_candidate": "Existing Makeup selected guidance2.5 for compatible serving integration; keep original presets/styles/weights and fallback.",
+    "pending_visual_acceptance": [
+      "Three tested Nail renderer designs",
+      "Berry and IcySilver if client accepts actual glam appearance and accurate naming rather than unsupported blurred/subtle claims"
+    ],
+    "hold": [
+      "Comma Hair",
+      "Other unaccepted/untested shortlist entries"
+    ]
+  },
+  "limitations": [
+    "2reusedMakeup people and2historicalHairvalidationimages, not untouched final evaluation or a broad lighting/complexion coverage study.",
+    "No new training dataset or adapter weights.",
+    "All10runtime completions do not establish all10labels' exact visual fidelity.",
+    "No quantitative complexion/style metric or salon acceptance of expansion outputs.",
+    "Forward timings exclude setup/download/encoding/packaging and are not end-to-end application latency.",
+    "No publiccatalog/routing/profile/cloud/deployment change during this review."
+  ],
+  "application_or_production_changed": false,
+  "human_followup": {
+    "status": "BERRY_REJECTED",
+    "date": "2026-10-25",
+    "reason": "User says too white, unnatural, poor blend with source skin tone.",
+    "release_impact": "Hold new Makeup expansion; selected2.5must not be described as a verified complexion correction."
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-25",
+  "stage": "PILOT_PREPARED_GPU_RUN_PENDING",
+  "approval": "CONFIRMED: recommended first batch for isolated testing",
+  "local_cuda_available": false,
+  "focused_tests": {
+    "passed": 43,
+    "command": "python -m pytest backend/tests/test_style_expansion.py backend/tests/test_registry_expansion.py backend/tests/test_nails_hybrid.py backend/tests/test_generation_benchmark.py -q"
+  },
+  "artifact_preflight": {
+    "notebook_sha256": "e4dee6b92093362c73b59aa411a23cc5a3ffb83a45cbdced4ac14c5c58856c5e",
+    "embedded_source_matches_working_files": true,
+    "original_gpu_bundle_and_registry_preflight": "PASSED",
+    "source_hashes": {
+      "scripts/inference_performance.py": "b69dd604baa6a09ba1a1d7598e979c66a81d26f70a8e9ae3db3bb790766030af",
+      "scripts/unified_gate3_server.py": "bb1d24159075f0592f491532080195f204f73c708e2a8e2fd095daac481723a2",
+      "scripts/style_expansion_pilot.py": "8e5dc547ef445c92790e004f4612d733ab80ae22e4325a245c72715d92976fa1",
+      "scripts/style_expansion_nails.py": "e2b10af9b63582e3f22f62225f91eab616bddc80719c73d6a98ab7a722bebc04",
+      "scripts/style_expansion_bootstrap.py": "3fe166cd70f1996f64cb615bc2bd3bd1e4e233a179e8d0b5276517d79f9a9a8e",
+      "backend/app/nails/geometry.py": "af6d9bdea365fee4243c3b387c01be11adf356f904e4a2c1ef3ae6d3fab45f1a",
+      "data/style-expansion/STYLE-EXP-001/pilot.json": "7325e06095ba33a60a5c2e64f44800bde972cf549404d30beb46961a3ebaac70"
+    },
+    "fixture_hashes": {
+      "hand.png": "c483244132e74ffc6e492271e742c17dce4ce694050abab78c43bc306dd4fd98",
+      "mask.png": "91580d510e48b4e09dbb5bea464a3a4bc58cbd7ee06226b9de4b4b8947ceb936"
+    },
+    "cuda_inference_run": false
+  },
+  "local_renderer": {
+    "status": "REQUIRES_VISUAL_REVIEW",
+    "scope": "Reviewed-mask renderer ceiling only",
+    "source_sha256": "c483244132e74ffc6e492271e742c17dce4ce694050abab78c43bc306dd4fd98",
+    "mask_sha256": "91580d510e48b4e09dbb5bea464a3a4bc58cbd7ee06226b9de4b4b8947ceb936",
+    "segmentation_tested": false,
+    "trained_model": false,
+    "production_enabled": false,
+    "cases": [
+      {
+        "candidate_id": "exp_raspberry_jelly",
+        "output": "exp_raspberry_jelly.png",
+        "renderer_seconds": 0.23145300000010138,
+        "rgb_sha256": "df6e61071805224a4a807f2fb4a747ed2bbdc2cd216539d1b8571d1fea8c9095",
+        "png_sha256": "4ecabace8e6f3b55f94d2b47f79fa34bb6f00b4dcb2e342329e83a1169e711a8",
+        "changed_outside_mask_pixels": 0,
+        "changed_pixels_per_component": [
+          4499,
+          2306,
+          3880,
+          3566,
+          1981
+        ],
+        "visual_verdict": "NEEDS_REVIEW"
+      },
+      {
+        "candidate_id": "exp_pink_aura",
+        "output": "exp_pink_aura.png",
+        "renderer_seconds": 0.19944940000004863,
+        "rgb_sha256": "68d1593a1ea17e94a627740fd5221f62c9add10eafc56b5788932abddd37e336",
+        "png_sha256": "44577513b08c9fd70240f8a18b268409ce1f15a7bc2217769cea4e4a9fdc8e9c",
+        "changed_outside_mask_pixels": 0,
+        "changed_pixels_per_component": [
+          4499,
+          2306,
+          3880,
+          3566,
+          1981
+        ],
+        "visual_verdict": "NEEDS_REVIEW"
+      },
+      {
+        "candidate_id": "exp_negative_space_microdots",
+        "output": "exp_negative_space_microdots.png",
+        "renderer_seconds": 0.2038574000000608,
+        "rgb_sha256": "9d24bb56b6f2e50421f1afa6bc2e109e084f286a06e8ac788edd501585a14fe8",
+        "png_sha256": "614da3d483199f3e29b23b827b1f777b460810fe9990a1f7b4deef04e6fe22af",
+        "changed_outside_mask_pixels": 0,
+        "changed_pixels_per_component": [
+          4499,
+          2306,
+          3880,
+          3566,
+          1981
+        ],
+        "visual_verdict": "NEEDS_REVIEW"
+      }
+    ],
+    "limitations": [
+      "One reused validation hand; no new dataset or generalization claim.",
+      "Manual mask bypasses live segmentation. Real upload/mask acceptance remains required.",
+      "Elapsed time measures this renderer only, not application latency."
+    ]
+  },
+  "local_visual_inspection": "Comparison sheet inspected; candidates visible, client quality acceptance pending.",
+  "notebook": "artifacts/style-expansion-20261025/beautycore_style_expansion_pilot.ipynb",
+  "guide": "docs/guides/style-expansion-pilot.md",
+  "expected_portrait_calls": 15,
+  "new_training_images_collected": 0,
+  "training_performed": false,
+  "new_public_styles_enabled": false,
+  "render_or_kaggle_configuration_changed": false,
+  "next": "User confirms separate T4 session available; run prepared private pilot and return ZIP.",
+  "limitations": [
+    "Local renderer uses one old manual-mask hand; no automatic mask or live API claim.",
+    "No Hair/Makeup candidate has been generated in this task.",
+    "Kaggle host/dependency acceptance remains pending actual execution.",
+    "No generalization or generation-speed improvement claimed."
+  ]
+}

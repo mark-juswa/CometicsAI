@@ -1,0 +1,279 @@
+{
+  "experiment": "MAKEUP-ALIGN-001",
+  "case_count": 4,
+  "mediapipe": "0.10.33",
+  "training": false,
+  "lora_active": false,
+  "production_enabled": false,
+  "new_model_inference": "PRETRAINED_LANDMARK_DETECTION_ONLY",
+  "chains": {
+    "right_upper": [
+      33,
+      246,
+      161,
+      160,
+      159,
+      158,
+      157,
+      173,
+      133
+    ],
+    "right_lower": [
+      33,
+      7,
+      163,
+      144,
+      145,
+      153,
+      154,
+      155,
+      133
+    ],
+    "left_upper": [
+      362,
+      398,
+      384,
+      385,
+      386,
+      387,
+      388,
+      466,
+      263
+    ],
+    "left_lower": [
+      362,
+      382,
+      381,
+      380,
+      374,
+      373,
+      390,
+      249,
+      263
+    ],
+    "right_brow_lower": [
+      46,
+      53,
+      52,
+      65,
+      55
+    ],
+    "right_brow_upper": [
+      70,
+      63,
+      105,
+      66,
+      107
+    ],
+    "left_brow_lower": [
+      276,
+      283,
+      282,
+      295,
+      285
+    ],
+    "left_brow_upper": [
+      300,
+      293,
+      334,
+      296,
+      336
+    ],
+    "lip_outer": [
+      61,
+      185,
+      40,
+      39,
+      37,
+      0,
+      267,
+      269,
+      270,
+      409,
+      291,
+      375,
+      321,
+      405,
+      314,
+      17,
+      84,
+      181,
+      91,
+      146
+    ],
+    "lip_inner": [
+      78,
+      191,
+      80,
+      81,
+      82,
+      13,
+      312,
+      311,
+      310,
+      415,
+      308,
+      324,
+      318,
+      402,
+      317,
+      14,
+      87,
+      178,
+      88,
+      95
+    ]
+  },
+  "subjects": [
+    {
+      "id": "054109",
+      "source": ".tmp/data_m001/paired_selection/final_v1/validation/reference/054109_makeup_01.jpg",
+      "sha256": "81e57faca39e3989ed9920ebd6568efad563ae4f012f3fbb130918858d18e8ed",
+      "source_photo": {
+        "author": "Presidency Maldives",
+        "photo_title": "MK_NAIVAIDHOO1493",
+        "photo_url": "https://www.flickr.com/photos/presidencymaldives/5292667558/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Existing development portrait; not untouched final acceptance.",
+      "note": "Original photo may already contain cosmetics; no bare-skin ground-truth claim.",
+      "previous": "artifacts/makeup-render-20261027/complete-01/054109-complete.png",
+      "previous_sha256": "aec123c1f9f02dd25be751c4b5d5f8982832886afa189a55b3fd081f784f5fcf"
+    },
+    {
+      "id": "056266",
+      "source": ".tmp/data_m001/paired_selection/final_v1/validation/reference/056266_makeup_01.jpg",
+      "sha256": "d6b86be2fe5f505eb6ebe7f2b1c22a59f41ddef053953f55eba1ca0b859f1728",
+      "source_photo": {
+        "author": "Lori Thantos",
+        "photo_title": "IMG_1526.jpg",
+        "photo_url": "https://www.flickr.com/photos/lori_thantos/5121900493/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Existing development portrait; not untouched final acceptance.",
+      "note": "Original photo may already contain cosmetics; no bare-skin ground-truth claim.",
+      "previous": "artifacts/makeup-render-20261027/complete-01/056266-complete.png",
+      "previous_sha256": "3a410d7946ea4783483f9ecc0fb87cea14f20c0074dbd95df4e864b377503493"
+    },
+    {
+      "id": "006553",
+      "source": ".tmp/data_m001/paired_selection/final_v1/train/reference/006553_makeup_01.jpg",
+      "sha256": "64a84cfe4ccde31e01cc10edcbc6843211163fc006a279ce8c49ff75b1ca3098",
+      "source_photo": {
+        "author": "academy visavis",
+        "photo_title": "272_visavis_academy_0423_khs-1370823",
+        "photo_url": "https://www.flickr.com/photos/145889229@N04/40808745485/",
+        "license": "Attribution License",
+        "license_url": "https://creativecommons.org/licenses/by/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Existing development portrait; not untouched final acceptance.",
+      "note": "Original photo may already contain cosmetics; no bare-skin ground-truth claim.",
+      "previous": "artifacts/makeup-render-20261027/complete-01/006553-complete.png",
+      "previous_sha256": "f89694d2e1f2aab0709acdbef5d37eeb6137cf9f7e49f2324d7eb10d759cfa1d"
+    },
+    {
+      "id": "035149",
+      "source": ".tmp/data_m001/paired_selection/final_v1/train/reference/035149_makeup_01.jpg",
+      "sha256": "65ff8f0ad1ca3dc416eb91733770669654d45d50a6aee9cf17beacd1a8be1e40",
+      "source_photo": {
+        "author": "Jack Donahue",
+        "photo_title": "Sheila's Graduation-0113",
+        "photo_url": "https://www.flickr.com/photos/jackflynndonahue/4651049950/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Existing development portrait; not untouched final acceptance.",
+      "note": "Original photo may already contain cosmetics; no bare-skin ground-truth claim.",
+      "previous": "artifacts/makeup-render-20261027/complete-01/035149-complete.png",
+      "previous_sha256": "7092b2add840249b208895d546dc9f19af9a5237d8562e5cbf7ac94a1b7f6010"
+    }
+  ],
+  "maps": [
+    {
+      "id": "054109",
+      "labels": "artifacts/makeup-render-20261026/run-02/054109-labels.png",
+      "sha256": "93cfaaf691c744b47ca53cdc8028c9e2d33ab496260afab855312251b0204ffe"
+    },
+    {
+      "id": "056266",
+      "labels": "artifacts/makeup-render-20261026/run-02/056266-labels.png",
+      "sha256": "ece1aad22b396febb1b0dc6cea275b67f690ddae1529014d5a0372ea2d51b4fa"
+    },
+    {
+      "id": "006553",
+      "labels": "artifacts/makeup-render-20261026/run-02/006553-labels.png",
+      "sha256": "b1102e9dbe8e14a5483d6fe400db63dc6edaf59d186da25889579d4ff66b73b8"
+    },
+    {
+      "id": "035149",
+      "labels": "artifacts/makeup-render-20261026/run-02/035149-labels.png",
+      "sha256": "5d7cdda621cea36e4ca680a61a45ce57e1cae353825590ecb54b83145a3fae23"
+    }
+  ],
+  "helpers": [
+    {
+      "path": "scripts/makeup_source_render.py",
+      "sha256": "0471a37c01b4438dcf7c12389e0b044e7b7c81d6da3be67147b3eff742e8fb05"
+    },
+    {
+      "path": "scripts/makeup_visibility_pilot.py",
+      "sha256": "9dc198a22c3966269b0937eeeebb8f0f56f7f8026680c878b9c4650a2d9bac7f"
+    },
+    {
+      "path": "scripts/makeup_complete_look.py",
+      "sha256": "1c4a4c2625b1d3783c5451acc2148cf0d5fd74a46202db0c41abda2077e12dc4"
+    }
+  ],
+  "model": {
+    "url": "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task",
+    "sha256": "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff",
+    "bytes": 3758596,
+    "members": [
+      "face_detector.tflite",
+      "face_landmarks_detector.tflite",
+      "geometry_pipeline_metadata_landmarks.binarypb",
+      "face_blendshapes.tflite"
+    ],
+    "source": "https://developers.google.com/edge/mediapipe/solutions/vision/face_landmarker/index",
+    "scope": "Offline local CPU alignment pilot; no photo uploaded",
+    "path": "models/downloaded/mediapipe-face-landmarker-v1/face_landmarker.task",
+    "hash_type": "Observed downloaded model hash pinned for reproducibility; not an upstream published checksum"
+  },
+  "reference": {
+    "filename": "codex-clipboard-19740f06-a00e-461d-9b35-8a549af7a0a3.png",
+    "sha256": "e3f1b9309df8b3e32b040b7d0c52b00d76d7808c537d0563f3d008e370e96787",
+    "size": [
+      1600,
+      2399
+    ],
+    "role": "User-supplied visual guide only, not a training target or same-person before/after pair",
+    "source_author_license": "UNKNOWN; no redistribution/training permission inferred",
+    "target_elements": [
+      "Warm rose-bronze shaded eyelids",
+      "Defined dark lashes and brows",
+      "Visible warm blush",
+      "Localized cheek highlight",
+      "Glossy rose-brown lips"
+    ],
+    "not_transferred": [
+      "Person identity",
+      "Complexion",
+      "Pose",
+      "Face geometry",
+      "Studio lighting",
+      "Skin retouching"
+    ]
+  },
+  "limits": [
+    "Four reused development portraits; no generalization or final acceptance",
+    "0.6 detection/presence thresholds are initial pilot settings, not calibrated acceptance metrics",
+    "Detector supplies coordinates, not realistic cosmetics",
+    "No source face reconstruction or user-photo upload"
+  ]
+}

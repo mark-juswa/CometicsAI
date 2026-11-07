@@ -1,0 +1,171 @@
+{
+  "archive": "D:\\Downloads\\beautycore-makeup-guidance-results-d2f303a097.zip",
+  "archive_sha256": "01832128682ba72b9f3935f4186ea413da154693fe516431f8fa7b04ba528c07",
+  "archive_bytes": 4771605,
+  "status": "GPU_VERIFIED_HUMAN_SELECTED_GUIDANCE_2_5_PRODUCTION_UNCHANGED",
+  "main_cases": 12,
+  "new_calls": 5,
+  "retained_cases": 8,
+  "checks": "PASS: CRC/paths/source/plan/prompt/source portrait/PNG/RGB/environment/adapter hashes;8retained rows+images byte-identical;3.0control pixel-identical;100layer state restoration.",
+  "all_four_2_5_results_differ_from_their_3_0_references": true,
+  "timings": {
+    "guidance_4_reference": {
+      "count": 4,
+      "min_seconds": 64.3959377010001,
+      "median_seconds": 64.51416358799997,
+      "max_seconds": 64.675475957
+    },
+    "guidance_3_reference": {
+      "count": 4,
+      "min_seconds": 59.778355780999846,
+      "median_seconds": 63.7899756365,
+      "max_seconds": 64.07841516699955
+    },
+    "guidance_2_5": {
+      "count": 4,
+      "min_seconds": 59.53177805099949,
+      "median_seconds": 63.752894534999996,
+      "max_seconds": 63.997372142999666
+    }
+  },
+  "new_forward_seconds": 312.9356448569988,
+  "foundation_load_seconds": 48.12520446100007,
+  "cache_reuse": {
+    "snapshot": "/tmp/beautycore-style-pilot-hf/beautycore-makeup-quality-687a09ec0101/hub/models--black-forest-labs--FLUX.2-klein-base-4B/snapshots/a3b4f4849157f664bdbc776fd7453c2783562f4d",
+    "downloaded_again": false,
+    "reinstalled_packages": false
+  },
+  "private_directory": "I:\\HAIR\\artifacts\\makeup-quality-20261025\\guidance-review-d2f303a097",
+  "date": "2026-10-25",
+  "visual_review": {
+    "method": "Codex qualitative review of both original/current4/3/2.5comparison sheets plus full512pixel Natural outputs at3and2.5for both subjects. No standardized skin/identity score.",
+    "observations": [
+      {
+        "subject_id": "054109",
+        "style_id": "natural_makeup",
+        "condition": "guidance_4_reference",
+        "output": "054109-natural_makeup-current_adapter.png",
+        "verdict": "HOLD_FOR_RELEASE",
+        "notes": "Strong pale highlighting/lightening, smoothed texture and heavy pink cheek/eye/brow styling.",
+        "reviewer": "Codex qualitative inspection; salon release acceptance not provided"
+      },
+      {
+        "subject_id": "054109",
+        "style_id": "classic_red_lip",
+        "condition": "guidance_4_reference",
+        "output": "054109-classic_red_lip-current_adapter.png",
+        "verdict": "HOLD_FOR_RELEASE",
+        "notes": "Red lip obvious; pale smoothed face and extra cheek/highlight changes persist.",
+        "reviewer": "Codex qualitative inspection; salon release acceptance not provided"
+      },
+      {
+        "subject_id": "056266",
+        "style_id": "natural_makeup",
+        "condition": "guidance_4_reference",
+        "output": "056266-natural_makeup-current_adapter.png",
+        "verdict": "HOLD_FOR_RELEASE",
+        "notes": "Heavy glossy/smoothed glam appearance, stronger cheeks/brows than restrained everyday request.",
+        "reviewer": "Codex qualitative inspection; salon release acceptance not provided"
+      },
+      {
+        "subject_id": "056266",
+        "style_id": "classic_red_lip",
+        "condition": "guidance_4_reference",
+        "output": "056266-classic_red_lip-current_adapter.png",
+        "verdict": "HOLD_FOR_RELEASE",
+        "notes": "Red lip plus extensive smoothing, glossy highlights and strong cheek pigment.",
+        "reviewer": "Codex qualitative inspection; salon release acceptance not provided"
+      },
+      {
+        "subject_id": "054109",
+        "style_id": "natural_makeup",
+        "condition": "guidance_3_reference",
+        "output": "054109-natural_makeup-lower_guidance.png",
+        "verdict": "HOLD_FOR_RELEASE",
+        "notes": "Small softening relative to4.0; user-preferred direction, but source complexion remains substantially lightened.",
+        "reviewer": "Codex qualitative inspection; salon release acceptance not provided"
+      },
+      {
+        "subject_id": "054109",
+        "style_id": "classic_red_lip",
+        "condition": "guidance_3_reference",
+        "output": "054109-classic_red_lip-lower_guidance.png",
+        "verdict": "HOLD_FOR_RELEASE",
+        "notes": "Red lip remains obvious; small changes from4.0without restored source complexion/texture.",
+        "reviewer": "Codex qualitative inspection; salon release acceptance not provided"
+      },
+      {
+        "subject_id": "056266",
+        "style_id": "natural_makeup",
+        "condition": "guidance_3_reference",
+        "output": "056266-natural_makeup-lower_guidance.png",
+        "verdict": "HOLD_FOR_RELEASE",
+        "notes": "Some softer details than4.0; original texture, smile and facial detail remain altered.",
+        "reviewer": "Codex qualitative inspection; salon release acceptance not provided"
+      },
+      {
+        "subject_id": "056266",
+        "style_id": "classic_red_lip",
+        "condition": "guidance_3_reference",
+        "output": "056266-classic_red_lip-lower_guidance.png",
+        "verdict": "HOLD_FOR_RELEASE",
+        "notes": "Clearly visible red lip; facial smoothing/highlights remain.",
+        "reviewer": "Codex qualitative inspection; salon release acceptance not provided"
+      },
+      {
+        "subject_id": "054109",
+        "style_id": "natural_makeup",
+        "condition": "guidance_2_5",
+        "output": "054109-natural_makeup-guidance_2_5.png",
+        "verdict": "HOLD_FOR_RELEASE",
+        "notes": "Makeup remains clearly visible. Very close to3.0 with small detail/tone changes; no clear correction of source-complexion lightening.",
+        "reviewer": "Codex qualitative inspection; salon release acceptance not provided"
+      },
+      {
+        "subject_id": "054109",
+        "style_id": "classic_red_lip",
+        "condition": "guidance_2_5",
+        "output": "054109-classic_red_lip-guidance_2_5.png",
+        "verdict": "HOLD_FOR_RELEASE",
+        "notes": "Red lip and eye/cheek effects remain obvious; appearance close to3.0with persistent full-face lightening and smoothing.",
+        "reviewer": "Codex qualitative inspection; salon release acceptance not provided"
+      },
+      {
+        "subject_id": "056266",
+        "style_id": "natural_makeup",
+        "condition": "guidance_2_5",
+        "output": "056266-natural_makeup-guidance_2_5.png",
+        "verdict": "HOLD_FOR_RELEASE",
+        "notes": "Very close to3.0; small detail changes but no consistent additional naturalness/preservation gain. Makeup does not disappear.",
+        "reviewer": "Codex qualitative inspection; salon release acceptance not provided"
+      },
+      {
+        "subject_id": "056266",
+        "style_id": "classic_red_lip",
+        "condition": "guidance_2_5",
+        "output": "056266-classic_red_lip-guidance_2_5.png",
+        "verdict": "HOLD_FOR_RELEASE",
+        "notes": "Red lip remains clear and intense; close to3.0, with continued smoothing and unrelated face/cheek edits.",
+        "reviewer": "Codex qualitative inspection; salon release acceptance not provided"
+      }
+    ],
+    "finding": "Guidance2.5keeps clearly visible makeup but looks close to3.0; no consistent additional preservation/naturalness win across4cases. Source-complexion lightening and heavy smoothing remain.",
+    "relative_preference": "Prior human preference for3.0over matched-foundation wording is retained; that comparison differs from3.0vs2.5. Do not erase the observed relative gain or label either final complexion fix.",
+    "recommendation": "Stop this bounded guidance test here. Keep3.0as a provisional human-preferred comparison candidate, not a deployed selection; no basis to switch to2.5automatically. If correction continues, prepare reviewed target curation and a bounded corrected-data plan before further GPU sweeps."
+  },
+  "limitations": [
+    "Two reused people x2styles; not an untouched final test or proof across all users/presets.",
+    "Only one3.0control rerun;8references otherwise retained.",
+    "Small visual differences do not establish a ranked quality score or final salon acceptance.",
+    "Recorded single-call timings span retained and new processes; no speed-improvement claim.",
+    "No corrected-data training has run; Base also over-edits, so fine-tuning is not a guaranteed complete solution."
+  ],
+  "application_or_production_changed": false,
+  "human_selection": {
+    "date": "2026-10-25",
+    "status": "CONFIRMED",
+    "guidance": 2.5,
+    "evidence": "Supervisor explicitly selected LATEST RESULT after being asked2.5latestversus3.0.",
+    "production_updated": false
+  }
+}

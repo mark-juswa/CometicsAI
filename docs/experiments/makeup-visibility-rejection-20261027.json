@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-27",
+  "experiment": "MAKEUP-VISIBILITY-001",
+  "decision_status": "CONFIRMED",
+  "evidence_status": "VERIFIED",
+  "progress": "DONE",
+  "feedback": "it still looks like it doesnt have a makeup",
+  "interpretation": "Latest comparison is not accepted as solving insufficient visible makeup. No per-case judgments inferred.",
+  "technical_results_preserved": "70 tests and 12 exact reproductions remain historical technical evidence, not appearance acceptance.",
+  "inspection": [
+    "scripts/makeup_source_render.py:geometry protects all labels except skin/lips, including brows",
+    "scripts/makeup_visibility_pilot.py:render adds bounded pigment and darkening on skin, preserves previous lips",
+    "scripts/makeup_source_styles.py local finish operations do not implement full lashes, brow shaping or foundation replacement"
+  ],
+  "finding": "Current prototype is a localized color/finish renderer. Stronger pigment did not satisfy the user's desired makeup appearance.",
+  "cause_limits": "Not proof that absent lashes/brows alone caused rejection; desired visual target/strength is unresolved.",
+  "next_design_status": "PROPOSED / NOT STARTED",
+  "next_design": "One complete reference-guided Soft Glam prototype: deliberate lid shading, defined lash line, coordinated cheek and lip makeup; consider brow/lash detail only with appropriate anatomy and revised protection. Original complexion/identity preserved. Test a small comparison before scaling to ten styles.",
+  "needs_verification": [
+    "User's intended makeup appearance/strength, ideally one reference image",
+    "Anatomical placement and realism of proposed complete-look details",
+    "Any additional detector/component requirements"
+  ],
+  "changes": "Documentation only; no new previews, code, training, GPU, serving or cloud changes.",
+  "deployment_ready": false
+}

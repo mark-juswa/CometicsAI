@@ -1,0 +1,45 @@
+{
+  "checked_at_utc": "2026-10-09T15:30:06.500639+00:00",
+  "status": "CURRENT_TUNNEL_UNAVAILABLE; CLIENT_STARTER_LOCAL_VERIFIED; FRESH_KAGGLE_REHEARSAL_REQUIRED",
+  "health_checks": [
+    {
+      "component": "Render website",
+      "url": "https://beautycore-demo.onrender.com/api/health",
+      "status": 200,
+      "body": "{\"status\":\"ok\",\"service\":\"beautycore\"}"
+    },
+    {
+      "component": "Current Kaggle tunnel",
+      "url": "https://circumstances-prior-quad-logging.trycloudflare.com/health",
+      "status": 530
+    }
+  ],
+  "diagnosis": "Current upstream outage is consistent with a stopped Kaggle session or failed tunnel. Health probes do not identify the exact process that stopped, nor retrospectively prove every reported 502 had this cause. Leaving a page does not cancel an admitted generation; demo_gateway busy returns 429, not 502.",
+  "client_starter": {
+    "file": "notebooks/render_kaggle_client_demo.ipynb",
+    "changes": [
+      "Embed corrected no-ensurepip CPU setup",
+      "Use MPLBACKEND=Agg for CPU",
+      "Unique work directory avoids retained-file extraction failure",
+      "Early exact host check from the verified GPU bundle review",
+      "Refuse duplicate live workers",
+      "Preserve old private inputs and model guards"
+    ],
+    "tests": "27 startup/recovery tests passed",
+    "actual_client_account_gpu_startup": "NEEDS VERIFICATION",
+    "all_feature_outputs": "NEEDS VERIFICATION"
+  },
+  "bundles": [
+    {
+      "name": "capstone_train002_20260928_v1.bin",
+      "sha256": "f0d1fed52e00b6c5a1da2cade3731237675cdebbfc0b2cde3b2dbda99a4019ac",
+      "unchanged": true
+    },
+    {
+      "name": "render_kaggle_cpu_20261009.bin",
+      "sha256": "f391050851519e9cc1080830b615a6cc457b6dd1e21fde156522bb959fad9ede",
+      "unchanged": true
+    }
+  ],
+  "cloud_changes": "None; did not change Render or start/stop Kaggle"
+}

@@ -14,6 +14,8 @@ from zipfile import ZipFile
 
 from PIL import Image, ImageDraw, ImageOps
 
+from makeup_target_quality import validate_quality, quality_review_template
+
 
 CAPTION = ("Apply realistic makeup visible in the target portrait while preserving "
            "the person's identity, facial structure, expression, hairstyle, clothing, and scene.")
@@ -116,6 +118,7 @@ def prepare(archive_path: Path, metadata_path: Path, selection_path: Path, outpu
                 "pairs": rows}
     write_json(output / "candidate_manifest.json", manifest)
     write_json(output / "reviews.json", {"schema": "DATA-M001-human-review-v1", "reviews": reviews})
+    write_json(output / "target_quality.json", quality_review_template(rows))
     make_contact_sheets(output, rows)
     qa = {"status": "PENDING_HUMAN_REVIEW", "identity_counts": {"train": 10, "validation": 2},
           "pair_counts": dict(Counter(row["split"] for row in rows)),
@@ -164,7 +167,7 @@ def record_all_approval(candidate: Path, reviewer: str, note: str) -> dict:
     return {"accepted": len(data["reviews"]), "reviewer": reviewer}
 
 
-def finalize(candidate: Path, output: Path) -> dict:
+def finalize(candidate: Path, output: Path, quality_review: Path | None = None) -> dict:
     manifest = read_json(candidate / "candidate_manifest.json")
     reviews = read_json(candidate / "reviews.json")["reviews"]
     rows = manifest["pairs"]
@@ -192,6 +195,11 @@ def finalize(candidate: Path, output: Path) -> dict:
                 raise ValueError(f"Candidate image hash mismatch: {path}")
             with Image.open(path) as image:
                 image.verify()
+    quality_review = quality_review or candidate / "target_quality.json"
+    if not quality_review.is_file():
+        raise ValueError("Corrective target quality review missing, historical ACCEPT is insufficient")
+    quality_document = read_json(quality_review)
+    quality_evidence = validate_quality(accepted, quality_document, candidate)
     output.mkdir(parents=True, exist_ok=True)
     final_rows = []
     for row in accepted:
@@ -210,12 +218,14 @@ def finalize(candidate: Path, output: Path) -> dict:
     write_json(output / "manifests" / "pairs.json", final_rows)
     write_json(output / "manifests" / "reviews.json", reviews)
     write_json(output / "manifests" / "selection.json", read_json(candidate / "selection.json"))
+    write_json(output / "reports" / "target_quality.json", quality_document)
     qa = {"status": "FINALIZED", "train_pairs": sum(row["split"] == "train" for row in final_rows),
           "validation_pairs": sum(row["split"] == "validation" for row in final_rows),
           "train_identities": len(train_ids), "validation_identities": len(validation_ids),
           "rejected_pairs": sorted(set(decisions) - {row["pair_id"] for row in final_rows}),
           "split_leakage": "NONE", "review_mode": "explicit_human_review",
-          "source_archive_sha256": manifest["source_archive_sha256"]}
+          "source_archive_sha256": manifest["source_archive_sha256"],
+          "corrective_quality": quality_evidence}
     write_json(output / "reports" / "qa.json", qa)
     return qa
 
@@ -229,6 +239,7 @@ def main() -> None:
     parser.add_argument("--candidate", type=Path)
     parser.add_argument("--reviewer")
     parser.add_argument("--approval-note")
+    parser.add_argument("--quality-review", type=Path, help="Per pair corrective quality review, never inferred from approve-all")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if args.phase == "prepare":
@@ -242,7 +253,7 @@ def main() -> None:
     else:
         if not args.candidate:
             parser.error("finalize requires --candidate")
-        result = finalize(args.candidate, args.output)
+        result = finalize(args.candidate, args.output, args.quality_review)
     print(json.dumps(result, indent=2))
 
 

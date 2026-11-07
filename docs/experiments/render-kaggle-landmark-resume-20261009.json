@@ -1,0 +1,14 @@
+{
+  "status": "CAUSE VERIFIED; RESUME LOCAL VERIFIED; ONLINE RESUME NEEDS VERIFICATION",
+  "user_log": "MediaPipe import reaches Matplotlib; rcParams backend initialization raises ValueError for module://matplotlib_inline.backend_inline. A prior sitecustomize missing-wrapt message did not stop execution.",
+  "fix": "CPU-only MPLBACKEND=Agg. Supported in the actual error list and official Matplotlib documentation. No package/model change.",
+  "resume": "New standalone replacement Cell 2 validates the known failed-startup marker and landmark error, refuses live/later-stage startup, confirms CPU interpreters exist, archives the failed reservation, skips only completed install commands and reruns both pip checks plus both model loads. GPU configuration is preserved; Agg remains in CPU API environment.",
+  "validation": {
+    "tests_passed": 15,
+    "coverage": "Both recovery cells; install reuse, CPU/API plotting mode, GPU environment preservation, failed model recheck log output, and active/unrelated/later session refusal. No real MediaPipe model load occurred locally."
+  },
+  "existing_cpu_bundle_sha256": "f391050851519e9cc1080830b615a6cc457b6dd1e21fde156522bb959fad9ede",
+  "official_reference": "https://matplotlib.org/stable/users/explain/figure/backends.html",
+  "warning": "Missing wrapt in platform sitecustomize remains a separately observed warning; it was not the fatal exception. No unverified host hook or package changes introduced.",
+  "online_generation": "NEEDS VERIFICATION"
+}

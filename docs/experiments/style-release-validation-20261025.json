@@ -1,0 +1,374 @@
+{
+  "date": "2026-10-25",
+  "experiment": "STYLE-VAL-001",
+  "status": "PORTRAIT_GPU_AND_NAILS_CPU_VERIFIED_VISUAL_REVIEW_DONE_RELEASE_SUBSET_PENDING",
+  "authorization": "Supervisor approved proceeding with validation/integration after selecting Makeup2.5; requests a fresh notebook because prior GPU session ended.",
+  "portrait_calls": {
+    "existing_makeup": 20,
+    "candidate_makeup": 4,
+    "hair_baseline_and_comma": 4,
+    "makeup_restoration": 1,
+    "total": 29
+  },
+  "settings": {
+    "makeup_guidance": 2.5,
+    "hair_guidance": 4.0,
+    "adapter_weight": 1.0,
+    "steps": 20,
+    "seed": 1977,
+    "size": [
+      512,
+      512
+    ]
+  },
+  "inputs": {
+    "makeup": "Two previously reused validation subjects054109/056266.",
+    "hair": "DATA-002 historical validation d2_curtain_hair_4jpg and d2_side_part_undercut_28jpg; exact source archive member/hash recorded, originals visually inspected.",
+    "limitation": "Historical development fixtures, not untouched final evaluation or a new training dataset."
+  },
+  "preflight": {
+    "notebook": "I:\\HAIR\\artifacts\\style-expansion-20261025\\beautycore_release_validation_v1.ipynb",
+    "sha256": "0600bdcb19559d08ff0a4af85c0791a966f178275111b522d810f3c862ec86d8",
+    "source_hashes": {
+      "scripts/style_expansion_bootstrap.py": "9e3b3c3eade96439a30091cb404a793e9b11bb50bdc5fc2b2f0eedf0147e89a9",
+      "scripts/makeup_quality_diagnostic.py": "00dcdc46116a3f2875c21c4df43daa6d4e6e2222f2800181ec856ae14c19b79a",
+      "scripts/style_release_bootstrap.py": "c53d3d76f22733f9d10d1c8d279c145179a31fa1cf5a82cd8d78b109e1d0ec65",
+      "scripts/style_release_validation.py": "db7dc12e17611716ffed4dee6e184cf4f14e6ffcc76f161f5dd5e88c1e1107c6",
+      "data/style-expansion/STYLE-VAL-001/plan.json": "20343573ddac427873228eb706d2e23ea0abe1f8295529d72b6f12b2efb6f7c7"
+    },
+    "portrait_hashes": {
+      "054109.jpg": "81e57faca39e3989ed9920ebd6568efad563ae4f012f3fbb130918858d18e8ed",
+      "056266.jpg": "d6b86be2fe5f505eb6ebe7f2b1c22a59f41ddef053953f55eba1ca0b859f1728",
+      "d2_curtain_hair_4jpg.jpg": "b222215758528b013ee67e23f3c41db0991d519811d964d748e81fabfece8d51",
+      "d2_side_part_undercut_28jpg.jpg": "97899322d425187deb89f028f8f4b6fa56107f2bd8364da73409ef5aebb450bc"
+    },
+    "original_bundle_crc_and_all_member_hashes": "PASS",
+    "overlay_original_member_collision": "NONE",
+    "automatic_nails_independent_output_checks": "PASS:4hands,12outputs,5editedcomponents each,0pixels changed outside actual refined masks"
+  },
+  "tests": {
+    "passed": 78,
+    "new_release_tests": 12,
+    "command": "python -m pytest backend/tests/test_style_release_validation.py backend/tests/test_style_expansion.py backend/tests/test_makeup_runtime.py backend/tests/test_nails_hybrid.py backend/tests/test_registry_expansion.py -q",
+    "covers": "29calls,onefoundation,fulladapter,correctMakeup/Hairguidance,ordinaryunload/load,exact4priorcontrols,finalpixelrestoration,realCPUtorchlazyparameterbehavior,scope/failureguards,partialZIPandprivatepayloads.",
+    "catalog_consistency": "PASS",
+    "local_cuda_portrait_generation": false
+  },
+  "nails": {
+    "status": "REAL_CPU_AUTO_MASK_RUN_VERIFIED_REQUIRES_VISUAL_CLIENT_REVIEW",
+    "report": "artifacts/style-expansion-20261025/automatic-mask-validation-02/report.json",
+    "inputs": 4,
+    "outputs": 12,
+    "nails_per_input": 5,
+    "pipeline": "Actual MediaPipe localizer, isolated existing CPUYOLO segmenter, source-resolution fingertip refinement, experimental renderer at normalized resolution, original-coordinate inward-only composite.",
+    "independent_verification": "AllPNG/RGBhashesmatch;5editedcomponents per output and0changedpixelsoutsideactualrefinedmask.",
+    "visual_review": "All4comparison sheets and full-resolution0000088PinkAura inspected by Codex. Designs distinguishable; sourcehand/background preserved. Fullmask contour/finish acceptance remains client review; binary outside-mask checks do not prove no anatomical skin leakage.",
+    "limits": "4reused11KHands historical validation sources, no diverse-conditions generalization test or calibrated ground-truth segmentation metric.",
+    "source_credit": "Afifi,11KHands(2019); existing academic usage metadata retained.",
+    "first_attempt": {
+      "report": "artifacts/style-expansion-20261025/automatic-mask-validation-01/report.json",
+      "failure": "New offline validation wrapper referenced nonexistent nails_segment_infer.py. Corrected to existing nails_segment_once.py; new02folderpreserves01failure. No generation/service source changed."
+    },
+    "runtime_report": {
+      "status": "REQUIRES_VISUAL_REVIEW",
+      "production_enabled": false,
+      "segmentation_tested": true,
+      "trained_model": false,
+      "scope": "Four reused historical validation hands; automatic pipeline, not new final test.",
+      "inputs": [
+        {
+          "subject_id": "0000045",
+          "original_sha256": "b9a348f28b8d64669b8a4c8aa21cc5e8a5a221ed0db71b250c020cccc7cf63af",
+          "source_member": "Hands/Hand_0000763.jpg",
+          "credit": "Afifi, 11K Hands (2019)",
+          "license": "free for reasonable academic fair use; cite Afifi 2019",
+          "original_size": [
+            1600,
+            1200
+          ],
+          "nails": 5,
+          "preparation_seconds": 19.877412599998934,
+          "coarse_mask_sha256": "ccbf5df2cac19358c46ed46eec46e38d32e96b2848a8a6dff4ed291d8d4cf156",
+          "refined_mask_sha256": "eee3e083f9fa3155e0668b539f75d424ec7fd5262d8f554952dbab2a3b3d91da",
+          "mask_quality": "NEEDS_VISUAL_REVIEW; outside-mask preservation alone does not prove correct segmentation"
+        },
+        {
+          "subject_id": "0000088",
+          "original_sha256": "724ce7f96fa0a73ccb14477a3070f1ecbcb439024e19c677c7f4926777e1034e",
+          "source_member": "Hands/Hand_0010572.jpg",
+          "credit": "Afifi, 11K Hands (2019)",
+          "license": "free for reasonable academic fair use; cite Afifi 2019",
+          "original_size": [
+            1600,
+            1200
+          ],
+          "nails": 5,
+          "preparation_seconds": 12.944903700001305,
+          "coarse_mask_sha256": "0376b05a7899145b09fe35bf6550c176d84b7fa666f80de5f13b4d889bfae5d8",
+          "refined_mask_sha256": "e0fbff3332ec5f5ac2cbd4b4c341bc99f9177d93aa0084672c6e332e8848fe12",
+          "mask_quality": "NEEDS_VISUAL_REVIEW; outside-mask preservation alone does not prove correct segmentation"
+        },
+        {
+          "subject_id": "0001030",
+          "original_sha256": "45b3c6f788fb69d626fda32c91f7cc142bdbe240a0e93b8f34c0ee5ff455d6d5",
+          "source_member": "Hands/Hand_0007515.jpg",
+          "credit": "Afifi, 11K Hands (2019)",
+          "license": "free for reasonable academic fair use; cite Afifi 2019",
+          "original_size": [
+            1600,
+            1200
+          ],
+          "nails": 5,
+          "preparation_seconds": 12.506102000003011,
+          "coarse_mask_sha256": "223998ccb0c47a27fc0b9a3ddafa25ceb1e4169fca93ba2cab4e2d43ab8413e1",
+          "refined_mask_sha256": "8351aee67bb45b336a86320fc2ce105a8f5424332fb9be7f7ea5730c2b00ca28",
+          "mask_quality": "NEEDS_VISUAL_REVIEW; outside-mask preservation alone does not prove correct segmentation"
+        },
+        {
+          "subject_id": "0001593",
+          "original_sha256": "baa28d2e134843d0164dedab4a3cc2d7d3496dc207c75c30ccfdbb38e8584e3b",
+          "source_member": "Hands/Hand_0000658.jpg",
+          "credit": "Afifi, 11K Hands (2019)",
+          "license": "free for reasonable academic fair use; cite Afifi 2019",
+          "original_size": [
+            1600,
+            1200
+          ],
+          "nails": 5,
+          "preparation_seconds": 12.592600399999355,
+          "coarse_mask_sha256": "152c0cfc9f49e8e1d1cba581ffa815fa6d51d43420ecfe9cf3e0b56cb53480ba",
+          "refined_mask_sha256": "f0f5612ddf75ae83b5050daec42f4a79ab3f2798ee21317d64557aeb408b1b88",
+          "mask_quality": "NEEDS_VISUAL_REVIEW; outside-mask preservation alone does not prove correct segmentation"
+        }
+      ],
+      "cases": [
+        {
+          "subject_id": "0000045",
+          "style_id": "exp_raspberry_jelly",
+          "output": "0000045/exp_raspberry_jelly.png",
+          "png_sha256": "44abcb79f8a4b5dc43f1c52b55b522b60be106650f1d283f28a3c00e1f865be9",
+          "rgb_sha256": "ed84f26e1f442dc012e3b0cc8ebfbc09e0054b17f6e2a7362524a4f5b009a8bd",
+          "changed_outside_refined_mask_pixels": 0,
+          "changed_pixels_per_nail_component": [
+            4311,
+            2469,
+            4342,
+            3894,
+            2566
+          ],
+          "render_and_composite_seconds": 0.27095919999919715,
+          "visual_verdict": "NEEDS_REVIEW"
+        },
+        {
+          "subject_id": "0000045",
+          "style_id": "exp_pink_aura",
+          "output": "0000045/exp_pink_aura.png",
+          "png_sha256": "4c9b482ddf3524625f7c388d59597fe564e0291e6f35115e5e5ed60701fda575",
+          "rgb_sha256": "3832e34b615de70d80f48fd0230e15dd6ccf65c396ebd4aa2f556bc3f1971aec",
+          "changed_outside_refined_mask_pixels": 0,
+          "changed_pixels_per_nail_component": [
+            4311,
+            2469,
+            4342,
+            3894,
+            2566
+          ],
+          "render_and_composite_seconds": 0.25258860000030836,
+          "visual_verdict": "NEEDS_REVIEW"
+        },
+        {
+          "subject_id": "0000045",
+          "style_id": "exp_negative_space_microdots",
+          "output": "0000045/exp_negative_space_microdots.png",
+          "png_sha256": "ce7354bf2169f63e38dcc8615510cb89f0352961906d8098b991c5a26d82e8f8",
+          "rgb_sha256": "4e1c96a672d2db39128a26e2711ce45e2f69e43b87c12fc51000ba1d894b030f",
+          "changed_outside_refined_mask_pixels": 0,
+          "changed_pixels_per_nail_component": [
+            4311,
+            2469,
+            4342,
+            3894,
+            2565
+          ],
+          "render_and_composite_seconds": 0.25721620000331313,
+          "visual_verdict": "NEEDS_REVIEW"
+        },
+        {
+          "subject_id": "0000088",
+          "style_id": "exp_raspberry_jelly",
+          "output": "0000088/exp_raspberry_jelly.png",
+          "png_sha256": "c2a0a4a4c32311990ae02b84f99220406ac076f49954b7b96f428f3923d37a03",
+          "rgb_sha256": "1b4040fbfa1dbfcba4d5919bcd641f75c15844395e229f01cca61200018c7901",
+          "changed_outside_refined_mask_pixels": 0,
+          "changed_pixels_per_nail_component": [
+            4149,
+            3886,
+            2661,
+            2521,
+            3712
+          ],
+          "render_and_composite_seconds": 0.3235120999997889,
+          "visual_verdict": "NEEDS_REVIEW"
+        },
+        {
+          "subject_id": "0000088",
+          "style_id": "exp_pink_aura",
+          "output": "0000088/exp_pink_aura.png",
+          "png_sha256": "342fcf23b6a21f87d40774509bdd8327c0feab0ec35fcf41f61365c3cda2b4cf",
+          "rgb_sha256": "146bcf17b3d7318fa89e58bf6cd54e5ca101aea38b468e429a64960b7f851b8c",
+          "changed_outside_refined_mask_pixels": 0,
+          "changed_pixels_per_nail_component": [
+            4149,
+            3886,
+            2661,
+            2521,
+            3712
+          ],
+          "render_and_composite_seconds": 0.3246488999975554,
+          "visual_verdict": "NEEDS_REVIEW"
+        },
+        {
+          "subject_id": "0000088",
+          "style_id": "exp_negative_space_microdots",
+          "output": "0000088/exp_negative_space_microdots.png",
+          "png_sha256": "07d5255df900be6e3daf89505ca91364070ce7bb6a5c470b25370274498aa108",
+          "rgb_sha256": "aa86f148b89c871fb00b392c6d1dfcd856665225ff2b9c7744e000d7fbb8ec81",
+          "changed_outside_refined_mask_pixels": 0,
+          "changed_pixels_per_nail_component": [
+            4149,
+            3886,
+            2661,
+            2521,
+            3712
+          ],
+          "render_and_composite_seconds": 0.3303492000013648,
+          "visual_verdict": "NEEDS_REVIEW"
+        },
+        {
+          "subject_id": "0001030",
+          "style_id": "exp_raspberry_jelly",
+          "output": "0001030/exp_raspberry_jelly.png",
+          "png_sha256": "6413ff29d9ce5d888df06991f39dc590db08276244982719f30e4d73c677f2bd",
+          "rgb_sha256": "6dad41dc8ca27d02bb8cc17d0eb5f2d77a9fd7c5c872f72567148f94a0ab6cbb",
+          "changed_outside_refined_mask_pixels": 0,
+          "changed_pixels_per_nail_component": [
+            4157,
+            3236,
+            3635,
+            2481,
+            2585
+          ],
+          "render_and_composite_seconds": 0.25455979999969713,
+          "visual_verdict": "NEEDS_REVIEW"
+        },
+        {
+          "subject_id": "0001030",
+          "style_id": "exp_pink_aura",
+          "output": "0001030/exp_pink_aura.png",
+          "png_sha256": "5a53713055b0220057925ffd83540434e4f14a32450395dbc18ed3f4a968bdb1",
+          "rgb_sha256": "b5ea0f1592c61b683aed0f6b85fdbcdfc964bd9ece393e0259136065d8e741df",
+          "changed_outside_refined_mask_pixels": 0,
+          "changed_pixels_per_nail_component": [
+            4157,
+            3236,
+            3635,
+            2481,
+            2585
+          ],
+          "render_and_composite_seconds": 0.25934699999925215,
+          "visual_verdict": "NEEDS_REVIEW"
+        },
+        {
+          "subject_id": "0001030",
+          "style_id": "exp_negative_space_microdots",
+          "output": "0001030/exp_negative_space_microdots.png",
+          "png_sha256": "724d3339ef75eb560700ed34ecad14e4856c487e434c7fac2e7f61cc3e8bba95",
+          "rgb_sha256": "19f1d907df28356111212b7240f4173ff84c3ba444da448b0a84b50e0a6b8b92",
+          "changed_outside_refined_mask_pixels": 0,
+          "changed_pixels_per_nail_component": [
+            4156,
+            3236,
+            3633,
+            2481,
+            2585
+          ],
+          "render_and_composite_seconds": 0.30143329999918933,
+          "visual_verdict": "NEEDS_REVIEW"
+        },
+        {
+          "subject_id": "0001593",
+          "style_id": "exp_raspberry_jelly",
+          "output": "0001593/exp_raspberry_jelly.png",
+          "png_sha256": "b54d51cafb8a18a615737759d7c0d005bd935c331703a8f42a867fa6f1ea9270",
+          "rgb_sha256": "0f764a951098dd571b0d36e38e3a307fa2964426218da8a454c2a1c51a663489",
+          "changed_outside_refined_mask_pixels": 0,
+          "changed_pixels_per_nail_component": [
+            2639,
+            3832,
+            4306,
+            4920,
+            4832
+          ],
+          "render_and_composite_seconds": 0.3140886999972281,
+          "visual_verdict": "NEEDS_REVIEW"
+        },
+        {
+          "subject_id": "0001593",
+          "style_id": "exp_pink_aura",
+          "output": "0001593/exp_pink_aura.png",
+          "png_sha256": "bbf88029eab7140f622bd04df8166e320c01b9d9beb6a8df008bc8424e217086",
+          "rgb_sha256": "0ac4e24b734272639c9d99f80873df64b2664953719aadfc9f007ea82d40a47b",
+          "changed_outside_refined_mask_pixels": 0,
+          "changed_pixels_per_nail_component": [
+            2639,
+            3832,
+            4306,
+            4920,
+            4832
+          ],
+          "render_and_composite_seconds": 0.30979370000204653,
+          "visual_verdict": "NEEDS_REVIEW"
+        },
+        {
+          "subject_id": "0001593",
+          "style_id": "exp_negative_space_microdots",
+          "output": "0001593/exp_negative_space_microdots.png",
+          "png_sha256": "9ecfcf95f51dc97314065e33b9639740b2e94d2689ba8704b3795dcbb79a01c5",
+          "rgb_sha256": "201bc30cbde5024acb93f443e9a097e4dcd01984696581c589b3f1bb26433860",
+          "changed_outside_refined_mask_pixels": 0,
+          "changed_pixels_per_nail_component": [
+            2636,
+            3831,
+            4304,
+            4920,
+            4831
+          ],
+          "render_and_composite_seconds": 0.31519139999727486,
+          "visual_verdict": "NEEDS_REVIEW"
+        }
+      ],
+      "failures": [],
+      "assets": {
+        "selection_sha256": "518bac807d250fd418d5225ad1dc7149f76332fb2fb9c0c70157d7098cb37d8c",
+        "segmenter_sha256": "99b7d1c6ceb4bde32d80fe7ae8c8eb809c27d99b55cf9db54b6692afe68f4070",
+        "landmarker_sha256": "fbc2a30080c3c557093b5ddfc334698132eb341044ccee322ccf8bcf3607cde1"
+      }
+    }
+  },
+  "source_hashes": {
+    "scripts/style_release_validation.py": "db7dc12e17611716ffed4dee6e184cf4f14e6ffcc76f161f5dd5e88c1e1107c6",
+    "scripts/style_release_bootstrap.py": "c53d3d76f22733f9d10d1c8d279c145179a31fa1cf5a82cd8d78b109e1d0ec65",
+    "scripts/package_style_release_validation.py": "728ff00deb365e5016d3835d802ebb162e4fe8baca74b23cc4d1e9b141c27a84",
+    "scripts/style_expansion_nails_auto_validation.py": "f716ef0508df0c6ed52c7d85c6e0ae5c3b55b1041e20acdd7e5bc87dfc05687d"
+  },
+  "release_boundary": "No production style IDs/configuration/weights/prompts/catalog changes, no new training or cloud/public network/deployment actions. Original bundles/notebooks retained.",
+  "next": "Operator runs fresh private two-cell notebook; returns beautycore-release-validation-results.zip, including on failure. Then accept/reject actual candidates and integrate accepted batch.",
+  "gpu_followup": {
+    "archive_sha256": "52aa504b1d5fd91d43fef65460bd4c5d3c3e2a8c7e3ff9218b0cfb1d84d58302",
+    "calls": 29,
+    "four_prior_controls_and_final_restore": "PNG bytes and RGB pixels independently identical",
+    "finding": "Existing10Makeupatselected2.5execute; Berry/Icy distinct but partial promptfidelity, Comma unreliable.",
+    "review": "style-release-validation-20261025-review.json",
+    "production_changed": false
+  }
+}

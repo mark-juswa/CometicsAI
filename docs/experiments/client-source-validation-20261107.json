@@ -1,0 +1,162 @@
+{
+  "date": "2026-11-07",
+  "evidence_status": "VERIFIED",
+  "website": {
+    "typecheck": "PASS",
+    "release_registration_tests": 33,
+    "business_tests": 55,
+    "production_build": "PASS"
+  },
+  "backend": {
+    "command": "python -m pytest -o \"pythonpath=backend scripts\" backend/tests -q --disable-warnings --tb=short",
+    "passed": 1016,
+    "failed": 18,
+    "seconds": 302.55,
+    "warnings": 1,
+    "failures": [
+      {
+        "test": "backend/tests/test_data_m001_paired.py::test_inference_presets_keep_all_ten_makeup_ui_ids_without_training_classes",
+        "observed": "Historical 10 style presets compared against expanded 13 style UI"
+      },
+      {
+        "test": "backend/tests/test_expanded_nails_package.py::test_notebook_embeds_exact_pair_optimization_and_current_runner",
+        "observed": "Embedded notebook differs from current source rebuild"
+      },
+      {
+        "test": "backend/tests/test_french_bob_release.py::test_real_package_extraction_overlay_and_original_metadata_contract",
+        "observed": "Historical package scope guard rejects current release"
+      },
+      {
+        "test": "backend/tests/test_makeup_corrective_application.py::test_candidate_uses_exact_thirteen_accepted_captions_without_changing_legacy_contract",
+        "observed": "Old adapter replacement anchor absent after approved deployment"
+      },
+      {
+        "test": "backend/tests/test_makeup_expansion_completion.py::test_exact_three_calls_reuses_six_outputs_and_keeps_no_fix_claim",
+        "observed": "Historical experiment rejects current Makeup contract"
+      },
+      {
+        "test": "backend/tests/test_makeup_expansion_completion.py::test_continuity_mismatch_stops_before_manga_and_retains_references",
+        "observed": "Historical experiment rejects current Makeup contract"
+      },
+      {
+        "test": "backend/tests/test_makeup_expansion_completion.py::test_generation_failure_keeps_control_and_partial_images",
+        "observed": "Historical experiment rejects current Makeup contract"
+      },
+      {
+        "test": "backend/tests/test_makeup_package.py::test_runtime_bundle_is_makeup_only_and_all_inventory_hashes_match",
+        "observed": "Historical 10 style assertion sees 13"
+      },
+      {
+        "test": "backend/tests/test_makeup_source_layers.py::test_inventory_preserves_ten_serving_and_three_held_styles",
+        "observed": "Expanded styles are now active, assertion still expects held"
+      },
+      {
+        "test": "backend/tests/test_nails_latency.py::test_assembled_worker_imports_reviewed_presets_without_loading_models",
+        "observed": "Older assembled worker import preflight fails"
+      },
+      {
+        "test": "backend/tests/test_optimized_demo_release.py::test_release_notebook_embeds_current_source_and_preserves_original_fallback",
+        "observed": "Historical embedded worker differs from current source"
+      },
+      {
+        "test": "backend/tests/test_style_release_validation.py::test_all_presets_and_candidates_use_correct_adapter_guidance_and_sources",
+        "observed": "Historical validation scope guard rejects current scope"
+      },
+      {
+        "test": "backend/tests/test_style_release_validation.py::test_full_29_calls_one_foundation_prior_controls_and_adapter_reload",
+        "observed": "Historical validation scope guard rejects current scope"
+      },
+      {
+        "test": "backend/tests/test_style_release_validation.py::test_prior_pixel_mismatch_stops_after_first_case_and_keeps_report",
+        "observed": "Historical validation scope guard rejects current scope"
+      },
+      {
+        "test": "backend/tests/test_style_release_validation.py::test_generation_failure_keeps_prior_completed_evidence",
+        "observed": "Historical validation scope guard rejects current scope"
+      },
+      {
+        "test": "backend/tests/test_style_release_validation.py::test_real_no_grad_allows_switches_after_lazy_tensor_materialization",
+        "observed": "Historical validation scope guard rejects current scope"
+      },
+      {
+        "test": "backend/tests/test_style_release_validation.py::test_package_has_four_verified_sources_and_partial_zip_on_failure",
+        "observed": "Historical validation scope guard rejects current scope"
+      },
+      {
+        "test": "backend/tests/test_unified_gate1.py::test_worker_reuses_actual_feature_runtime_calls_with_a_fake_gpu[None-makeup]",
+        "observed": "Older worker subprocess returns 1 instead of 0"
+      }
+    ]
+  },
+  "initial_secret_check": {
+    "file_paths": 1349,
+    "known_local_credential_values": 10,
+    "matches": 0,
+    "pending_pattern_matches": 0
+  },
+  "notebook_privacy": [
+    {
+      "path": "notebooks/hair_expansion_validation.ipynb",
+      "private_fixture_files": 4,
+      "original_sha256": "634b347b8f7537f7b90e21448eb0df17d768142475e97cd79845b338b1afb4de",
+      "published_source_sha256": "48684408e28f8acb6b6480d07d891b7b848c9312b73f91209399421e0a33ea18",
+      "hashes_preserved": true,
+      "external_lookup_verified": true,
+      "missing_duplicate_rejected": true,
+      "original_unchanged": true
+    },
+    {
+      "path": "notebooks/makeup_expansion_completion.ipynb",
+      "private_fixture_files": 9,
+      "original_sha256": "bbaa7ba06be6b6fed3bd4ebaafcab9aff0dd96b3e1c3ac5e8c5623bba943950e",
+      "published_source_sha256": "32538dc702b4d873e3ad911977da6fdcc22a6b04081b10ac9fa54bfeb58f67a7",
+      "hashes_preserved": true,
+      "external_lookup_verified": true,
+      "missing_duplicate_rejected": true,
+      "original_unchanged": true
+    }
+  ],
+  "initial_tree_check": {
+    "tree": "a6dc836702e23cf74b1c2922874ea24c646a291b",
+    "files_in_tree": 1351,
+    "source_paths_considered": 332,
+    "changed_vs_deployment": 311,
+    "oversized_files": [],
+    "forbidden_paths": [],
+    "notebooks_checked": 21,
+    "embedded_portrait_images": [],
+    "encoded_credential_value_matches": [],
+    "shared_index_unchanged": true
+  },
+  "clean_public_source_smoke": {
+    "status": "PASS",
+    "passed": 47,
+    "warnings": 1,
+    "seconds": 43.44,
+    "command": "python -m pytest -o \"pythonpath=backend scripts\" backend/tests/test_makeup_api.py backend/tests/test_makeup_runtime.py backend/tests/test_makeup_release_startup.py backend/tests/test_makeup_corrective_data.py -q --disable-warnings --tb=short",
+    "source": "fresh Git archive export, private workspace artifacts absent",
+    "initial_failure": "Automatic line ending conversion changed a byte-hashed presets file, then the quality policy",
+    "fix": "Narrow .gitattributes -text rules plus verbatim blobs for the six reviewed byte-hashed files"
+  },
+  "new_gpu_generation": false,
+  "new_cloud_deployment": false,
+  "byte_contracts": {
+    "tree": "1b02fcd0a63eb0184791407afa72e83084840ac9",
+    "exact_export_bytes_verified": [
+      "data/makeup/DATA-M001-paired/inference_presets.json",
+      "data/makeup/DATA-M001-corrective/inference_presets.json",
+      "data/makeup/MAKEUP-CORRECTION-001/quality-policy.json",
+      "data/makeup/DATA-M001-CORRECTIVE-001/catalog.json",
+      "notebooks/render_kaggle_makeup_corrective_demo.ipynb",
+      "client/render_kaggle_makeup_corrective_demo.ipynb"
+    ],
+    "exported_sha256": {
+      "data/makeup/DATA-M001-paired/inference_presets.json": "8e6e244f6174dc70f33cb15a037f5e67e2a245f15278967f4d2f85bc909cd5f5",
+      "data/makeup/DATA-M001-corrective/inference_presets.json": "62ed513dad52a629453a6a4fbf384b95011b2e78b2b930e4b7313228f75a923c",
+      "data/makeup/MAKEUP-CORRECTION-001/quality-policy.json": "451b341d8210cfa543db82c058dfdc773202efea1cc63fb2c7f4ad711accba45",
+      "data/makeup/DATA-M001-CORRECTIVE-001/catalog.json": "770292968c600fffc3bc330ba30caf7ab6429b8ec365d0a9896a783128e6cc56",
+      "notebooks/render_kaggle_makeup_corrective_demo.ipynb": "b4a4e1c1482fd060d194f19f5570b6221131379e8214d18c064a713452ab08fd",
+      "client/render_kaggle_makeup_corrective_demo.ipynb": "b4a4e1c1482fd060d194f19f5570b6221131379e8214d18c064a713452ab08fd"
+    }
+  }
+}

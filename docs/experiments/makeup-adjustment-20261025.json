@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-25",
+  "experiment": "MAKEUP-QA-002",
+  "status": "GPU_EXECUTION_VERIFIED_NEITHER_ADJUSTMENT_ACCEPTED",
+  "authorization": "User approved the two proposed limited adjustments and confirmed the same completed Kaggle session is still running.",
+  "conditions": [
+    {
+      "id": "current_reference",
+      "adapter_weight": 1.0,
+      "guidance": 4.0,
+      "prompt": "unchanged original",
+      "retained_images": 4
+    },
+    {
+      "id": "lower_guidance",
+      "adapter_weight": 1.0,
+      "guidance": 3.0,
+      "prompt": "unchanged original",
+      "new_images": 4
+    },
+    {
+      "id": "matched_foundation",
+      "adapter_weight": 1.0,
+      "guidance": 4.0,
+      "prompt": "original plus frozen complexion/foundation instruction",
+      "new_images": 4
+    }
+  ],
+  "continuity": {
+    "new_calls": 1,
+    "must_match": "First saved current-adapter control decoded RGB SHA256; stop before candidates on mismatch."
+  },
+  "total_new_calls": 9,
+  "total_comparison_cases": 12,
+  "settings": {
+    "steps": 20,
+    "seed": 1977,
+    "width": 512,
+    "height": 512,
+    "generation_context": "torch.no_grad"
+  },
+  "reference_report_sha256": "b2a0ffee3a45468c13bb551a7e97fcc68aa3a0245806fac26ad5df6829c95b2d",
+  "source_hashes": {
+    "scripts/makeup_adjustment_diagnostic.py": "3b7bbc8883b7a0f0ebfd9975e6c84358fd1f4e161d94bf3e99008e45ae61d679",
+    "scripts/package_makeup_adjustment.py": "3ccfe100cac8b1c5275a95de43bf265046109d72ca2b60d40ee7513ee3ddfca6",
+    "data/makeup/MAKEUP-QA-002/plan.json": "8a86f1a700eaba0faf334bf4bfc2bf7aeddc0494c76c2416d7f5e60d1600a107"
+  },
+  "prepared_cell": {
+    "path": "notebooks/makeup_adjustment_cell.py",
+    "sha256": "c84c0753d134b5f97e587e6f701e14a8900881443e6a24bd32b3cb670f246457",
+    "portraits_embedded": false,
+    "weights_embedded": false,
+    "secret_values_embedded": false
+  },
+  "verification": {
+    "new_tests_passed": 16,
+    "focused_total_passed": 85,
+    "suite": "backend/tests/test_makeup_adjustment.py, test_makeup_quality_diagnostic.py, test_makeup_runtime.py, test_style_expansion.py",
+    "synthetic_inference": "All9calls/one foundation, retained4byte-identical, exact guidance/prompt changes, restoration, mismatch stop, failure partial evidence pass.",
+    "real_cpu_torch": "No-grad permits lazy adapter restoration in synthetic runtime with real Torch parameters.",
+    "real_reference_preflight": "PASS: exact reviewed report contract, all4PNG/RGB hashes, prompt/order/checkpoint/preset metadata.",
+    "frozen_helpers": "ASTs of3shared adapter helpers match frozen v1 actually installed on Kaggle.",
+    "cell_failure_handoff": "Compiled actual cell executed with local path redirection and failed child simulation; partial ZIP includes logs/report/plan/source, originals unchanged, replay blocked.",
+    "catalog": "PASS; application catalogs unchanged",
+    "payload_compile_integrity": "PASS; packaged bytes and frozen source inventory verified.",
+    "local_cuda_run": false
+  },
+  "runtime": "Cached-session entry verifies existing environment/original bundle and cached model snapshot, uses a new child, installs/downloads nothing.",
+  "estimate": "At previous roughly64seconds/call,9calls plus model loading suggests10to12minutes; not measured for this experiment.",
+  "release_boundary": "No serving app, production prompts/weights/catalog, original notebook files, old output/ZIP, training or cloud configuration changed.",
+  "limitations": [
+    "Kaggle execution and visual comparison remain pending.",
+    "Guidance is text conditioning, not a skin-only control, and may weaken desired makeup.",
+    "Existing preservation instructions already failed; added instruction is not an established fix.",
+    "Two reused development identities; no generalization/human acceptance claim.",
+    "Neither global darkening/blending nor masks/post-processing are introduced."
+  ],
+  "next": "Operator copies the entire prepared file into one new code cell in the same private session, runs once, returns beautycore-makeup-adjustment-results-<id>.zip.",
+  "gpu_followup": {
+    "archive_sha256": "f898ab3ce27aec9d3778ecb728f77724eb3170251c91ab27c827d8f9e1cf7261",
+    "continuity_pixel_identical": true,
+    "new_calls_completed": 9,
+    "main_cases": 12,
+    "quality": "No setting accepted; both fail preservation in visual review.",
+    "review": "makeup-adjustment-20261025-review.json"
+  }
+}

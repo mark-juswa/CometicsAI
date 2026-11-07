@@ -1,0 +1,497 @@
+{
+  "schema": "beautycore-style-expansion-candidates-v1",
+  "experiment": "STYLE-EXP-001",
+  "reviewed_date": "2026-10-25",
+  "status": "PROPOSED",
+  "production_enabled": false,
+  "candidate_selection_approved": false,
+  "scope": "Research shortlist only; no training images, new checkpoints or production availability implied.",
+  "sources": {
+    "pinterest": {
+      "title": "Pinterest Beauty Trend Report 2026",
+      "url": "https://newsroom.pinterest.com/news/beauty-trend-report-2026/",
+      "published": "2026-10-06",
+      "kind": "platform trend report",
+      "limitation": "Platform search/editorial signals; not a Philippines salon-demand measurement."
+    },
+    "redken": {
+      "title": "Best Winter Haircuts for Every Hair Type This Season",
+      "url": "https://www.redken.com/blog/best-winter-haircuts-trends.html",
+      "published": null,
+      "kind": "haircare brand guidance",
+      "limitation": "Seasonal guidance, not an independent popularity ranking."
+    },
+    "hongdae": {
+      "title": "Trending Korean Hairstyles for Men (2026 Edition)",
+      "url": "https://www.hongdaehairstudio.com/blog/trending-korean-hairstyles-for-men-2026-edition",
+      "published": "2026-01-11",
+      "kind": "salon editorial",
+      "limitation": "A salon's reported trends, not verified population-wide demand."
+    },
+    "gq": {
+      "title": "K-pop boys use the two-block method to get their hair so good",
+      "url": "https://www.gq-magazine.co.uk/article/two-block-haircut",
+      "published": "2026-10-03",
+      "kind": "reported grooming article",
+      "limitation": "Confirms current editorial relevance, not local demand."
+    },
+    "vogue": {
+      "title": "Soft, Diffused, Undone\u2014Welcome to the Era of Blurred Makeup",
+      "url": "https://www.vogue.com/article/blurred-makeup-trend-2026",
+      "published": "2026-02-06",
+      "kind": "reported beauty article",
+      "limitation": "Finish trend; no model-performance evidence."
+    },
+    "adore": {
+      "title": "6 Cool-Girl (And Wearable) Nail Trends To Take To Your Next Appointment",
+      "url": "https://www.adorebeauty.com.au/beautyiq/make-up/best-nail-art-trends/",
+      "published": "2026-08-24",
+      "kind": "retailer beauty editorial",
+      "limitation": "Commercial/editorial perspective; no local demand or generation-quality evidence."
+    },
+    "opi": {
+      "title": "Now Trending: Polka Dot Nails",
+      "url": "https://www.opi.com/blog/nail-trends/now-trending-polka-dot-nails",
+      "published": null,
+      "kind": "nail brand tutorial and examples",
+      "limitation": "No publication date verified; supports the design reference, not a dated trend ranking."
+    }
+  },
+  "candidates": [
+    {
+      "feature": "hairstyle",
+      "candidate_id": "exp_butterfly_cut",
+      "name": "Butterfly Cut",
+      "description": "Long hair with pronounced face-framing layers and a shorter-looking upper outline.",
+      "status": "PROPOSED",
+      "research_sources": [
+        "redken"
+      ],
+      "overlap_with_existing": [
+        "layered_hair"
+      ],
+      "evaluation_route": "Existing Hair adapters: isolated prompt comparison; choose adapter by observed quality.",
+      "priority": 1,
+      "service_mapping": {
+        "status": "PROPOSED",
+        "names": [
+          "Men's Cut",
+          "Women's Cut & Blowdry"
+        ],
+        "pricing_source": "beautycore/lib/services.ts",
+        "style_specific_price": null,
+        "confirmation_required": true
+      },
+      "visual_acceptance": "Must show a distinct face-framing layer structure rather than reproducing generic layers.",
+      "training_requirement": "NEEDS VERIFICATION",
+      "dataset_images_collected": 0,
+      "pilot_review": {
+        "report": "docs/experiments/style-expansion-pilot-20261025-review.json",
+        "verdict": "HOLD_RETEST_LONG_HAIR",
+        "preferred_adapter": null,
+        "observation": "Neither adapter produced the requested long Butterfly shape on the reused short-bob input. Test an appropriate input before deciding on retraining."
+      },
+      "production_approved": false
+    },
+    {
+      "feature": "hairstyle",
+      "candidate_id": "exp_wolf_cut",
+      "name": "Wolf Cut",
+      "description": "A choppy crown with a longer back and a distinctly shaggy outline.",
+      "status": "PROPOSED",
+      "research_sources": [
+        "redken"
+      ],
+      "overlap_with_existing": [
+        "shag_hair"
+      ],
+      "evaluation_route": "Existing Hair adapters: isolated prompt comparison.",
+      "priority": 2,
+      "service_mapping": {
+        "status": "PROPOSED",
+        "names": [
+          "Men's Cut",
+          "Women's Cut & Blowdry"
+        ],
+        "pricing_source": "beautycore/lib/services.ts",
+        "style_specific_price": null,
+        "confirmation_required": true
+      },
+      "visual_acceptance": "Must distinguish crown and back length from the existing shag while preserving the face.",
+      "training_requirement": "NEEDS VERIFICATION",
+      "dataset_images_collected": 0
+    },
+    {
+      "feature": "hairstyle",
+      "candidate_id": "exp_korean_two_block",
+      "name": "Korean Two-Block",
+      "description": "A longer upper section visibly separated from shorter sides and nape.",
+      "status": "PROPOSED",
+      "research_sources": [
+        "hongdae",
+        "gq"
+      ],
+      "overlap_with_existing": [
+        "curtain_hair",
+        "side_part_undercut"
+      ],
+      "evaluation_route": "Existing Hair adapters: isolated prompt comparison.",
+      "priority": 1,
+      "service_mapping": {
+        "status": "PROPOSED",
+        "names": [
+          "Men's Cut",
+          "Women's Cut & Blowdry"
+        ],
+        "pricing_source": "beautycore/lib/services.ts",
+        "style_specific_price": null,
+        "confirmation_required": true
+      },
+      "visual_acceptance": "The short lower section and fuller upper section must be visible; a centre part alone is insufficient.",
+      "training_requirement": "NEEDS VERIFICATION",
+      "dataset_images_collected": 0,
+      "pilot_review": {
+        "report": "docs/experiments/style-expansion-pilot-20261025-review.json",
+        "verdict": "HOLD_RETEST_VISIBLE_SIDES",
+        "preferred_adapter": null,
+        "observation": "TRAIN-001 changes are weak; TRAIN-002 changes the fringe but does not clearly show a shorter lower block."
+      },
+      "production_approved": false
+    },
+    {
+      "feature": "hairstyle",
+      "candidate_id": "exp_comma_hair",
+      "name": "Korean Comma Hair",
+      "description": "A styled front section curved inward into a comma-shaped fringe.",
+      "status": "PROPOSED",
+      "research_sources": [
+        "hongdae"
+      ],
+      "overlap_with_existing": [
+        "curtain_hair"
+      ],
+      "evaluation_route": "Existing Hair adapters: isolated prompt comparison.",
+      "priority": 1,
+      "service_mapping": {
+        "status": "PROPOSED",
+        "names": [
+          "Men's Cut",
+          "Women's Cut & Blowdry"
+        ],
+        "pricing_source": "beautycore/lib/services.ts",
+        "style_specific_price": null,
+        "confirmation_required": true
+      },
+      "visual_acceptance": "The fringe curve must be visible, without changing forehead or facial geometry.",
+      "training_requirement": "NEEDS VERIFICATION",
+      "dataset_images_collected": 0,
+      "pilot_review": {
+        "report": "docs/experiments/style-expansion-pilot-20261025-review.json",
+        "verdict": "ADVANCE_EXPERIMENTAL_VALIDATION",
+        "preferred_adapter": "hairstyle:train002",
+        "observation": "TRAIN-002 gives the clearest curved front strand; curl/fringe fidelity and preservation still require varied-input and stylist review."
+      },
+      "production_approved": false
+    },
+    {
+      "feature": "hairstyle",
+      "candidate_id": "exp_french_bob_wispy",
+      "name": "Textured French Bob with Wispy Bangs",
+      "description": "A short textured bob with a soft, separated fringe.",
+      "status": "PROPOSED",
+      "research_sources": [
+        "pinterest"
+      ],
+      "overlap_with_existing": [
+        "bob_hair"
+      ],
+      "evaluation_route": "Existing Hair adapters: isolated prompt comparison.",
+      "priority": 2,
+      "service_mapping": {
+        "status": "PROPOSED",
+        "names": [
+          "Men's Cut",
+          "Women's Cut & Blowdry"
+        ],
+        "pricing_source": "beautycore/lib/services.ts",
+        "style_specific_price": null,
+        "confirmation_required": true
+      },
+      "visual_acceptance": "Texture and wispy bangs must be visible compared with the existing bob.",
+      "training_requirement": "NEEDS VERIFICATION",
+      "dataset_images_collected": 0
+    },
+    {
+      "feature": "makeup",
+      "candidate_id": "exp_cloud_berry_lips",
+      "name": "Cloud-Skin Makeup with Blurred Berry Lips",
+      "description": "A soft base with diffused berry lip edges and restrained cheek color.",
+      "status": "PROPOSED",
+      "research_sources": [
+        "vogue",
+        "pinterest"
+      ],
+      "overlap_with_existing": [
+        "matte_nude",
+        "bold_evening_glam"
+      ],
+      "evaluation_route": "Existing MAKEUP-001 adapter: private custom-prompt experiment; keep frozen production preset file intact.",
+      "priority": 1,
+      "service_mapping": {
+        "status": "PROPOSED",
+        "names": [
+          "Makeup Application"
+        ],
+        "pricing_source": "beautycore/lib/services.ts",
+        "style_specific_price": null,
+        "confirmation_required": true
+      },
+      "visual_acceptance": "Berry color and softened lip edges should be visible without smoothing away identity or changing mouth shape.",
+      "training_requirement": "NEEDS VERIFICATION",
+      "dataset_images_collected": 0,
+      "pilot_review": {
+        "report": "docs/experiments/style-expansion-pilot-20261025-review.json",
+        "verdict": "HOLD_PRESERVATION_AND_FIDELITY",
+        "preferred_adapter": null,
+        "observation": "Berry pigment visible; edges defined rather than blurred, strong cheek pigment and substantial complexion lightening/smoothing."
+      },
+      "production_approved": false
+    },
+    {
+      "feature": "makeup",
+      "candidate_id": "exp_manga_lash",
+      "name": "Manga-Lash Makeup",
+      "description": "Separated lash clusters with delicate liner, soft blush, and a restrained lip.",
+      "status": "PROPOSED",
+      "research_sources": [
+        "pinterest"
+      ],
+      "overlap_with_existing": [
+        "soft_glam"
+      ],
+      "evaluation_route": "Existing MAKEUP-001 adapter: private custom-prompt experiment.",
+      "priority": 2,
+      "service_mapping": {
+        "status": "PROPOSED",
+        "names": [
+          "Makeup Application"
+        ],
+        "pricing_source": "beautycore/lib/services.ts",
+        "style_specific_price": null,
+        "confirmation_required": true
+      },
+      "visual_acceptance": "Distinct separated lash clusters; no enlarged eyes, altered eyelids, or artificial lashes drawn across skin.",
+      "training_requirement": "NEEDS VERIFICATION",
+      "dataset_images_collected": 0
+    },
+    {
+      "feature": "makeup",
+      "candidate_id": "exp_icy_silver",
+      "name": "Icy Silver Eye Makeup",
+      "description": "Localized silver-blue eyelid shimmer balanced with subdued cheeks and lips.",
+      "status": "PROPOSED",
+      "research_sources": [
+        "pinterest"
+      ],
+      "overlap_with_existing": [
+        "bronze_golden_glam",
+        "smoky_glam"
+      ],
+      "evaluation_route": "Existing MAKEUP-001 adapter: private custom-prompt experiment.",
+      "priority": 1,
+      "service_mapping": {
+        "status": "PROPOSED",
+        "names": [
+          "Makeup Application"
+        ],
+        "pricing_source": "beautycore/lib/services.ts",
+        "style_specific_price": null,
+        "confirmation_required": true
+      },
+      "visual_acceptance": "Clearly cool-toned eyelid makeup; preserve eye geometry and keep pigment in plausible makeup regions.",
+      "training_requirement": "NEEDS VERIFICATION",
+      "dataset_images_collected": 0,
+      "pilot_review": {
+        "report": "docs/experiments/style-expansion-pilot-20261025-review.json",
+        "verdict": "HOLD_PRESERVATION_AND_RESTRAINT",
+        "preferred_adapter": null,
+        "observation": "Cool metallic eyelid effect visible; vivid red lip and strong complexion retouching exceed the requested edit."
+      },
+      "production_approved": false
+    },
+    {
+      "feature": "nails",
+      "candidate_id": "exp_raspberry_jelly",
+      "name": "Raspberry Jelly",
+      "description": "A translucent raspberry tint that retains visible nail detail.",
+      "status": "PROPOSED",
+      "research_sources": [
+        "pinterest"
+      ],
+      "overlap_with_existing": [
+        "classic_red",
+        "nude_pink"
+      ],
+      "evaluation_route": "Isolated renderer transparency experiment; not an existing supported renderer style.",
+      "priority": 1,
+      "service_mapping": {
+        "status": "PROPOSED",
+        "names": [
+          "Classic Manicure",
+          "Gel Manicure"
+        ],
+        "pricing_source": "beautycore/lib/services.ts",
+        "style_specific_price": null,
+        "confirmation_required": true
+      },
+      "visual_acceptance": "Must appear translucent rather than opaque red or pink; preserve surrounding skin and source nail outline.",
+      "training_requirement": "NEEDS VERIFICATION",
+      "dataset_images_collected": 0,
+      "pilot_review": {
+        "report": "docs/experiments/style-expansion-pilot-20261025-review.json",
+        "verdict": "ADVANCE_AUTOMATIC_MASK_VALIDATION",
+        "preferred_adapter": "renderer",
+        "observation": "Translucent tint direction visible on one manual-mask hand; zero outside-mask pixel edits verified."
+      },
+      "production_approved": false
+    },
+    {
+      "feature": "nails",
+      "candidate_id": "exp_pink_aura",
+      "name": "Pink Aura Ombr\u00e9",
+      "description": "A concentrated pink center fading softly into a lighter surrounding base.",
+      "status": "PROPOSED",
+      "research_sources": [
+        "adore"
+      ],
+      "overlap_with_existing": [
+        "pink_ombre"
+      ],
+      "evaluation_route": "Isolated renderer radial-gradient experiment.",
+      "priority": 1,
+      "service_mapping": {
+        "status": "PROPOSED",
+        "names": [
+          "Classic Manicure",
+          "Gel Manicure"
+        ],
+        "pricing_source": "beautycore/lib/services.ts",
+        "style_specific_price": null,
+        "confirmation_required": true
+      },
+      "visual_acceptance": "A central glow rather than the existing tip-directed gradient; no polish outside reviewed nail masks.",
+      "training_requirement": "NEEDS VERIFICATION",
+      "dataset_images_collected": 0,
+      "pilot_review": {
+        "report": "docs/experiments/style-expansion-pilot-20261025-review.json",
+        "verdict": "ADVANCE_AUTOMATIC_MASK_VALIDATION",
+        "preferred_adapter": "renderer",
+        "observation": "Central gradient visible and distinct from tip ombre; automatic masking and varied hands remain unverified."
+      },
+      "production_approved": false
+    },
+    {
+      "feature": "nails",
+      "candidate_id": "exp_negative_space_microdots",
+      "name": "Negative-Space Micro-Dots",
+      "description": "Sparse fine dots over a sheer base with visible uncovered nail.",
+      "status": "PROPOSED",
+      "research_sources": [
+        "opi",
+        "adore"
+      ],
+      "overlap_with_existing": [],
+      "evaluation_route": "Isolated renderer pattern experiment using per-nail coordinates.",
+      "priority": 1,
+      "service_mapping": {
+        "status": "PROPOSED",
+        "names": [
+          "Classic Manicure",
+          "Gel Manicure"
+        ],
+        "pricing_source": "beautycore/lib/services.ts",
+        "style_specific_price": null,
+        "confirmation_required": true
+      },
+      "visual_acceptance": "Dots remain small, separated and inside each nail without accidental skin/jewelry dots.",
+      "training_requirement": "NEEDS VERIFICATION",
+      "dataset_images_collected": 0,
+      "pilot_review": {
+        "report": "docs/experiments/style-expansion-pilot-20261025-review.json",
+        "verdict": "ADVANCE_AUTOMATIC_MASK_VALIDATION",
+        "preferred_adapter": "renderer",
+        "observation": "Small separated dots visible within supplied masks; automatic masking and varied hands remain unverified."
+      },
+      "production_approved": false
+    },
+    {
+      "feature": "nails",
+      "candidate_id": "exp_milky_pearl_chrome",
+      "name": "Milky Pearl Chrome",
+      "description": "A pale base with a subtle pearlescent reflective overlay.",
+      "status": "PROPOSED",
+      "research_sources": [
+        "adore",
+        "pinterest"
+      ],
+      "overlap_with_existing": [
+        "nude_pink"
+      ],
+      "evaluation_route": "New finish rendering or localized model experiment; feasibility unresolved.",
+      "priority": 2,
+      "service_mapping": {
+        "status": "PROPOSED",
+        "names": [
+          "Classic Manicure",
+          "Gel Manicure"
+        ],
+        "pricing_source": "beautycore/lib/services.ts",
+        "style_specific_price": null,
+        "confirmation_required": true
+      },
+      "visual_acceptance": "A visible pearl finish distinct from plain gloss; no claim of physically accurate moving reflections.",
+      "training_requirement": "NEEDS VERIFICATION",
+      "dataset_images_collected": 0
+    },
+    {
+      "feature": "nails",
+      "candidate_id": "exp_dark_red_velvet_cat_eye",
+      "name": "Dark-Red Velvet Cat-Eye",
+      "description": "A deep red base with a narrow reflective band and a soft luminous finish.",
+      "status": "PROPOSED",
+      "research_sources": [
+        "pinterest",
+        "adore"
+      ],
+      "overlap_with_existing": [
+        "classic_red"
+      ],
+      "evaluation_route": "New finish rendering or localized model experiment; feasibility unresolved.",
+      "priority": 2,
+      "service_mapping": {
+        "status": "PROPOSED",
+        "names": [
+          "Classic Manicure",
+          "Gel Manicure"
+        ],
+        "pricing_source": "beautycore/lib/services.ts",
+        "style_specific_price": null,
+        "confirmation_required": true
+      },
+      "visual_acceptance": "A clear reflective band distinct from red gloss; a still image cannot demonstrate view-dependent movement.",
+      "training_requirement": "NEEDS VERIFICATION",
+      "dataset_images_collected": 0
+    }
+  ],
+  "approved_pilot_candidate_ids": [
+    "exp_butterfly_cut",
+    "exp_korean_two_block",
+    "exp_comma_hair",
+    "exp_cloud_berry_lips",
+    "exp_icy_silver",
+    "exp_raspberry_jelly",
+    "exp_pink_aura",
+    "exp_negative_space_microdots"
+  ],
+  "pilot_approval": "CONFIRMED: user authorized the recommended first batch for isolated evaluation on 2026-10-25; no production approval."
+}

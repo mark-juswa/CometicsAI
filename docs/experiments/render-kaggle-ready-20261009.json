@@ -1,0 +1,49 @@
+{
+  "status": "KAGGLE READY FOR REHEARSAL; RENDER CREDENTIAL ENTRY PENDING; ONLINE GENERATION NEEDS VERIFICATION",
+  "kaggle_user_report": {
+    "completed": [
+      "backend-pip-check",
+      "segment-pip-check",
+      "segment-load",
+      "landmark-load",
+      "gpu-bootstrap"
+    ],
+    "status": "READY_FOR_REHEARSAL",
+    "url": "https://circumstances-prior-quad-logging.trycloudflare.com"
+  },
+  "independent_http_checks": {
+    "GET /health": {
+      "status": 200,
+      "body": {
+        "status": "ok",
+        "service": "render-kaggle-demo-v1"
+      }
+    },
+    "GET /features without credentials": {
+      "status": 401
+    }
+  },
+  "lookup_limits": "Web lookup could not access endpoint; in-app browser navigation was blocked by client. Independent read-only urllib requests passed.",
+  "render_browser_verified": {
+    "state": "new service draft, not deployed",
+    "repository": "mark-juswa/CometicsAI",
+    "branch": "codex/render-kaggle-demo",
+    "root": "beautycore",
+    "runtime": "Node",
+    "build": "npm ci --include=dev && npm run build",
+    "start": "npm run start -- --hostname 0.0.0.0 --port $PORT",
+    "plan": "Free, $0/month, 0.1 CPU, 512 MB",
+    "auto_deploy": "Off",
+    "health": "/api/health",
+    "AI_FASTAPI_URL": "filled and verified with current Kaggle URL",
+    "empty_credentials": [
+      "DATABASE_URL",
+      "SESSION_SECRET",
+      "AI_CONSULTATION_HANDLE_SECRET",
+      "AI_BACKEND_API_KEY"
+    ]
+  },
+  "secrets": "No credential values read, recorded or transmitted.",
+  "next": "Owner privately enters remaining credentials and submits Render deployment; retain running Kaggle session. Then verify web liveness, login and all feature generation/Consultation.",
+  "proof": "C:/Users/Gigabyte/.codex/visualizations/2026/10/04/01a10467-9143-7b43-bdb4-601adcb49233/render-free-deploy-proof.jpg"
+}

@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-30",
+  "experiment": "HAIR-EXP-002",
+  "status": "PREPARED_GPU_NOT_RUN",
+  "notebook": "notebooks\\hair_expansion_validation.ipynb",
+  "sha256": "634b347b8f7537f7b90e21448eb0df17d768142475e97cd79845b338b1afb4de",
+  "bytes": 431278,
+  "expected_calls": 21,
+  "source_sha256": {
+    "scripts/style_expansion_bootstrap.py": "9e3b3c3eade96439a30091cb404a793e9b11bb50bdc5fc2b2f0eedf0147e89a9",
+    "scripts/makeup_quality_diagnostic.py": "00dcdc46116a3f2875c21c4df43daa6d4e6e2222f2800181ec856ae14c19b79a",
+    "scripts/hair_expansion_bootstrap.py": "14838fc3f1416d3453cab503669861164f640eee6a4628ee486511da026d9f56",
+    "scripts/hair_expansion_validation.py": "a0825fb41dcedcb70b58dff9752f685444a245e2569d96c42b35493d63d01c17",
+    "data/style-expansion/HAIR-EXP-002/plan.json": "648520eac677b15798abcdb463b2e22f7f10ef0e0177f88ae1bd1a939017f2fe"
+  },
+  "portrait_sha256": {
+    "d2_wavy_hair_25jpg.jpg": "b458de12bd218fba278bb5a11f7a19cbeb1e822b200a1076b018e3f1c0cb90ea",
+    "d2_wavy_hair_27jpg.jpg": "47a4b3b95c054b692b89e258ac329f2108eb2bfcc72911a49374fc5b7c7a494e",
+    "d2_side_part_undercut_28jpg.jpg": "97899322d425187deb89f028f8f4b6fa56107f2bd8364da73409ef5aebb450bc",
+    "d2_side_part_undercut_9jpg.jpg": "58c67afd9644413b101da40c515b977a7f19de25b37d24795879cb08746598d3"
+  },
+  "includes_private_portraits": true,
+  "includes_weights": false,
+  "includes_keys": false,
+  "production_enabled": false,
+  "evidence": "VERIFIED local preparation; GPU appearance UNKNOWN",
+  "tests": {
+    "hair_specific_passed": 12,
+    "related_artifact_release_passed": 23,
+    "total_passed": 35,
+    "catalog_consistency": "PASS",
+    "accepted_nail_release_unchanged": {
+      "backend/app/style_release.json": true,
+      "beautycore/lib/ai/style-release.json": true,
+      "beautycore/lib/business/style-catalog.json": true,
+      "notebooks/render_kaggle_expanded_nails_demo.ipynb": true
+    }
+  },
+  "actual_hair_artifact_validation": "PASS: fresh extraction of original GPU bundle, original metadata/checkpoint/style-ownership verification in separate Python process; no diffusion",
+  "failures_found_and_corrected": [
+    "Exact GPU registry bytes differ from local Windows line endings. Plan now pins original archive member bytes; strict guard retained. Failed first preflight notebook/plan/receipt preserved under artifacts/hair-expansion-20261030/preflight-attempt-01."
+  ],
+  "gpu_runs": 0,
+  "training": false,
+  "production_changed": false,
+  "guide": "docs/guides/hair-expansion-validation.md",
+  "next": "Operator runs separate private pinned Kaggle T4 notebook and returns beautycore-hair-expansion-results.zip for per-style visual review."
+}

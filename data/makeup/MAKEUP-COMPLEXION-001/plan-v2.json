@@ -1,0 +1,141 @@
+{
+  "experiment": "MAKEUP-COMPLEXION-001",
+  "production_enabled": false,
+  "training": false,
+  "new_diffusion_calls": 0,
+  "configuration": {
+    "grid_size": 64,
+    "anchor_weight": 2.0,
+    "minimum_anchor_cells": 24,
+    "maximum_lightness_reduction": 35.0,
+    "maximum_lightness_increase": 15.0,
+    "maximum_chroma_offset": 22.0,
+    "field_blur_sigma": 4.0,
+    "domain_margin_pixels": 8,
+    "boundary_blur_sigma": 3.0,
+    "protection": "inner-eyes-and-neutral-teeth-only"
+  },
+  "sources": [
+    {
+      "id": "054109",
+      "source": ".tmp/data_m001/paired_selection/final_v1/validation/reference/054109_makeup_01.jpg",
+      "source_sha256": "81e57faca39e3989ed9920ebd6568efad563ae4f012f3fbb130918858d18e8ed",
+      "source_photo": {
+        "author": "Presidency Maldives",
+        "photo_title": "MK_NAIVAIDHOO1493",
+        "photo_url": "https://www.flickr.com/photos/presidencymaldives/5292667558/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "neutral_box": [
+        170,
+        65,
+        295,
+        125
+      ],
+      "usage": "Reused development subject, not untouched acceptance",
+      "source_labels": "artifacts/makeup-tone-20261025/run-02/source-054109-labels.png",
+      "source_labels_sha256": "93cfaaf691c744b47ca53cdc8028c9e2d33ab496260afab855312251b0204ffe"
+    },
+    {
+      "id": "056266",
+      "source": ".tmp/data_m001/paired_selection/final_v1/validation/reference/056266_makeup_01.jpg",
+      "source_sha256": "d6b86be2fe5f505eb6ebe7f2b1c22a59f41ddef053953f55eba1ca0b859f1728",
+      "source_photo": {
+        "author": "Lori Thantos",
+        "photo_title": "IMG_1526.jpg",
+        "photo_url": "https://www.flickr.com/photos/lori_thantos/5121900493/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "neutral_box": [
+        170,
+        75,
+        310,
+        150
+      ],
+      "usage": "Reused development subject, not untouched acceptance",
+      "source_labels": "artifacts/makeup-tone-20261025/run-02/source-056266-labels.png",
+      "source_labels_sha256": "ece1aad22b396febb1b0dc6cea275b67f690ddae1529014d5a0372ea2d51b4fa"
+    }
+  ],
+  "cases": [
+    {
+      "id": "054109-natural_makeup",
+      "subject_id": "054109",
+      "style_id": "natural_makeup",
+      "raw": "artifacts/style-expansion-20261025/release-review-01/results/01-054109-natural_makeup.png",
+      "raw_sha256": "a300937dabc97ef2d852adf44daf7f63af5159b8daebcd53f741fd5f567101ae",
+      "guidance": 2.5,
+      "prompt_sha256": "282183128cb4409f4cd02774025c6ae7545b550129c6666a8d029a0f285655f0",
+      "raw_labels": "artifacts/makeup-tone-20261025/run-02/054109-natural_makeup-labels.png",
+      "raw_labels_sha256": "24df6e2b7c242ff8c44c320e18cda67b0a428a5ddbdebf1c491d0efdd8ef5d57"
+    },
+    {
+      "id": "054109-classic_red_lip",
+      "subject_id": "054109",
+      "style_id": "classic_red_lip",
+      "raw": "artifacts/style-expansion-20261025/release-review-01/results/17-054109-classic_red_lip.png",
+      "raw_sha256": "f77e1b5c459adb66f4b02e7aa5df87abd71f075a08e76728929acfe52b6d1892",
+      "guidance": 2.5,
+      "prompt_sha256": "dd9c4cfe2a584053c9ed2e9a4bbb6c97473806905f3d90c44044d6f366dc93c3",
+      "raw_labels": "artifacts/makeup-tone-20261025/run-02/054109-classic_red_lip-labels.png",
+      "raw_labels_sha256": "81588a3d40fb3000513717e0e297cb68347d193abb72c879cb0920974aa694f7"
+    },
+    {
+      "id": "054109-exp_cloud_berry_lips",
+      "subject_id": "054109",
+      "style_id": "exp_cloud_berry_lips",
+      "raw": "artifacts/style-expansion-20261025/release-review-01/results/21-054109-exp_cloud_berry_lips.png",
+      "raw_sha256": "3dcc30b86f4f422848ed726a49c8d2c5f5fb5c9602cc8a748a81e69b34d0cc62",
+      "guidance": 2.5,
+      "prompt_sha256": "b4c0a6e75e0660ab5dfe7aed06369646b49ce5d2e198d5e8b2471f5a4195fac3",
+      "raw_labels": "artifacts/makeup-tone-20261025/run-02/054109-exp_cloud_berry_lips-labels.png",
+      "raw_labels_sha256": "4d5458c39c9b8b77cbecb23e3d8e8380efe5a42d0db9c432cc4ddccdb6433a41"
+    },
+    {
+      "id": "056266-natural_makeup",
+      "subject_id": "056266",
+      "style_id": "natural_makeup",
+      "raw": "artifacts/style-expansion-20261025/release-review-01/results/02-056266-natural_makeup.png",
+      "raw_sha256": "77a091d2485dd2d1d0f3b8885e2a865ceda2d26e79d98e8b4d0d81d9dcec8290",
+      "guidance": 2.5,
+      "prompt_sha256": "282183128cb4409f4cd02774025c6ae7545b550129c6666a8d029a0f285655f0",
+      "raw_labels": "artifacts/makeup-tone-20261025/run-02/056266-natural_makeup-labels.png",
+      "raw_labels_sha256": "6a4d66da75ce3bff4ae8668a47f599a552e587ce62d4b26e1d9ab5c3ab4e9398"
+    },
+    {
+      "id": "056266-classic_red_lip",
+      "subject_id": "056266",
+      "style_id": "classic_red_lip",
+      "raw": "artifacts/style-expansion-20261025/release-review-01/results/18-056266-classic_red_lip.png",
+      "raw_sha256": "ab8a89f264ff36890a3a6ce986fccf69b91755621cf09e2cb244b08803386258",
+      "guidance": 2.5,
+      "prompt_sha256": "dd9c4cfe2a584053c9ed2e9a4bbb6c97473806905f3d90c44044d6f366dc93c3",
+      "raw_labels": "artifacts/makeup-tone-20261025/run-02/056266-classic_red_lip-labels.png",
+      "raw_labels_sha256": "ec2b228d259cd6921f2902d052d02c16cf44a5d598c9b9b5a017d03ed7d1d1eb"
+    },
+    {
+      "id": "056266-exp_cloud_berry_lips",
+      "subject_id": "056266",
+      "style_id": "exp_cloud_berry_lips",
+      "raw": "artifacts/style-expansion-20261025/release-review-01/results/22-056266-exp_cloud_berry_lips.png",
+      "raw_sha256": "f0c85513c8aeba6381e63925c31a0b287159978198666fb4ae70970ff1512a19",
+      "guidance": 2.5,
+      "prompt_sha256": "b4c0a6e75e0660ab5dfe7aed06369646b49ce5d2e198d5e8b2471f5a4195fac3",
+      "raw_labels": "artifacts/makeup-tone-20261025/run-02/056266-exp_cloud_berry_lips-labels.png",
+      "raw_labels_sha256": "56f51fa3f17484c343f8f07bb1c60570bffafe1e1d62a439c6953b23cf6d43b2"
+    }
+  ],
+  "method": "Source-aligned spatial Lab correction with automatic neutral skin/neck anchors, continuous full-face cosmetic correction and a narrow inner-eye/neutral-teeth guard. No displayed geometry warp.",
+  "limits": [
+    "Two reused development portraits, six existing results, no generalization or calibrated quality proof.",
+    "No raw texture/identity reconstruction fix. Makeup color/contrast and natural skin transitions require visual review.",
+    "One fixed source-guided algorithm, not a per-style/strength sweep. No production/GPU/provider changes.",
+    "Lip, brow, ear/neck and narrow hairline colors can change; only pixels outside the actual edit influence are guaranteed raw-identical."
+  ],
+  "variant": "continuous-head-neck-field-v2",
+  "change_from_v1": "V1 hard-protected whole lips and stopped at semantic skin borders, causing a pasted lip and jaw/hairline seams. V2 includes lips, head outline and neck transitions, with source-measured neck anchors and dark-color/inner-eye/white-teeth protection. Source/raw inputs and neutral-reference algorithm are unchanged."
+}

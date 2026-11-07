@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-30",
+  "status": "DONE_LOCAL",
+  "milestone": "release contract and three inactive Nails integrations",
+  "baseline_commit": "4da827250995ef9ac1f21e4cbf08c2730e0a8955",
+  "baseline_source_sha256": {
+    "backend/app/nails/render.py": "6921ad5d4b5f26786ba32d15a81ef8eeb4e437533140080b303f4f18ad88a1f6",
+    "backend/app/nails/contract.py": "4d17aec03b59f17696f7d9c0268ec9cbb003fe012847501154088542e81bbabe",
+    "backend/app/nails/styles.py": "d5fdb3d210281b6f662ce733ef360985eb2d06d7f501c7ebdb2db570e32281cd",
+    "backend/app/main.py": "0301c6bce85f68daddabb1ef526380843bc9331c258bf173f76319e94e6ff195",
+    "backend/app/deployment.py": "16ebf1001832c0645d01c07fa79b768e6e9dc7328ccbfb6390c5728fc565d1b3",
+    "backend/app/makeup_contract.py": "4253463a6a6c7afcd97384c0a5a4e0c25ba7ce9f9eb1d3f4411d2b8fec0a2fa1",
+    "backend/app/style_registry.json": "d3d04d109c31d472dbfaa13b0be3fc005e69286166384faaeb01a8cfb45165f4",
+    "backend/app/style_registry_train002_smoke.json": "57867eaaba463811467532b18417bf8e7aee3c13ccf33c180b10db07f192b0fa",
+    "scripts/unified_gate3_server.py": "bb1d24159075f0592f491532080195f204f73c708e2a8e2fd095daac481723a2",
+    "scripts/inference_performance.py": "b69dd604baa6a09ba1a1d7598e979c66a81d26f70a8e9ae3db3bb790766030af",
+    "notebooks/render_kaggle_optimized_demo.ipynb": "26ad683611f4fc16b073c787a68438c79b4988bd01d5845bb1964189ac8a342f",
+    "notebooks/render_kaggle_client_demo.ipynb": "f92d95e593ecf241a4defb680b5b5b4843b28e2ec80d2e78a01376c08d7df6fb",
+    "beautycore/lib/business/style-catalog.json": "b762538f4c9fc651382a1cc6419dc4e97f19cb1c24060559e282a2d40512fdee",
+    "beautycore/lib/ai/runtime-registry.ts": "850976f23ebc74b5214719849a60be639fed508f688c8be1f4b074163cb7bd97"
+  },
+  "production_changed": false,
+  "gpu_calls": 0,
+  "visual_acceptance": "PENDING",
+  "deployment": "NOT_STARTED",
+  "release_implementation": "IN_PROGRESS",
+  "enabled_additions": 0,
+  "staged_candidates": 13,
+  "installed_renderer_additions": [
+    "exp_raspberry_jelly",
+    "exp_pink_aura",
+    "exp_negative_space_microdots"
+  ],
+  "tests": {
+    "focused_backend_initial": 79,
+    "full_backend": 773,
+    "final_readiness_release_followup": 64,
+    "render_registration_release": 32,
+    "business_workflows": 47,
+    "guest_trial": 29,
+    "typescript": "PASS",
+    "production_build": "PASS",
+    "catalog_consistency": "PASS",
+    "generated_release_consistency": "PASS"
+  },
+  "historical_reproduction": {
+    "subjects": 4,
+    "outputs": 12,
+    "comparison": "decoded RGB arrays exactly equal",
+    "skipped": 0
+  },
+  "unchanged_source_checks": {
+    "backend/app/makeup_contract.py": true,
+    "backend/app/style_registry.json": true,
+    "backend/app/style_registry_train002_smoke.json": true,
+    "scripts/unified_gate3_server.py": true,
+    "scripts/inference_performance.py": true,
+    "notebooks/render_kaggle_optimized_demo.ipynb": true,
+    "notebooks/render_kaggle_client_demo.ipynb": true,
+    "beautycore/lib/business/style-catalog.json": true
+  },
+  "source_sha256": {
+    "backend/app/style_release.json": "3bdf26c397025e90b2094fccf9e9fbef71412fd118fe029b5cfbada90ab4c78e",
+    "backend/app/style_release.py": "5a28d367679b6997393a0c91f74f02cc7a0cdfe321a46e0e8505f599dc8dc347",
+    "backend/app/style_capabilities.py": "760dabeac0d8daf3c928d9f9b24c3718ab65d52b9f0353e3ec94b03e2d52b020",
+    "backend/app/nails/expanded.py": "43de791464d9e764c1b6d7f05449b6a8b7b470b356f082685e23f5356f2fa3d6",
+    "backend/app/nails/styles.py": "f40a7008361c743ae944f79d50b4179ade98480e777f2cab317979daefe4ad47",
+    "backend/app/nails/contract.py": "5706edbb1e2cdcc3a48fb1a1192a02f10f600e70b1b715a3a93333119ec61de6",
+    "backend/app/nails/render.py": "85d0e99802802f31f3850b623543c6ce8176d5134d8ab9ee299ff1520560eac8",
+    "backend/app/main.py": "c652f5ff8c62b6496b07c14c052f0d58618a1903cb8cbf100a6e735f92c0010b",
+    "backend/app/deployment.py": "3226b819dabf040d37930df3cf1d0ceac2f50dbbcf67c1c7561679b03dd3664e",
+    "backend/app/consultation/metadata.py": "6e6eab86b939878495ff79a72bfc625141a04a8ece13399b6e715fa8c0deed7c",
+    "backend/tests/test_expanded_style_release.py": "c49b2b04b9993e4822be8af16345214d1b5eda9ebeb9eff4b2f83bae8ba09d8d",
+    "scripts/generate_style_release.py": "ba11e83dc0c75c2bf4232fcdaff678115e47ac4e689d810249ca05888d9d9cfe",
+    "scripts/check_saved_look_catalog.py": "183b3b1c2fce48a9b68dcbb1c1a1fe582dc0b72b79f3cc06cce50d6b0d66c92f",
+    "beautycore/lib/ai/style-release.json": "93468dd8cd1c4bda05a191b0b44942e2e69ddae1c54c1d6146aedf9b4a0df2c0",
+    "beautycore/lib/ai/style-release.ts": "0a94a25405bcc200de9cd4c34b1dcd05aa88f6b4002ce236c307e16e3ee5941e",
+    "beautycore/lib/ai/runtime-registry.ts": "63d1a46ee415ae2f39a725bc446bae4f2f753bd2e8a81440745fbb0658cfb878",
+    "beautycore/tests/style-release.test.ts": "d6ab356eb3549dd300220f9780ab552e598a9c49c06a91ec930226e3f6a58792",
+    "beautycore/package.json": "c05861408379c8afc7baf9fbf3493a72af4449ab3c157178145731f5230e05be"
+  },
+  "review_gallery": "artifacts/expanded-nails-release-review-20261030/index.html",
+  "supervisor_feedback": "Needs to review the images first; no appearance approval granted",
+  "limitations": [
+    "All additions remain disabled.",
+    "Hair/Makeup execution profile expansion is not implemented.",
+    "Worker source and all model/checkpoint contracts remain baseline; protected facade capability reports support known baseline model catalogs only.",
+    "New Kaggle release archives/notebook have not been built or rehearsed.",
+    "No cloud deployment, production migration, GPU call or speed benchmark performed."
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "schema": "makeup-reference-diagnostic-v1",
+  "date": "2026-11-05",
+  "production_enabled": false,
+  "training": false,
+  "inference": {
+    "width": 512,
+    "height": 512,
+    "steps": 20,
+    "guidance": 4.0,
+    "seed": 1977
+  },
+  "cases": [
+    {
+      "source_id": "054109",
+      "source_split": "validation",
+      "source_photo": {
+        "author": "Presidency Maldives",
+        "photo_title": "MK_NAIVAIDHOO1493",
+        "photo_url": "https://www.flickr.com/photos/presidencymaldives/5292667558/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "style_id": "soft_glam",
+      "guide_identity_id": "006553",
+      "guide_source_split": "train",
+      "guide_kind": "external-editor-synthetic-source-protected",
+      "guide_tool": "built-in image_gen",
+      "guide_tool_model_id": "not provided by tool",
+      "guide_source_photo": {
+        "author": "academy visavis",
+        "photo_title": "272_visavis_academy_0423_khs-1370823",
+        "photo_url": "https://www.flickr.com/photos/145889229@N04/40808745485/",
+        "license": "Attribution License",
+        "license_url": "https://creativecommons.org/licenses/by/2.0/"
+      },
+      "guide_review": "Direction approved on035149Bold only; not admitted as training or production asset.",
+      "previous_kind": "rejected CPU whole-face-review compositor, not MAKEUP-001 baseline",
+      "source_filename": "054109-soft_glam-source.jpg",
+      "source_sha256": "81e57faca39e3989ed9920ebd6568efad563ae4f012f3fbb130918858d18e8ed",
+      "guide_filename": "054109-soft_glam-guide.png",
+      "guide_sha256": "dda3a5fef4bd8f340b3d3926ad00fc3d031488d31c83839d1f882692d7902809",
+      "previous_filename": "054109-soft_glam-previous.png",
+      "previous_sha256": "2478d5c8ef4d3435805020882860a82804cec1926be5d2b3df51152d71434d08"
+    },
+    {
+      "source_id": "056266",
+      "source_split": "validation",
+      "source_photo": {
+        "author": "Lori Thantos",
+        "photo_title": "IMG_1526.jpg",
+        "photo_url": "https://www.flickr.com/photos/lori_thantos/5121900493/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "style_id": "bold_evening_glam",
+      "guide_identity_id": "035149",
+      "guide_source_split": "train",
+      "guide_kind": "external-editor-synthetic-source-protected",
+      "guide_tool": "built-in image_gen",
+      "guide_tool_model_id": "not provided by tool",
+      "guide_source_photo": {
+        "author": "Jack Donahue",
+        "photo_title": "Sheila's Graduation-0113",
+        "photo_url": "https://www.flickr.com/photos/jackflynndonahue/4651049950/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "guide_review": "Direction approved on035149Bold only; not admitted as training or production asset.",
+      "previous_kind": "rejected CPU whole-face-review compositor, not MAKEUP-001 baseline",
+      "source_filename": "056266-bold_evening_glam-source.jpg",
+      "source_sha256": "d6b86be2fe5f505eb6ebe7f2b1c22a59f41ddef053953f55eba1ca0b859f1728",
+      "guide_filename": "056266-bold_evening_glam-guide.png",
+      "guide_sha256": "588e15c1ada01230865b794b181e250dd8a4c7d2e4ad9063cf3f0f022743dc88",
+      "previous_filename": "056266-bold_evening_glam-previous.png",
+      "previous_sha256": "545e62359c9d86574405daf7cae57aa93af2915ebfa9545a774d76fbd55489e8"
+    }
+  ]
+}

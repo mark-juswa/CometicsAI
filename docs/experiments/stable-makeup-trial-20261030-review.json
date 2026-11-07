@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-30",
+  "experiment": "STABLE-MAKEUP-001",
+  "evidence_status": "VERIFIED",
+  "progress": "DONE",
+  "appearance_status": "EXPERIMENTAL / Codex release rejection",
+  "archive": "D:/Downloads/beautycore-stable-i3gf100o.zip",
+  "archive_sha256": "90d6a5ec5de34f3a3673d2a0d38fb22bbe49b6b80a161f7094228e4d1a2b0e86",
+  "archive_bytes": 6739783,
+  "members": 32,
+  "archive_crc": "PASS",
+  "metrics": {
+    "count": 4,
+    "per_image_seconds": [
+      12.243804699999941,
+      10.294369329999995,
+      10.439720313999942,
+      10.700746329000026
+    ],
+    "mean_seconds": 10.919660168249976,
+    "median_seconds": 10.570233321499984,
+    "model_load_seconds": 17.586434757999996,
+    "whole_trial_seconds": 265.04300185999995,
+    "peak_allocated_GiB": 4.691859245300293,
+    "peak_reserved_GiB": 4.908203125,
+    "measurement_scope": "Offline fixed-input generation+PNG/comparison writing; excludes API queue/network, request preprocessing and coexistence with Hair/Nails."
+  },
+  "runtime": {
+    "gpu": "Tesla T4",
+    "torch": "2.0.1+cu117",
+    "cuda": "11.7",
+    "diffusers": "0.23.1",
+    "dtype": "float16"
+  },
+  "integrity": {
+    "frozen_plan": true,
+    "source_control_reference_hashes": true,
+    "output_hashes": true,
+    "asset_receipts": 6
+  },
+  "visual_review": {
+    "reviewer": "Codex qualitative visual screen",
+    "status": "REJECTED_FOR_RELEASE",
+    "human_acceptance": "PENDING",
+    "new_generation_calls": 0,
+    "deployed": false,
+    "sheets_inspected": [
+      "054109-comparison.png",
+      "056266-comparison.png",
+      "006553-comparison.png",
+      "035149-comparison.png"
+    ],
+    "findings": [
+      "Makeup is clearly visible and fuller/more reference-like than the hand-rendered prototype.",
+      "054109: altered eye shape, nose, mouth/smile and face proportions; complexion/skin texture changed.",
+      "056266: substantially changed eyes, nose, lips/teeth display, expression and skin finish.",
+      "006553: altered eye/nose/mouth geometry and expression; face appears reconstructed.",
+      "035149: substantial eye/nose/lip/expression and texture changes; skin finish/lightness changed.",
+      "Reference feature influence is suspected from visual resemblance; no causal ablation or biometric identity score was run."
+    ],
+    "decision": "Runtime/memory feasibility passes this isolated T4 trial; face/complexion preservation fails the visual screen.",
+    "limits": [
+      "Four reused development portraits, one reference, one configuration; no generalization or all-style approval",
+      "Reported4.9GiB reserved is standalone peak, not simultaneous Hair/Nails capacity proof",
+      "No claim of a guaranteed parameter fix or cross-model quality-equivalent speedup",
+      "This uses external pretrained Stable-Makeup; not a newly trained BeautyCore model."
+    ],
+    "next": "No automatic deployment or further GPU sweep. Surface the preservation failure for review; retain working system and separate trial evidence."
+  },
+  "production_enabled": false,
+  "new_training": false,
+  "new_code_or_model_changes_this_review": false,
+  "downloaded_assets": [
+    {
+      "path": "base/text_encoder/model.fp16.safetensors",
+      "sha256": "77795e2023adcf39bc29a884661950380bd093cf0750a966d473d1718dc9ef4e",
+      "size": 246144864,
+      "hash_basis": "upstream_expected"
+    },
+    {
+      "path": "base/unet/diffusion_pytorch_model.fp16.safetensors",
+      "sha256": "c83908253f9a64d08c25fc90874c9c8aef9a329ce1ca5fb909d73b0c83d1ea21",
+      "size": 1719125304,
+      "hash_basis": "upstream_expected"
+    },
+    {
+      "path": "base/vae/diffusion_pytorch_model.fp16.safetensors",
+      "sha256": "4fbcf0ebe55a0984f5a5e00d8c4521d52359af7229bb4d81890039d2aa16dd7c",
+      "size": 167335342,
+      "hash_basis": "upstream_expected"
+    },
+    {
+      "path": "weights/pytorch_model.bin",
+      "sha256": "da8272fdbb74cb70714272e3b4ff381958944b4f308df16977dfe8893dfc7f64",
+      "size": 1373905877,
+      "hash_basis": "observed_after_size_metadata_and_crc_checks"
+    },
+    {
+      "path": "weights/pytorch_model_1.bin",
+      "sha256": "05573314b4a16e592456e4c5dc3932fe705e1e35d8609ea886cb98ac2deadf47",
+      "size": 1445256905,
+      "hash_basis": "observed_after_size_metadata_and_crc_checks"
+    },
+    {
+      "path": "weights/pytorch_model_2.bin",
+      "sha256": "143d489e9e1f3c5014ae97f735b2c37bbc7c487b7a50f1f6062afc593ab9da40",
+      "size": 1445256905,
+      "hash_basis": "observed_after_size_metadata_and_crc_checks"
+    }
+  ]
+}

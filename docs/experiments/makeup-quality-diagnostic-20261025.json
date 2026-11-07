@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-25",
+  "status": "LOCAL_PREPARATION_VERIFIED_GPU_RESULTS_PENDING",
+  "notebook": "I:\\HAIR\\artifacts\\makeup-quality-20261025\\beautycore_makeup_quality_diagnostic.ipynb",
+  "notebook_sha256": "d2f3a5dc47a413a1f29b5c28923a53a953661c99a8c1b30eb6aff739667b7e0d",
+  "source_hashes": {
+    "scripts/style_expansion_bootstrap.py": "9e3b3c3eade96439a30091cb404a793e9b11bb50bdc5fc2b2f0eedf0147e89a9",
+    "scripts/makeup_quality_bootstrap.py": "8063266751cb73771bbab3a7a6c02f90e694649a82eee0c1669bb446a7fc1b30",
+    "scripts/makeup_quality_diagnostic.py": "fb43265bf810454e55015dd59ce4385360f2d17860eadcd641b15c410e8d6720",
+    "data/makeup/MAKEUP-QA-001/plan.json": "d79f1bd6864a79abd76bce19616034a0ad0229bac73225fa3e215dbbff29e84b"
+  },
+  "portrait_hashes": {
+    "054109.jpg": "81e57faca39e3989ed9920ebd6568efad563ae4f012f3fbb130918858d18e8ed",
+    "056266.jpg": "d6b86be2fe5f505eb6ebe7f2b1c22a59f41ddef053953f55eba1ca0b859f1728"
+  },
+  "original_archive_nested_artifact_cpu_preflight": "PASSED",
+  "expected_generated_images": 12,
+  "test_results": {
+    "focused_passed": 60,
+    "new_diagnostic_checks_passed": 13
+  },
+  "conditions": [
+    0.0,
+    1.0,
+    0.5
+  ],
+  "steps": 20,
+  "seed": 1977,
+  "guidance": 4.0,
+  "local_gpu_run": false,
+  "cloud_or_deployed_settings_changed": false,
+  "limitations": [
+    "Adapter scaling checks have CPU synthetic coverage; actual pinned GPU inference remains to run.",
+    "Two reused evaluation identities are now diagnostic development examples, not an untouched final test.",
+    "No automatic complexion-quality score, training or promotion."
+  ],
+  "technical_references": [
+    "https://raw.githubusercontent.com/huggingface/diffusers/c943837899b16cbae2f619b8dd4f7bb6f07dd81a/src/diffusers/loaders/lora_base.py",
+    "https://raw.githubusercontent.com/huggingface/peft/v0.18.1/src/peft/tuners/lora/layer.py"
+  ]
+}

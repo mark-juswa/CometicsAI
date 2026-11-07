@@ -1,0 +1,61 @@
+{
+  "schema": "beautycore-style-expansion-pilot-v1",
+  "experiment": "STYLE-EXP-001",
+  "status": "EXPERIMENTAL",
+  "selection_approved": true,
+  "production_enabled": false,
+  "approval": "User authorized the recommended next step on 2026-10-25. Acceptance for testing is not approval of generated quality or public release.",
+  "portrait_candidates": [
+    {
+      "feature": "hairstyle",
+      "candidate_id": "exp_butterfly_cut",
+      "adapters": [
+        "hairstyle:train001",
+        "hairstyle:train002"
+      ],
+      "prompt": "Change the hairstyle to a butterfly cut: retain long lower lengths, create shorter pronounced face-framing upper layers and voluminous curved layers sweeping away from the face. Keep the same person, recognizable face, facial proportions, expression, skin tone, clothing, pose, background, lighting and framing. Preserve the original hair color. Change hairstyle only."
+    },
+    {
+      "feature": "hairstyle",
+      "candidate_id": "exp_korean_two_block",
+      "adapters": [
+        "hairstyle:train001",
+        "hairstyle:train002"
+      ],
+      "prompt": "Change the hairstyle to a Korean two-block haircut with a visibly shorter lower section at the sides and nape and a distinctly longer fuller upper section with a soft natural fringe. Show the two lengths clearly. Keep the same person, recognizable face, facial proportions, expression, skin tone, clothing, pose, background, lighting and framing. Preserve the original hair color. Change hairstyle only."
+    },
+    {
+      "feature": "hairstyle",
+      "candidate_id": "exp_comma_hair",
+      "adapters": [
+        "hairstyle:train001",
+        "hairstyle:train002"
+      ],
+      "prompt": "Change the hairstyle to Korean comma hair with a softly parted medium-length top and a distinct front lock curved inward into a comma shape over the forehead. Keep the same person, recognizable face, facial proportions, expression, skin tone, clothing, pose, background, lighting and framing. Preserve the original hair color. Change hairstyle only."
+    },
+    {
+      "feature": "makeup",
+      "candidate_id": "exp_cloud_berry_lips",
+      "adapters": [
+        "makeup"
+      ],
+      "prompt": "Apply cloud-skin makeup with soft natural-texture complexion coverage and a muted berry lip stain with visibly diffused edges within the existing lip outline. Keep the eyes understated and add restrained soft berry cheek color. Edit the supplied photo of the same person. Preserve facial proportions, eye and lip geometry, natural skin tone and texture, expression, hair, clothing, background, lighting and framing. Change makeup only; keep pigment in plausible cosmetic regions."
+    },
+    {
+      "feature": "makeup",
+      "candidate_id": "exp_icy_silver",
+      "adapters": [
+        "makeup"
+      ],
+      "prompt": "Apply icy silver eye makeup with a visible cool silver-blue shimmer localized to the upper eyelids, fine charcoal lash-line definition, restrained neutral cheeks and a subtle natural lip. Edit the supplied photo of the same person. Preserve facial proportions, eye and lip geometry, natural skin tone and texture, expression, hair, clothing, background, lighting and framing. Change makeup only; keep pigment in plausible cosmetic regions."
+    }
+  ],
+  "nail_candidates": [
+    "exp_raspberry_jelly",
+    "exp_pink_aura",
+    "exp_negative_space_microdots"
+  ],
+  "expected_diffusion_outputs": 15,
+  "evaluation_inputs": "Reuse original bundle Hair/Makeup fixtures and historical manual-mask validation hand only. No claim of new data collection.",
+  "training_performed": false
+}

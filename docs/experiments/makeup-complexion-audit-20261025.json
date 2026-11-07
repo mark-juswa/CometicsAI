@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-25",
+  "status": "PRESERVATION_ISSUE_VERIFIED_CAUSAL_ABLATION_PENDING",
+  "pair_counts": {
+    "train": 50,
+    "validation": 10
+  },
+  "identity_counts": {
+    "train": 10,
+    "validation": 2
+  },
+  "all_image_hashes_verified": true,
+  "distinct_captions": 1,
+  "original_contact_sheets_visually_inspected": 3,
+  "proposed_diagnostic_calls": 12,
+  "diagnostic_run": false,
+  "production_changed": false,
+  "new_data_collected": false,
+  "causal_limit": "Retouched targets/full-frame generation are verified concerns; causal contribution and a remedy are not isolated."
+}

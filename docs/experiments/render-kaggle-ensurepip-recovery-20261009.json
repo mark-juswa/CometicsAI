@@ -1,0 +1,17 @@
+{
+  "status": "LOCAL RECOVERY VERIFIED; KAGGLE RECOVERY NEEDS VERIFICATION",
+  "host_reported_by_user": {
+    "python": "3.12.13",
+    "executable": "/usr/bin/python3"
+  },
+  "confirmed_failure": "backend-env/bin/python3 -m ensurepip --upgrade --default-pip exits 1",
+  "recovery": "Replacement Cell 2 creates CPU envs with --without-pip and uses host pip --python to install pip==25.3 into each isolated target. Existing runner is loaded unchanged and its command function is wrapped in memory. The exact early-failure marker is archived after live-port/later-stage checks.",
+  "validation": {
+    "recovery_tests_passed": 7,
+    "real_isolated_environment": "Fresh Windows Python 3.11 venv had no pip; host pip 23.2.1 --python installed pip 25.3 from a local wheel. Target prefix and pip version verified; host unchanged. Not a Kaggle Linux acceptance test."
+  },
+  "existing_cpu_bundle_sha256": "f391050851519e9cc1080830b615a6cc457b6dd1e21fde156522bb959fad9ede",
+  "source_change": "Future bootstrap now uses --without-pip and targeted pip installation; existing uploaded CPU archive remains original and is supported by the recovery wrapper.",
+  "official_reference": "https://pip.pypa.io/en/stable/topics/python-option/",
+  "online_ai_generation": "NEEDS VERIFICATION"
+}

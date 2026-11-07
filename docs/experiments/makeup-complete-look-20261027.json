@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-27",
+  "experiment": "MAKEUP-COMPLETE-001",
+  "progress": "DONE",
+  "evidence_status": "EXPERIMENTAL",
+  "decision_status": "PROPOSED",
+  "user_decision": "Supplied portrait is the desired approximate makeup appearance/strength; not approval of existing outputs.",
+  "reference": "data/makeup/MAKEUP-COMPLETE-001/plan.json:reference",
+  "visual_target": [
+    "Warm rose-bronze eyelids with blended depth",
+    "Defined lash line and full-looking lashes",
+    "Defined brows",
+    "Visible warm rosy cheeks",
+    "Localized cheek glow",
+    "Glossy rose-brown lips"
+  ],
+  "scope": "One isolated Soft Glam prototype on four reused development portraits",
+  "implementation": [
+    "Source parser contours for layered warm eyelids and lash-line accents",
+    "Brow darkening restricted to existing brow labels, not new shape",
+    "Outward cheek blush, small localized highlights and source-highlight-driven lip gloss",
+    "Supersampled procedural lash strokes; source eye interiors/nose/mouth/nonface restored"
+  ],
+  "technical": {
+    "new_tests": 16,
+    "prior_regression_tests": 70,
+    "independent_exact_reproductions": 4,
+    "protected_changes": 0,
+    "outside_support_changes": 0,
+    "protection_definition": "All source labels except skin1, eyebrows6/7, lips11/12",
+    "passed_tests": 86,
+    "test_command": "python -m pytest backend/tests/test_makeup_complete_look.py backend/tests/test_makeup_visibility_pilot.py backend/tests/test_makeup_source_render.py backend/tests/test_makeup_source_styles.py -q"
+  },
+  "appearance": {
+    "human_acceptances": 0,
+    "codex_decision": "REJECTED_NOT_RELEASE_READY",
+    "findings": [
+      "Lash strokes look drawn-on/evenly spaced and can sit above real lash line",
+      "Warm palette is closer to reference direction but complete finish still inadequate",
+      "Lip edges/color can look flat/painted; reference studio finish is not reproduced"
+    ]
+  },
+  "new_model_inference": false,
+  "training": false,
+  "lora_active": false,
+  "production_enabled": false,
+  "serving_api_cloud_dependency_changes": "NONE",
+  "reference_handling": "Qualitative guide; no identity/complexion transfer, reference redistribution or training use.",
+  "next_status": "PROPOSED / NOT STARTED",
+  "next": "Validate eye/brow/lip anatomical alignment first; precise face landmark model is a candidate, not an adopted or proven fix. Then one appearance-focused revision rather than ten-style batch.",
+  "primary_source": "https://developers.google.com/edge/mediapipe/solutions/vision/face_landmarker/python",
+  "caveat": "Landmark coordinates support placement; they do not generate realistic cosmetics or prove a reference match.",
+  "paths": {
+    "runner": "scripts/makeup_complete_look.py",
+    "tests": "backend/tests/test_makeup_complete_look.py",
+    "artifacts": "artifacts/makeup-render-20261027/complete-01"
+  },
+  "alignment_preflight": {
+    "mediapipe_installed": "0.10.33",
+    "face_landmarker_asset_present": false,
+    "official_docs_checked": true,
+    "model_downloaded": false,
+    "landmark_inference_run": false,
+    "conclusion": "Potential next component only; no new capability or placement accuracy established."
+  }
+}

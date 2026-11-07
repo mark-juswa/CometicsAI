@@ -1,0 +1,217 @@
+{
+  "archive": "D:\\Downloads\\beautycore-makeup-quality-resumed-db42b690b2.zip",
+  "archive_sha256": "705953d79637dd149defabba4364e91247f67ea95547bf2e5afb8148f0c461c6",
+  "archive_bytes": 5001069,
+  "checks": "PASSED: CRC,12case sequence,PNG/RGB/input/prompt/source hashes,8retained rows,control pixels,adapter scale/tensors/restorations,pinned environment",
+  "continuation": {
+    "retained_cases": 8,
+    "original_report_sha256": "89d7ca65b3cd3d0edcda0c7d3f7043b8c386d34c8922c3d2c9966a5f8a6e49b1",
+    "old_generation_context": "torch.inference_mode",
+    "new_generation_context": "torch.no_grad",
+    "expected_new_calls": 5,
+    "note": "One continuity control plus four missing outputs; original files untouched."
+  },
+  "new_inference_calls": 5,
+  "timings": {
+    "foundation_only": {
+      "count": 4,
+      "min_seconds": 57.089234902000044,
+      "max_seconds": 61.00494320400003,
+      "median_seconds": 59.00351138399998
+    },
+    "current_adapter": {
+      "count": 4,
+      "min_seconds": 64.3959377010001,
+      "max_seconds": 64.675475957,
+      "median_seconds": 64.51416358799997
+    },
+    "reduced_adapter": {
+      "count": 4,
+      "min_seconds": 59.52899097999989,
+      "max_seconds": 64.07493856400015,
+      "median_seconds": 63.664780283499795
+    }
+  },
+  "new_forward_seconds": 310.95825016699973,
+  "resume_startup_seconds": 56.909528056,
+  "resume_model": {
+    "snapshot": "/tmp/beautycore-style-pilot-hf/beautycore-makeup-quality-687a09ec0101/hub/models--black-forest-labs--FLUX.2-klein-base-4B/snapshots/a3b4f4849157f664bdbc776fd7453c2783562f4d",
+    "downloaded_again": false,
+    "reinstalled_packages": false
+  },
+  "comparison_sheets": [
+    "I:\\HAIR\\artifacts\\makeup-quality-20261025\\review-db42b690b2\\results\\natural_makeup-comparison.jpg",
+    "I:\\HAIR\\artifacts\\makeup-quality-20261025\\review-db42b690b2\\results\\classic_red_lip-comparison.jpg"
+  ],
+  "date": "2026-10-25",
+  "status": "GPU_CONTINUATION_AND_ARTIFACTS_VERIFIED_VISUAL_REVIEW_DONE_NO_RELEASE_ACCEPTANCE",
+  "private_archive": "I:\\HAIR\\artifacts\\makeup-quality-20261025\\review-db42b690b2\\beautycore-makeup-quality-resumed-db42b690b2.zip",
+  "matched_cases": 12,
+  "controls": {
+    "retained_original_cases": 8,
+    "extra_current_control_pixel_identical": true,
+    "missing_reduced_cases_completed": 4,
+    "effective_layer_scales_and_tensor_restoration": true,
+    "original_and_recovery_source_inventory_matches": true
+  },
+  "visual_review": {
+    "method": "Codex qualitative side-by-side review of both returned sheets containing all12images and original portraits; no standardized complexion or identity score and no salon acceptance.",
+    "observations": [
+      {
+        "subject_id": "054109",
+        "style_id": "natural_makeup",
+        "condition": "foundation_only",
+        "adapter_weight": 0.0,
+        "output": "054109-natural_makeup-foundation_only.png",
+        "complexion_observation": "Closer to original than adapter; highlights/complexion still differ",
+        "texture_observation": "Strong smoothing",
+        "notes": "Heavy pink blush, eyes and brows exceed restrained everyday request; facial details change.",
+        "reviewer": "Codex visual inspection; no human/salon acceptance",
+        "recommendation": "HOLD"
+      },
+      {
+        "subject_id": "054109",
+        "style_id": "classic_red_lip",
+        "condition": "foundation_only",
+        "adapter_weight": 0.0,
+        "output": "054109-classic_red_lip-foundation_only.png",
+        "complexion_observation": "Closest of this trio to source complexion; not an exact lock",
+        "texture_observation": "Texture still altered",
+        "notes": "Red lip achieved but saturation/edge geometry and smile need correction.",
+        "reviewer": "Codex visual inspection; no human/salon acceptance",
+        "recommendation": "HOLD"
+      },
+      {
+        "subject_id": "056266",
+        "style_id": "natural_makeup",
+        "condition": "foundation_only",
+        "adapter_weight": 0.0,
+        "output": "056266-natural_makeup-foundation_only.png",
+        "complexion_observation": "Complexion/lighting changes still visible",
+        "texture_observation": "Texture reduced",
+        "notes": "Excessively dark thick brows/eye emphasis and blush; smile/eye details differ.",
+        "reviewer": "Codex visual inspection; no human/salon acceptance",
+        "recommendation": "HOLD"
+      },
+      {
+        "subject_id": "056266",
+        "style_id": "classic_red_lip",
+        "condition": "foundation_only",
+        "adapter_weight": 0.0,
+        "output": "056266-classic_red_lip-foundation_only.png",
+        "complexion_observation": "Closer to source than adapter; not an exact lock",
+        "texture_observation": "Texture reduced",
+        "notes": "Very dark saturated lip with altered smile/lip contour; not salon-accepted.",
+        "reviewer": "Codex visual inspection; no human/salon acceptance",
+        "recommendation": "HOLD"
+      },
+      {
+        "subject_id": "054109",
+        "style_id": "natural_makeup",
+        "condition": "current_adapter",
+        "adapter_weight": 1.0,
+        "output": "054109-natural_makeup-current_adapter.png",
+        "complexion_observation": "Substantial visible lightening",
+        "texture_observation": "Strong smoothing",
+        "notes": "Heavy glam eyes, brows and cheeks; changed smile/mouth appearance.",
+        "reviewer": "Codex visual inspection; no human/salon acceptance",
+        "recommendation": "HOLD"
+      },
+      {
+        "subject_id": "054109",
+        "style_id": "classic_red_lip",
+        "condition": "current_adapter",
+        "adapter_weight": 1.0,
+        "output": "054109-classic_red_lip-current_adapter.png",
+        "complexion_observation": "Substantial visible lightening",
+        "texture_observation": "Strong smoothing",
+        "notes": "Red lip visible; adds strong pale highlight and pink cheeks beyond request.",
+        "reviewer": "Codex visual inspection; no human/salon acceptance",
+        "recommendation": "HOLD"
+      },
+      {
+        "subject_id": "056266",
+        "style_id": "natural_makeup",
+        "condition": "current_adapter",
+        "adapter_weight": 1.0,
+        "output": "056266-natural_makeup-current_adapter.png",
+        "complexion_observation": "Tone/highlight/face color changes",
+        "texture_observation": "Strong smoothing",
+        "notes": "Glossy retouched glam instead of restrained everyday makeup.",
+        "reviewer": "Codex visual inspection; no human/salon acceptance",
+        "recommendation": "HOLD"
+      },
+      {
+        "subject_id": "056266",
+        "style_id": "classic_red_lip",
+        "condition": "current_adapter",
+        "adapter_weight": 1.0,
+        "output": "056266-classic_red_lip-current_adapter.png",
+        "complexion_observation": "Tone/highlights change",
+        "texture_observation": "Strong smoothing",
+        "notes": "Red lip achieved but extra cheek pigment, glossy skin and retouching exceed request.",
+        "reviewer": "Codex visual inspection; no human/salon acceptance",
+        "recommendation": "HOLD"
+      },
+      {
+        "subject_id": "054109",
+        "style_id": "natural_makeup",
+        "condition": "reduced_adapter",
+        "adapter_weight": 0.5,
+        "output": "054109-natural_makeup-reduced_adapter.png",
+        "complexion_observation": "Lightening remains substantial",
+        "texture_observation": "Strong smoothing",
+        "notes": "Looks very similar to full influence; no acceptable complexion correction.",
+        "reviewer": "Codex visual inspection; no human/salon acceptance",
+        "recommendation": "HOLD"
+      },
+      {
+        "subject_id": "054109",
+        "style_id": "classic_red_lip",
+        "condition": "reduced_adapter",
+        "adapter_weight": 0.5,
+        "output": "054109-classic_red_lip-reduced_adapter.png",
+        "complexion_observation": "Substantial visible lightening persists",
+        "texture_observation": "Strong smoothing",
+        "notes": "No meaningful visual rescue of source complexion; excessive blush/highlight.",
+        "reviewer": "Codex visual inspection; no human/salon acceptance",
+        "recommendation": "HOLD"
+      },
+      {
+        "subject_id": "056266",
+        "style_id": "natural_makeup",
+        "condition": "reduced_adapter",
+        "adapter_weight": 0.5,
+        "output": "056266-natural_makeup-reduced_adapter.png",
+        "complexion_observation": "Tone/highlight changes persist",
+        "texture_observation": "Strong smoothing",
+        "notes": "Close to current-adapter appearance; subtle differences do not establish a fix.",
+        "reviewer": "Codex visual inspection; no human/salon acceptance",
+        "recommendation": "HOLD"
+      },
+      {
+        "subject_id": "056266",
+        "style_id": "classic_red_lip",
+        "condition": "reduced_adapter",
+        "adapter_weight": 0.5,
+        "output": "056266-classic_red_lip-reduced_adapter.png",
+        "complexion_observation": "Tone/highlights still change",
+        "texture_observation": "Strong smoothing",
+        "notes": "Close to full influence; remaining complexion/retouching issue.",
+        "reviewer": "Codex visual inspection; no human/salon acceptance",
+        "recommendation": "HOLD"
+      }
+    ],
+    "conclusion": "Reducing adapter influence from1.0to0.5 does not visibly resolve whitening/retouching on these cases. Foundation-only also over-edits; it is not an accepted replacement. Adapter increases the visible lightening/retouched look on these fixed examples, especially054109; this does not isolate the training-data contribution.",
+    "recommendation": "Do not deploy0.5or substitute Base. Re-review source/target data for complexion/texture/geometry preservation and prepare a bounded corrected-data fine-tuning plan; no training or data acquisition authorized by this review."
+  },
+  "limitations": [
+    "Two reused diagnostic identities and two styles; no generalization claim across skin tones, users or all10presets.",
+    "Only one extra current control is pixel-validated; all four old cases were not regenerated.",
+    "Original cases use inference_mode and recovery uses no_grad; passing control supports continuity for that case, not every possible input.",
+    "No standardized numeric skin/identity score or human acceptance.",
+    "Single-call timings across two child processes/contexts; not a speed benchmark or website latency.",
+    "Training-pair retouching remains a plausible contributor; no corrected-data training experiment has run."
+  ],
+  "application_model_weights_prompts_catalog_cloud_changed": false
+}

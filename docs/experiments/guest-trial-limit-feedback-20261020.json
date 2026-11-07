@@ -4,8 +4,12 @@
   "authorization": "User requests a clear guest generation-limit modal and indicator beside the results.",
   "development": "DONE",
   "verification": "VERIFIED locally",
-  "publication": "PENDING",
-  "renderUiUpdate": "NOT DEPLOYED",
+  "publication": {
+    "pushed": true,
+    "verifiedRemoteCommit": "4da827250995ef9ac1f21e4cbf08c2730e0a8955",
+    "branch": "codex/render-kaggle-demo"
+  },
+  "renderUiUpdate": "PENDING_OPERATOR_MANUAL_DEPLOY",
   "changes": [
     "Contextual allowance indicator near the recommendations",
     "Automatic dismissible used-trial modal with Create account, Log in and Keep browsing",

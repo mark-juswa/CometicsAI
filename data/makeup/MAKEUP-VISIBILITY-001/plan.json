@@ -1,0 +1,371 @@
+{
+  "experiment": "MAKEUP-VISIBILITY-001",
+  "generator": "beautycore_source_makeup_visibility_test_v1",
+  "production_enabled": false,
+  "training": false,
+  "lora_active": false,
+  "new_model_inference": false,
+  "subjects": [
+    {
+      "id": "054109",
+      "source": ".tmp/data_m001/paired_selection/final_v1/validation/reference/054109_makeup_01.jpg",
+      "sha256": "81e57faca39e3989ed9920ebd6568efad563ae4f012f3fbb130918858d18e8ed",
+      "source_photo": {
+        "author": "Presidency Maldives",
+        "photo_title": "MK_NAIVAIDHOO1493",
+        "photo_url": "https://www.flickr.com/photos/presidencymaldives/5292667558/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Existing development portrait; not untouched final acceptance.",
+      "note": "Original photo may already contain cosmetics; no bare-skin ground-truth claim."
+    },
+    {
+      "id": "056266",
+      "source": ".tmp/data_m001/paired_selection/final_v1/validation/reference/056266_makeup_01.jpg",
+      "sha256": "d6b86be2fe5f505eb6ebe7f2b1c22a59f41ddef053953f55eba1ca0b859f1728",
+      "source_photo": {
+        "author": "Lori Thantos",
+        "photo_title": "IMG_1526.jpg",
+        "photo_url": "https://www.flickr.com/photos/lori_thantos/5121900493/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Existing development portrait; not untouched final acceptance.",
+      "note": "Original photo may already contain cosmetics; no bare-skin ground-truth claim."
+    },
+    {
+      "id": "006553",
+      "source": ".tmp/data_m001/paired_selection/final_v1/train/reference/006553_makeup_01.jpg",
+      "sha256": "64a84cfe4ccde31e01cc10edcbc6843211163fc006a279ce8c49ff75b1ca3098",
+      "source_photo": {
+        "author": "academy visavis",
+        "photo_title": "272_visavis_academy_0423_khs-1370823",
+        "photo_url": "https://www.flickr.com/photos/145889229@N04/40808745485/",
+        "license": "Attribution License",
+        "license_url": "https://creativecommons.org/licenses/by/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Existing development portrait; not untouched final acceptance.",
+      "note": "Original photo may already contain cosmetics; no bare-skin ground-truth claim."
+    },
+    {
+      "id": "035149",
+      "source": ".tmp/data_m001/paired_selection/final_v1/train/reference/035149_makeup_01.jpg",
+      "sha256": "65ff8f0ad1ca3dc416eb91733770669654d45d50a6aee9cf17beacd1a8be1e40",
+      "source_photo": {
+        "author": "Jack Donahue",
+        "photo_title": "Sheila's Graduation-0113",
+        "photo_url": "https://www.flickr.com/photos/jackflynndonahue/4651049950/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Existing development portrait; not untouched final acceptance.",
+      "note": "Original photo may already contain cosmetics; no bare-skin ground-truth claim."
+    }
+  ],
+  "profiles": {
+    "soft_glam": {
+      "name": "Soft Glam",
+      "shadow_rgb": [
+        119,
+        75,
+        99
+      ],
+      "shadow_opacity": 0.7,
+      "shadow_darkening": 7.0,
+      "crease_rgb": [
+        78,
+        54,
+        58
+      ],
+      "crease_opacity": 0.4,
+      "crease_darkening": 7.0,
+      "liner_opacity": 0.6,
+      "liner_darkening": 22.0,
+      "lower_opacity": 0.05,
+      "blush_rgb": [
+        190,
+        89,
+        105
+      ],
+      "blush_opacity": 0.2
+    },
+    "smoky_glam": {
+      "name": "Smoky Glam",
+      "shadow_rgb": [
+        73,
+        62,
+        61
+      ],
+      "shadow_opacity": 0.82,
+      "shadow_darkening": 12.0,
+      "crease_rgb": [
+        46,
+        38,
+        39
+      ],
+      "crease_opacity": 0.6,
+      "crease_darkening": 7.0,
+      "liner_opacity": 0.75,
+      "liner_darkening": 22.0,
+      "lower_opacity": 0.28,
+      "blush_rgb": [
+        168,
+        95,
+        94
+      ],
+      "blush_opacity": 0.07
+    },
+    "rosy_pink": {
+      "name": "Rosy Pink",
+      "shadow_rgb": [
+        185,
+        96,
+        135
+      ],
+      "shadow_opacity": 0.68,
+      "shadow_darkening": 3.0,
+      "crease_rgb": [
+        128,
+        69,
+        98
+      ],
+      "crease_opacity": 0.36,
+      "crease_darkening": 4.0,
+      "liner_opacity": 0.42,
+      "liner_darkening": 18.0,
+      "lower_opacity": 0.04,
+      "blush_rgb": [
+        204,
+        85,
+        128
+      ],
+      "blush_opacity": 0.23
+    }
+  },
+  "cases": [
+    {
+      "subject_id": "054109",
+      "style_id": "soft_glam",
+      "previous": "artifacts/makeup-render-20261026/run-02/054109-soft_glam-rendered.png",
+      "previous_sha256": "ebcf78d79128b040549af5018880203c34ca31c1834b978312f812054ae23abe"
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "smoky_glam",
+      "previous": "artifacts/makeup-render-20261026/remaining-seven-01/054109-smoky_glam-rendered.png",
+      "previous_sha256": "b2a82dcfa2295683e3f9d5b5d6923ee7d3108710ccbe2b184e87d27f57944331"
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "rosy_pink",
+      "previous": "artifacts/makeup-render-20261026/remaining-seven-01/054109-rosy_pink-rendered.png",
+      "previous_sha256": "0d0dc6b8fb78cd3181b5cbc4ed7b9c8c8871a4ece8acd8205d975148c7ad2041"
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "soft_glam",
+      "previous": "artifacts/makeup-render-20261026/run-02/056266-soft_glam-rendered.png",
+      "previous_sha256": "1bd3323f8d73dcc06f43107074daf42293f5ede1de13892107ca381624de132d"
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "smoky_glam",
+      "previous": "artifacts/makeup-render-20261026/remaining-seven-01/056266-smoky_glam-rendered.png",
+      "previous_sha256": "ddcf43eb9d93fdaab559155c0cfb8808276834470920c24894ae3ed344c5934c"
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "rosy_pink",
+      "previous": "artifacts/makeup-render-20261026/remaining-seven-01/056266-rosy_pink-rendered.png",
+      "previous_sha256": "93bc874b3efcb199b5a07d701c7f806e028d8b5d414b1f457b949fd9962fd01a"
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "soft_glam",
+      "previous": "artifacts/makeup-render-20261026/run-02/006553-soft_glam-rendered.png",
+      "previous_sha256": "573aacfe5570427ce49fbaebb4ddc01c1bdcccce9c8ec1ff01edc61d9d6ba3d1"
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "smoky_glam",
+      "previous": "artifacts/makeup-render-20261026/remaining-seven-01/006553-smoky_glam-rendered.png",
+      "previous_sha256": "0872aaf169fea2b8c7e2125cb49eb89926191d8f1b169897c528286e116bc71c"
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "rosy_pink",
+      "previous": "artifacts/makeup-render-20261026/remaining-seven-01/006553-rosy_pink-rendered.png",
+      "previous_sha256": "4d581ba9b2cae29b27e91a96bff171af3921062f1c2df9e2bdc29bb306531d27"
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "soft_glam",
+      "previous": "artifacts/makeup-render-20261026/run-02/035149-soft_glam-rendered.png",
+      "previous_sha256": "72415fc137732552c89c03f5c3ded0a7849ccce42575098d3c42069e333aa07b"
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "smoky_glam",
+      "previous": "artifacts/makeup-render-20261026/remaining-seven-01/035149-smoky_glam-rendered.png",
+      "previous_sha256": "7ece1c9c49fe4863a5790114c5bf49799808e341a1416ce6c33f0bf5490435cb"
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "rosy_pink",
+      "previous": "artifacts/makeup-render-20261026/remaining-seven-01/035149-rosy_pink-rendered.png",
+      "previous_sha256": "735ef605cc1f7189e95a0c20ab79e343faf10343c75d48133d187567a7963756"
+    }
+  ],
+  "case_count": 12,
+  "cached_maps": [
+    {
+      "id": "054109",
+      "labels": "artifacts/makeup-render-20261026/run-02/054109-labels.png",
+      "labels_sha256": "93cfaaf691c744b47ca53cdc8028c9e2d33ab496260afab855312251b0204ffe",
+      "allowed": "054109-allowed.png",
+      "placements": [
+        {
+          "eye_label": 4,
+          "eye_center": [
+            318.85591397849464,
+            188.70322580645163
+          ],
+          "eye_width": 45,
+          "cheek_center": [
+            330.55591397849463,
+            258.6
+          ]
+        },
+        {
+          "eye_label": 5,
+          "eye_center": [
+            176.60068259385665,
+            188.14163822525597
+          ],
+          "eye_width": 44,
+          "cheek_center": [
+            165.16068259385665,
+            259.54
+          ]
+        }
+      ]
+    },
+    {
+      "id": "056266",
+      "labels": "artifacts/makeup-render-20261026/run-02/056266-labels.png",
+      "labels_sha256": "ece1aad22b396febb1b0dc6cea275b67f690ddae1529014d5a0372ea2d51b4fa",
+      "allowed": "056266-allowed.png",
+      "placements": [
+        {
+          "eye_label": 4,
+          "eye_center": [
+            328.5593635250918,
+            182.21542227662178
+          ],
+          "eye_width": 57,
+          "cheek_center": [
+            343.3793635250918,
+            258.31
+          ]
+        },
+        {
+          "eye_label": 5,
+          "eye_center": [
+            185.74751243781094,
+            182.14800995024876
+          ],
+          "eye_width": 54,
+          "cheek_center": [
+            171.70751243781095,
+            258.31
+          ]
+        }
+      ]
+    },
+    {
+      "id": "006553",
+      "labels": "artifacts/makeup-render-20261026/run-02/006553-labels.png",
+      "labels_sha256": "b1102e9dbe8e14a5483d6fe400db63dc6edaf59d186da25889579d4ff66b73b8",
+      "allowed": "006553-allowed.png",
+      "placements": [
+        {
+          "eye_label": 4,
+          "eye_center": [
+            338.2732558139535,
+            178.27325581395348
+          ],
+          "eye_width": 42,
+          "cheek_center": [
+            349.1932558139535,
+            243.83
+          ]
+        },
+        {
+          "eye_label": 5,
+          "eye_center": [
+            197.39242424242425,
+            178.85757575757575
+          ],
+          "eye_width": 55,
+          "cheek_center": [
+            183.09242424242424,
+            244.3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "035149",
+      "labels": "artifacts/makeup-render-20261026/run-02/035149-labels.png",
+      "labels_sha256": "5d7cdda621cea36e4ca680a61a45ce57e1cae353825590ecb54b83145a3fae23",
+      "allowed": "035149-allowed.png",
+      "placements": [
+        {
+          "eye_label": 4,
+          "eye_center": [
+            317.2120141342756,
+            189.72791519434628
+          ],
+          "eye_width": 64,
+          "cheek_center": [
+            333.8520141342756,
+            263.01
+          ]
+        },
+        {
+          "eye_label": 5,
+          "eye_center": [
+            181.07307307307306,
+            180.94794794794794
+          ],
+          "eye_width": 53,
+          "cheek_center": [
+            167.29307307307306,
+            259.25
+          ]
+        }
+      ]
+    }
+  ],
+  "base_renderer": "scripts/makeup_source_render.py",
+  "base_renderer_sha256": "0471a37c01b4438dcf7c12389e0b044e7b7c81d6da3be67147b3eff742e8fb05",
+  "previous_extension": "scripts/makeup_source_styles.py",
+  "previous_extension_sha256": "ad8ff50a683e054dfa11c234e00cd447dee84fd62c46f9dd78c11a0800d0483c",
+  "layer_rules": {
+    "maximum_nonlip_lightness_reduction": 16.0,
+    "maximum_nonlip_lightness_increase": 2.0,
+    "maximum_nonlip_chroma_shift": 40.0,
+    "lip_pixels": "EXACT_PREVIOUS"
+  },
+  "limits": [
+    "Focused3style/4person comparison, not all10style revision or generalization.",
+    "Lips retained exactly so visibility differences must arise elsewhere.",
+    "Cached source parser masks/curves, not independently validated eye landmarks.",
+    "No new training photos, models, GPU calls, full-face foundation or deployment."
+  ]
+}

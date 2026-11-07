@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-25",
+  "status": "EXACT_EXCEPTION_VERIFIED_RECOVERY_CPU_TESTED_GPU_PENDING",
+  "input": {
+    "path": "C:\\Users\\Gigabyte\\.codex\\attachments\\45d5f796-bbb1-494e-affb-63245aef8356\\Pasted text.txt",
+    "sha256": "cb626c952d74dfd8080ef4f083b87df9a057e3951686ea626b8b6b06809f2189"
+  },
+  "reported_completed_images": 8,
+  "reported_completed_conditions": [
+    "foundation_only",
+    "current_adapter"
+  ],
+  "reported_reduced_condition_started": false,
+  "partial_zip_local_present": false,
+  "exception": "RuntimeError: Setting requires_grad=True on inference tensor outside InferenceMode is not allowed.",
+  "verified_failure_location": "adapter_condition finally: pipe.set_adapters(name, adapter_weights=1.0) after image8; PEFT layer.requires_grad_(True)",
+  "diagnosis": "The diagnostic switches/reactivates adapters after forwards wrapped in inference_mode. Inference-tensor reactivation is rejected by PyTorch. A lazy parameter materialization reproduction with real CPU torch fails at the same boundary; no_grad permits restoration. Exact GPU tensor allocation/hook is not traced.",
+  "scope": "Experimental diagnostic runner and local recovery tooling only; production unchanged.",
+  "fix": "Use torch.no_grad for forwards; rerun in a fresh child process to discard the failed child's inference tensors.",
+  "continuation": {
+    "requires_same_kaggle_session": true,
+    "original_images_kept": 8,
+    "expected_new_forward_calls": 5,
+    "control_calls": 1,
+    "missing_reduced_outputs": 4,
+    "control_acceptance": "Current-adapter first case must reproduce original RGB hash, otherwise stop.",
+    "reinstall": false,
+    "download_model_again": false,
+    "gpu_result": "NEEDS VERIFICATION"
+  },
+  "next": "Run the new recovery cell once in the still-open failed notebook; return the NEW resumed ZIP. If session ended, use corrected v2 fresh notebook."
+}

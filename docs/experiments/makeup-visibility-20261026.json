@@ -1,0 +1,60 @@
+{
+  "experiment": "MAKEUP-VISIBILITY-001",
+  "date": "2026-10-26",
+  "decision_status": "PROPOSED",
+  "evidence_status": "EXPERIMENTAL",
+  "progress": "DONE",
+  "scope": "Offline comparison only; integration NOT STARTED",
+  "trigger": "Supervisor says source-rendered makeup is mostly noticeable on lips.",
+  "case_count": 12,
+  "subjects": 4,
+  "styles": [
+    "soft_glam",
+    "smoky_glam",
+    "rosy_pink"
+  ],
+  "changes": [
+    "Wider source-contour upper-lid field",
+    "Soft crease/upper-liner definition",
+    "Outward bounded blush",
+    "Feathered exact previous-mouth exclusion"
+  ],
+  "technical_checks": {
+    "new_tests": 19,
+    "regression_tests": 51,
+    "passed": 70,
+    "saved_png_exact_reproductions": 12,
+    "lip_mouth_changes": 0,
+    "protected_changes": 0,
+    "outside_allowed_changes": 0
+  },
+  "appearance": {
+    "human_acceptances": 0,
+    "release_ready": false,
+    "codex_review": "Four three-row sheets inspected. Eyes stronger, cheeks restrained; Rosy can be saturated/high near crease. Prior lipstick edges remain. User acceptance pending."
+  },
+  "production_enabled": false,
+  "training": false,
+  "lora_active": false,
+  "new_model_inference": false,
+  "runtime_api_catalog_dependencies_cloud_changes": "NONE",
+  "limits": [
+    "Four reused development portraits, not independent acceptance",
+    "Existing cosmetics/flash/blemishes persist",
+    "No full-face foundation, contour or false lashes",
+    "Parser-derived geometry; no new landmark detector or manual per-photo placement",
+    "Color-change metrics do not score naturalness",
+    "Other seven styles and expansion candidates not promoted"
+  ],
+  "plan": "data/makeup/MAKEUP-VISIBILITY-001/plan.json",
+  "runner": "scripts/makeup_visibility_pilot.py",
+  "tests": "backend/tests/test_makeup_visibility_pilot.py",
+  "verification": "artifacts/makeup-render-20261026/visibility-01/verification.json",
+  "archive": {
+    "path": "artifacts/makeup-render-20261026/beautycore-makeup-visibility-review.zip",
+    "bytes": 13441530,
+    "members": 43,
+    "sha256": "b03a4fb922322b23d08e11ce8ad3d4d01be6b1de643fd8516088b1c939ea5515"
+  },
+  "next": "Specific eye/cheek visual feedback, then broader validation of accepted profiles before explicit versioned integration."
+}

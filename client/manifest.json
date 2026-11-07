@@ -1,0 +1,36 @@
+{
+  "schema": "beautycore-client-serving-handoff-v1",
+  "release_id": "styles-20261106-01",
+  "features": {
+    "hairstyle": 18,
+    "makeup": 13,
+    "nails": 8
+  },
+  "files": {
+    "render_kaggle_makeup_corrective_demo.ipynb": {
+      "bytes": 122688,
+      "sha256": "b4a4e1c1482fd060d194f19f5570b6221131379e8214d18c064a713452ab08fd"
+    },
+    "beautycore_makeup_release_20261106.bin": {
+      "bytes": 75246586,
+      "sha256": "0c657ae4d2b62e11bd8c5728321330d5416fbfd1d36354d8482ac548f1449357"
+    },
+    "capstone_train002_20260928_v1.bin": {
+      "bytes": 171360891,
+      "sha256": "f0d1fed52e00b6c5a1da2cade3731237675cdebbfc0b2cde3b2dbda99a4019ac"
+    }
+  },
+  "project_model_adapters_included": [
+    "Hair TRAIN-001",
+    "Hair TRAIN-002",
+    "MAKEUP-001-CORRECTIVE-001",
+    "NAILS-001-LOCAL-v1"
+  ],
+  "nails_cpu_assets_included": true,
+  "shared_flux_base": "Downloaded at startup at the existing pinned revision; Internet required",
+  "raw_training_dataset_required": false,
+  "credentials_included": false,
+  "render_commit": "578330d34019e593fbb4b8fb4eaed898da3ff09d",
+  "render_live": true,
+  "new_kaggle_production_connection_verified": false
+}

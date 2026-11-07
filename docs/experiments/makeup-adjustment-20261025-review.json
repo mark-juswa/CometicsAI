@@ -1,0 +1,177 @@
+{
+  "archive": "D:\\Downloads\\beautycore-makeup-adjustment-results-ebdbe64f35.zip",
+  "archive_bytes": 4796110,
+  "archive_sha256": "f898ab3ce27aec9d3778ecb728f77724eb3170251c91ab27c827d8f9e1cf7261",
+  "status": "GPU_EXECUTION_AND_PROVENANCE_VERIFIED_VISUAL_REVIEW_DONE_NO_SETTING_ACCEPTED",
+  "checks": "PASS: CRC,duplicate/path guards,source/plan/prompt/input/PNG/RGB hashes,12ordered cases,4retained byte-identical controls,extra control pixels,checkpoint/scaling/tensors/restoration/environment.",
+  "new_calls": 9,
+  "retained_cases": 4,
+  "continuity_pixel_identical": true,
+  "timings": {
+    "current_reference": {
+      "count": 4,
+      "min_seconds": 64.3959377010001,
+      "median_seconds": 64.51416358799997,
+      "max_seconds": 64.675475957
+    },
+    "lower_guidance": {
+      "count": 4,
+      "min_seconds": 59.778355780999846,
+      "median_seconds": 63.7899756365,
+      "max_seconds": 64.07841516699955
+    },
+    "matched_foundation": {
+      "count": 4,
+      "min_seconds": 63.4819923770001,
+      "median_seconds": 63.67325586200013,
+      "max_seconds": 63.74265280100008
+    }
+  },
+  "new_forward_seconds": 566.3607205979997,
+  "foundation_load_seconds": 43.15124572900004,
+  "cache_reuse": {
+    "snapshot": "/tmp/beautycore-style-pilot-hf/beautycore-makeup-quality-687a09ec0101/hub/models--black-forest-labs--FLUX.2-klein-base-4B/snapshots/a3b4f4849157f664bdbc776fd7453c2783562f4d",
+    "downloaded_again": false,
+    "reinstalled_packages": false
+  },
+  "private_directory": "I:\\HAIR\\artifacts\\makeup-quality-20261025\\adjustment-review-ebdbe64f35",
+  "date": "2026-10-25",
+  "main_cases": 12,
+  "reviewed_source_people": 2,
+  "reviewed_styles": [
+    "natural_makeup",
+    "classic_red_lip"
+  ],
+  "all_eight_candidates_differ_from_their_reference_pixels": true,
+  "visual_review": {
+    "method": "Codex qualitative inspection of both returned side-by-side sheets with all12cases and2source portraits. No numerical skin/identity score or salon acceptance.",
+    "observations": [
+      {
+        "subject_id": "054109",
+        "style_id": "natural_makeup",
+        "condition": "current_reference",
+        "output": "054109-natural_makeup-current_adapter.png",
+        "verdict": "HOLD",
+        "notes": "Substantial complexion lightening, erased texture, strong pink cheeks and heavy eye/brow styling.",
+        "reviewer": "Codex qualitative side-by-side inspection; human/salon acceptance not provided"
+      },
+      {
+        "subject_id": "054109",
+        "style_id": "classic_red_lip",
+        "condition": "current_reference",
+        "output": "054109-classic_red_lip-current_adapter.png",
+        "verdict": "HOLD",
+        "notes": "Bright red lip visible; pale face, strong cheek/highlight edits and altered smile/lip appearance persist.",
+        "reviewer": "Codex qualitative side-by-side inspection; human/salon acceptance not provided"
+      },
+      {
+        "subject_id": "056266",
+        "style_id": "natural_makeup",
+        "condition": "current_reference",
+        "output": "056266-natural_makeup-current_adapter.png",
+        "verdict": "HOLD",
+        "notes": "Strong smoothing/highlights and glam eye/brow/cheek treatment; face/smile details differ from source.",
+        "reviewer": "Codex qualitative side-by-side inspection; human/salon acceptance not provided"
+      },
+      {
+        "subject_id": "056266",
+        "style_id": "classic_red_lip",
+        "condition": "current_reference",
+        "output": "056266-classic_red_lip-current_adapter.png",
+        "verdict": "HOLD",
+        "notes": "Clearly visible red lip; extensive smoothing, highlights and cheek pigment beyond lip request.",
+        "reviewer": "Codex qualitative side-by-side inspection; human/salon acceptance not provided"
+      },
+      {
+        "subject_id": "054109",
+        "style_id": "natural_makeup",
+        "condition": "lower_guidance",
+        "output": "054109-natural_makeup-lower_guidance.png",
+        "verdict": "HOLD",
+        "notes": "Small tonal/detail changes; face remains much lighter and smoother than source. Visible cosmetics remain; no acceptable correction.",
+        "reviewer": "Codex qualitative side-by-side inspection; human/salon acceptance not provided"
+      },
+      {
+        "subject_id": "054109",
+        "style_id": "classic_red_lip",
+        "condition": "lower_guidance",
+        "output": "054109-classic_red_lip-lower_guidance.png",
+        "verdict": "HOLD",
+        "notes": "Red lip remains obvious; source complexion/texture still not preserved. Close to current appearance.",
+        "reviewer": "Codex qualitative side-by-side inspection; human/salon acceptance not provided"
+      },
+      {
+        "subject_id": "056266",
+        "style_id": "natural_makeup",
+        "condition": "lower_guidance",
+        "output": "056266-natural_makeup-lower_guidance.png",
+        "verdict": "HOLD",
+        "notes": "Small changes to details/tone; glossy smoothing and exaggerated makeup remain. Not a preserved natural look.",
+        "reviewer": "Codex qualitative side-by-side inspection; human/salon acceptance not provided"
+      },
+      {
+        "subject_id": "056266",
+        "style_id": "classic_red_lip",
+        "condition": "lower_guidance",
+        "output": "056266-classic_red_lip-lower_guidance.png",
+        "verdict": "HOLD",
+        "notes": "Red lip visible, but smoothing/highlights and extra cheek makeup remain close to current.",
+        "reviewer": "Codex qualitative side-by-side inspection; human/salon acceptance not provided"
+      },
+      {
+        "subject_id": "054109",
+        "style_id": "natural_makeup",
+        "condition": "matched_foundation",
+        "output": "054109-natural_makeup-matched_foundation.png",
+        "verdict": "HOLD",
+        "notes": "Remains pale, strongly highlighted/smoothed with heavy pink cheeks. Added instruction does not restore source complexion.",
+        "reviewer": "Codex qualitative side-by-side inspection; human/salon acceptance not provided"
+      },
+      {
+        "subject_id": "054109",
+        "style_id": "classic_red_lip",
+        "condition": "matched_foundation",
+        "output": "054109-classic_red_lip-matched_foundation.png",
+        "verdict": "HOLD",
+        "notes": "Red lipstick remains obvious; full-face lightening/smoothing and strong cheek edits persist.",
+        "reviewer": "Codex qualitative side-by-side inspection; human/salon acceptance not provided"
+      },
+      {
+        "subject_id": "056266",
+        "style_id": "natural_makeup",
+        "condition": "matched_foundation",
+        "output": "056266-natural_makeup-matched_foundation.png",
+        "verdict": "HOLD",
+        "notes": "Similar retouched glam/highlights and blush; original texture/face details not recovered.",
+        "reviewer": "Codex qualitative side-by-side inspection; human/salon acceptance not provided"
+      },
+      {
+        "subject_id": "056266",
+        "style_id": "classic_red_lip",
+        "condition": "matched_foundation",
+        "output": "056266-classic_red_lip-matched_foundation.png",
+        "verdict": "HOLD",
+        "notes": "Red lip visible, but retouching and unrelated facial appearance changes persist.",
+        "reviewer": "Codex qualitative side-by-side inspection; human/salon acceptance not provided"
+      }
+    ],
+    "finding": "Neither guidance3 nor the appended complexion/foundation instruction resolves visible lightening, smoothing and over-editing on these cases. Makeup remains obvious, so neither meets preservation-and-visible-makeup acceptance together.",
+    "lower_guidance": "Small tonal/detail differences; source complexion/texture still not restored.",
+    "matched_foundation": "Remains close to current; extra instruction does not reliably control pale foundation/highlights.",
+    "inference": "The tested adjustments are insufficient; this does not establish that every guidance/prompt combination will fail or that the exact training-data cause is proven.",
+    "recommendation": "Keep production unchanged. Stop repeating unbounded prompt/strength sweeps; prepare a reviewed corrected-target curation and bounded fine-tuning plan if further Makeup correction proceeds. Base also over-edits, so retraining success is not assured."
+  },
+  "limitations": [
+    "Only2reused diagnostic people and2styles; not an untouched final test or all-user result.",
+    "One original-condition control was regenerated, not all4.",
+    "Visual review by Codex; no quantitative complexion/identity metric or salon acceptance.",
+    "Single-case timings across retained and new child processes; not a speed benchmark.",
+    "No new training or source-target correction has been performed; foundation reconstruction may also need evaluation."
+  ],
+  "application_or_production_configuration_changed": false,
+  "human_followup": {
+    "observation": "Supervisor sees lower_guidance3.0as relatively more natural than matched_foundation in supplied crop.",
+    "release_acceptance": false,
+    "authorized_next": "Bounded3.0vs2.5comparison; MAKEUP-QA-003"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-30",
+  "experiment": "STABLE-MAKEUP-001",
+  "decision_status": "CONFIRMED",
+  "authorization": "User proceeds with one isolated free pretrained reference-transfer trial, four existing portraits and supplied reference; no production replacement.",
+  "progress": {
+    "preparation": "DONE",
+    "gpu_generation": "NOT STARTED",
+    "appearance_acceptance": "NOT STARTED",
+    "production_integration": "NOT STARTED"
+  },
+  "evidence_status": "EXPERIMENTAL",
+  "source": {
+    "repo": "https://github.com/Xiaojiu-z/Stable-Makeup",
+    "commit": "88c8ca512261e1f9125684178423e6355ed5ad0a",
+    "vendored_diffusers": "0.23.1 (actual repository code; requirements snapshot says0.25.1)",
+    "base": "stable-diffusion-v1-5/stable-diffusion-v1-5",
+    "base_revision": "451f4fe16113bff5a5d2269ed5ad43b0592e9a14",
+    "clip_config": "openai/clip-vit-large-patch14@32bd64288804d66eefd0ccbe215aa642df71cc41",
+    "method": "Externally pretrained image-reference-conditioned generation; not project MAKEUP-001 LoRA"
+  },
+  "inputs": {
+    "source_ids": [
+      "054109",
+      "056266",
+      "006553",
+      "035149"
+    ],
+    "controls": "RetinaFace+SPIGA300wpublic, two-pass author preprocessing/drawing, executed on local CPU",
+    "spiga_source": "andresprados/SPIGA@656f90a76a6800e6091bbce519550e86e04cf17f",
+    "spiga_weights_sha256": "98f014611ac25d549e89083992d9e6ade15da133c634a3883473abf2953cee2d",
+    "retina_source": "sajjjadayobi/FaceLib@382841efec823f059f49754e5d378abb12cfb551",
+    "retina_weights_sha256": "2979b33ffafda5d74b6948cd7a5b9a7a62f62b949cef24e95fd15d2883a65220",
+    "reference": "User portrait cropped350,350,1350,1350 to512square; visual crop inspected",
+    "data": "Existing development sources with original credits; not untouched holdout or new training data"
+  },
+  "runtime": {
+    "kaggle": "Separate private T4 notebook",
+    "python": "3.10.20 isolated managed runtime",
+    "torch": "2.0.1",
+    "dtype": "float16",
+    "steps": 30,
+    "guidance": 1.6,
+    "seed": 1977,
+    "images": 4,
+    "hard_stop_seconds": 7200,
+    "configuration_caveat": "FP16 differs from upstream FP32 entry example and must pass actual visual/runtime evaluation"
+  },
+  "local_checks": {
+    "unit_tests": 23,
+    "bundle_roundtrip_hashes": "PASS",
+    "all_source_python_ast": "PASS",
+    "notebook_code_compile": "PASS",
+    "full_notebook_schema": "NOT RUN:nbformat not installed",
+    "model_imports_and_meta_construction": "PASS using local CPU Torch2.10, not target GPU Torch2.0.1",
+    "checkpoint_parameter_names": "All434makeup and340eachcontrol names present, no unexpected weight/bias names",
+    "metadata_execution": "Never executed pickle during remote key audit",
+    "public_asset_probes": "Six large files reachable via bounded HTTP ranges; base-model LFS SHA values pinned",
+    "author_checkpoint_hashes": "Known size/data.pkl hash/ZIP CRC checks; full SHA observed during first complete download, not publisher-verified in local preflight",
+    "gpu_memory_latency_quality": "NEEDS VERIFICATION"
+  },
+  "changes": {
+    "production": false,
+    "training": false,
+    "api_calls_paid": false,
+    "new_secrets": false,
+    "render_kaggle_existing_service": false,
+    "original_model_artifacts": false
+  },
+  "artifacts": {
+    "notebook": "notebooks/stable_makeup_trial.ipynb",
+    "bundle": "artifacts/makeup-render-20261030/stable-makeup-pilot/beautycore-stable-makeup-pilot.bin",
+    "bundle_sha256": "4a3ec034bb433efaa5bf9a6d764909cbe004ec8248134286a4dd956009ad95d1",
+    "bytes": 3767075,
+    "members": 350,
+    "asset_download_bytes": 6397025197,
+    "gpu_inference_tested": false
+  },
+  "next": "User imports new private notebook, attaches only new private bin input, enables Internet/T4 and runs once; return result ZIP even on setup failure, then stop GPU. Review runtime/identity/complexion/cosmetics before any service integration."
+}

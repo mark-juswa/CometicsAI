@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-31",
+  "status": "TECHNICAL_VERIFIED_VISUAL_REVIEW_DONE",
+  "archive_sha256": "3e3474b98823247b471964de173223ae6eb314af34cdaafc486012ee88cae1db",
+  "archive_bytes": 16571514,
+  "members": 54,
+  "experiment": "HAIR-EXP-002",
+  "completed_calls": 21,
+  "foundation_load_count": 1,
+  "original_source_inventory": "exact match",
+  "plan_match": true,
+  "source_images_verified": 4,
+  "output_hashes_and_dimensions_verified": 21,
+  "restoration_png_and_pixels_exact": true,
+  "runtime_matches_reviewed_t4": true,
+  "review_html_reproduced_from_trusted_local_source": true,
+  "inference_seconds": {
+    "total": 1367.764614037,
+    "minimum": 61.56837005000011,
+    "maximum": 66.13396062099991,
+    "median": 65.46423569900003
+  },
+  "model_load_seconds": 51.82649966199983,
+  "peak_allocated_mib": 8304.30517578125,
+  "review_root": "artifacts/hair-expansion-20261031/review-01",
+  "production_enabled": false,
+  "new_training": false,
+  "visual_reviewer": "Codex qualitative review; no new human style approval",
+  "style_findings": [
+    {
+      "style_id": "exp_butterfly_cut",
+      "name": "Butterfly Cut",
+      "verdict": "HOLD",
+      "observation": "Both outputs shorten long hair into a smooth bob with fringe. Long lower lengths and distinct Butterfly layers are absent. The blonde source changes to black.",
+      "next": "Do not enable as Butterfly; current tested prompt/adapter fails its stated shape."
+    },
+    {
+      "style_id": "exp_french_bob_wispy",
+      "name": "Textured French Bob with Wispy Bangs",
+      "verdict": "HOLD_PENDING_CLIENT_REVIEW",
+      "observation": "Both outputs show a visibly different curly, rounded bob with separated bangs. This is the closest candidate, but strongly curls the texture and changes the blonde source to black. It is not an unqualified preservation pass.",
+      "next": "Show the exact outputs for client/stylist review of the curly interpretation and color limits. Keep disabled until explicit acceptance and remaining production checks."
+    },
+    {
+      "style_id": "exp_wolf_cut",
+      "name": "Wolf Cut",
+      "verdict": "HOLD",
+      "observation": "Shorter crown/longer back is present, but both outputs are dominated by exaggerated stiff spikes and dark scene/punk-like hair. The blonde source changes to black; this does not meet a natural salon-preview standard.",
+      "next": "Do not present this tested profile as a reliable natural Wolf Cut."
+    },
+    {
+      "style_id": "exp_korean_two_block",
+      "name": "Korean Two-Block",
+      "verdict": "HOLD",
+      "observation": "Both outputs have a dense, rounded long fringe. The color example covers the eyes; clear shorter lower-side separation is not established. The baseline preserves visible short sides more clearly.",
+      "next": "Hold; a long bowl-like fringe alone is not evidence of the requested two-block shape."
+    },
+    {
+      "style_id": "exp_comma_hair",
+      "name": "Korean Comma Hair",
+      "verdict": "HOLD",
+      "observation": "The detached ring/U artifact is reduced, but outputs stay close to Curtain Hair. The color example still drapes strands across the eyes/nose, and a clearly distinct reliable comma shape is not established on both inputs.",
+      "next": "Do not enable a nearly duplicate Curtain result under a new label."
+    }
+  ],
+  "gallery_check": {
+    "browser": "Microsoft Edge",
+    "images_loaded": 30,
+    "enlargement_passed": true,
+    "mobile_overflow": false,
+    "script_errors": []
+  },
+  "appearance_approved_by_client": 0,
+  "new_hair_styles_enabled": 0,
+  "accepted_nail_release_unchanged": {
+    "backend/app/style_release.json": true,
+    "beautycore/lib/ai/style-release.json": true,
+    "beautycore/lib/business/style-catalog.json": true,
+    "notebooks/render_kaggle_expanded_nails_demo.ipynb": true
+  },
+  "limits": [
+    "Only two reused development inputs per style, not untouched final evaluation or population-wide evidence.",
+    "Source hair-color and retouching issues also occur in several existing baseline outputs; not proven to be caused solely by expansion prompts.",
+    "Current tested combinations fail or remain qualified; no proof that all possible prompts/adapters will fail and no new training requirement established.",
+    "Strict original model/profile/adapter/source checks passed; no runner mismatch found in this audit.",
+    "Read/verified returned code as data only. Returned HTML exactly reproduced from trusted local gallery code before browser display.",
+    "No serving settings, catalogs, checkpoints, release packages, database or cloud deployment changed during review."
+  ],
+  "next": "Client may review the closest French Bob output with limits; keep the other four held. Do not deploy all five or start an unsolicited parameter/training sweep."
+}

@@ -1,0 +1,295 @@
+{
+  "experiment": "MAKEUP-RENDER-001",
+  "status": "TECHNICAL_CHECKS_PASS_APPEARANCE_PENDING",
+  "date": "2026-10-26",
+  "plan_sha256": "0780f7d7063c35bb3eb1a03318793b08ce4eb4c75fcb8f24391cb60484297296",
+  "executed_runner_sha256": "1b20280e83cb88e0b97c121e5df7e60c27ae7150b4bed2ff0169714755cb42d8",
+  "executed_runner_snapshot_sha256": "1b20280e83cb88e0b97c121e5df7e60c27ae7150b4bed2ff0169714755cb42d8",
+  "current_runner_sha256": "0471a37c01b4438dcf7c12389e0b044e7b7c81d6da3be67147b3eff742e8fb05",
+  "source_manifest_sha256": "d75bbb096ca2dcc797dd26c9782104dde1952f637c4947246752b0acc4a802f4",
+  "report_sha256": "f9d5eaf492d88656067e2e0911e1384e43d1871607bf4b421182cabd5bb59a70",
+  "all_inputs_unchanged": true,
+  "reproduced_all12_with_current_runner": true,
+  "cases": [
+    {
+      "subject_id": "054109",
+      "style_id": "natural_makeup",
+      "sha256": "7a8fefe8a0f39ce177e666ed6ec918c9443ac2b3ab20718c7d56ceeb0cf04354",
+      "rgb_sha256": "f1707f88c844ce3a2c2c9a0ae7517621958ae659c5d98b2dc01f96130b81f0b3",
+      "changed_pixels": 20484,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "central_forehead_patch_changed_pixels": 0,
+      "reproduced_with_current_runner": true,
+      "gamut_compressed_pixels": 28
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "soft_glam",
+      "sha256": "ebcf78d79128b040549af5018880203c34ca31c1834b978312f812054ae23abe",
+      "rgb_sha256": "b8edf964cf2db01432ff65a54e209e55efe6f496d8debfcb150a4f65807a4890",
+      "changed_pixels": 25068,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "central_forehead_patch_changed_pixels": 0,
+      "reproduced_with_current_runner": true,
+      "gamut_compressed_pixels": 66
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "classic_red_lip",
+      "sha256": "c853e1e527a32be324fe75cfc030fecbb6751fa800e564884a8a9bd1d0012582",
+      "rgb_sha256": "d6a35005b27378765d6b38f342208e4f32a0f3e79e0620860aa16a2598673de7",
+      "changed_pixels": 19075,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "central_forehead_patch_changed_pixels": 0,
+      "reproduced_with_current_runner": true,
+      "gamut_compressed_pixels": 2001
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "natural_makeup",
+      "sha256": "c8f3792cd2c3b1ab8e7609c0f86c1b86dc9f1a990c468ed59bbd04bca2190724",
+      "rgb_sha256": "9fdbc9ce2b9e4c07128136361c4eadaa9daf562016f99f3306f0bdaf9d49fb86",
+      "changed_pixels": 16209,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "central_forehead_patch_changed_pixels": 0,
+      "reproduced_with_current_runner": true,
+      "gamut_compressed_pixels": 247
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "soft_glam",
+      "sha256": "1bd3323f8d73dcc06f43107074daf42293f5ede1de13892107ca381624de132d",
+      "rgb_sha256": "2fba2da3ae54c880b7fe9bbd8a09644044afd342595cfdae3c1616001bd67859",
+      "changed_pixels": 25391,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "central_forehead_patch_changed_pixels": 0,
+      "reproduced_with_current_runner": true,
+      "gamut_compressed_pixels": 499
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "classic_red_lip",
+      "sha256": "afcd610a2d2859aaf2f9108ae5a6d9f040b729dff160e2003d0464ae05e06ca2",
+      "rgb_sha256": "b7a4373ba2123bbce820f04815ea40fb872584af1b1cf7d92a081b8670c004ba",
+      "changed_pixels": 12219,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "central_forehead_patch_changed_pixels": 0,
+      "reproduced_with_current_runner": true,
+      "gamut_compressed_pixels": 1101
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "natural_makeup",
+      "sha256": "701b7a3c5dd3870fdee8a36ed92ea8aae7e9a1e6f23c8e354bbc59fab9895130",
+      "rgb_sha256": "92c6bb9c9c5c88fea0f38690b3063332278ee2dd5392c4ec9ab67980f07b1c0f",
+      "changed_pixels": 18707,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "central_forehead_patch_changed_pixels": 0,
+      "reproduced_with_current_runner": true,
+      "gamut_compressed_pixels": 0
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "soft_glam",
+      "sha256": "573aacfe5570427ce49fbaebb4ddc01c1bdcccce9c8ec1ff01edc61d9d6ba3d1",
+      "rgb_sha256": "4cfcf495775bef37a9b155a1368446284ecfc46416dfa5a24457765d71da0621",
+      "changed_pixels": 22502,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "central_forehead_patch_changed_pixels": 0,
+      "reproduced_with_current_runner": true,
+      "gamut_compressed_pixels": 14
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "classic_red_lip",
+      "sha256": "d47aa5ddea8667099acb7969d40ab88643bc4f7cc9af65abeea478add2dfccfc",
+      "rgb_sha256": "2bf9de0c6e256c552e1ca54a6b6bbc21f233d18f8cd85eb52cfe3996d1566981",
+      "changed_pixels": 18140,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "central_forehead_patch_changed_pixels": 0,
+      "reproduced_with_current_runner": true,
+      "gamut_compressed_pixels": 169
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "natural_makeup",
+      "sha256": "96246664b4c6999e68839fe41a8251f85281823e2cd71af22aeff649db058ce0",
+      "rgb_sha256": "5a3af803af3bad241dc91a7a150a7d7e5bdd95ba09dc76ef451d2f7aadb25ae3",
+      "changed_pixels": 18351,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "central_forehead_patch_changed_pixels": 0,
+      "reproduced_with_current_runner": true,
+      "gamut_compressed_pixels": 86
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "soft_glam",
+      "sha256": "72415fc137732552c89c03f5c3ded0a7849ccce42575098d3c42069e333aa07b",
+      "rgb_sha256": "9ee5bf431e6012a909eb2d5e94224535f22ddf90f3b978559c66d895ac2139bf",
+      "changed_pixels": 25263,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "central_forehead_patch_changed_pixels": 0,
+      "reproduced_with_current_runner": true,
+      "gamut_compressed_pixels": 112
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "classic_red_lip",
+      "sha256": "c0fed82e1cdfeea4ab765f1c932af0fd34f68f640d88c0095b94cc3694beee3b",
+      "rgb_sha256": "787fb2bc95995a63796f0b61f29a575f798ac9f9cf41a08d62ba8ae8e86a222f",
+      "changed_pixels": 13882,
+      "outside_cosmetic_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "central_forehead_patch_changed_pixels": 0,
+      "reproduced_with_current_runner": true,
+      "gamut_compressed_pixels": 1520
+    }
+  ],
+  "visual_review": [
+    {
+      "subject_id": "054109",
+      "style_id": "natural_makeup",
+      "reviewer": "Codex qualitative inspection",
+      "disposition": "HOLD_FOR_HUMAN_VISUAL_REVIEW",
+      "human_approval": "PENDING",
+      "notes": "Subtle rose lip/eye/cheek changes; complexion/texture retained. Visibility is modest and needs user approval."
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "soft_glam",
+      "reviewer": "Codex qualitative inspection",
+      "disposition": "HOLD_FOR_HUMAN_VISUAL_REVIEW",
+      "human_approval": "PENDING",
+      "notes": "Clearer mauve lip with subtler eye/cheek changes; not full foundation/lash makeover. Upper/lower lip contrast can look strong."
+    },
+    {
+      "subject_id": "054109",
+      "style_id": "classic_red_lip",
+      "reviewer": "Codex qualitative inspection",
+      "disposition": "HOLD_FOR_HUMAN_VISUAL_REVIEW",
+      "human_approval": "PENDING",
+      "notes": "Distinct strong red lip; edge/intensity can look painted on some sources. Appearance acceptance pending."
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "natural_makeup",
+      "reviewer": "Codex qualitative inspection",
+      "disposition": "HOLD_FOR_HUMAN_VISUAL_REVIEW",
+      "human_approval": "PENDING",
+      "notes": "Subtle rose lip/eye/cheek changes; complexion/texture retained. Visibility is modest and needs user approval."
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "soft_glam",
+      "reviewer": "Codex qualitative inspection",
+      "disposition": "HOLD_FOR_HUMAN_VISUAL_REVIEW",
+      "human_approval": "PENDING",
+      "notes": "Clearer mauve lip with subtler eye/cheek changes; not full foundation/lash makeover. Upper/lower lip contrast can look strong."
+    },
+    {
+      "subject_id": "056266",
+      "style_id": "classic_red_lip",
+      "reviewer": "Codex qualitative inspection",
+      "disposition": "HOLD_FOR_HUMAN_VISUAL_REVIEW",
+      "human_approval": "PENDING",
+      "notes": "Distinct strong red lip; edge/intensity can look painted on some sources. Appearance acceptance pending."
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "natural_makeup",
+      "reviewer": "Codex qualitative inspection",
+      "disposition": "HOLD_FOR_HUMAN_VISUAL_REVIEW",
+      "human_approval": "PENDING",
+      "notes": "Subtle rose lip/eye/cheek changes; complexion/texture retained. Visibility is modest and needs user approval."
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "soft_glam",
+      "reviewer": "Codex qualitative inspection",
+      "disposition": "HOLD_FOR_HUMAN_VISUAL_REVIEW",
+      "human_approval": "PENDING",
+      "notes": "Clearer mauve lip with subtler eye/cheek changes; not full foundation/lash makeover. Upper/lower lip contrast can look strong."
+    },
+    {
+      "subject_id": "006553",
+      "style_id": "classic_red_lip",
+      "reviewer": "Codex qualitative inspection",
+      "disposition": "HOLD_FOR_HUMAN_VISUAL_REVIEW",
+      "human_approval": "PENDING",
+      "notes": "Distinct strong red lip; edge/intensity can look painted on some sources. Appearance acceptance pending."
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "natural_makeup",
+      "reviewer": "Codex qualitative inspection",
+      "disposition": "HOLD_FOR_HUMAN_VISUAL_REVIEW",
+      "human_approval": "PENDING",
+      "notes": "Subtle rose lip/eye/cheek changes; complexion/texture retained. Visibility is modest and needs user approval."
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "soft_glam",
+      "reviewer": "Codex qualitative inspection",
+      "disposition": "HOLD_FOR_HUMAN_VISUAL_REVIEW",
+      "human_approval": "PENDING",
+      "notes": "Clearer mauve lip with subtler eye/cheek changes; not full foundation/lash makeover. Upper/lower lip contrast can look strong."
+    },
+    {
+      "subject_id": "035149",
+      "style_id": "classic_red_lip",
+      "reviewer": "Codex qualitative inspection",
+      "disposition": "HOLD_FOR_HUMAN_VISUAL_REVIEW",
+      "human_approval": "PENDING",
+      "notes": "Distinct strong red lip; edge/intensity can look painted on some sources. Appearance acceptance pending."
+    }
+  ],
+  "tests": {
+    "passed": 24,
+    "command": "python -m pytest backend/tests/test_makeup_source_render.py -q"
+  },
+  "timing": {
+    "minimum_render_seconds": 0.20209109999996144,
+    "maximum_render_seconds": 0.34537649999992937,
+    "median_render_seconds": 0.21422129999996287,
+    "excludes": "AI parser inference, disk I/O, network, queue and website latency; not an end-to-end speed result."
+  },
+  "project_trained_makeup_generator_used": false,
+  "lora_active": false,
+  "new_training": false,
+  "new_gpu_generation_calls": 0,
+  "production_changed": false,
+  "limits": [
+    "Only4existingdevelopmentpeople; no universal skin-tone/pose/lighting acceptance.",
+    "Source photos may already wear makeup; no removal performed.",
+    "No full-face foundation, complexion smoothing, face warping or generated face.",
+    "Automatic parser/geometry proposals need visual boundary review.",
+    "No runtime integration, public style promotion or deployment without appearance acceptance.",
+    "Initial red pigment clipped with too little lip lightness adjustment. V2 allows target lip shade lightness within24L on lips only and compresses out-of-gamut chroma. Same face regions/profiles/opacities otherwise; no further parameter sweep."
+  ],
+  "private_directory": "artifacts/makeup-render-20261026/run-02",
+  "first_attempt": "artifacts/makeup-render-20261026/run-01",
+  "first_attempt_issue": "Out-of-gamut red pigment clipped; original outputs/runner preserved.",
+  "variant": "pigment-gamut-correction-v2",
+  "visual_status": "SOURCE_PRESERVATION_PROMISING_COSMETIC_FIDELITY_PENDING",
+  "progress": "DONE_OFFLINE_PILOT",
+  "human_accepted_cases": 0,
+  "next": "User review before any integration; more representative region/appearance validation needed. No automatic rollout.",
+  "review_bundle": {
+    "path": "artifacts/makeup-render-20261026/beautycore-source-makeup-pilot-review.zip",
+    "bytes": 9856242,
+    "sha256": "99a01983edcc9499b4727f559bb6f64668d78c089e9e490af7ca214001f8fec0",
+    "members": 35,
+    "crc": "PASS"
+  }
+}

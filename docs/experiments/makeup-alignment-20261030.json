@@ -1,0 +1,99 @@
+{
+  "date": "2026-10-30",
+  "experiment": "MAKEUP-ALIGN-001",
+  "decision_status": "CONFIRMED",
+  "progress": "DONE",
+  "evidence_status": "EXPERIMENTAL",
+  "authorization": "User proceeds with alignment gate and one four-photo Soft Glam revision; reassess method if it stays artificial.",
+  "scope": "Four reused source portraits; one rendering configuration; source palette and pigment strengths unchanged.",
+  "landmark_model": {
+    "name": "Google MediaPipe Face Landmarker",
+    "mediapipe": "0.10.33",
+    "sha256": "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff",
+    "bytes": 3758596,
+    "new_inference": "Four local pretrained CPU detections only",
+    "photos_uploaded": false,
+    "faces_per_image": 1,
+    "points_per_face": 478,
+    "inference_seconds_range": [
+      0.0085875,
+      0.0313996
+    ],
+    "timing_caveat": "Detection calls only; excludes startup/model loading/parser/rendering/network, not an application speed benchmark."
+  },
+  "alignment": {
+    "mean_absolute_upper_curve_disagreement_range_pixels": [
+      0.6927754805,
+      2.7775569024
+    ],
+    "meaning": "Landmark/parser disagreement, not ground-truth accuracy. Manual Codex review permits four-case prototype only.",
+    "brows": "Keep source semantic brow shape; landmark brow line is not blindly substituted."
+  },
+  "render_changes": [
+    "Landmark eyelid/lip alignment",
+    "Finer nonuniform clustered tapered lash curves",
+    "Explicit landmark eye interiors plus eroded semantic eye cores protected",
+    "No profile strength/color sweep"
+  ],
+  "technical": {
+    "new_tests": 20,
+    "regression_tests": 86,
+    "passed_tests": 106,
+    "exact_saved_reproductions": 4,
+    "outside_support_changes": 0,
+    "protected_changes": 0,
+    "eye_interior_changes": 0,
+    "semantic_eye_outer_rim_changed_pixels": {
+      "054109": 43,
+      "056266": 28,
+      "006553": 0,
+      "035149": 71
+    },
+    "protection_caveat": "Unlike earlier renderer, a narrow semantic eye rim outside landmark eye polygons AND eroded semantic core is editable. This is explicit offline anatomy scope, not all old label4/5 pixels preserved."
+  },
+  "appearance": {
+    "codex_review": "REJECTED_FOR_RELEASE",
+    "human_acceptances": 0,
+    "findings": [
+      "Root placement improves and prior regular comb band is reduced",
+      "Procedural hairs still look drawn-on/spiky",
+      "Full reference makeup/material finish is not achieved"
+    ],
+    "next": "Stop tuning this hand-rendered prototype and reassess reference-conditioned makeup transfer."
+  },
+  "candidate_audit": {
+    "status": "READ_ONLY_FEASIBILITY_ONLY_NOT_ADOPTED",
+    "candidate": "Stable-Makeup",
+    "commit": "88c8ca512261e1f9125684178423e6355ed5ad0a",
+    "code_executed": false,
+    "weights_downloaded": false,
+    "gpu_tested": false,
+    "verified_problems": [
+      "infer_kps.py fails AST parse at line43",
+      "Imports utils.pipeline_sd15, absent at that path in official tree",
+      "Historical dependencies and FP32 GPU loading with two ControlNets require separate compatibility/memory preflight"
+    ],
+    "not_verified": [
+      "Checkpoint access and complete model terms",
+      "Kaggle T4 fit/runtime",
+      "Complexion/identity preservation on our cases"
+    ],
+    "approval": "No architecture/model replacement decision inferred."
+  },
+  "training": false,
+  "lora_active": false,
+  "production_enabled": false,
+  "cloud_serving_api_catalog_changes": "NONE",
+  "new_packages_installed": false,
+  "archive": {
+    "sha256": "6b148a4020448d743a732ac8735f4b81c048788371369901f747744f51c4d0fd",
+    "bytes": 6264489,
+    "members": 37
+  },
+  "paths": {
+    "alignment": "artifacts/makeup-render-20261030/alignment-01",
+    "render": "artifacts/makeup-render-20261030/aligned-soft-glam-01",
+    "archive": "artifacts/makeup-render-20261030/beautycore-makeup-alignment-review.zip",
+    "reassessment": "docs/research/makeup-method-reassessment-20261030.md"
+  }
+}

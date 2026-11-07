@@ -1,0 +1,103 @@
+{
+  "date": "2026-10-30",
+  "status": "DONE_LOCAL_PREPARATION",
+  "overall_release": "IN_PROGRESS",
+  "appearance_approval": "CONFIRMED for the three reviewed Nail designs only",
+  "approval_record": "docs/experiments/expanded-nails-approval-20261030.json",
+  "package_record": "docs/experiments/expanded-nails-package-20261030.json",
+  "style_release": {
+    "release_id": "styles-20261030-01",
+    "manifest_sha256": "379f8fffec474d3114ec638288d02a2b7975c93a4f95756c6b6a8281a66f24c9",
+    "enabled_style_ids": [
+      "exp_negative_space_microdots",
+      "exp_pink_aura",
+      "exp_raspberry_jelly"
+    ]
+  },
+  "local_metadata_counts": {
+    "hairstyle": 13,
+    "makeup": 10,
+    "nails": 8
+  },
+  "tests": {
+    "backend_full": {
+      "passed": 777,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 195.0
+    },
+    "render_registration_and_release": {
+      "passed": 32
+    },
+    "business": {
+      "passed": 50
+    },
+    "guest_trial": {
+      "passed": 29
+    },
+    "typescript": "PASS",
+    "production_build": "PASS",
+    "catalog_consistency": "PASS",
+    "generated_release_consistency": "PASS",
+    "package_repeat_build": "PASS; same immutable bytes",
+    "scoped_git_diff_check": "PASS"
+  },
+  "business_checks": "Each added style saves, captures actual description/estimate, books Gel Manicure at catalog price and exposes the same private image/details to client and assigned stylist; other stylist denied.",
+  "renderer_checks": "Real FastAPI routes with supplied reviewed-mask/localizer fixture; all 12 historical automatic-mask PNG results reproduce exactly.",
+  "package_checks": "Real CPU archive extraction/member hashes/CRC/source parity; altered member refused before write; exact notebook and overlay payload; CPU/GPU mismatch refusal; immutable outputs; fallback hashes.",
+  "failures_found_and_corrected": [
+    "Pair-check Windows text decoding required explicit UTF-8; failed pre-publication notebook/receipt retained under artifacts/expanded-nails-build-attempt-01.",
+    "Three old test assertions assumed the pre-approval catalog or default Windows decoding. Updated exact expected IDs/statuses and UTF-8 test reading; final full suite passes."
+  ],
+  "preserved_baseline_sources": {
+    "backend/app/makeup_contract.py": true,
+    "backend/app/style_registry.json": true,
+    "backend/app/style_registry_train002_smoke.json": true,
+    "scripts/unified_gate3_server.py": true,
+    "scripts/inference_performance.py": true,
+    "notebooks/render_kaggle_optimized_demo.ipynb": true,
+    "notebooks/render_kaggle_client_demo.ipynb": true
+  },
+  "source_sha256": {
+    "backend/app/style_release.json": "29b6fcf3bbf237a8a87a4ea93ac1309ef88a2fb16a65cd9ee82be44d7beacc49",
+    "beautycore/lib/ai/style-release.json": "d778a11f886eed0ce79fa81e8374cff996089b362a55b7e5238fadb4e2ba4cb2",
+    "beautycore/lib/business/style-catalog.json": "9e2fe7f4bd02a4b7e36105c750a04cd1e54f3a2b55978bf478c640d2b02f19d4",
+    "scripts/package_expanded_nails_release.py": "dd38a830408bca0ca13ee8f52ab738869faf13cbfbc44052be499efb35b82618",
+    "notebooks/render_kaggle_expanded_nails_demo.ipynb": "7ebc2cea71c25d7aefece2a012bc3f78bb23a9769adce83045e5824cac7c35c9",
+    "backend/tests/test_expanded_style_release.py": "ce77db544b6bc43477660859bf09da219381098c1f31dd4d939c7e5640b8f1d6",
+    "backend/tests/test_expanded_nails_package.py": "4710b80e97dcadaa9569542d6baca5e8db2c7e1d044f933009bfae586fff3c31",
+    "backend/tests/test_consultation.py": "0eae879a37746ac4ca8199ee3eab0cda65d67a74d73d71c0c8caabd6476c5597",
+    "backend/tests/test_nails.py": "c4bb3962cf7a8ba5fb86b2c936d3dc90f071e303f9489f3b605a79d2a5eecca2",
+    "beautycore/tests/business-workflows.test.ts": "d5e01931d048492131b5fdb40400cd4fd66feabad491fca375f43347b1c32a77",
+    "beautycore/tests/style-release.test.ts": "b69fb50b3c9a949fc56f9e4004f61873d166d9b640ffe198714c593a2436a051",
+    "docs/guides/expanded-nails-release-20261030.md": "0bebd3a37d5932025f4696abe8e99f990306a32c805ec4e3d526d98c24c53cba"
+  },
+  "cpu": {
+    "name": "render_kaggle_cpu_styles_20261030_01.bin",
+    "sha256": "55eb347b67b0031e1bd61b7bf48dbccfd4f002a3dd66567f5a779342259d6654",
+    "bytes": 27917180
+  },
+  "gpu": {
+    "name": "capstone_train002_20260928_v1.bin",
+    "sha256": "f0d1fed52e00b6c5a1da2cade3731237675cdebbfc0b2cde3b2dbda99a4019ac",
+    "unchanged": true
+  },
+  "notebook": {
+    "path": "notebooks/render_kaggle_expanded_nails_demo.ipynb",
+    "sha256": "7ebc2cea71c25d7aefece2a012bc3f78bb23a9769adce83045e5824cac7c35c9",
+    "bytes": 67309
+  },
+  "cloud": {
+    "source_committed_or_pushed": false,
+    "render_deployed": false,
+    "kaggle_started": false,
+    "live_generation_verified": false,
+    "database_migrated": false,
+    "gpu_calls": 0
+  },
+  "pending": [
+    "Publish/deploy matching Render source, then controlled fresh Kaggle and website rehearsal.",
+    "Remaining ten expansion candidates stay held or untested.",
+    "Original Makeup white-cast issue is unresolved."
+  ]
+}

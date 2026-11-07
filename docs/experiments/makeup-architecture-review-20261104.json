@@ -1,0 +1,108 @@
+{
+  "date": "2026-11-04",
+  "decision": "CONFIRMED artist/salon authored source fitted layers",
+  "bounded_implementation": "DONE",
+  "full_makeup_correction": "IN PROGRESS",
+  "appearance": "EXPERIMENTAL",
+  "production_integration": "NOT STARTED",
+  "report": "docs/experiments/makeup-architecture-review-20261104.md",
+  "spec": "docs/specs/0016-makeup-source-layer-quality.md",
+  "gallery": "artifacts/makeup-architecture-20261104/review-validated/review-self-contained.html",
+  "validation": {
+    "retained_lip_exact_reproductions": 6,
+    "reused_development_people": 2,
+    "styles_with_lip_component_only": 3,
+    "active_styles": 10,
+    "held_expanded_styles": 3,
+    "styles_with_accepted_full_correction": 0,
+    "distinct_passing_checks": 103,
+    "focused_suite_before_final_shadow_guard": 75,
+    "final_material_suite": 20,
+    "unchanged_runtime_contract_suite": 27,
+    "gallery": {
+      "desktop": {
+        "images": 24,
+        "overflow": false
+      },
+      "mobile": {
+        "images": 24,
+        "overflow": false
+      },
+      "nativeDownload": "g4-054109-natural_makeup-0.png",
+      "errors": []
+    },
+    "new_corrective_pairs": 0,
+    "rejected_historical_targets": 60,
+    "policy_refuses_lossless_reencoding": true,
+    "new_model_calls": 0,
+    "new_training_calls": 0
+  },
+  "preservation": {
+    "unchanged_checks": {
+      ".tmp\\data_m001\\paired_selection\\final_v1\\validation\\reference\\054109_makeup_01.jpg": true,
+      ".tmp\\data_m001\\paired_selection\\final_v1\\validation\\reference\\056266_makeup_01.jpg": true,
+      "artifacts/render_kaggle_cpu_hair_nails_20261031_02.bin": true,
+      "artifacts\\makeup-complexion-20261101\\serving-controls\\g4-054109-classic_red_lip-labels.png": true,
+      "artifacts\\makeup-complexion-20261101\\serving-controls\\g4-054109-natural_makeup-labels.png": true,
+      "artifacts\\makeup-complexion-20261101\\serving-controls\\g4-056266-classic_red_lip-labels.png": true,
+      "artifacts\\makeup-complexion-20261101\\serving-controls\\g4-056266-natural_makeup-labels.png": true,
+      "artifacts\\makeup-cosmetic-layers-20261101\\source-054109-landmarks.json": true,
+      "artifacts\\makeup-cosmetic-layers-20261101\\source-056266-landmarks.json": true,
+      "artifacts\\makeup-quality-20261025\\guidance-review-d2f303a097\\results\\054109-classic_red_lip-current_adapter.png": true,
+      "artifacts\\makeup-quality-20261025\\guidance-review-d2f303a097\\results\\054109-natural_makeup-current_adapter.png": true,
+      "artifacts\\makeup-quality-20261025\\guidance-review-d2f303a097\\results\\056266-classic_red_lip-current_adapter.png": true,
+      "artifacts\\makeup-quality-20261025\\guidance-review-d2f303a097\\results\\056266-natural_makeup-current_adapter.png": true,
+      "artifacts\\makeup-reference-20261101\\run-05\\054109-exp_cloud_berry_lips-corrected.png": true,
+      "artifacts\\makeup-reference-20261101\\run-05\\056266-exp_cloud_berry_lips-corrected.png": true,
+      "artifacts\\makeup-reference-20261101\\run-05\\g4-054109-classic_red_lip-corrected.png": true,
+      "artifacts\\makeup-reference-20261101\\run-05\\g4-054109-natural_makeup-corrected.png": true,
+      "artifacts\\makeup-reference-20261101\\run-05\\g4-056266-classic_red_lip-corrected.png": true,
+      "artifacts\\makeup-reference-20261101\\run-05\\g4-056266-natural_makeup-corrected.png": true,
+      "artifacts\\makeup-tone-20261025\\run-02\\054109-exp_cloud_berry_lips-labels.png": true,
+      "artifacts\\makeup-tone-20261025\\run-02\\056266-exp_cloud_berry_lips-labels.png": true,
+      "artifacts\\makeup-tone-20261025\\run-02\\source-054109-labels.png": true,
+      "artifacts\\makeup-tone-20261025\\run-02\\source-056266-labels.png": true,
+      "artifacts\\style-expansion-20261025\\release-review-01\\results\\21-054109-exp_cloud_berry_lips.png": true,
+      "artifacts\\style-expansion-20261025\\release-review-01\\results\\22-056266-exp_cloud_berry_lips.png": true,
+      "backend/app/generation/remote_makeup.py": true,
+      "backend/app/makeup_contract.py": true,
+      "backend/app/makeup_styles.py": true,
+      "backend/app/style_release.json": true,
+      "data/makeup/MAKEUP-CORRECTION-001/review.json": true,
+      "notebooks/render_kaggle_all_hair_nails_demo.ipynb": true,
+      "scripts/evaluate_makeup_reference_application.py": true,
+      "scripts/inference_performance.py": true,
+      "scripts/makeup_alignment_pilot.py": true,
+      "scripts/makeup_inference_server.py": true,
+      "scripts/makeup_reference_application.py": true,
+      "scripts/makeup_selected_cosmetics.py": true,
+      "scripts/makeup_source_faithful_retouch.py": true,
+      "scripts/makeup_source_render.py": true,
+      "scripts/unified_gate3_server.py": true
+    },
+    "all_unchanged": true,
+    "intended_training_tool_changes": [
+      "notebooks/train_m001_kaggle.py",
+      "scripts/data_m001_package_training.py",
+      "scripts/data_m001_paired.py"
+    ]
+  },
+  "implementation_sha256": {
+    "scripts/makeup_source_layers.py": "affda71837fefa5c18e01604197f69ad2479cab0d7977f00a1685d300949285c",
+    "scripts/makeup_target_quality.py": "383b2f0cf6a540630b14cd3eb57d48afb0151dd7d0bde9c3368e4d01b0b21590",
+    "scripts/review_makeup_architecture.py": "51e54474b52100e8cabbd851ca4ed052bf71736d0caa6972de7d4a6d21bd8390",
+    "scripts/data_m001_paired.py": "dbaf22360fcb207abf2458ea74db4f9a6c2c44a6591762343c50eb90832c1d1b",
+    "scripts/data_m001_package_training.py": "8ab7863e2f27dbd7160e9ec1e9706df783217d5076cef446c352d34e43158a80",
+    "notebooks/train_m001_kaggle.py": "b90b660dd3ce81db32f8c824052ff5cfc9d1efbddb7e88ae0070f00781d1da95"
+  },
+  "limits": [
+    "No artist/salon approved full look assets",
+    "No automatic fitting for new uploads",
+    "No corrected strong eyes, full glam, finish or all catalog appearance evidence",
+    "Source anchored Lab is not calibrated skin physics",
+    "Human review records are attestations, not authenticated reviewer proof",
+    "Historical validation people have been reused for development",
+    "New data does not establish future model behavior"
+  ],
+  "next_milestone": "Acquire and visually review complete source fitted artist assets before corrective target admission. No retraining yet."
+}

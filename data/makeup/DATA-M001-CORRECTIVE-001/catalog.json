@@ -1,0 +1,204 @@
+{
+  "schema": "makeup-corrective-catalog-v1",
+  "production_enabled": false,
+  "preservation_instruction": "Edit the supplied photo of the same person. Keep their recognizable identity, face shape, eyes, nose, mouth geometry, expression, natural skin tone and skin texture. Keep the original hairstyle, hair color, clothing, background, pose, framing and lighting. Change makeup only. Keep cosmetic color in plausible facial regions and avoid mask-like patches or plastic skin.",
+  "styles": [
+    {
+      "id": "natural_makeup",
+      "name": "Natural Makeup",
+      "components": {
+        "eyes": "soft upper-lash definition and light neutral lid color",
+        "lips": "muted rose satin lips",
+        "blush": "soft neutral rose blush",
+        "complexion_finish": "light satin coverage with natural texture",
+        "brows": "Retain the existing brow outline and individual hairs; do not redraw or reshape brows.",
+        "contour_highlight": "very restrained natural cheek dimension"
+      },
+      "serving_status": "existing",
+      "instruction": "Apply Natural Makeup. Eyes: soft upper-lash definition and light neutral lid color. Lips: muted rose satin lips. Blush: soft neutral rose blush. Complexion finish: light satin coverage with natural texture. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: very restrained natural cheek dimension.",
+      "caption": "Apply Natural Makeup. Eyes: soft upper-lash definition and light neutral lid color. Lips: muted rose satin lips. Blush: soft neutral rose blush. Complexion finish: light satin coverage with natural texture. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: very restrained natural cheek dimension. Foundation and any local concealer must match the original skin shade and undertone, retaining pores, fine lines and natural lighting. Edit the supplied photo of the same person. Keep their recognizable identity, face shape, eyes, nose, mouth geometry, expression, natural skin tone and skin texture. Keep the original hairstyle, hair color, clothing, background, pose, framing and lighting. Change makeup only. Keep cosmetic color in plausible facial regions and avoid mask-like patches or plastic skin."
+    },
+    {
+      "id": "no_makeup_makeup",
+      "name": "No-Makeup Makeup",
+      "components": {
+        "eyes": "minimal natural lash definition without a visible heavy shadow",
+        "lips": "sheer natural rose lip tint",
+        "blush": "a faint natural cheek flush",
+        "complexion_finish": "sheer local complexion evening with original freckles visible",
+        "brows": "Retain the existing brow outline and individual hairs; do not redraw or reshape brows.",
+        "contour_highlight": "no obvious contour or added bright highlight"
+      },
+      "serving_status": "existing",
+      "instruction": "Apply No-Makeup Makeup. Eyes: minimal natural lash definition without a visible heavy shadow. Lips: sheer natural rose lip tint. Blush: a faint natural cheek flush. Complexion finish: sheer local complexion evening with original freckles visible. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: no obvious contour or added bright highlight.",
+      "caption": "Apply No-Makeup Makeup. Eyes: minimal natural lash definition without a visible heavy shadow. Lips: sheer natural rose lip tint. Blush: a faint natural cheek flush. Complexion finish: sheer local complexion evening with original freckles visible. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: no obvious contour or added bright highlight. Foundation and any local concealer must match the original skin shade and undertone, retaining pores, fine lines and natural lighting. Edit the supplied photo of the same person. Keep their recognizable identity, face shape, eyes, nose, mouth geometry, expression, natural skin tone and skin texture. Keep the original hairstyle, hair color, clothing, background, pose, framing and lighting. Change makeup only. Keep cosmetic color in plausible facial regions and avoid mask-like patches or plastic skin."
+    },
+    {
+      "id": "soft_glam",
+      "name": "Soft Glam",
+      "components": {
+        "eyes": "clearly visible blended warm taupe/bronze shadow, fine liner and naturally separated lashes",
+        "lips": "medium nude-rose satin lipstick",
+        "blush": "feathered warm rose blush",
+        "complexion_finish": "polished medium satin coverage and discreet matched concealer",
+        "brows": "Retain the existing brow outline and individual hairs; do not redraw or reshape brows.",
+        "contour_highlight": "soft cheek contour and a restrained satin highlight"
+      },
+      "serving_status": "existing",
+      "instruction": "Apply Soft Glam. Eyes: clearly visible blended warm taupe/bronze shadow, fine liner and naturally separated lashes. Lips: medium nude-rose satin lipstick. Blush: feathered warm rose blush. Complexion finish: polished medium satin coverage and discreet matched concealer. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: soft cheek contour and a restrained satin highlight.",
+      "caption": "Apply Soft Glam. Eyes: clearly visible blended warm taupe/bronze shadow, fine liner and naturally separated lashes. Lips: medium nude-rose satin lipstick. Blush: feathered warm rose blush. Complexion finish: polished medium satin coverage and discreet matched concealer. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: soft cheek contour and a restrained satin highlight. Foundation and any local concealer must match the original skin shade and undertone, retaining pores, fine lines and natural lighting. Edit the supplied photo of the same person. Keep their recognizable identity, face shape, eyes, nose, mouth geometry, expression, natural skin tone and skin texture. Keep the original hairstyle, hair color, clothing, background, pose, framing and lighting. Change makeup only. Keep cosmetic color in plausible facial regions and avoid mask-like patches or plastic skin."
+    },
+    {
+      "id": "smoky_glam",
+      "name": "Smoky Glam",
+      "components": {
+        "eyes": "strong charcoal/deep brown smoky upper lids and soft outer corners, defined lash lines and realistic mascara",
+        "lips": "subdued nude satin lipstick",
+        "blush": "restrained neutral rose blush",
+        "complexion_finish": "matched medium satin base",
+        "brows": "Retain the existing brow outline and individual hairs; do not redraw or reshape brows.",
+        "contour_highlight": "soft contour with no pale under-eye triangles"
+      },
+      "serving_status": "existing",
+      "instruction": "Apply Smoky Glam. Eyes: strong charcoal/deep brown smoky upper lids and soft outer corners, defined lash lines and realistic mascara. Lips: subdued nude satin lipstick. Blush: restrained neutral rose blush. Complexion finish: matched medium satin base. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: soft contour with no pale under-eye triangles.",
+      "caption": "Apply Smoky Glam. Eyes: strong charcoal/deep brown smoky upper lids and soft outer corners, defined lash lines and realistic mascara. Lips: subdued nude satin lipstick. Blush: restrained neutral rose blush. Complexion finish: matched medium satin base. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: soft contour with no pale under-eye triangles. Foundation and any local concealer must match the original skin shade and undertone, retaining pores, fine lines and natural lighting. Edit the supplied photo of the same person. Keep their recognizable identity, face shape, eyes, nose, mouth geometry, expression, natural skin tone and skin texture. Keep the original hairstyle, hair color, clothing, background, pose, framing and lighting. Change makeup only. Keep cosmetic color in plausible facial regions and avoid mask-like patches or plastic skin."
+    },
+    {
+      "id": "dewy_peach",
+      "name": "Dewy Peach",
+      "components": {
+        "eyes": "soft peach-neutral lids and fine natural lashes",
+        "lips": "peach-rose lightly glossy lips",
+        "blush": "visible feathered peach blush adapted to the original complexion",
+        "complexion_finish": "light dewy skin coverage with visible pores",
+        "brows": "Retain the existing brow outline and individual hairs; do not redraw or reshape brows.",
+        "contour_highlight": "small naturally placed sheen, not a broad white highlight"
+      },
+      "serving_status": "existing",
+      "instruction": "Apply Dewy Peach. Eyes: soft peach-neutral lids and fine natural lashes. Lips: peach-rose lightly glossy lips. Blush: visible feathered peach blush adapted to the original complexion. Complexion finish: light dewy skin coverage with visible pores. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: small naturally placed sheen, not a broad white highlight.",
+      "caption": "Apply Dewy Peach. Eyes: soft peach-neutral lids and fine natural lashes. Lips: peach-rose lightly glossy lips. Blush: visible feathered peach blush adapted to the original complexion. Complexion finish: light dewy skin coverage with visible pores. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: small naturally placed sheen, not a broad white highlight. Foundation and any local concealer must match the original skin shade and undertone, retaining pores, fine lines and natural lighting. Edit the supplied photo of the same person. Keep their recognizable identity, face shape, eyes, nose, mouth geometry, expression, natural skin tone and skin texture. Keep the original hairstyle, hair color, clothing, background, pose, framing and lighting. Change makeup only. Keep cosmetic color in plausible facial regions and avoid mask-like patches or plastic skin."
+    },
+    {
+      "id": "rosy_pink",
+      "name": "Rosy Pink",
+      "components": {
+        "eyes": "delicate rose upper-eyelid color and fine liner",
+        "lips": "soft rose-pink satin lips",
+        "blush": "coordinated softly feathered rose-pink cheek color",
+        "complexion_finish": "light satin matched foundation",
+        "brows": "Retain the existing brow outline and individual hairs; do not redraw or reshape brows.",
+        "contour_highlight": "restrained neutral cheek dimension"
+      },
+      "serving_status": "existing",
+      "instruction": "Apply Rosy Pink. Eyes: delicate rose upper-eyelid color and fine liner. Lips: soft rose-pink satin lips. Blush: coordinated softly feathered rose-pink cheek color. Complexion finish: light satin matched foundation. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: restrained neutral cheek dimension.",
+      "caption": "Apply Rosy Pink. Eyes: delicate rose upper-eyelid color and fine liner. Lips: soft rose-pink satin lips. Blush: coordinated softly feathered rose-pink cheek color. Complexion finish: light satin matched foundation. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: restrained neutral cheek dimension. Foundation and any local concealer must match the original skin shade and undertone, retaining pores, fine lines and natural lighting. Edit the supplied photo of the same person. Keep their recognizable identity, face shape, eyes, nose, mouth geometry, expression, natural skin tone and skin texture. Keep the original hairstyle, hair color, clothing, background, pose, framing and lighting. Change makeup only. Keep cosmetic color in plausible facial regions and avoid mask-like patches or plastic skin."
+    },
+    {
+      "id": "bronze_golden_glam",
+      "name": "Bronze / Golden Glam",
+      "components": {
+        "eyes": "visible blended warm bronze lids, localized gold shimmer, fine dark liner and separated lashes",
+        "lips": "warm nude satin lipstick",
+        "blush": "warm softly blended bronze-rose cheeks",
+        "complexion_finish": "matched medium luminous satin coverage",
+        "brows": "Retain the existing brow outline and individual hairs; do not redraw or reshape brows.",
+        "contour_highlight": "soft bronze contour and a small gold highlight without orange skin"
+      },
+      "serving_status": "existing",
+      "instruction": "Apply Bronze / Golden Glam. Eyes: visible blended warm bronze lids, localized gold shimmer, fine dark liner and separated lashes. Lips: warm nude satin lipstick. Blush: warm softly blended bronze-rose cheeks. Complexion finish: matched medium luminous satin coverage. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: soft bronze contour and a small gold highlight without orange skin.",
+      "caption": "Apply Bronze / Golden Glam. Eyes: visible blended warm bronze lids, localized gold shimmer, fine dark liner and separated lashes. Lips: warm nude satin lipstick. Blush: warm softly blended bronze-rose cheeks. Complexion finish: matched medium luminous satin coverage. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: soft bronze contour and a small gold highlight without orange skin. Foundation and any local concealer must match the original skin shade and undertone, retaining pores, fine lines and natural lighting. Edit the supplied photo of the same person. Keep their recognizable identity, face shape, eyes, nose, mouth geometry, expression, natural skin tone and skin texture. Keep the original hairstyle, hair color, clothing, background, pose, framing and lighting. Change makeup only. Keep cosmetic color in plausible facial regions and avoid mask-like patches or plastic skin."
+    },
+    {
+      "id": "matte_nude",
+      "name": "Matte Nude",
+      "components": {
+        "eyes": "neutral brown lid definition and fine lash lines",
+        "lips": "opaque but naturally shaded matte nude lipstick",
+        "blush": "restrained nude-rose blush",
+        "complexion_finish": "matched medium soft matte foundation retaining fine skin texture",
+        "brows": "Retain the existing brow outline and individual hairs; do not redraw or reshape brows.",
+        "contour_highlight": "light natural contour, no added glossy highlight"
+      },
+      "serving_status": "existing",
+      "instruction": "Apply Matte Nude. Eyes: neutral brown lid definition and fine lash lines. Lips: opaque but naturally shaded matte nude lipstick. Blush: restrained nude-rose blush. Complexion finish: matched medium soft matte foundation retaining fine skin texture. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: light natural contour, no added glossy highlight.",
+      "caption": "Apply Matte Nude. Eyes: neutral brown lid definition and fine lash lines. Lips: opaque but naturally shaded matte nude lipstick. Blush: restrained nude-rose blush. Complexion finish: matched medium soft matte foundation retaining fine skin texture. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: light natural contour, no added glossy highlight. Foundation and any local concealer must match the original skin shade and undertone, retaining pores, fine lines and natural lighting. Edit the supplied photo of the same person. Keep their recognizable identity, face shape, eyes, nose, mouth geometry, expression, natural skin tone and skin texture. Keep the original hairstyle, hair color, clothing, background, pose, framing and lighting. Change makeup only. Keep cosmetic color in plausible facial regions and avoid mask-like patches or plastic skin."
+    },
+    {
+      "id": "classic_red_lip",
+      "name": "Classic Red Lip",
+      "components": {
+        "eyes": "minimal neutral lids with fine dark lash-line definition",
+        "lips": "classic rich red satin lipstick inside the existing lip outline",
+        "blush": "restrained natural cheeks",
+        "complexion_finish": "matched light-to-medium satin base",
+        "brows": "Retain the existing brow outline and individual hairs; do not redraw or reshape brows.",
+        "contour_highlight": "subtle natural cheek dimension"
+      },
+      "serving_status": "existing",
+      "instruction": "Apply Classic Red Lip. Eyes: minimal neutral lids with fine dark lash-line definition. Lips: classic rich red satin lipstick inside the existing lip outline. Blush: restrained natural cheeks. Complexion finish: matched light-to-medium satin base. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: subtle natural cheek dimension.",
+      "caption": "Apply Classic Red Lip. Eyes: minimal neutral lids with fine dark lash-line definition. Lips: classic rich red satin lipstick inside the existing lip outline. Blush: restrained natural cheeks. Complexion finish: matched light-to-medium satin base. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: subtle natural cheek dimension. Foundation and any local concealer must match the original skin shade and undertone, retaining pores, fine lines and natural lighting. Edit the supplied photo of the same person. Keep their recognizable identity, face shape, eyes, nose, mouth geometry, expression, natural skin tone and skin texture. Keep the original hairstyle, hair color, clothing, background, pose, framing and lighting. Change makeup only. Keep cosmetic color in plausible facial regions and avoid mask-like patches or plastic skin."
+    },
+    {
+      "id": "bold_evening_glam",
+      "name": "Bold Evening Glam",
+      "components": {
+        "eyes": "strong blended deep brown/plum lids, defined dark liner and realistic separated mascara",
+        "lips": "rich berry-red satin lipstick",
+        "blush": "visible naturally blended rose blush",
+        "complexion_finish": "matched polished medium coverage foundation and discreet concealer",
+        "brows": "Retain the existing brow outline and individual hairs; do not redraw or reshape brows.",
+        "contour_highlight": "softly sculpted cheeks and restrained photographic highlight"
+      },
+      "serving_status": "existing",
+      "instruction": "Apply Bold Evening Glam. Eyes: strong blended deep brown/plum lids, defined dark liner and realistic separated mascara. Lips: rich berry-red satin lipstick. Blush: visible naturally blended rose blush. Complexion finish: matched polished medium coverage foundation and discreet concealer. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: softly sculpted cheeks and restrained photographic highlight.",
+      "caption": "Apply Bold Evening Glam. Eyes: strong blended deep brown/plum lids, defined dark liner and realistic separated mascara. Lips: rich berry-red satin lipstick. Blush: visible naturally blended rose blush. Complexion finish: matched polished medium coverage foundation and discreet concealer. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: softly sculpted cheeks and restrained photographic highlight. Foundation and any local concealer must match the original skin shade and undertone, retaining pores, fine lines and natural lighting. Edit the supplied photo of the same person. Keep their recognizable identity, face shape, eyes, nose, mouth geometry, expression, natural skin tone and skin texture. Keep the original hairstyle, hair color, clothing, background, pose, framing and lighting. Change makeup only. Keep cosmetic color in plausible facial regions and avoid mask-like patches or plastic skin."
+    },
+    {
+      "id": "exp_cloud_berry_lips",
+      "name": "Cloud-Skin Makeup with Blurred Berry Lips",
+      "components": {
+        "eyes": "understated neutral eyes and fine natural lashes",
+        "lips": "muted berry stain with visibly diffused edges within the original lip outline",
+        "blush": "restrained soft berry cheek color",
+        "complexion_finish": "soft cloud-like matte coverage with natural skin texture",
+        "brows": "Retain the existing brow outline and individual hairs; do not redraw or reshape brows.",
+        "contour_highlight": "very soft neutral contour without a white cast"
+      },
+      "serving_status": "held",
+      "instruction": "Apply Cloud-Skin Makeup with Blurred Berry Lips. Eyes: understated neutral eyes and fine natural lashes. Lips: muted berry stain with visibly diffused edges within the original lip outline. Blush: restrained soft berry cheek color. Complexion finish: soft cloud-like matte coverage with natural skin texture. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: very soft neutral contour without a white cast.",
+      "caption": "Apply Cloud-Skin Makeup with Blurred Berry Lips. Eyes: understated neutral eyes and fine natural lashes. Lips: muted berry stain with visibly diffused edges within the original lip outline. Blush: restrained soft berry cheek color. Complexion finish: soft cloud-like matte coverage with natural skin texture. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: very soft neutral contour without a white cast. Foundation and any local concealer must match the original skin shade and undertone, retaining pores, fine lines and natural lighting. Edit the supplied photo of the same person. Keep their recognizable identity, face shape, eyes, nose, mouth geometry, expression, natural skin tone and skin texture. Keep the original hairstyle, hair color, clothing, background, pose, framing and lighting. Change makeup only. Keep cosmetic color in plausible facial regions and avoid mask-like patches or plastic skin."
+    },
+    {
+      "id": "exp_manga_lash",
+      "name": "Manga-Lash Makeup",
+      "components": {
+        "eyes": "distinct separated upper-lash clusters and delicate dark liner fitted to the original eye shape; no enlarged eyes",
+        "lips": "restrained muted rose lipstick",
+        "blush": "soft pink blush",
+        "complexion_finish": "matched light satin skin coverage",
+        "brows": "Retain the existing brow outline and individual hairs; do not redraw or reshape brows.",
+        "contour_highlight": "restrained natural cheek dimension"
+      },
+      "serving_status": "held",
+      "instruction": "Apply Manga-Lash Makeup. Eyes: distinct separated upper-lash clusters and delicate dark liner fitted to the original eye shape; no enlarged eyes. Lips: restrained muted rose lipstick. Blush: soft pink blush. Complexion finish: matched light satin skin coverage. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: restrained natural cheek dimension.",
+      "caption": "Apply Manga-Lash Makeup. Eyes: distinct separated upper-lash clusters and delicate dark liner fitted to the original eye shape; no enlarged eyes. Lips: restrained muted rose lipstick. Blush: soft pink blush. Complexion finish: matched light satin skin coverage. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: restrained natural cheek dimension. Foundation and any local concealer must match the original skin shade and undertone, retaining pores, fine lines and natural lighting. Edit the supplied photo of the same person. Keep their recognizable identity, face shape, eyes, nose, mouth geometry, expression, natural skin tone and skin texture. Keep the original hairstyle, hair color, clothing, background, pose, framing and lighting. Change makeup only. Keep cosmetic color in plausible facial regions and avoid mask-like patches or plastic skin."
+    },
+    {
+      "id": "exp_icy_silver",
+      "name": "Icy Silver Eye Makeup",
+      "components": {
+        "eyes": "clearly visible localized cool silver-blue upper-lid shimmer, fine charcoal lash lines and realistic lashes",
+        "lips": "subtle natural neutral-rose lips",
+        "blush": "subdued neutral cheeks",
+        "complexion_finish": "matched light-to-medium satin skin coverage",
+        "brows": "Retain the existing brow outline and individual hairs; do not redraw or reshape brows.",
+        "contour_highlight": "restrained natural dimension without silver pigment on the whole face"
+      },
+      "serving_status": "held",
+      "instruction": "Apply Icy Silver Eye Makeup. Eyes: clearly visible localized cool silver-blue upper-lid shimmer, fine charcoal lash lines and realistic lashes. Lips: subtle natural neutral-rose lips. Blush: subdued neutral cheeks. Complexion finish: matched light-to-medium satin skin coverage. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: restrained natural dimension without silver pigment on the whole face.",
+      "caption": "Apply Icy Silver Eye Makeup. Eyes: clearly visible localized cool silver-blue upper-lid shimmer, fine charcoal lash lines and realistic lashes. Lips: subtle natural neutral-rose lips. Blush: subdued neutral cheeks. Complexion finish: matched light-to-medium satin skin coverage. Brows: Retain the existing brow outline and individual hairs; do not redraw or reshape brows.. Contour highlight: restrained natural dimension without silver pigment on the whole face. Foundation and any local concealer must match the original skin shade and undertone, retaining pores, fine lines and natural lighting. Edit the supplied photo of the same person. Keep their recognizable identity, face shape, eyes, nose, mouth geometry, expression, natural skin tone and skin texture. Keep the original hairstyle, hair color, clothing, background, pose, framing and lighting. Change makeup only. Keep cosmetic color in plausible facial regions and avoid mask-like patches or plastic skin."
+    }
+  ],
+  "source_presets_sha256": "8e6e244f6174dc70f33cb15a037f5e67e2a245f15278967f4d2f85bc909cd5f5",
+  "source_release_sha256": "61cce06d4e76a6570550b2fee4c7ff4183323aea0ce1b3a1b63e191fced118b5"
+}

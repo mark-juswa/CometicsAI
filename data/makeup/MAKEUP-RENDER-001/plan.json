@@ -1,0 +1,170 @@
+{
+  "experiment": "MAKEUP-RENDER-001",
+  "production_enabled": false,
+  "training": false,
+  "generator": "beautycore_makeup_render_pilot_v1",
+  "method": "AI-assisted source-coordinate cosmetic rendering",
+  "project_trained_generator_used": false,
+  "lora_active": false,
+  "subjects": [
+    {
+      "id": "054109",
+      "source": ".tmp/data_m001/paired_selection/final_v1/validation/reference/054109_makeup_01.jpg",
+      "sha256": "81e57faca39e3989ed9920ebd6568efad563ae4f012f3fbb130918858d18e8ed",
+      "source_photo": {
+        "author": "Presidency Maldives",
+        "photo_title": "MK_NAIVAIDHOO1493",
+        "photo_url": "https://www.flickr.com/photos/presidencymaldives/5292667558/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Existing development portrait; not untouched final acceptance.",
+      "note": "Original photo may already contain cosmetics; no bare-skin ground-truth claim."
+    },
+    {
+      "id": "056266",
+      "source": ".tmp/data_m001/paired_selection/final_v1/validation/reference/056266_makeup_01.jpg",
+      "sha256": "d6b86be2fe5f505eb6ebe7f2b1c22a59f41ddef053953f55eba1ca0b859f1728",
+      "source_photo": {
+        "author": "Lori Thantos",
+        "photo_title": "IMG_1526.jpg",
+        "photo_url": "https://www.flickr.com/photos/lori_thantos/5121900493/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Existing development portrait; not untouched final acceptance.",
+      "note": "Original photo may already contain cosmetics; no bare-skin ground-truth claim."
+    },
+    {
+      "id": "006553",
+      "source": ".tmp/data_m001/paired_selection/final_v1/train/reference/006553_makeup_01.jpg",
+      "sha256": "64a84cfe4ccde31e01cc10edcbc6843211163fc006a279ce8c49ff75b1ca3098",
+      "source_photo": {
+        "author": "academy visavis",
+        "photo_title": "272_visavis_academy_0423_khs-1370823",
+        "photo_url": "https://www.flickr.com/photos/145889229@N04/40808745485/",
+        "license": "Attribution License",
+        "license_url": "https://creativecommons.org/licenses/by/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Existing development portrait; not untouched final acceptance.",
+      "note": "Original photo may already contain cosmetics; no bare-skin ground-truth claim."
+    },
+    {
+      "id": "035149",
+      "source": ".tmp/data_m001/paired_selection/final_v1/train/reference/035149_makeup_01.jpg",
+      "sha256": "65ff8f0ad1ca3dc416eb91733770669654d45d50a6aee9cf17beacd1a8be1e40",
+      "source_photo": {
+        "author": "Jack Donahue",
+        "photo_title": "Sheila's Graduation-0113",
+        "photo_url": "https://www.flickr.com/photos/jackflynndonahue/4651049950/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Existing development portrait; not untouched final acceptance.",
+      "note": "Original photo may already contain cosmetics; no bare-skin ground-truth claim."
+    }
+  ],
+  "profiles": {
+    "natural_makeup": {
+      "name": "Natural Makeup",
+      "lip_rgb": [
+        157,
+        75,
+        81
+      ],
+      "lip_opacity": 0.35,
+      "lip_chroma_cap": 18.0,
+      "lip_lightness_cap": 4.0,
+      "shadow_rgb": [
+        114,
+        89,
+        73
+      ],
+      "shadow_opacity": 0.18,
+      "shadow_darkening": 2.0,
+      "liner_opacity": 0.25,
+      "liner_darkening": 14.0,
+      "blush_rgb": [
+        178,
+        87,
+        94
+      ],
+      "blush_opacity": 0.07
+    },
+    "soft_glam": {
+      "name": "Soft Glam",
+      "lip_rgb": [
+        156,
+        67,
+        97
+      ],
+      "lip_opacity": 0.62,
+      "lip_chroma_cap": 30.0,
+      "lip_lightness_cap": 6.0,
+      "shadow_rgb": [
+        133,
+        88,
+        102
+      ],
+      "shadow_opacity": 0.5,
+      "shadow_darkening": 6.0,
+      "liner_opacity": 0.45,
+      "liner_darkening": 18.0,
+      "blush_rgb": [
+        173,
+        78,
+        110
+      ],
+      "blush_opacity": 0.12
+    },
+    "classic_red_lip": {
+      "name": "Classic Red Lip",
+      "lip_rgb": [
+        178,
+        21,
+        40
+      ],
+      "lip_opacity": 0.82,
+      "lip_chroma_cap": 45.0,
+      "lip_lightness_cap": 8.0,
+      "shadow_rgb": [
+        110,
+        82,
+        63
+      ],
+      "shadow_opacity": 0.22,
+      "shadow_darkening": 3.0,
+      "liner_opacity": 0.35,
+      "liner_darkening": 16.0,
+      "blush_rgb": [
+        173,
+        90,
+        92
+      ],
+      "blush_opacity": 0.06
+    }
+  },
+  "parser": {
+    "directory": ".tmp/data_m001/parser_model",
+    "id": "jonathandinu/face-parsing",
+    "revision": "758b82e15a0178c9db39c1ff666a8b56e3a550c8",
+    "files": {
+      "config.json": "01d82e818569beda6aec804642e34ce187bed43326337d52ce370ff015964d68",
+      "model.safetensors": "c2bec795a8c243db71bd95be538fd62559003566466c71237e45c99b920f4b62",
+      "preprocessor_config.json": "e5a25d8fc054bf780be930e161b47d188bec1b0bf0a44fd5fdfb3f3312c0be0b"
+    }
+  },
+  "case_count": 12,
+  "new_gpu_generation_calls": 0,
+  "limits": [
+    "Only4existingdevelopmentpeople; no universal skin-tone/pose/lighting acceptance.",
+    "Source photos may already wear makeup; no removal performed.",
+    "No full-face foundation, complexion smoothing, face warping or generated face.",
+    "Automatic parser/geometry proposals need visual boundary review.",
+    "No runtime integration, public style promotion or deployment without appearance acceptance."
+  ]
+}

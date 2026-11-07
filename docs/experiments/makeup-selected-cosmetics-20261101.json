@@ -1,0 +1,180 @@
+{
+  "date": "2026-11-01",
+  "experiment": "MAKEUP-LAYERS-001",
+  "progress": "DONE_OFFLINE_COMPARISON",
+  "decision_status": "PROPOSED_METHOD_NOT_ADOPTED",
+  "technical_evidence": "VERIFIED",
+  "appearance_evidence": "EXPERIMENTAL_FAILED",
+  "codex_release_verdict": "REJECT",
+  "human_acceptance": "NOT_RECORDED",
+  "requirement": "Preserve the original person and the selected existing makeup together; only correct complexion naturally. Removing makeup does not satisfy the requirement.",
+  "user_scope": "All three offered reference looks: Natural Makeup, Cloud/Berry Lips and Classic Red Lip.",
+  "scope_limit": "Not all ten current or thirteen potential Makeup styles. No catalog-wide acceptance inferred.",
+  "prior_interpretation_correction": "MAKEUP-FAITHFUL-001 was rejected by the user because it removed the selected makeup. This corrects the assistant interpretation, not a user scope reversal.",
+  "reference_roles": {
+    "original_photo": "Canvas, identity, geometry, expression, texture, lighting and scene.",
+    "selected_existing_makeup": "Cosmetic style, color and intensity; not a replacement person."
+  },
+  "method": "Warp only the existing makeup reference with cached 478-point landmarks, estimate pigment/stroke layers, and apply to original source coordinates.",
+  "new_diffusion_calls": 0,
+  "new_training": false,
+  "new_photo_acquisition": false,
+  "new_model_downloads": false,
+  "new_dependencies": false,
+  "production_changed": false,
+  "landmark_inference": "Cached pretrained CPU detector only. Five initial detections plus three additional reference detections; not new makeup generation.",
+  "runs": [
+    {
+      "path": "artifacts/makeup-cosmetic-layers-20261101/run-01",
+      "cases": 3,
+      "codex_verdict": "REJECT",
+      "finding": "Cutout brow/eye edges and circular blush; not faithful cosmetics."
+    },
+    {
+      "path": "artifacts/makeup-cosmetic-layers-20261101/run-02",
+      "cases": 3,
+      "codex_verdict": "REJECT",
+      "finding": "Softer boundaries still leave pasted brows/blush and incomplete lashes."
+    },
+    {
+      "path": "artifacts/makeup-cosmetic-layers-20261101/run-03",
+      "cases": 6,
+      "codex_verdict": "REJECT",
+      "finding": "Reference-relative reflectance introduces cyan/orange cheek patches. Lip colors remain visible, but eye makeup and blush do not faithfully match the reference."
+    }
+  ],
+  "visual_review": {
+    "inspected_comparisons_v3": 6,
+    "original_size": "Each comparison contains three 512-square columns.",
+    "verdict": "All six fail faithful cosmetic preservation and natural blend. Source texture is visible, but this is not sufficient.",
+    "human_review_requested_for_failed_candidate": false
+  },
+  "technical_verification": {
+    "experiment": "MAKEUP-LAYERS-001",
+    "variant": "v3",
+    "technical_evidence": "VERIFIED",
+    "appearance_evidence": "EXPERIMENTAL_FAILED",
+    "release_verdict": "REJECT",
+    "production_enabled": false,
+    "new_diffusion_calls": 0,
+    "cases": [
+      {
+        "id": "g4-054109-natural_makeup",
+        "exact_rgb_reproduction": true,
+        "input_hashes_verified": true,
+        "original_pixels_outside_support_changed": 0,
+        "semantic_protected_pixels_changed": 0,
+        "changed_pixels": 42173,
+        "source_landmark_sha256": "a9bf04287a7995a6060668782a490d6b6d76a3228d96bdc7bfd1408b513555ae",
+        "reference_landmark_sha256": "b226e0399a1bfc11f0684993be9f1b00332c59c902808ddcc83361aa6efed68f",
+        "appearance": "FAIL_CODEX_VISUAL_REVIEW",
+        "human_accepted": false
+      },
+      {
+        "id": "g4-054109-classic_red_lip",
+        "exact_rgb_reproduction": true,
+        "input_hashes_verified": true,
+        "original_pixels_outside_support_changed": 0,
+        "semantic_protected_pixels_changed": 0,
+        "changed_pixels": 42837,
+        "source_landmark_sha256": "a9bf04287a7995a6060668782a490d6b6d76a3228d96bdc7bfd1408b513555ae",
+        "reference_landmark_sha256": "05f42df6a2dc0bfe363e1be9dd722dd903c4b2789c3a113fa0eb140b5a215a0a",
+        "appearance": "FAIL_CODEX_VISUAL_REVIEW",
+        "human_accepted": false
+      },
+      {
+        "id": "g4-056266-natural_makeup",
+        "exact_rgb_reproduction": true,
+        "input_hashes_verified": true,
+        "original_pixels_outside_support_changed": 0,
+        "semantic_protected_pixels_changed": 0,
+        "changed_pixels": 36297,
+        "source_landmark_sha256": "b2dbdea8e51f7b94c5e29f88305caf000483231565aa514629f105019551cc34",
+        "reference_landmark_sha256": "7205dca474feb85ab077adb1c1e839b65e0872cc569186e74d176a1d94abe9c3",
+        "appearance": "FAIL_CODEX_VISUAL_REVIEW",
+        "human_accepted": false
+      },
+      {
+        "id": "g4-056266-classic_red_lip",
+        "exact_rgb_reproduction": true,
+        "input_hashes_verified": true,
+        "original_pixels_outside_support_changed": 0,
+        "semantic_protected_pixels_changed": 0,
+        "changed_pixels": 37024,
+        "source_landmark_sha256": "b2dbdea8e51f7b94c5e29f88305caf000483231565aa514629f105019551cc34",
+        "reference_landmark_sha256": "674cd3823abeec6dd5e4f943685d18228b5fedbbfd399c54446ec1b362662146",
+        "appearance": "FAIL_CODEX_VISUAL_REVIEW",
+        "human_accepted": false
+      },
+      {
+        "id": "054109-exp_cloud_berry_lips",
+        "exact_rgb_reproduction": true,
+        "input_hashes_verified": true,
+        "original_pixels_outside_support_changed": 0,
+        "semantic_protected_pixels_changed": 0,
+        "changed_pixels": 42843,
+        "source_landmark_sha256": "a9bf04287a7995a6060668782a490d6b6d76a3228d96bdc7bfd1408b513555ae",
+        "reference_landmark_sha256": "44439ea0e578d0b32aeef623daf848595f90dc5e21c147234889d1dc4960dfd8",
+        "appearance": "FAIL_CODEX_VISUAL_REVIEW",
+        "human_accepted": false
+      },
+      {
+        "id": "056266-exp_cloud_berry_lips",
+        "exact_rgb_reproduction": true,
+        "input_hashes_verified": true,
+        "original_pixels_outside_support_changed": 0,
+        "semantic_protected_pixels_changed": 0,
+        "changed_pixels": 36200,
+        "source_landmark_sha256": "b2dbdea8e51f7b94c5e29f88305caf000483231565aa514629f105019551cc34",
+        "reference_landmark_sha256": "80176afaaa5b8c0aeac945676b03ccef1b7f009738a3da08be57b55b6a793b49",
+        "appearance": "FAIL_CODEX_VISUAL_REVIEW",
+        "human_accepted": false
+      }
+    ],
+    "model_asset": {
+      "url": "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task",
+      "sha256": "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff",
+      "bytes": 3758596,
+      "members": [
+        "face_detector.tflite",
+        "face_landmarks_detector.tflite",
+        "geometry_pipeline_metadata_landmarks.binarypb",
+        "face_blendshapes.tflite"
+      ],
+      "source": "https://developers.google.com/edge/mediapipe/solutions/vision/face_landmarker/index",
+      "scope": "Offline local CPU alignment pilot; no photo uploaded",
+      "path": "models/downloaded/mediapipe-face-landmarker-v1/face_landmarker.task",
+      "hash_type": "Observed downloaded model hash pinned for reproducibility; not an upstream published checksum"
+    },
+    "algorithm_sha256": "0974104e4092e7126384a0b812cdfc951ff3e63db21999af7a752742a43ee720",
+    "unchanged_source_and_artifact_sha256": {
+      "backend/app/makeup_contract.py": "4253463a6a6c7afcd97384c0a5a4e0c25ba7ce9f9eb1d3f4411d2b8fec0a2fa1",
+      "backend/app/generation/remote_makeup.py": "4205e24f1864bde02dc75e60cd1a107a06ee29cf476ac001a8bcdf3fa26d5615",
+      "backend/app/makeup_styles.py": "c2ac1d40a4940e0335f8c382c1062148b54f0fa3dc07fec95e8ed33f1adaa6ba",
+      "scripts/makeup_inference_server.py": "ec9dd0c10a102a6bb13b4288994f18423c5164969cd131b02f2a4993ed570854",
+      "backend/app/style_release.json": "61cce06d4e76a6570550b2fee4c7ff4183323aea0ce1b3a1b63e191fced118b5",
+      "scripts/unified_gate3_server.py": "bb1d24159075f0592f491532080195f204f73c708e2a8e2fd095daac481723a2",
+      "scripts/inference_performance.py": "b69dd604baa6a09ba1a1d7598e979c66a81d26f70a8e9ae3db3bb790766030af",
+      "artifacts/render_kaggle_cpu_hair_nails_20261031_02.bin": "dfb5fc35f2c9c446fb8fdcc4439650c5f8a72941db864db1e9045cadae73082f",
+      "notebooks/render_kaggle_all_hair_nails_demo.ipynb": "574d8a144b90ee2a2a10c74ab1f6d8d46dd3d3891d1e9c74d5ee1bc01368ab84"
+    },
+    "scope_limit": "Six development cases from two reused people. Exact source protection is not proof of cosmetic preservation, skin-tone accuracy, or generalization."
+  },
+  "diagnosis": {
+    "verified": "Input RGB and stored outputs are intact. Only reference is warped. The current face parser does not provide separate foundation, blush, eyeshadow or lash mattes. The reference PNG is flattened.",
+    "inference": "Estimated neutral color/reflectance and heuristic region masks confuse generated complexion/highlight differences with cosmetic pigment. This explains why this implementation cannot reliably preserve the makeup while removing the pale cast.",
+    "not_established": "Exact cause of every original model skin edit; a guarantee that all possible correction methods fail."
+  },
+  "next_gate": "Validate separation of actual cosmetics from complexion/highlights against the fixed references before any further transfer or release. Explicitly inspect lipstick hue/intensity, blush shape, eyelid color and lash/liner strokes. Another guidance/opacity/model sweep is not justified by this failure.",
+  "unchanged_source_and_artifact_sha256": {
+    "backend/app/makeup_contract.py": "4253463a6a6c7afcd97384c0a5a4e0c25ba7ce9f9eb1d3f4411d2b8fec0a2fa1",
+    "backend/app/generation/remote_makeup.py": "4205e24f1864bde02dc75e60cd1a107a06ee29cf476ac001a8bcdf3fa26d5615",
+    "backend/app/makeup_styles.py": "c2ac1d40a4940e0335f8c382c1062148b54f0fa3dc07fec95e8ed33f1adaa6ba",
+    "scripts/makeup_inference_server.py": "ec9dd0c10a102a6bb13b4288994f18423c5164969cd131b02f2a4993ed570854",
+    "backend/app/style_release.json": "61cce06d4e76a6570550b2fee4c7ff4183323aea0ce1b3a1b63e191fced118b5",
+    "scripts/unified_gate3_server.py": "bb1d24159075f0592f491532080195f204f73c708e2a8e2fd095daac481723a2",
+    "scripts/inference_performance.py": "b69dd604baa6a09ba1a1d7598e979c66a81d26f70a8e9ae3db3bb790766030af",
+    "artifacts/render_kaggle_cpu_hair_nails_20261031_02.bin": "dfb5fc35f2c9c446fb8fdcc4439650c5f8a72941db864db1e9045cadae73082f",
+    "notebooks/render_kaggle_all_hair_nails_demo.ipynb": "574d8a144b90ee2a2a10c74ab1f6d8d46dd3d3891d1e9c74d5ee1bc01368ab84"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "experiment": "MAKEUP-FAITHFUL-001",
+  "schema": "beautycore-source-faithful-retouch-v1",
+  "production_enabled": false,
+  "automatic_promotion": false,
+  "training": false,
+  "new_diffusion_calls": 0,
+  "configuration": {
+    "strength": 0.2,
+    "chroma_sigma_pixels": 16.0,
+    "maximum_chroma_code_units": 2.0,
+    "inside_feather_pixels": 4.0,
+    "minimum_common_skin": 10000,
+    "maximum_rgb_code_change": 4,
+    "maximum_luma_code_error": 0.501
+  },
+  "sources": [
+    {
+      "id": "054109",
+      "source": ".tmp/data_m001/paired_selection/final_v1/validation/reference/054109_makeup_01.jpg",
+      "source_sha256": "81e57faca39e3989ed9920ebd6568efad563ae4f012f3fbb130918858d18e8ed",
+      "source_photo": {
+        "author": "Presidency Maldives",
+        "photo_title": "MK_NAIVAIDHOO1493",
+        "photo_url": "https://www.flickr.com/photos/presidencymaldives/5292667558/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "neutral_box": [
+        170,
+        65,
+        295,
+        125
+      ],
+      "usage": "Reused development subject, not untouched acceptance",
+      "source_labels": "artifacts/makeup-tone-20261025/run-02/source-054109-labels.png",
+      "source_labels_sha256": "93cfaaf691c744b47ca53cdc8028c9e2d33ab496260afab855312251b0204ffe"
+    },
+    {
+      "id": "056266",
+      "source": ".tmp/data_m001/paired_selection/final_v1/validation/reference/056266_makeup_01.jpg",
+      "source_sha256": "d6b86be2fe5f505eb6ebe7f2b1c22a59f41ddef053953f55eba1ca0b859f1728",
+      "source_photo": {
+        "author": "Lori Thantos",
+        "photo_title": "IMG_1526.jpg",
+        "photo_url": "https://www.flickr.com/photos/lori_thantos/5121900493/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "neutral_box": [
+        170,
+        75,
+        310,
+        150
+      ],
+      "usage": "Reused development subject, not untouched acceptance",
+      "source_labels": "artifacts/makeup-tone-20261025/run-02/source-056266-labels.png",
+      "source_labels_sha256": "ece1aad22b396febb1b0dc6cea275b67f690ddae1529014d5a0372ea2d51b4fa"
+    }
+  ],
+  "algorithm_sha256": "7ed93007084e1fb23c1ac699ebecdc6169f1e012bf33eb5053511e9f6e882b63",
+  "priority": "Subtle source-photo retouch, not a full makeup makeover or a claim that all existing style presets are implemented.",
+  "cases": [
+    {
+      "id": "054109",
+      "source": ".tmp/data_m001/paired_selection/final_v1/validation/reference/054109_makeup_01.jpg",
+      "source_sha256": "81e57faca39e3989ed9920ebd6568efad563ae4f012f3fbb130918858d18e8ed",
+      "source_labels": "artifacts/makeup-tone-20261025/run-02/source-054109-labels.png",
+      "source_labels_sha256": "93cfaaf691c744b47ca53cdc8028c9e2d33ab496260afab855312251b0204ffe",
+      "reference": "artifacts/makeup-complexion-20261101/review/g4-054109-natural_makeup-corrected.png",
+      "reference_sha256": "10e9b35a66eafac03a01cff417d24fb6a84857f4ea3601ae99d61c6596d4ca99",
+      "reference_labels": "artifacts/makeup-complexion-20261101/serving-controls/g4-054109-natural_makeup-labels.png",
+      "reference_labels_sha256": "3841c1f96c88a993710058e1037b84b9d376341eee67fd49ca6fd0867a5d7716"
+    },
+    {
+      "id": "056266",
+      "source": ".tmp/data_m001/paired_selection/final_v1/validation/reference/056266_makeup_01.jpg",
+      "source_sha256": "d6b86be2fe5f505eb6ebe7f2b1c22a59f41ddef053953f55eba1ca0b859f1728",
+      "source_labels": "artifacts/makeup-tone-20261025/run-02/source-056266-labels.png",
+      "source_labels_sha256": "ece1aad22b396febb1b0dc6cea275b67f690ddae1529014d5a0372ea2d51b4fa",
+      "reference": "artifacts/makeup-complexion-20261101/review/g4-056266-natural_makeup-corrected.png",
+      "reference_sha256": "019d4e0a01a1470f60cccca1aa8948496f8d9ec51fcb0e28d9f38f182d1921fb",
+      "reference_labels": "artifacts/makeup-complexion-20261101/serving-controls/g4-056266-natural_makeup-labels.png",
+      "reference_labels_sha256": "e7ddfd8823499ff6b3e33667a88e962e18e52b211a64e0c933e60cc046e2884d"
+    }
+  ]
+}

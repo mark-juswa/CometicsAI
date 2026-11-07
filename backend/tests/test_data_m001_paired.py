@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import sys
 from zipfile import ZipFile
+import subprocess
 
 import pytest
 from PIL import Image
@@ -17,8 +18,24 @@ from data_m001_paired import digest, finalize, prepare, read_json, record_all_ap
 from data_m001_package_training import package  # noqa: E402
 import train_m001_kaggle as trainer  # noqa: E402
 from train_m001_kaggle import prepare as prepare_training, validate_dataset  # noqa: E402
+from makeup_target_quality import BINDINGS, CRITERIA, ANNOTATIONS, POLICY_SHA256  # noqa: E402
 sys.path.insert(0, str(ROOT / "backend"))
 from app.makeup_styles import MAKEUP_STYLES  # noqa: E402
+
+
+def fixture_quality(candidate):
+    """Synthetic test attestations only, never reviews of actual project photos."""
+    rows = read_json(candidate / "candidate_manifest.json")["pairs"]
+    document = {"schema": "makeup-target-quality-v1", "policy_sha256": POLICY_SHA256,
+                "pairs": [{**{key: row[key] for key in BINDINGS},
+                           "decision": "ACCEPT", "human_approved": True,
+                           "reviewer": "Synthetic test reviewer", "evidence": "Synthetic fixture only",
+                           "criteria": {key: {"verdict": "PASS", "note": "Synthetic fixture only"}
+                                        for key in CRITERIA},
+                           "source_cosmetics": {key: "Synthetic fixture only" for key in ANNOTATIONS},
+                           "target_cosmetics": {key: "Synthetic fixture only" for key in ANNOTATIONS}}
+                          for row in rows]}
+    write_json(candidate / "target_quality.json", document)
 
 
 @pytest.fixture
@@ -75,6 +92,10 @@ def test_finalization_requires_human_review_and_produces_trainer_layout(inputs, 
     with pytest.raises(ValueError, match="explicit human"):
         finalize(candidate, final)
     approval = record_all_approval(candidate, "Project Lead", "Approved fixture contact sheets")
+    with pytest.raises(ValueError, match="corrective target acceptance"):
+        finalize(candidate, final)
+    assert not final.exists()
+    fixture_quality(candidate)
     summary = finalize(candidate, final)
 
     assert approval["accepted"] == 60
@@ -113,6 +134,7 @@ def test_training_preflight_uses_only_final_reviewed_dataset_and_makeup_job(inpu
     candidate, final = tmp_path / "candidate", tmp_path / "final"
     prepare(archive, metadata, selection, candidate)
     record_all_approval(candidate, "Project Lead", "Approved fixture contact sheets")
+    fixture_quality(candidate)
     finalize(candidate, final)
     evidence = validate_dataset(final)
     result = prepare_training(final, tmp_path / "train")
@@ -132,6 +154,7 @@ def test_training_preflight_rejects_changed_review_and_bundle_is_makeup_only(inp
     candidate, final = tmp_path / "candidate", tmp_path / "final"
     prepare(archive, metadata, selection, candidate)
     record_all_approval(candidate, "Project Lead", "Approved fixture contact sheets")
+    fixture_quality(candidate)
     finalize(candidate, final)
     reviews = read_json(final / "manifests" / "reviews.json")
     reviews[0]["state"] = "REJECT"
@@ -148,7 +171,24 @@ def test_training_preflight_rejects_changed_review_and_bundle_is_makeup_only(inp
         names = contents.namelist()
     assert result["dataset_pairs"] == 60
     assert "train_m001_kaggle.py" in names
+    assert "makeup_target_quality.py" in names and "makeup_target_policy.json" in names
     assert not any("train001" in name or "hair" in name.lower() for name in names)
+    extracted = tmp_path / "standalone"
+    with ZipFile(bundle) as contents:
+        contents.extractall(extracted)
+    # A fresh subprocess must load the bundled gate and policy, without repo imports.
+    result = subprocess.run([sys.executable, "-c",
+        "import json; from train_m001_kaggle import validate_dataset; from pathlib import Path; "
+        "print(json.dumps(validate_dataset(Path('data_m001'))['corrective_quality']))"],
+        cwd=extracted, capture_output=True, text=True)
+    # This synthetic archive deliberately differs from the real pinned archive.
+    assert "missing or incompatible" in result.stderr
+    # Exercise the shared quality check separately without changing production pins.
+    result = subprocess.run([sys.executable, "-c",
+        "from makeup_target_quality import validate_dataset_quality; from pathlib import Path; "
+        "print(validate_dataset_quality(Path('data_m001'))['reviewed_pairs'])"],
+        cwd=extracted, capture_output=True, text=True, check=True)
+    assert result.stdout.strip() == "60"
 
 
 def test_inference_presets_keep_all_ten_makeup_ui_ids_without_training_classes():

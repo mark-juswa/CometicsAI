@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-25",
+  "status": "PROPOSED_NOT_IMPLEMENTED_OR_RUN",
+  "request": "Reduce whitening without losing visible makeup or damaging the look.",
+  "verified_current": "Full-frame Flux2KleinPipeline, adapter1.0, guidance4.0,20steps,512square,seed1977. Matched0.5comparison did not resolve lightening; preservation instructions already present.",
+  "pinned_api_inspection": {
+    "source": "https://raw.githubusercontent.com/huggingface/diffusers/c943837899b16cbae2f619b8dd4f7bb6f07dd81a/src/diffusers/pipelines/flux2/pipeline_flux2_klein.py",
+    "supported": "guidance_scale controls text conditioning; no direct strength or complexion-only argument in __call__. No ordinary negative_prompt text argument; negative_prompt_embeds is distinct.",
+    "limitation": "Lower guidance is not a skin-tone control and may weaken requested makeup or preservation; quality outcome unknown."
+  },
+  "proposed_small_test": [
+    "Keep adapter1.0, prompt/style,20steps,resolution and seed fixed; compare guidance3.0 with existing4.0, preserving original baselines.",
+    "Separately test one complexion/foundation-specific prompt revision at guidance4.0 while retaining the original visible lip/eye/cheek instructions; preservation language alone already failed.",
+    "Evaluate original complexion/texture/geometry AND obvious intended makeup. Do not choose a result merely because it is darker or has less makeup.",
+    "If neither produces acceptable preservation, proceed to reviewed corrected-data fine-tuning plan, not repeated whole-effect reductions."
+  ],
+  "possible_future_option": "Source-referenced skin-region color correction would be a separate post-processing experiment requiring face alignment and exclusions for lips/eyes/blush/highlights; not implemented, not guaranteed, and prior failed preservation routes remain closed.",
+  "changes": "No code/model/prompt/production/cloud edits, training, GPU generation or notebook prepared.",
+  "followup": {
+    "status": "AUTHORIZED_AND_PREPARED_GPU_PENDING",
+    "receipt": "makeup-adjustment-20261025.json"
+  }
+}

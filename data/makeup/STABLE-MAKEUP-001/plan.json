@@ -1,0 +1,113 @@
+{
+  "experiment": "STABLE-MAKEUP-001",
+  "training": false,
+  "production_enabled": false,
+  "cases": [
+    {
+      "id": "054109",
+      "source": "inputs/054109-source.png",
+      "source_sha256": "b25eae87a60a2b1ab3bf48722fc8243a3682dce007af02d5291f0f05dca54e40",
+      "control": "inputs/054109-control.png",
+      "control_sha256": "e5bbb415258784de55009e1e0f61534f1d43a41e2f19404f31a5f6666a2ca375"
+    },
+    {
+      "id": "056266",
+      "source": "inputs/056266-source.png",
+      "source_sha256": "f64f646f0750d18d5732c7b3a7063eff4a7e972c582c5c427efb3b073a575c50",
+      "control": "inputs/056266-control.png",
+      "control_sha256": "f7e61f38442d446c2d59951d1ed8b5b62ab87e67555a32cad7482ad725f7ddf8"
+    },
+    {
+      "id": "006553",
+      "source": "inputs/006553-source.png",
+      "source_sha256": "4993d6122e17171f93d68c822e36e73fd458d18623a29fd60ad7610aad96cb75",
+      "control": "inputs/006553-control.png",
+      "control_sha256": "8d30db42e0b3466df679187dea1a2e15da166baa4593e151b3717a678ca88bda"
+    },
+    {
+      "id": "035149",
+      "source": "inputs/035149-source.png",
+      "source_sha256": "6198688dc175f93944e8e27b2620e5e535e55e750dd3ff1836d4bada6f46c90b",
+      "control": "inputs/035149-control.png",
+      "control_sha256": "1e7fb11de6168b22febc0a260e551c4de5153d1e8fa7aecad1b564746208a1bb"
+    }
+  ],
+  "reference": {
+    "file": "inputs/makeup-reference.png",
+    "sha256": "31b84681b84abf2b4e0bab3caea54e45d42e8cf66e8a6d8c763a0cbbf54973cc",
+    "preprocessing": {
+      "file": "makeup-reference.png",
+      "sha256": "31b84681b84abf2b4e0bab3caea54e45d42e8cf66e8a6d8c763a0cbbf54973cc",
+      "original_sha256": "e3f1b9309df8b3e32b040b7d0c52b00d76d7808c537d0563f3d008e370e96787",
+      "original_size": [
+        1600,
+        2399
+      ],
+      "crop": [
+        350,
+        350,
+        1350,
+        1350
+      ],
+      "use": "User provided visual target; model evaluation reference only, no training"
+    }
+  },
+  "source_commit": "88c8ca512261e1f9125684178423e6355ed5ad0a",
+  "base_model": {
+    "id": "stable-diffusion-v1-5/stable-diffusion-v1-5",
+    "revision": "451f4fe16113bff5a5d2269ed5ad43b0592e9a14"
+  },
+  "steps": 30,
+  "guidance": 1.6,
+  "seed": 1977,
+  "dtype": "float16",
+  "max_seconds": 7200,
+  "assets": [
+    {
+      "path": "base/text_encoder/model.fp16.safetensors",
+      "url": "https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5/resolve/451f4fe16113bff5a5d2269ed5ad43b0592e9a14/text_encoder/model.fp16.safetensors",
+      "size": 246144864,
+      "sha256": "77795e2023adcf39bc29a884661950380bd093cf0750a966d473d1718dc9ef4e"
+    },
+    {
+      "path": "base/unet/diffusion_pytorch_model.fp16.safetensors",
+      "url": "https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5/resolve/451f4fe16113bff5a5d2269ed5ad43b0592e9a14/unet/diffusion_pytorch_model.fp16.safetensors",
+      "size": 1719125304,
+      "sha256": "c83908253f9a64d08c25fc90874c9c8aef9a329ce1ca5fb909d73b0c83d1ea21"
+    },
+    {
+      "path": "base/vae/diffusion_pytorch_model.fp16.safetensors",
+      "url": "https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5/resolve/451f4fe16113bff5a5d2269ed5ad43b0592e9a14/vae/diffusion_pytorch_model.fp16.safetensors",
+      "size": 167335342,
+      "sha256": "4fbcf0ebe55a0984f5a5e00d8c4521d52359af7229bb4d81890039d2aa16dd7c"
+    },
+    {
+      "path": "weights/pytorch_model.bin",
+      "url": "https://drive.usercontent.google.com/download?id=1hXwUNLFTUuT_AseMEiLOTkwj0JVoP9PT&export=download&confirm=t",
+      "size": 1373905877,
+      "pickle_sha256": "3d6c59af3b70bdedab84d1a88962c9df282ecab0fb44ba945b1668fc058edd06"
+    },
+    {
+      "path": "weights/pytorch_model_1.bin",
+      "url": "https://drive.usercontent.google.com/download?id=1erdooW-JT9YP6jNNc8ZR4-Kc5KOBumss&export=download&confirm=t",
+      "size": 1445256905,
+      "pickle_sha256": "e0a73ae3cebeb1f2381b71c2e032ce6b0ef4e5da9fa4b6475dba1f30e07cd534"
+    },
+    {
+      "path": "weights/pytorch_model_2.bin",
+      "url": "https://drive.usercontent.google.com/download?id=1vY1akep_tWxh36iv6IZYxu-HX0yTcbpZ&export=download&confirm=t",
+      "size": 1445256905,
+      "pickle_sha256": "e0a73ae3cebeb1f2381b71c2e032ce6b0ef4e5da9fa4b6475dba1f30e07cd534"
+    }
+  ],
+  "own_trained_makeup_adapter_used": false,
+  "quality_acceptance": "PENDING",
+  "limits": [
+    "Isolated test, not production or a guaranteed cosmetic quality fix",
+    "FP16 is an explicit T4 evaluation change from the author's FP32 entry example",
+    "Prepared controls use author SPIGA/RetinaFace on CPU and frozen source images",
+    "No training, servers, API keys, tunnels, Render connection, or catalog changes",
+    "Do not redistribute this photo-containing evaluation input publicly",
+    "No automatic acceptance or claimed pixel preservation for the generative output"
+  ]
+}

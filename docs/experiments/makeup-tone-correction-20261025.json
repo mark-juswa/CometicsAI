@@ -1,0 +1,118 @@
+{
+  "experiment": "MAKEUP-TONE-001",
+  "variant": "mask-boundary-correction-v2",
+  "status": "PASS_TECHNICAL_NOT_VISUAL_ACCEPTANCE",
+  "plan_sha256": "a76fd137b6fef5ac5e754e9e81a1a3eab6ffa3bad2b377f33db3a9fc0bead177",
+  "runner_sha256": "b49c288f3e905aa525ac91a794b457e2ea850e3560e765f8a0a50fc585b57219",
+  "raw_report_sha256": "b0e6ffa314284224d59c7111aa2d24d5e6c78f627da162d8ee618193a19499f5",
+  "output_report_sha256": "fb890fa39c0dc825c4f61e68396d1e4627f023e753149ca69624e98e4b0e5e92",
+  "cases": [
+    {
+      "case": "054109-natural_makeup",
+      "status": "APPLIED",
+      "changed_pixels": 123261,
+      "outside_allowed_changed": 0,
+      "protected_feature_changed": 0,
+      "source_lightness_gap_before": 12.59765625,
+      "source_lightness_gap_after": 0.52490234375,
+      "corrected_png_sha256": "7220ad794e6d1d898f14da24c8cee622fd44074b83a422862e7d353706de280f"
+    },
+    {
+      "case": "054109-classic_red_lip",
+      "status": "APPLIED",
+      "changed_pixels": 121809,
+      "outside_allowed_changed": 0,
+      "protected_feature_changed": 0,
+      "source_lightness_gap_before": 8.5205078125,
+      "source_lightness_gap_after": 0.775146484375,
+      "corrected_png_sha256": "e2c54a4bd2f2a3afedad26f1ee3e46c7c9a7b57df596972fb5d4714ccad6bef9"
+    },
+    {
+      "case": "054109-exp_cloud_berry_lips",
+      "status": "APPLIED",
+      "changed_pixels": 122588,
+      "outside_allowed_changed": 0,
+      "protected_feature_changed": 0,
+      "source_lightness_gap_before": 13.616943359375,
+      "source_lightness_gap_after": 0.72021484375,
+      "corrected_png_sha256": "92a102e6e155be28640f9cc1911edc7257f81480f417c2463d890fd1d71e70bc"
+    },
+    {
+      "case": "056266-natural_makeup",
+      "status": "APPLIED",
+      "changed_pixels": 116831,
+      "outside_allowed_changed": 0,
+      "protected_feature_changed": 0,
+      "source_lightness_gap_before": 3.38134765625,
+      "source_lightness_gap_after": 0.091552734375,
+      "corrected_png_sha256": "6fecf4dca95795201dc27b9f697994e1d2211adbe1f646090ea14d10f8c4355e"
+    },
+    {
+      "case": "056266-classic_red_lip",
+      "status": "NO_EXCESS_LIGHTNESS",
+      "changed_pixels": 0,
+      "outside_allowed_changed": 0,
+      "protected_feature_changed": 0,
+      "source_lightness_gap_before": 0.921630859375,
+      "source_lightness_gap_after": 0.921630859375,
+      "corrected_png_sha256": "ab8a89f264ff36890a3a6ce986fccf69b91755621cf09e2cb244b08803386258"
+    },
+    {
+      "case": "056266-exp_cloud_berry_lips",
+      "status": "NO_EXCESS_LIGHTNESS",
+      "changed_pixels": 0,
+      "outside_allowed_changed": 0,
+      "protected_feature_changed": 0,
+      "source_lightness_gap_before": 1.983642578125,
+      "source_lightness_gap_after": 1.983642578125,
+      "corrected_png_sha256": "f0c85513c8aeba6381e63925c31a0b287159978198666fb4ae70970ff1512a19"
+    }
+  ],
+  "input_hashes_unchanged": true,
+  "source_geometry_recovered": false,
+  "mask_review": "Codex viewed all8 overlays, both6-case comparison sheets and native Berry054109/Natural056266; masks are not ground-truth validated.",
+  "fitted_metric_warning": "Forehead statistics are used to calculate correction; improvement is not an independent accuracy score.",
+  "new_gpu_calls": 0,
+  "training": false,
+  "production_enabled": false,
+  "date": "2026-10-25",
+  "evidence_status": "VERIFIED",
+  "quality_status": "EXPERIMENTAL",
+  "progress": "DONE",
+  "private_output": "artifacts/makeup-tone-20261025/run-02",
+  "initial_failed_output": "artifacts/makeup-tone-20261025/run-01",
+  "initial_failure": "Rectangular orbital protection left visible pale boxes; rejected before release.",
+  "boundary_change_only": "V2 reuses same8parser maps and six raw cases; smaller semantic protection with smooth20pixel feature transition, no rectangular exclusion; same tone estimator and tone caps.",
+  "summary": {
+    "cases": 6,
+    "tone_adjusted": 4,
+    "unchanged_by_guard": 2,
+    "human_accepted": 0
+  },
+  "visual_review": {
+    "reviewer": "Codex qualitative inspection",
+    "disposition": "PARTIAL_IMPROVEMENT_NOT_RELEASE_READY",
+    "observations": [
+      "054109 all3styles: warmer/less pale facial foundation; requested lips and eye cosmetics remain visible.",
+      "V1 rectangular patches removed; some pale brow/perioral transition and source undertone mismatch persist.",
+      "054109 Berry: strong magenta blush/retouched skin remain; not an approved expansion look.",
+      "056266 Natural: modest warmth/lightness change; retouched texture and heavy blush remain.",
+      "056266 Red/Berry: no adjustment, because neutral forehead gaps are below2LabL; whole-face unnaturalness can exist without a large neutral-patch lightness gap.",
+      "No facial geometry or source texture is restored; source-referenced color correction is not a complete model fix."
+    ]
+  },
+  "tests": {
+    "command": "python -m pytest backend/tests/test_makeup_tone_correction.py backend/tests/test_makeup_corrective_review.py -q",
+    "passed": 32,
+    "new_tone_tests": 14,
+    "existing_audit_tests": 18
+  },
+  "next": "User visual review of comparisons before any broader automatic-region experiment or serving integration. No new parameter sweep or deployment performed.",
+  "review_bundle": {
+    "path": "artifacts/makeup-tone-20261025/beautycore-makeup-tone-review.zip",
+    "bytes": 7440961,
+    "sha256": "8f9e8b3683a36e22100afe13f5afb84ee5c4168922a4b375a287053e6db6c072",
+    "members": 22,
+    "crc": "PASS"
+  }
+}

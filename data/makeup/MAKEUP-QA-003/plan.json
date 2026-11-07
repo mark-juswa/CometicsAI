@@ -1,0 +1,82 @@
+{
+  "schema": "beautycore-makeup-guidance-v1",
+  "experiment": "MAKEUP-QA-003",
+  "production_enabled": false,
+  "automatic_promotion": false,
+  "new_training": false,
+  "subjects": [
+    {
+      "id": "054109",
+      "filename": "054109.jpg",
+      "sha256": "81e57faca39e3989ed9920ebd6568efad563ae4f012f3fbb130918858d18e8ed",
+      "origin": "054109/bare.jpg",
+      "source_photo": {
+        "author": "Presidency Maldives",
+        "photo_title": "MK_NAIVAIDHOO1493",
+        "photo_url": "https://www.flickr.com/photos/presidencymaldives/5292667558/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Reused validation portrait for diagnostic development; private academic artifact, not new untouched final evaluation."
+    },
+    {
+      "id": "056266",
+      "filename": "056266.jpg",
+      "sha256": "d6b86be2fe5f505eb6ebe7f2b1c22a59f41ddef053953f55eba1ca0b859f1728",
+      "origin": "056266/bare.jpg",
+      "source_photo": {
+        "author": "Lori Thantos",
+        "photo_title": "IMG_1526.jpg",
+        "photo_url": "https://www.flickr.com/photos/lori_thantos/5121900493/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Reused validation portrait for diagnostic development; private academic artifact, not new untouched final evaluation."
+    }
+  ],
+  "styles": [
+    "natural_makeup",
+    "classic_red_lip"
+  ],
+  "conditions": [
+    {
+      "id": "guidance_4_reference",
+      "adapter_weight": 1.0,
+      "guidance": 4.0,
+      "prompt_variant": "original"
+    },
+    {
+      "id": "guidance_3_reference",
+      "adapter_weight": 1.0,
+      "guidance": 3.0,
+      "prompt_variant": "original"
+    },
+    {
+      "id": "guidance_2_5",
+      "adapter_weight": 1.0,
+      "guidance": 2.5,
+      "prompt_variant": "original"
+    }
+  ],
+  "inference": {
+    "width": 512,
+    "height": 512,
+    "steps": 20,
+    "seed": 1977
+  },
+  "reference_report_sha256": "1df65af22e4281df9ce296bd7cb89ddb0dd611d4c6c7b2169cf07895e4668f7d",
+  "reference_plan_sha256": "8a86f1a700eaba0faf334bf4bfc2bf7aeddc0494c76c2416d7f5e60d1600a107",
+  "retained_cases": 8,
+  "new_inference_calls": 5,
+  "expected_comparison_cases": 12,
+  "human_quality_review": "REQUIRED",
+  "limits": [
+    "Two reused diagnostic people, not an untouched final test.",
+    "One control at guidance3.0 followed by four guidance2.5outputs; no further parameter sweep.",
+    "Makeup visibility and source complexion/texture/geometry must be reviewed together.",
+    "No training, masking, recoloring, blending or production changes."
+  ],
+  "human_observation": "Supervisor prefers guidance3.0 to matched-foundation appearance; relative preference, not final release acceptance."
+}

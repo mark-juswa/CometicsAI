@@ -13,3 +13,22 @@ When data work is authorized, record source URLs, license evidence, transformati
 DATA-002 selection is PROPOSED for Project Lead review after a Philippine-priority source-photo reassessment. The current manifest selects ten classes and 120 distinct source photographs (100 train, 20 validation), with 2–4 screened reserves per class and a balanced two-neighbor edit plan. `Crop`, `UndercutSlickback`, and `MedLenHair` were replaced by `Fauxhawk`, `PonyTail`, and `Bun` because the original folders did not support clear, distinct labels at the intended count. `CurtainedHair` and `shag` are lower-confidence labels that still supplied 12 selected identities each. No DATA-002 counterpart has been generated or reviewed and no TRAIN-002 adapter exists. The manifest, curation, audit sheets, and superseded prior shortlist are in [DATA-002](../docs/data/DATA-002.md).
 
 DATA-M001 uses the audited real FFHQ-Makeup pairs rather than any synthetic output. Twelve selected identities have a disjoint 10 TRAIN / 2 VALIDATION split and 50/10 existing bare-to-makeup pairs. The Project Lead approved all 60 from contact sheets; manifest hashes, source photo attribution/licenses, captions and finalizer QA passed. Numeric makeup suffixes are variant positions, not project style labels. Some accepted targets contain smoothing or retouching, so the practical review gate does not prove geometry-perfect data. See [DATA-M001](../docs/data/DATA-M001.md).
+
+
+## Corrective Makeup intake, 2026-10-25
+
+**VERIFIED integrity; EXPERIMENTAL qualitative audit:** original DATA-M001 60-pair files, captions, credits and earlier approvals unchanged. Separate data/makeup/MAKEUP-CORRECTION-001/review.json has 0 KEEP / 60 REJECT for stricter unchanged corrective reuse, training_allowed=false and human_approval=PENDING. No new training examples acquired. Blank replacement-intake.csv captures correspondence/provenance/rights and review gates. Current source FFHQ-Makeup differs from BeautyBank/BMS; BMS's makeup-only archive requires matching FFHQ originals. No replacement has passed pairing, natural appearance and permission gates. [Primary-source research](../docs/research/makeup-replacement-datasets-20261025.md).
+
+
+2026-10-25 BMS intake IN PROGRESS: public revision 47f245b2d1181eab71f76ef0b829d94fd4edf760/part sizes and publisher hashes inspected, tiny exact ranges verified. Publisher hashes were not independently checked against full parts. Larger index read timed out, recovery DNS failed; no raw images acquired, zero approved new pairs. Labels alone do not establish actual cosmetic fidelity or source pairing. [Receipt](../docs/experiments/makeup-replacement-intake-20261025.json).
+
+
+2026-10-26 MAKEUP-RENDER-001 reuses only original054109/056266/006553/035149with frozen source hashes/credits. No target faces, replacement dataset or trained examples acquired/created for corrective training. Twelve cosmetic previews are private evaluation outputs with human acceptance pending, not ground-truth data. Source originals may already have makeup; no bare-face truth or untouched-test claim. [Review](../docs/experiments/makeup-source-render-pilot-20261026.md).
+
+
+2026-10-30 STABLE-MAKEUP-001 reuses originals054109/056266/006553/035149 with credits/hashes and the user's reference portrait (static square crop350,350,1350,1350 resized512). Four frozen source-control PNGs generated via pretrained SPIGA/RetinaFace; not makeup outputs/training targets or newdatasetcollection. Inputbin is private evaluation material, no public redistribution instruction. No original dataset/paired targets modified. Quality/holdout coverage remains unverified.
+
+
+## Automatic Makeup previews are not finalized pairs, 2026-11-04
+
+**VERIFIED artifact coverage / EXPERIMENTAL appearance:** 4reuseddevelopmentportraits by13actualcatalogstyles produce52automaticcandidateoutputs in artifacts/makeup-local-transfer-20261104/catalog-review. Existing AI guides are imperfect conditioning references, not cosmetic ground truth. Source credits/terms, requested style IDs, guide hashes, preprocessing and pretrained teacher provenance are retained. Human acceptance PENDING; eligible_for_training=false for every candidate. Zero new accepted pairs or identity holdout claims. No source/old dataset/target modified. Author code records CC BY-NC-SA4.0; downstream target reuse/production rights remain NEEDS VERIFICATION. No artist prerequisite. Existing rejection policy remains in force. [Review](../docs/experiments/makeup-automatic-correction-20261104.md).

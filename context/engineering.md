@@ -1,5 +1,9 @@
 # Engineering facts
 
+2026-11-07 source handoff inspection: GitHub reports public repository `mark-juswa/CometicsAI`; default `main` is an ancestor of the reviewed deployment branch, 57 commits behind before handoff. `render.yaml` selects the BeautyCore root and disables automatic deployment. The client guide at `docs/guides/client-repository-handoff.md` distinguishes source, private serving inputs and provider access. Two historical notebook public copies load private fixtures by filename with unchanged hashes; their embedded original copies are preserved locally. The final corrective serving notebook remains byte identical. Full publication evidence is tracked separately in `docs/experiments/client-source-publication-20261107.md`.
+
+2026-11-07 clean source export verification: automatic Git line ending conversion altered raw Makeup file hashes and reproduced an import refusal. `.gitattributes` now preserves exact bytes of four Makeup JSON contracts and two final serving notebook copies. No hash guard or model setting changes. All six exported files match original bytes and 47 critical Makeup checks pass in the clean public source export. The full workspace backend run separately reports 1,016 passed and 18 historical check failures; website typecheck, 33 release/registration, 55 business and production build pass. See the structured validation receipt beside the publication report.
+
 2026-10-09 inspected deployment implementation: `backend/app/demo_gateway.py` authenticates the shared backend key and trusted Client identity, binds consultation/job ownership, retains three bounded 30-minute jobs and serializes existing generation dispatch. `demo_server.py` is the public facade entry point. BeautyCore remote mode is explicit and HTTPS tunnel-root restricted; the three GPU clients permit only opt-in fixed-port loopback. `scripts/package_render_kaggle.py` creates a separate private CPU overlay plus `notebooks/render_kaggle_demo.ipynb`; `render_kaggle_bootstrap.py` isolates NumPy1/MediaPipe, NumPy2/CPU-TorchVision/YOLO, and the original pinned GPU host. Render Blueprint uses `beautycore`, Node24.7, port binding and `/api/health`; no DB mutation or model-source change. Local checks and unverified cloud gates are recorded in [validation](../docs/experiments/render-kaggle-validation.json).
 
 2026-10-03 mobile Consultation UI: `mobile/app/consultation.tsx` now uses `components/consultation-service-cards.tsx` and the Consultation-only variant of `components/workflow.tsx` for native web-derived Service/Direction/Your Looks presentation. `components/photo-picker.tsx` adds a compact Consultation variant without changing Custom studios. `store/consultation.ts` permits Service → Direction with a selected feature and requires the photo before Your Looks; removing a photo returns to Direction. The first nonempty description is sent through unchanged session begin/reply methods on one Start action. `app/consultation-result.tsx` keeps native header Back and Select. No API routes or server code changed. TypeScript/lint, 37 mobile tests, Doctor 21/21, Android/web exports, 320–430 px intercepted UI checks and private bundle scan passed; the Supervisor reported the Expo Go UI looks good. [Evidence](../docs/experiments/mobile-consultation-ux.md).
@@ -286,3 +290,214 @@ The inspected backend has Hair's `GenerationEngine`, `MockEngine`, Hair-only `Re
 ## Guest trial limit feedback, 2026-10-20
 
 **UI development DONE / local verification VERIFIED; updated UI deployment PENDING.** Supervisor requests a clear used-limit modal and indicator beyond the top banner. Shared consultation now shows contextual allowance near recommendations, automatic dismissible account prompt after a settled used attempt, Account required labels/locked-card prompt, and distinct processing/unknown messages. Compact intro retains collapsed privacy/attempt terms. Native dialog includes named description, Escape/close and scroll restoration; preview and Download preserved.29guest +47business tests=76pass; production build/TypeScript pass. No quota, database, model, notebook or generation changes; no GPU job/credit used. Independent current live availability200/enabled=true resolves prior flag mismatch, but this new frontend is not deployed yet. Native browser/mobile visual acceptance remains Needs verification. [Evidence](../docs/experiments/guest-trial-limit-feedback-20261020.json).
+
+
+## Style expansion offline tooling, 2026-10-25
+
+**VERIFIED:** scripts/style_expansion_pilot.py runs an explicit private custom-prompt path using existing verified adapter ownership, with old baseline/restoration controls. scripts/style_expansion_nails.py isolates three new patterns against supplied masks; scripts/style_expansion_bootstrap.py preserves nested preflight/environment pins and creates no serving process. scripts/package_style_expansion_pilot.py builds an ignored private notebook including the historical hand/manual mask, no weights or secret values. Global local Python has NumPy/Pillow/pytest; backend/.venv lacks NumPy and is not used for this renderer validation. Local torch.cuda.is_available() is false.43focused checks pass; original bundle CPU preflight passes. GPU candidate quality remains unverified.
+
+
+2026-10-25 STYLE-EXP-001 scratch correction VERIFIED locally: model cache selection probes actual free space on /tmp and /kaggle/temp, preserving original30GiB downloader threshold. Guarded --resume-after-scratch-failure rechecks installed environment without pip reinstall and writes separate nested evidence; recovery cell preserves original ZIP and source inventory.49focused tests pass; corrected v2/recovery payload hashes match current source. Returned first GPU attempt passed environment/artifact gates but never downloaded the Base or generated a look. Actual retry/storage success remains unverified.
+
+
+2026-10-25 scratch correction VERIFIED in completed Kaggle artifact: /tmp selected with1048.46GiBfree, Base download/preflight succeeded and all15portrait calls completed on reported Tesla T4. Both Hair/Makeup old-style restoration hashes match initial controls. Returned PNG/RGB and source/prompt/adapter hashes independently verified; no code changes during review. Timings/pixel preservation are scoped to the pilot, not online generation acceptance.
+
+
+2026-10-25 MAKEUP-QA-001 tooling VERIFIED locally: scripts/makeup_quality_diagnostic.py checks matched12cases, raw LoRA tensors plus actual per-layer scaling and restoration; scripts/makeup_quality_bootstrap.py reuses proven scratch selection with original preflight and no server; scripts/package_makeup_quality_diagnostic.py creates ignored PRIVATE notebook with2hash-verified old portraits.13new/60focused tests and original archive/notebook CPU integrity checks pass; actual GPU scaling/inference remains to run. No new local dependencies installed.
+
+
+2026-10-25 diagnostic recovery VERIFIED locally: experimental forward uses torch.no_grad; scripts/makeup_quality_resume_bootstrap.py verifies installed pins and cached snapshot without pip/download and launches a fresh runner. Packager embeds standalone same-session recovery in notebooks/makeup_quality_resume_cell.py and corrected ignored v2. Old source/output files preserved, report continuation retains8cases with one exact-pixel control before4missing.22diagnostic/69focused tests pass; pinned GPU validation pending.
+
+
+2026-10-25 diagnostic recovery VERIFIED from returned archive:5new forwards finish12case matrix; one current control exactly matches prior PNG/RGB;8old rows retained,4reduced complete, both adapter restorations pass100layers. Cached model/packages reused. Original failure evidence retained. No code modifications this review; raw archive/reports/images preserved in ignored artifacts/makeup-quality-20261025/review-db42b690b2.
+
+
+2026-10-25 MAKEUP-QA-002 tooling VERIFIED locally: scripts/makeup_adjustment_diagnostic.py implements cached-session9call comparison with exact reviewed reference hash, fixedstyle/adapter/seed/steps/frame, effective scale/tensor restoration and no_grad; scripts/package_makeup_adjustment.py embeds runner/plan in notebooks/makeup_adjustment_cell.py without photos/weights/keys. Uses unchanged frozen3adapter helper functions from prior notebook; tests establish AST equivalence.16new/85focused tests and actual4control preflight pass. No app/model/production configuration change or GPU execution.
+
+
+2026-10-25 MAKEUP-QA-002 cached-session execution VERIFIED from returned archive:9newcalls/one foundation,4retained byte-identical current images, one exact control and100layerstate restoration. Sources/settings/PNG/RGB/environment/preset/checkpoint hashes match frozen records. No reinstall/download.566.36sforward plus43.15sload reported; not website timing. No implementation changes during review.
+
+
+2026-10-25 MAKEUP-QA-003 tooling VERIFIED locally: scripts/makeup_guidance_diagnostic.py and scripts/package_makeup_guidance.py create cached-session5call follow-up with8retained4/3references, one3.0control and4new2.5cases. Original style prompts and full adapter retained; frozen shared scaling/restoration helpers reused. notebooks/makeup_guidance_25_cell.py includes no photos/weights/keys and validates exact prior report/cache.15new/100focused checks and actual8control preflight pass. Existing QA-001/002 scripts/artifacts and production files unchanged.
+
+
+2026-10-25 MAKEUP-QA-003 cached-session execution VERIFIED from returned archive:5newcalls/one foundation,8retained references byte-identical and3.0control PNG/RGB identical;100layer tensors/scaling restore. Source/settings/environment and all12image hashes match frozen evidence.312.94sforward plus48.13sload, no cache reinstall/download. No code or production changes during artifact review.
+
+
+2026-10-25 STYLE-VAL-001 tooling VERIFIED: style_release_validation.py, style_release_bootstrap.py and package_style_release_validation.py prepare freshprivate29portraitvalidation with onefoundation and ordinary verifiedadapterunload/load; inheritedpins/scratchguard intact. Local style_expansion_nails_auto_validation.py runs actualMediaPipe/isolatedCPUYOLO/fingertiprefinement +3experimentalrenderers on4historicalhands. Twelveoutputs independentlypreserveoutsideactualmask.78focused tests/12newpass; originalGPUarchiveallhashes and notebookpayloads pass. No productioncodechanges; automaticmaskcontourquality and GPUoutputs pendingclientreview.
+
+
+2026-10-25 STYLE-VAL-001actualGPUexecution VERIFIED:29calls/onefoundation,4historicalselected2.5controls+finaladapterrestore PNG/RGBmatch;100LoRAlayers/200tensors inspected onMakeup->TRAIN002->Makeup. Pinnedhost/source/prompt/artifact/outputhashesverified. No servingcodechangesduringreview. Timing1863.77sforward+44.48sload,notwebsitelatency.
+
+
+## Makeup corrective review tooling, 2026-10-25
+
+**VERIFIED:** scripts/makeup_corrective_review.py verifies 60 unique JPEG512 pairs, captions, source/target hashes, identity-disjoint 50/10 split and preserved original metadata. Preparation creates separate private review sheets and refuses an existing output directory. validate_review requires all frozen rows in order and rejects fabricated human/training approval or altered original license/credit metadata. Eighteen focused synthetic regression tests pass; actual original manifest and ledger revalidation pass. data/makeup/MAKEUP-CORRECTION-001/review.json stores separate qualitative decisions, not a changed training dataset. No serving, dependency or model configuration changes.
+
+
+## Offline Makeup tone prototype, 2026-10-25
+
+**VERIFIED:** scripts/makeup_tone_correction.py uses cached hash-pinned SegFormer CPU labels and manual neutral boxes; Lab offset gated by positive lightness gap and bounded16L/8chroma. V2 uses semantic protection plus smooth20px distance transition instead of rejected rectangular exclusions. Operates on generated canvas; restores protected/outside RGB exactly. Validates input/plan/parser hashes, offline-only flags, refuses existing preparation/completed comparison. Two-phase prepare/apply with cached8maps, six existing cases.14new+18audit=32focusedpass; six saved outputs independently checked. No new dependencies or serving changes. Historical v1 runner/evidence kept in ignored artifacts.
+
+
+## Source-coordinate Makeup prototype, 2026-10-26
+
+**VERIFIED:** scripts/makeup_source_render.py implements offline prepare/apply with pinned cached SegFormer CPU parsing, source-contour eyelid/liner, semantic lip and conservative cheek fields. Lab pigment keeps local texture/luminance variation; source/protected RGB restored exactly. Inverse Lab/D65 and bounded gamut mapping tested; zero-opacity bypass preserves exact source. Guards on missing/ambiguous geometry, invalid profiles, hashes, truthful non-LoRA metadata and evidence overwrite.24new focused tests pass; all12actual saved images independently reproduce with current code after a zero-alpha safeguard. No runtime/backend/UI/dependency changes.
+
+
+## Seven-profile source renderer extension, 2026-10-26
+
+**VERIFIED:** scripts/makeup_source_styles.py adds bounded localized lower-eye/upper-eye fields, cheek highlights, source-driven lip gloss/matte and golden eyelid tint while importing unchanged baselinegeometry/colorhelpers. New7style plan pins4sourceimages/cachedlabels/baselinecode/plan/report. It verifies12oldcontroloutputs; no model is loaded in this extension. Deterministic prepare/apply, original-pixel guards, truthful non-LoRA flags and no-overwrite checks.27new+24baseline tests=51pass; all28newPNGs independently reproduce and12baselinecontrols stayexact. Cosmetic finish scope is local, not full-face foundation/lash capability. No production route/contract/dependency change.
+
+
+## Offline non-lip visibility experiment, 2026-10-26
+
+**VERIFIED:** scripts/makeup_visibility_pilot.py and MAKEUP-VISIBILITY-001 pin4originals/maps, prior helpers and12previousoutputs. Adds contour upper-lid/crease/liner and outward cheek fields; skin-only edits, feathered mouth exclusion, combined Lab bounds/gamut safety. Previous mouth/protected/outside RGB exact.19new+51regression=70pass;12actual PNGs reproduce. No serving imports/newinference/dependencies/cloudintegration. Technical preservation is not cosmetic acceptance.
+
+
+## Offline complete-look prototype, 2026-10-27
+
+**VERIFIED implementation:** scripts/makeup_complete_look.py uses unchanged source/visibility helpers and4cached source maps; layered eyelid colors, supersampled procedural lash strokes, existing-brow darkening, local blush/highlights/lip gloss. Frozen MAKEUP-COMPLETE-001 guards flags, source/helper/map/prior hashes and overwrite. Editable classes1/6/7/11/12; source eye/nose/mouth/nonface exact. Four actual outputs independently reproduce. Procedural lash quality fails visual review; this is not a serving feature. No new package/model inference/cloud change.
+
+Complete-look check receipt:16new+70regression=86pass. MediaPipe0.10.33 detected locally; no face-landmarker asset or inference added.
+
+
+## Offline Makeup landmark gate, 2026-10-30
+
+**VERIFIED:** scripts/makeup_alignment_pilot.py and MAKEUP-ALIGN-001 guard model/source/map/helper hashes,478finite normalized points,1face, semantic eye/mouth consistency/pose and evidence overwrite. ExistingMediaPipe0.10.33 loads pinned Google3,758,596byte task onCPU;4detections complete. scripts/makeup_aligned_soft_glam.py consumes hash-pinned/reviewed points, uses finer clustered tapered curves and exact previousprofile; eye-safe union=landmark polygons +eroded semantic eyes. Explicit onepixel semantic rim may change; otherprotected/outside RGB exact.20new+86prior=106pass;4savedoutputs reproduce. No runtime imports/routes or installed package changes. Read-only alternative source snapshot is never executed.
+
+
+## Stable-Makeup evaluation package, 2026-10-30
+
+**VERIFIED local preparation:** scripts/prepare_stable_makeup_controls.py generates4source controls onCPU from pinned SPIGA/RetinaFace with minimal recorded CPU/import patches. scripts/stable_makeup_trial.py validates manifest/input/asset checksums, author checkpoint metadata/CRC and strict full-state loading, then4raw outputs/metrics. scripts/stable_makeup_bootstrap.py isolatesPython/dependencies and staged logs; notebook adds7200secondprocess-group kill/archive-finally. scripts/package_stable_makeup_trial.py and build_stable_makeup_notebook.py freeze350files/3.77MBbin; reference/portraits/controlRGB512 verified.23newtests pass. Model imports/meta structure pass on localCPU2.10; targetT4Torch2.0.1/FP16 loading/inference not run. Existingbackend/frontend/dependencies/serving untouched.
+
+
+2026-10-30 actual Stable-Makeup trial runs on T4 with targetTorch2.0.1+cu117 and strict learned-state loading;4outputs complete.17.59secondload,10.29–12.24second generation+writing,4.69GiBallocated/4.91GiBreservedstandalone. No production code change in this review. Cosmetic quality still fails source-feature preservation; runtime compatibility is not release acceptance. Returned full asset SHA receipts retained separately.
+
+
+2026-10-30 release planning source audit: render.yaml selects beautycore/ Next.js on Render; scripts/render_kaggle_bootstrap.py starts the Python facade and shared GPU worker in Kaggle. runtime-registry.ts verifies protected feature readiness but has no per-style release capability contract. Schema ai_generations.style_id is varchar(80), style_name varchar(255), look_details JSONB; migration0004 enforces version1/size/immutability. Existing python scripts/check_saved_look_catalog.py passes for13Hair/10Makeup/5Nails metadata. These are source/static checks, not a live deployment/schema verification. Proposed compatible expansion design is docs/specs/0015-expanded-styles-release.md; it is not runtime implementation.
+
+
+2026-10-30 expanded-style milestone: app/style_release.py strictly parses the single manifest; app/style_capabilities.py verifies installed renderer source/profile and reports only known baseline model catalogs plus approved CPU renderer IDs. Original workers can omit optional model capability fields; mismatched/malformed advertisements fail protected readiness. app/nails/expanded.py ports the three algorithms; main discovery/generation uses active_nail_styles/active_nail_style_by_id. render_target dispatches to them without altering baseline math or hybrid compositing. scripts/generate_style_release.py produces beautycore/lib/ai/style-release.json and accepted business additions; accepted metadata is retained when generation is disabled. runtime-registry.ts checks new readiness via style-release.ts without modifying signed registration fields. All13manifestentries disabled. Full backend773, application108, typecheck/build passed; final readiness/release follow-up64passed. Old GPU worker, optimization, Hair registries, Makeup contract, notebooks and business JSON are byte-unchanged against baseline receipt. Packages not rebuilt, live runtime not tested. See docs/experiments/expanded-style-milestone1-20261030.md.
+
+
+## Accepted Nails package, 2026-10-30
+
+**VERIFIED implementation:** exactly three app/style_release.json entries are accepted/enabled; generated Render evidence and business metadata match. Active Nails count is eight. scripts/package_expanded_nails_release.py builds deterministic immutable artifacts/render_kaggle_cpu_styles_20261030_01.bin plus notebooks/render_kaggle_expanded_nails_demo.ipynb with the unchanged pinned GPU archive. It verifies original registry/preset agreement, compiles included Python and embeds the current verified Nails-only optimization overlay. Setup checks outer/member hashes, CPU/GPU pair and exact release digest; startup checks loaded facade release before tunnel/registration. Explicit UTF-8 fixes a real Windows roundtrip-test mismatch; the failed pre-publication notebook/receipt are preserved under artifacts/expanded-nails-build-attempt-01. No fallback, model source, cloud configuration or database mutation. Receipt: docs/experiments/expanded-nails-package-20261030.json.
+
+Final accepted-release verification: fullbackend777passed; Renderrelease32/business50/guest29=111applicationtests passed; TypeScript/productionbuild/catalog/package-idempotence/scopedwhitespace checks passed. Per-design disposableDB tests verify price snapshots and shared authorized booked images. No cloud/GPU run. Evidence: docs/experiments/expanded-nails-release-20261030.json.
+
+
+## Hair-only validation preparation, 2026-10-30
+
+**VERIFIED:** HAIR-EXP-002 plan, hair_expansion_validation.py, hair_expansion_bootstrap.py and package_hair_expansion_validation.py create a separate21call candidate/baseline/restoration notebook. Original GPU archive/member/model/host checks retained, original Hair read_adapter_metadata guards both actual checkpoints and exact supported training labels before model load. Plan pins exact registry bytes from original GPU archive rather than local Windows formatting. Onefoundation/tensor/scale checks, no_grad, saved hashes and partial report, embedded-image review, twohour group timeout and ZIPfinally.12new/23relatedchecks pass, including real extracted Hair metadata in a separate Python process; actual diffusion not run. Production catalog/Nail release hashes unchanged. Only notebooks/hair_expansion_validation.ipynb is new for operator use; it embeds historical research photos and must stay private.
+
+
+## Hair validation returned evidence, 2026-10-31
+
+**VERIFIED returned-run evidence:** HAIR-EXP-002 completes21cases on exact reviewedPython3.12.13/Torch2.10.0+cu128/TeslaT4 environment; allfrozen source/plan/input/PNG/RGB hashes, onefoundation and exactTRAIN001restorationpass. No runner mismatch found. Per-image total1367.76sec, load51.83sec, peakallocated8304.31MiB; not application latency. Trusted gallery rebuild matches returnedHTML; Edge30embeddedimages/enlargement/mobilecheckpass. Runtime integrity is separate from failed/qualified haircut appearance. No source/model/deployment changes; accepted Nail release hashes remain intact. See docs/experiments/hair-expansion-results-20261031-review.json.
+
+
+## Approved Hair inference profile, 2026-10-31
+
+**VERIFIED implementation:** backend/app/hair_profile.json pins the approved French Bob prompt, original TRAIN-001 SHA and full1.0/4.0guidance/20steps/seed1977/512settings. hair_profiles.py verifies profile/registry ownership, exposes approved additional styles and validates exact remote result provenance. Original REAL_STYLE_PROMPTS and trained registries stay unchanged. main.py uses active remote Hair discovery/lookup; consultation tags and generated business metadata include French Bob with the hair-color limitation.
+
+scripts/hair_release_worker.py is a bounded initialization extension installed in a fresh verified workspace. It preserves original FluxRuntime methods for baseline styles, adds the single approved prompt path with no_grad/full-scale verification and returns explicit execution-profile/hash/release/trained_style:false metadata. Original ServingOwner still controls adapter switching/tensor checks/locking/cancellation. Original worker source on disk is unchanged; the release payload appends a checked initialization hook in its extracted copy.
+
+style_capabilities.py requires exact matching advertised worker capabilities for this enabled model profile. Render's generated evidence adds the exact preserved Nail-only release allowlist; the previous manifest is archived under backend/app/style_releases/styles-20261030-01.json. New hair_nails_release_overlay.py whitelists seven source/config files, verifies hashes/original members and refuses running sessions. package_hair_nails_release.py creates separate immutable CPU/worker/notebook artifacts and binds their inventories. Original GPU/checkpoints/registries/fallbacks remain intact. No live runtime, database or cloud deployment verified here.
+
+French Bob finalverification: fullbackend809passed/0failed/0skipped; Render33/business51/guest29=113app; TypeScript/Nextproductionbuild/catalog/generatedmetadata/packageCRC/sourceparity/whitespacepass. No liveGPU/website rehearsal. Evidence docs/experiments/french-bob-integration-20261031.json; separately named CPU+starter ready and oldfallbacks unchanged.
+
+
+## Makeup completion pilot and review gallery, 2026-10-31
+
+**VERIFIED preparation:** makeup_expansion_completion.py validates fixed3calls, originalMAKEUP001/preset hashes, six frozen priorimages/report and source hashes; SoftGlamcontrolmustmatchbefore2Manga calls. Singlefoundation/fullscaling/no_grad/tensorchecks, reports onfailure, embeddedreview; no productionprompt mutation. makeup_expansion_bootstrap.py retains originalguardedfresh setup; package_makeup_expansion_completion.py embeds2documentedJPEGs,6PNGs,referenceJSON and5source/configfiles inprivate2cellnotebook.11tests pass; no GPU inference. Current reviewgallery has64verified embeddedimages and passesEdge/mobile/enlargement. Existing French/Nails serving source and packagehashes unchanged; no model/registry/schema/API/config change.
+
+
+## Five-Hair release implementation and publication, 2026-10-31
+
+Verified source: hair_profiles.py supports five explicit hash-bound inference profiles with original checkpoint ownership and truthful trained_style:false metadata; missing TRAIN-002 is filtered from advertised catalog. hair_release_worker.py adds their routing to a fresh verified worker and delegates baseline generation unchanged. Strict11file overlay retains original manifest/model/registry, publishes matching capability evidence, and remains under shared serialized adapter owner. package_all_hair_nails_release.py creates separate release02CPU/notebook using existing bootstrap/registration and Nails-only cache. Original Makeup contract/remote implementation/style catalog and original worker/optimization source normalize byte-identically to previous Git HEAD. No new runtime dependencies/migrations. 52explicit release files published at63fc851 to confirmed Render branch. Cloud rollout still operator-dependent; no Render credential/control or Kaggle CLI/config/node_repl runtime available. [Publication](../docs/experiments/all-hair-nails-publication-20261031.json).
+
+
+## Offline source-complexion field, 2026-11-01
+
+Inspected/implemented scripts/makeup_complexion_field.py and scripts/evaluate_makeup_complexion.py only in the offline experiment path. Existing cached face parser supplies source/raw semantic labels; raw4.0controls parsed locally without downloads. Algorithm uses color-reference affine mapping, neutral skin/neck anchors, sparse harmonic Lab field, bounded shifts and continuous head/neck transition; image geometry not warped. Raw lip/brow/hairline/neck colors may change. Evaluator pins source/label/algorithm hashes and exact ten-case matrix; refuses drift/overwriting. 23focusedchecks/tenexactreproductions and Edge30images pass. No serving/dependency/cloud/Git integration; no CUDA inference. Local package environment and exact source inventories are in experiment record. [Evidence](../docs/experiments/makeup-complexion-20261101.json).
+
+
+## Original-photo retouch prototype, 2026-11-01
+
+scripts/makeup_source_faithful_retouch.py uses original512RGB/luma with bounded, primary-skin-only low-frequency chroma offsets; only the old color reference is aligned. No source warp, texture blur or synthetic features. Corrective RGB offset is orthogonal to original Y; gamut shrinks delta only, final maxRGB4/255 andlumaerror<=0.501. scripts/evaluate_source_faithful_retouch.py guards fixed two-photo plan/algorithm/input hashes and creates native/toggle gallery.18checks/twoexactreproductions and Edgeviewer/mobile/togglespass. No runtime/dependency/serving/cloud adoption. Reference from project Makeup output is historical color-only input; final canvas is original, so do not label final as unchanged raw MAKEUP-001 generation. [Evidence](../docs/experiments/makeup-source-faithful-20261101.json).
+
+## Offline Makeup repair tooling, 2026-11-01
+
+Inspected new local scripts: scripts/makeup_cosmetic_separation.py and scripts/evaluate_makeup_separation.py, frozen data/makeup/MAKEUP-SEPARATION-001/plan.json and backend/tests/test_makeup_cosmetic_separation.py. No live service imports the repair. It reuses offline alignment/numerical utilities and saved parser/landmark maps; production asset/runtime integration is absent. Python focused suite19pass; local Edge gallery QA loads48embeddedimages with no script errors. No packages installed or serving files changed. [Evidence](../docs/experiments/makeup-separation-20261101.md).
+
+## Reference makeup visibility tooling, 2026-11-01
+
+New isolated scripts/makeup_reference_application.py and scripts/evaluate_makeup_reference_application.py preserve prior separation source and outputs. data/makeup/MAKEUP-REFERENCE-001/plan.json freezes final v4.1; backend/tests/test_makeup_reference_application.py adds15checks, with19previous checks retained.54embeddedgalleryimages and local Edge controls/mobile verify. Existing services do not import this code. Runtime parser/landmark asset integration remains absent; nine serving/release hashes unchanged. [Evidence](../docs/experiments/makeup-reference-visibility-20261101.md).
+
+
+## Bounded Makeup source component files, 2026-11-02
+
+**VERIFIED local files:** scripts/makeup_surface_application.py contains only the source lip palette/coverage component. scripts/evaluate_makeup_surface_application.py verifies existing image/landmark hashes and refuses to overwrite an evidence directory. backend/tests/test_makeup_surface_application.py adds17checks. No live module imports these files. Source pixel preservation is enforced in the component. Failed full composition source is archived only under artifacts/makeup-surface-20261102/full-proof-01. Production MakeupRuntime/shared owner and Hair/Nail assets remain unchanged. [Evidence](../docs/experiments/makeup-source-surface-20261102.md).
+
+
+## Makeup source layers and target gates, 2026-11-04
+
+**VERIFIED inspected implementation:** scripts/makeup_source_layers.py provides an offline source fitted mask/material API and PNG/NPY file entry point, with source/hash/parser guards and explicit artist attestation or development mode. It reuses frozen numerical helpers; serving imports none of it. scripts/makeup_target_quality.py validates separate per pair quality reviews and pinned rejection policy. Paired preparation writes a pending template; finalization requires the separate review. Package and standalone train_m001_kaggle.py carry/recheck the shared validator and policy before preparation/GPU preflight. Old training tool snapshots remain in private artifacts. No existing runtime/model/catalog/dependency change.103distinctlocalchecks and24panelEdgegalleryQA pass; six exact retained lip reproductions and40unchangedhistorical/servingreleasehashes. Full artist assets and automatic new portrait fitting remain absent. [Evidence](../docs/experiments/makeup-architecture-review-20261104.json).
+
+
+## Automatic Makeup source application, 2026-11-04
+
+**VERIFIED inspected local implementation:** scripts/makeup_local_features.py strictly validates pinned EleGANt source/checkpoint, uses CPU tensor inputs adapted from Segformer19/SPIGA68, bounds its cache and clones decoder inputs to avoid upstream list mutation. scripts/makeup_source_layers.py adds automatic anatomy support, selected style pigment projection, source reflectance absorption and crease/brow feathering. scripts/evaluate_makeup_automatic.py freezes4sources/13guides, prepares local maps, runs52cases, reuses saved fields for material correction and creates truthful comparisons. No serving module imports this provider. Checkpoint41,123,601bytes SHA71473aa3abad4f66536cef89ab179851547811f1153e846333fa167655776737; observed author download hash, not an independent signature. Existing .tmp/stable-makeup-preflight-env uses Torch2.10.0+cpu; no new package install.95focused/27unchangedruntimechecks pass;52outputs/native crop/source checks and182imageEdgegalleryverify. Forty historical/input/servingreleasefiles unchanged. Fresh arbitrary upload fitting, GPU/Kaggle memory, full application latency and production adoption remain unverified. [Receipt](../docs/experiments/makeup-automatic-correction-20261104.json).
+
+## Returned private Makeup GPU evidence, 2026-11-05
+
+**VERIFIED returned technical evidence, appearance REJECTED:** Two reference conditioned MAKEUP-001 generations complete with exact pinned environment/model/adapter/settings and full active tensor/scaling assertions, one foundation. Independent archive review checks23safeuniqueCRCmembers, preparedinventory/plan/sixfixtures, rawPNG/RGBhashes and allcomparisonpanels.85.894/84.586seconds;8303.43/8304.56MiBpeakallocatedGPU. These are actual model output observations, not mocked tests. Both lose photographic texture and reconstruct features; deeper source heavily whitened. No serving integration or further GPU call. `review_returned_gpu.py` reads attached data only and preserves original archive plus review under `gpu-return-01`. [Evidence](../docs/experiments/makeup-guided-gpu-review-20261105.md).
+
+## Private complete Makeup model check, 2026-11-05
+
+**VERIFIED local implementation:** `prepare_makeup_teacher.py` generalizes the approved external teacher fit with existing parser/mesh/source protection and reproduces the035149v2PNG exactly. `makeup_reference_diagnostic.py` makes exactly two ordered original/guide calls with existing MAKEUP-001; raw outputs, full effective prompts, active adapter tensor/scaling checks, one foundation and partial failure records. Existing `makeup_quality_bootstrap.bootstrap` gains an allowlisted runner argument; the old default remains. Private notebook reuses original bundle extraction and pinned setup. Plan contains different train guide identities and validation source IDs, explicit synthetic provenance/credits, hashes and original settings. CPU package verification and139focusedtests pass, with no actual GPU generation. Rejected new complexion/gradient branches are archived and pre attempt helpers restored. Eight captured serving/release controls,52priorPNGs and existingCPU/GPUbundles unchanged. Latest combined Hair/Nails guide is18Hair/10Makeup/8Nails. No UI/API/model/environment/cloud change. [Evidence](../docs/experiments/makeup-complete-direction-20261105.md).
+
+## Optional automatic cosmetic materials, 2026-11-05
+
+**VERIFIED inspected implementation:** scripts/makeup_materials.py adds source guided confidence, constant pigment hue/local shadow protection, observed lash/reflection alpha fitting and bounded existing shine changes. scripts/makeup_source_layers.py accepts optional materials on the same automatic function; default and preferred historical lip operator remain available. scripts/evaluate_makeup_automatic.py adds refine using hash bound source confidence/detail maps and saved neural fields, with no overwrite and actual Nov4 baseline panels. Source probability maps reproduce all four existing hard label maps exactly. Detail donor is the existing user photo; cached parser and CPU SPIGA prepare it. No serving module imports the new materials.119distinctchecks and52independentsourcechecks pass;208imagegallery/filters/native/mobile QA pass.92of94frozenfiles unchanged, including52Nov4PNGs and8capturedservingreleasecontrols. Final inspected source snapshot is under artifacts/makeup-refinement-20261105/verified-source/. Appearance remains experimental with recorded lash/metal/finish limits; no target accepted or training/integration performed. [Receipt](../docs/experiments/makeup-material-refinement-20261105.json).
+
+
+## Corrective Makeup data and compatible training implementation, 2026-11-05
+
+**VERIFIED inspected code/local checks; authoring IN PROGRESS.** makeup_corrective_catalog.py builds all13current/heldstyledefinitions with six cosmetic components and distinct captions. makeup_corrective_data.py freezes source provenance and planned pairs, registers lossless same-stem source/targetPNGs, retains generation/preparation evidence and refuses missing individual quality admission. train_m001_kaggle.py dispatches an explicit corrective schema and uses a separate fresh Base run name; evaluation_plan resolves13stylecaptionsidenticalto training and52Base/adapterjobs before model load. data_m001_package_training.py embeds the corrective validator/catalog; standalone CPU prepare passed on synthetic reviewed fixtures. Historical validation/refusal path retained.
+
+prepare_makeup_teacher.py reuses pinned CPU parsing/MediaPipe and dense source fitting, protects original scene/features, accepts RGB-hash-bound cached target anatomy and UTF8photo metadata. v4restoresbrowspatialopticaldensity instead of source RGB cutouts, demonstrated on two extra source portraits. prepare_makeup_sources.py caches all14sourceanatomies and supports reuse without repeated model loading. Archived first78planworkspaces and review images are intact; active candidate03 contains13approvedrepresentativeappearances plus pending further pairs. Current appearance approvals are distinct from full training admission, which is zero. Existing serving/contracts,18Hair/8Nailsrelease and model weights unchanged.
+
+## Complete corrective target workspace, 5 November 2026
+
+VERIFIED implementation: data-candidate-04 contains78losslessRGB512pairedcandidates,52train/26validationand13styles. Existing v2 default and approved v3 outputs remain; v5 preparation uses original brow RGB gradient fitting with a copied OpenCV mask and independent anatomical write support. Source and target anatomy caches are hash bound. All14originalanatomycachesreusedforworkspace04. All65newrawteachersare saved.38focusedchecks pass after final changes,78independentsourcechecksand8servingreleasehashespass. Full offline gallery has210losslessassets, tested13groups/78rows/312displayedslots,nativeviewer,exactpendingexport,desktop/mobile390andzeroJSerrors. New artifact import_quality_review.py imports exact human review records and preserves originals/previous ledger; it never infers acceptance or starts training. No real review has been imported through it yet. Current serving/model/Hair/Nails/cloud unchanged. See docs/experiments/makeup-corrective-supervision-20261105.md.
+
+## Corrective training input and notebook, 6 November 2026
+
+VERIFIED locally: .tmp/data_m001/corrective_selection/final_v1 is FINALIZED with 52/26 accepted pairs and all 13 styles. data_m001_package_training.py produced artifacts/makeup001_corrective001_training_20261105.zip (198,859,794 bytes; 572 members; SHA12ab2d039e5fd3d7f8f0bdcb891fa0efe1865e1ecd6407bff6b16f7b60ab6312). The ready artifact notebook embeds all input hashes, handles ZIP or unpacked Kaggle input, stages writable data, constrains host Torch during pinned Toolkit setup and uses existing prepare/execute/evaluate/package runner phases. Exact final candidate checkpoint/hash is selected before evaluation. CPU notebook helper verification on the real dataset passes staging, integrity refusal, standalone prepare and 52 job evaluation planning. Four code cells compile; three are required, the fourth is recovery only. No new dependency, runtime source, model weight, GPU call or serving change. Connected Kaggle browser is signed out. See docs/guides/makeup-corrective001-training.md and the ready cpu-verification.json.
+
+
+## Corrective model and isolated application package, 6 November 2026
+
+VERIFIED actual return: 250 training steps, 52 Base/new raw outputs, final checkpoint SHA256 `991a1037cc892c1a62e1a731be577ed1aec2f331d9568b4586ff3829a4ee32c3`, 46,223,632 bytes and 160 finite LoRA tensors. The returned review binds 26 accepted cases to exact sources, captions, outputs and checkpoint.
+
+`scripts/package_makeup_corrective_application.py` builds a separate immutable CPU candidate/notebook using the existing complete Hair/Nails release machinery. `scripts/makeup_corrective_application_probe.py` exercises the existing authenticated facade and shared worker without generation retries. Generated candidate copies use exact 13 style captions and new metadata, expose the three held styles only for testing, install a separate adapter after original bundle verification and verify full scaling/active tensors. Production counterparts/defaults remain unchanged. Notebook returns before public tunnel/website registration. All 62 focused tests and actual staged archive/API preflight pass. Real GPU application validation remains NOT STARTED. [Evidence](../docs/experiments/makeup-corrective-model-results-20261106.md).
+
+
+## Verified application and production release candidate, 6 November 2026
+
+VERIFIED actual return: 16 real requests, 13 exact accepted Makeup PNGs, both original Hair adapters, existing Nails crop, active tensor equality and one ready foundation. Makeup conversion checks 200 tensors/100 layers, distinct from the 160 serialized tensors. `scripts/package_makeup_corrective_release.py` consumes the preserved tested application package to prepare isolated new release files without applying them. The candidate records three Makeup execution profiles bound to the exact contract source, matching Render/business JSON and preserved historical ten-Makeup catalogs. Normal registration is restored in the deployment notebook; generation code, weights and captions are identical to the actual tested candidate.
+
+Usable package is `artifacts/makeup-corrective-supervision-20261105/release-candidate-03/`. Actual archive/overlay staging, 13 API fixture paths, profile corruption guards, 25 staged runtime/API tests and five Render capability/business tests pass. Proposed source/test publication is 15 hash-bound files. No existing production files, bundles, cloud settings or endpoint changed. [Evidence](../docs/experiments/makeup-corrective-application-results-20261106.md), [rollout](../docs/guides/makeup-corrective001-release.md).
+
+
+## Corrective release publication and actual Render rollout, 6 November 2026
+
+VERIFIED:22selectedfiles published through isolated-index Git at578330d on codex/render-kaggle-demo; active branch/shared index/unrelated changes preserved. The final serving notebook adds Makeup model IDs to the existing release capability gate, with5regressioncases. Two stale catalog/model-ID test expectations corrected.25Makeup,56release/shared-worker/startup,33Render and55business checks, typecheck and production build pass. Render dep-dbmotdjm8hqs73b2bmrg is Live at the exact commit; public health200 and anonymousAI401. Kaggle browser is signed out, no runtime registration yet. Existing CPU/GPU inputs and accepted outputs remain intact. [Evidence](../docs/experiments/makeup-corrective-deployment-20261106.md).
+
+
+## Complete client serving archive, 6 November 2026
+
+VERIFIED actual input inventories: existing GPU bundle contains Hair TRAIN-001/TRAIN-002 and Nails checkpoints; new CPU bundle contains corrected Makeup checkpoint and CPU assets. Complete client ZIP is246,734,903bytes with final notebook/two binaries/start guide/hash manifest, fiveCRC-validmembers. Base weights/dependencies download at startup; no credentials included. No source/model/dependency change. Kaggle copy/import was performed, then user took manual browser control before new CPU upload or session startup. Production registration remains unverified. [Receipt](../docs/experiments/makeup-corrective-client-handoff-20261106.md).

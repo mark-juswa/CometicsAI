@@ -1,0 +1,224 @@
+{
+  "date": "2026-11-01",
+  "experiment": "MAKEUP-SEPARATION-001",
+  "variant": "v2.1",
+  "progress": "DONE_OFFLINE_REPAIR_AND_COMPARISONS",
+  "technical_evidence": "VERIFIED",
+  "appearance_evidence": "EXPERIMENTAL",
+  "release_verdict": "HOLD_NOT_PRODUCTION_READY",
+  "human_acceptance": "NOT_ACCEPTED_TOO_SUBTLE",
+  "scope": "Three selected references on two reused development photos, six cases. Not all catalog Makeup styles.",
+  "authorization": "User requests planning and proceeding with the fix. Local work only; no automatic deployment.",
+  "reproduced_failures": [
+    {
+      "id": "pale-highlight-as-blush",
+      "evidence": "Prior v3 Natural case exactly reproduced. At162,245, selectedRGB241,214,213 is a pale highlight; negative red/yellow residual received alpha0.945 through magnitude confidence. 3786 confident cheek pixels shifted in the negative red direction."
+    },
+    {
+      "id": "hard-cosmetic-boundaries",
+      "evidence": "Repair v1 removed cyan but produced visible dark eye plates and ellipse-shaped blush edges in native comparisons."
+    },
+    {
+      "id": "absolute-Lab-roundtrip",
+      "evidence": "Identical source/reference test failed on five pixels with one-code RGB changes, no inside-mesh mismatch and no false darkness. All five were Lab round-trip differences. Relative RGB-delta update fixes the failing regression."
+    }
+  ],
+  "fixes": [
+    "Signed rose/red pigment qualification rejects neutral pale highlights as blush.",
+    "Incremental Lab pigment replaces RGB reflectance ratios. Source luminance is not borrowed for blush.",
+    "Smooth cosmetic correction fields replace hard cheek and eye extents; source photo is not blurred.",
+    "Local eye contrast separates real dark cosmetic detail from the complexion brightness offset.",
+    "A bounded two-pixel parsed eye rim permits original reference strokes while copying original eye cores.",
+    "Both brow boundaries are feathered. Lip geometry and fine source detail are retained with selected lip color.",
+    "Only requested Lab-derived RGB delta is applied to original bytes, avoiding no-op round-trip edits."
+  ],
+  "saved_versions": [
+    {
+      "path": "artifacts/makeup-separation-20261101/run-01",
+      "variant": "v1",
+      "verdict": "REJECT",
+      "why": "Hard cosmetic plates and blush edges."
+    },
+    {
+      "path": "artifacts/makeup-separation-20261101/run-02",
+      "variant": "v2",
+      "verdict": "SUPERSEDED",
+      "why": "Five-pixel no-op rounding defect fixed in v2.1."
+    },
+    {
+      "path": "artifacts/makeup-separation-20261101/run-03",
+      "variant": "v2.1",
+      "verdict": "PARTIAL_CANDIDATE_HOLD"
+    }
+  ],
+  "visual_review": {
+    "full_size_comparisons_inspected": 6,
+    "improved": "No prior cyan cheek patches or dark quadrilateral eye plates in these comparisons. Original visible texture, geometry, expression and lighting remain. Lipstick, eyelid color, added lash/liner detail and cheek color remain visible.",
+    "remaining": "Lash density/shape, brow fill and blush extent/intensity are not equal to the selected generated reference. Strong lip edges/finish still merit review. This does not yet satisfy a guarantee of original selected makeup intact.",
+    "skin_color_accuracy": "Not calibrated. Original source canvas is retained; no universal photometric accuracy claim."
+  },
+  "checks": {
+    "focused_tests_passed": 19,
+    "exact_rgb_reproductions": 6,
+    "identical_real_photo_noop": "PASS",
+    "protected_original_eye_core_and_noneditable_regions": "PASS",
+    "input_arrays_unchanged": "PASS",
+    "browser": {
+      "images_loaded": 48,
+      "full_size_viewer": "PASS",
+      "original_toggle": "PASS",
+      "mobile390_overflow": false,
+      "component_masks": "PASS",
+      "script_errors": []
+    },
+    "serving_and_release_hashes_unchanged": true
+  },
+  "cases": [
+    {
+      "id": "g4-054109-natural_makeup",
+      "style": "natural_makeup",
+      "cpu_seconds": 2.2706498999996256,
+      "original_eye_core_changed_pixels": 0,
+      "original_eye_rim_changed_pixels": 73,
+      "rgb_sha256": "d1f8695e4c2d61e4dc90c2e0d088b7d5e2c63e684f8cd783f2e6fa47a5e5c189",
+      "qualitative_source_fidelity": "ORIGINAL_GEOMETRY_AND_VISIBLE_TEXTURE_RETAINED",
+      "cosmetic_fidelity": "PARTIAL_NOT_VERIFIED_EQUAL_TO_REFERENCE",
+      "appearance": "NEEDS_HUMAN_REVIEW",
+      "blush_mean_absolute_rgb_change_from_original": 5.249,
+      "eyeshadow_mean_absolute_rgb_change_from_original": 9.708,
+      "lash_liner_mean_absolute_rgb_change_from_original": 17.456,
+      "lip_mean_absolute_rgb_change_from_original": 22.725
+    },
+    {
+      "id": "g4-054109-classic_red_lip",
+      "style": "classic_red_lip",
+      "cpu_seconds": 1.7565856000001077,
+      "original_eye_core_changed_pixels": 0,
+      "original_eye_rim_changed_pixels": 77,
+      "rgb_sha256": "4c4e3a70a51650e51a135ad2d0b2601ff2a30816c272f865db75ccbb51f505a0",
+      "qualitative_source_fidelity": "ORIGINAL_GEOMETRY_AND_VISIBLE_TEXTURE_RETAINED",
+      "cosmetic_fidelity": "PARTIAL_NOT_VERIFIED_EQUAL_TO_REFERENCE",
+      "appearance": "NEEDS_HUMAN_REVIEW",
+      "blush_mean_absolute_rgb_change_from_original": 4.488,
+      "eyeshadow_mean_absolute_rgb_change_from_original": 8.398,
+      "lash_liner_mean_absolute_rgb_change_from_original": 17.519,
+      "lip_mean_absolute_rgb_change_from_original": 68.938
+    },
+    {
+      "id": "g4-056266-natural_makeup",
+      "style": "natural_makeup",
+      "cpu_seconds": 1.8581644000005326,
+      "original_eye_core_changed_pixels": 0,
+      "original_eye_rim_changed_pixels": 104,
+      "rgb_sha256": "3a4dc4c10d637fdd6c373d5d7503d85382af1f47e45664fb986e6a026c1b9ace",
+      "qualitative_source_fidelity": "ORIGINAL_GEOMETRY_AND_VISIBLE_TEXTURE_RETAINED",
+      "cosmetic_fidelity": "PARTIAL_NOT_VERIFIED_EQUAL_TO_REFERENCE",
+      "appearance": "NEEDS_HUMAN_REVIEW",
+      "blush_mean_absolute_rgb_change_from_original": 3.682,
+      "eyeshadow_mean_absolute_rgb_change_from_original": 7.415,
+      "lash_liner_mean_absolute_rgb_change_from_original": 15.457,
+      "lip_mean_absolute_rgb_change_from_original": 19.483
+    },
+    {
+      "id": "g4-056266-classic_red_lip",
+      "style": "classic_red_lip",
+      "cpu_seconds": 1.833408500000587,
+      "original_eye_core_changed_pixels": 0,
+      "original_eye_rim_changed_pixels": 120,
+      "rgb_sha256": "dd0eb043a8f4ef8ed07281073a609250e1f15f9734fd7fe69d7df35d48770ff6",
+      "qualitative_source_fidelity": "ORIGINAL_GEOMETRY_AND_VISIBLE_TEXTURE_RETAINED",
+      "cosmetic_fidelity": "PARTIAL_NOT_VERIFIED_EQUAL_TO_REFERENCE",
+      "appearance": "NEEDS_HUMAN_REVIEW",
+      "blush_mean_absolute_rgb_change_from_original": 3.33,
+      "eyeshadow_mean_absolute_rgb_change_from_original": 6.605,
+      "lash_liner_mean_absolute_rgb_change_from_original": 15.064,
+      "lip_mean_absolute_rgb_change_from_original": 53.756
+    },
+    {
+      "id": "054109-exp_cloud_berry_lips",
+      "style": "exp_cloud_berry_lips",
+      "cpu_seconds": 1.8048072000001412,
+      "original_eye_core_changed_pixels": 0,
+      "original_eye_rim_changed_pixels": 87,
+      "rgb_sha256": "4d1effe21442469b19fe4ce3dbe3118fd5c8f58287642dedc6fd97599cf1cb5f",
+      "qualitative_source_fidelity": "ORIGINAL_GEOMETRY_AND_VISIBLE_TEXTURE_RETAINED",
+      "cosmetic_fidelity": "PARTIAL_NOT_VERIFIED_EQUAL_TO_REFERENCE",
+      "appearance": "NEEDS_HUMAN_REVIEW",
+      "blush_mean_absolute_rgb_change_from_original": 5.715,
+      "eyeshadow_mean_absolute_rgb_change_from_original": 9.463,
+      "lash_liner_mean_absolute_rgb_change_from_original": 17.351,
+      "lip_mean_absolute_rgb_change_from_original": 38.672
+    },
+    {
+      "id": "056266-exp_cloud_berry_lips",
+      "style": "exp_cloud_berry_lips",
+      "cpu_seconds": 1.7571547999996255,
+      "original_eye_core_changed_pixels": 0,
+      "original_eye_rim_changed_pixels": 111,
+      "rgb_sha256": "3a407ac8e772931eb3153b9c2073e3de581b5ff74c51cf3a863b5024216fece9",
+      "qualitative_source_fidelity": "ORIGINAL_GEOMETRY_AND_VISIBLE_TEXTURE_RETAINED",
+      "cosmetic_fidelity": "PARTIAL_NOT_VERIFIED_EQUAL_TO_REFERENCE",
+      "appearance": "NEEDS_HUMAN_REVIEW",
+      "blush_mean_absolute_rgb_change_from_original": 3.968,
+      "eyeshadow_mean_absolute_rgb_change_from_original": 5.929,
+      "lash_liner_mean_absolute_rgb_change_from_original": 13.729,
+      "lip_mean_absolute_rgb_change_from_original": 27.706
+    }
+  ],
+  "timing_limit": "Approximately1.76to2.27seconds for local CPU transfer only. Excludes face parsing, landmark inference, model loading, file IO and GPU generation. Not an end-to-end speed claim.",
+  "new_diffusion_calls": 0,
+  "new_training": false,
+  "new_model_inference": false,
+  "new_photos": false,
+  "new_model_downloads": false,
+  "new_dependencies": false,
+  "new_paid_requests": false,
+  "production_changed": false,
+  "database_changed": false,
+  "git_published": false,
+  "implementation": {
+    "algorithm": "scripts/makeup_cosmetic_separation.py",
+    "evaluation": "scripts/evaluate_makeup_separation.py",
+    "tests": "backend/tests/test_makeup_cosmetic_separation.py",
+    "frozen_plan": "data/makeup/MAKEUP-SEPARATION-001/plan.json",
+    "gallery": "artifacts/makeup-separation-20261101/run-03/review-self-contained.html"
+  },
+  "source_sha256": {
+    "scripts/makeup_cosmetic_separation.py": "8c2008976a61c6d30a25da6bfa972934259bdc868bafda74472ce6d64a9024b9",
+    "scripts/makeup_selected_cosmetics.py": "0974104e4092e7126384a0b812cdfc951ff3e63db21999af7a752742a43ee720",
+    "scripts/makeup_source_faithful_retouch.py": "d2c78ea9731dbda97d4ee5c1e1d11809a323e44ef6eac7a5c0ad7e76f5fb542b",
+    "scripts/makeup_source_render.py": "0471a37c01b4438dcf7c12389e0b044e7b7c81d6da3be67147b3eff742e8fb05",
+    "scripts/makeup_alignment_pilot.py": "4ef6f76606a657d4d4cd576c509efdd4f9d60ef4aeaca301725ece50fa332e95",
+    "scripts/evaluate_makeup_separation.py": "84ad0637d85efc97bba9ef9b74e44d7ed5db8420d7a5280f8359b4c9bb68e515"
+  },
+  "test_source_sha256": "92fed0373c709bbc529a7ce219586a413e34a51e85e39b0c29c7077c1d61e3f3",
+  "unchanged_source_and_artifact_sha256": {
+    "backend/app/makeup_contract.py": "4253463a6a6c7afcd97384c0a5a4e0c25ba7ce9f9eb1d3f4411d2b8fec0a2fa1",
+    "backend/app/generation/remote_makeup.py": "4205e24f1864bde02dc75e60cd1a107a06ee29cf476ac001a8bcdf3fa26d5615",
+    "backend/app/makeup_styles.py": "c2ac1d40a4940e0335f8c382c1062148b54f0fa3dc07fec95e8ed33f1adaa6ba",
+    "scripts/makeup_inference_server.py": "ec9dd0c10a102a6bb13b4288994f18423c5164969cd131b02f2a4993ed570854",
+    "backend/app/style_release.json": "61cce06d4e76a6570550b2fee4c7ff4183323aea0ce1b3a1b63e191fced118b5",
+    "scripts/unified_gate3_server.py": "bb1d24159075f0592f491532080195f204f73c708e2a8e2fd095daac481723a2",
+    "scripts/inference_performance.py": "b69dd604baa6a09ba1a1d7598e979c66a81d26f70a8e9ae3db3bb790766030af",
+    "artifacts/render_kaggle_cpu_hair_nails_20261031_02.bin": "dfb5fc35f2c9c446fb8fdcc4439650c5f8a72941db864db1e9045cadae73082f",
+    "notebooks/render_kaggle_all_hair_nails_demo.ipynb": "574d8a144b90ee2a2a10c74ab1f6d8d46dd3d3891d1e9c74d5ee1bc01368ab84"
+  },
+  "release_gates": [
+    "Human comparison of original person and each selected makeup, not just skin color.",
+    "Reliable cosmetic fidelity for supported looks and separate fresh-photo, pose, skin-tone and failure checks.",
+    "Explicit production integration of source/reference parsing and landmark assets; current script depends on offline utility modules and saved maps.",
+    "Kaggle dependency, RAM and total latency checks; versioned provenance and fallback before deployment."
+  ],
+  "not_claimed": [
+    "Full preservation of selected makeup intensity/style",
+    "All-ten or expanded-thirteen style support",
+    "Deployment readiness",
+    "Universal or professional retouch quality"
+  ],
+  "human_feedback": {
+    "date": "2026-11-01",
+    "finding": "Selected makeup is insufficiently visible compared with the reference.",
+    "requirement": "Closer selected color, intensity and placement with original identity and natural blend.",
+    "followup": "docs/experiments/makeup-reference-visibility-20261101.md"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "status": "LANDMARK LOAD FAILURE VERIFIED; ROOT CAUSE NEEDS LOG",
+  "evidence": "User screenshot completes backend/segment installation, both pip checks and segment-load, then landmark-load fails.",
+  "ensurepip_recovery": "VERIFIED on the reported Kaggle run; backend and segmentation env pip bootstrap progressed successfully.",
+  "required_log": "/kaggle/working/render-kaggle/landmark-load.log",
+  "actual_loader": "backend/app/nails/geometry.py creates MediaPipe HandLandmarker from the bundled asset using model_asset_path and num_hands=2.",
+  "pins": "mediapipe 0.10.33, numpy 1.26.4, opencv-contrib-python 4.11.0.86",
+  "next_action": "Read the actual landmark-load log before changing dependencies or models. Keep installed environments; the earlier Cell 2 recovery refuses this later-stage state.",
+  "ai_services_started_in_reported_attempt": false
+}

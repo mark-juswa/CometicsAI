@@ -1,0 +1,35 @@
+.............................F.......................................... [ 98%]
+.                                                                        [100%]
+================================== FAILURES ===================================
+_________ test_reencoded_rejected_target_still_cannot_enter_training __________
+
+reviewed_pair = ([{'pair_id': 'test-only', 'identity_id': 'fixture', 'split': 'train', 'source_path': 'source.jpg', ...}], {'schema': ...s/sandbox.{53b066dd-8fd1-42bc-ac0e-06d681064bc2}/AC/Temp/pytest-of-Gigabyte/pytest-0/test_reencoded_rejected_target0'))
+
+    def test_reencoded_rejected_target_still_cannot_enter_training(reviewed_pair):
+        rows, review, root = reviewed_pair
+        dataset = ROOT / ".tmp/data_m001/paired_selection/final_v1"
+        if not dataset.exists():
+            pytest.skip("Private historical dataset unavailable")
+>       original = json.loads((dataset / "manifests/pairs.json").read_text())[0]
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_makeup_target_quality.py:83: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\Gigabyte\AppData\Local\Programs\Python\Python311\Lib\pathlib.py:1059: in read_text
+    return f.read()
+           ^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <encodings.cp1252.IncrementalDecoder object at 0x000001D14EB4F890>
+input = b'[\r\n  {\r\n    "pair_id": "003681_makeup_01",\r\n    "identity_id": "003681",\r\n    "split": "train",\r\n    "sour...he 2026-09-26 task reply; minor smoothing is accepted under the practical pair quality gate."\r\n    }\r\n  }\r\n]\r\n'
+final = True
+
+    def decode(self, input, final=False):
+>       return codecs.charmap_decode(input,self.errors,decoding_table)[0]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       UnicodeDecodeError: 'charmap' codec can't decode byte 0x90 in position 66956: character maps to <undefined>
+
+C:\Users\Gigabyte\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py:23: UnicodeDecodeError
+=========================== short test summary info ===========================
+FAILED backend/tests/test_makeup_target_quality.py::test_reencoded_rejected_target_still_cannot_enter_training
+1 failed, 72 passed in 25.48s

@@ -1,0 +1,99 @@
+{
+  "date": "2026-11-01",
+  "experiment": "MAKEUP-FAITHFUL-001",
+  "variant": "primary-face-only-v2",
+  "progress": "DONE_OFFLINE",
+  "evidence": "VERIFIED",
+  "appearance": "HUMAN_REJECTED",
+  "configuration": {
+    "strength": 0.2,
+    "chroma_sigma_pixels": 16.0,
+    "maximum_chroma_code_units": 2.0,
+    "inside_feather_pixels": 4.0,
+    "minimum_common_skin": 10000,
+    "maximum_rgb_code_change": 4,
+    "maximum_luma_code_error": 0.501,
+    "minimum_face_component_pixels": 15000,
+    "maximum_secondary_face_fraction": 0.15
+  },
+  "original_is_canvas": true,
+  "generated_face_is_canvas": false,
+  "historical_project_model_reference_used": "Previously corrected MAKEUP-001 Natural outputs used only for small low-frequency color differences.",
+  "new_diffusion_calls": 0,
+  "new_training": false,
+  "new_photo_acquisition": false,
+  "new_model_inference": false,
+  "technical_method": "Keep original RGB/luma; align only the color reference, subtract global color cast, apply a small smooth skin chroma delta with gamut-safe reduction and primary-face exclusion.",
+  "cases": [
+    {
+      "id": "054109",
+      "output": "054109-retouch.png",
+      "output_sha256": "b16f7393cb21fa994ad84ab756b235cad601f40865534479f8e6b131d83b1075",
+      "rgb_sha256": "8f38395df9fc4cb9343dd79440639399b5a739406bf50dc707d964c78cadacc1",
+      "changed_pixels": 53579,
+      "protected_source_pixels_changed": 0,
+      "non_primary_face_pixels_changed": 0,
+      "maximum_rgb_code_change": 4,
+      "maximum_luma_code_error": 0.484,
+      "mean_luma_code_error": 0.03478973388671874
+    },
+    {
+      "id": "056266",
+      "output": "056266-retouch.png",
+      "output_sha256": "2a6214d27ff190517c9a5e2a7c8984d5da750e1f8924b30d76745a56a573c607",
+      "rgb_sha256": "fa3e099efe10aeeaef82ace58491b84ab8b2eca503e4f0874df47435462e0fb8",
+      "changed_pixels": 45555,
+      "protected_source_pixels_changed": 0,
+      "non_primary_face_pixels_changed": 0,
+      "maximum_rgb_code_change": 3,
+      "maximum_luma_code_error": 0.484,
+      "mean_luma_code_error": 0.03443219375610351
+    }
+  ],
+  "tests_passed": 18,
+  "browser": {
+    "comparison_images_loaded": 6,
+    "toggle_images_loaded": 2,
+    "original_size_viewer": "PASS",
+    "original_retouch_toggle": "PASS",
+    "mobile390px": "PASS",
+    "script_errors": []
+  },
+  "visual_findings": "Both outputs remain very close to the original. Native texture, smile/teeth, eye/brow/nose shape, hair and scene are retained; change is a faint skin-color adjustment. Professional appearance is not independently established.",
+  "limits": [
+    "Two reused512-square development photos only; no generalization/biometric/professional-retouch quality guarantee.",
+    "Original skin RGB can change slightly; luma is retained before final8bit rounding. Measured maximum luma error0.484code units.",
+    "Protected RGB exactness is verified against cached parser regions, not hand-labeled universal facial boundaries.",
+    "One subtle complexion profile. Pronounced lipstick/eyes/lashes and the full10/13style catalogs are not implemented by this pilot.",
+    "Native-resolution uploads, uncertain parser regions and actual service integration remain unimplemented/unverified."
+  ],
+  "implementation": {
+    "algorithm": "scripts/makeup_source_faithful_retouch.py",
+    "evaluator": "scripts/evaluate_source_faithful_retouch.py",
+    "plan": "data/makeup/MAKEUP-FAITHFUL-001/plan-v2.json",
+    "gallery": "artifacts/makeup-faithful-20261101/review-v2/review-self-contained.html",
+    "algorithm_sha256": "d2c78ea9731dbda97d4ee5c1e1d11809a323e44ef6eac7a5c0ad7e76f5fb542b",
+    "evaluator_sha256": "cf1344e115bcc1d41ec316968242b4d6cbab729a8b2340f03940b6d315092a1c"
+  },
+  "production_changed": false,
+  "git_publication": false,
+  "unchanged_source_and_release_sha256": {
+    "backend/app/makeup_contract.py": "4253463a6a6c7afcd97384c0a5a4e0c25ba7ce9f9eb1d3f4411d2b8fec0a2fa1",
+    "backend/app/generation/remote_makeup.py": "4205e24f1864bde02dc75e60cd1a107a06ee29cf476ac001a8bcdf3fa26d5615",
+    "backend/app/makeup_styles.py": "c2ac1d40a4940e0335f8c382c1062148b54f0fa3dc07fec95e8ed33f1adaa6ba",
+    "scripts/makeup_inference_server.py": "ec9dd0c10a102a6bb13b4288994f18423c5164969cd131b02f2a4993ed570854",
+    "backend/app/style_release.json": "61cce06d4e76a6570550b2fee4c7ff4183323aea0ce1b3a1b63e191fced118b5",
+    "scripts/unified_gate3_server.py": "bb1d24159075f0592f491532080195f204f73c708e2a8e2fd095daac481723a2",
+    "scripts/inference_performance.py": "b69dd604baa6a09ba1a1d7598e979c66a81d26f70a8e9ae3db3bb790766030af",
+    "artifacts/render_kaggle_cpu_hair_nails_20261031_02.bin": "dfb5fc35f2c9c446fb8fdcc4439650c5f8a72941db864db1e9045cadae73082f",
+    "notebooks/render_kaggle_all_hair_nails_demo.ipynb": "574d8a144b90ee2a2a10c74ab1f6d8d46dd3d3891d1e9c74d5ee1bc01368ab84"
+  },
+  "next": "Human review of the original/previous-AI/new-source comparison. Preserve this subtle-fidelity brief; no automatic return to stronger makeup. Broader source/region/resolution validation and explicit versioned integration would follow if useful.",
+  "human_feedback": {
+    "date": "2026-11-01",
+    "decision": "REJECT",
+    "reason": "Removed selected makeup; user requires original makeup style, intensity and colors intact.",
+    "clarification": "Assistant misinterpreted natural complexion as permission to remove makeup. User did not change scope.",
+    "followup": "docs/experiments/makeup-selected-cosmetics-20261101.md"
+  }
+}

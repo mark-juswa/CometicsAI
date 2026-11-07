@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-31",
+  "status": "PREPARED_GPU_NOT_RUN",
+  "experiment": "MAKEUP-EXP-002",
+  "notebook": "notebooks\\makeup_expansion_completion.ipynb",
+  "sha256": "bbaa7ba06be6b6fed3bd4ebaafcab9aff0dd96b3e1c3ac5e8c5623bba943950e",
+  "bytes": 2629284,
+  "new_inference_calls": 3,
+  "retained_outputs": 6,
+  "source_sha256": {
+    "scripts/style_expansion_bootstrap.py": "9e3b3c3eade96439a30091cb404a793e9b11bb50bdc5fc2b2f0eedf0147e89a9",
+    "scripts/makeup_quality_diagnostic.py": "00dcdc46116a3f2875c21c4df43daa6d4e6e2222f2800181ec856ae14c19b79a",
+    "scripts/makeup_expansion_bootstrap.py": "11ef000211efd92578d9390cc784099d4c8b3c34438bf90335c164eb55942eba",
+    "scripts/makeup_expansion_completion.py": "879e45577a6d3498f4351232af0c438b494d3e1c312224d096a5d776ab7f9adf",
+    "data/style-expansion/MAKEUP-EXP-002/plan.json": "6c3357e0fc5861c0b358978b701c119394dbf67f67a94baa8eed14fe10e3071c"
+  },
+  "fixture_sha256": {
+    "054109.jpg": "81e57faca39e3989ed9920ebd6568efad563ae4f012f3fbb130918858d18e8ed",
+    "056266.jpg": "d6b86be2fe5f505eb6ebe7f2b1c22a59f41ddef053953f55eba1ca0b859f1728",
+    "reference-report.json": "b0e6ffa314284224d59c7111aa2d24d5e6c78f627da162d8ee618193a19499f5",
+    "reference-054109-soft_glam.png": "272f5a18fff62f776f0b22f7bfc2a66b4a9332c404992ab305fa955e07d9f3a9",
+    "reference-056266-soft_glam.png": "1bbc9c65c248cadf4adf62158dfefef3bbef14214f0dd9e464573d3e2a009d26",
+    "reference-054109-exp_cloud_berry_lips.png": "3dcc30b86f4f422848ed726a49c8d2c5f5fb5c9602cc8a748a81e69b34d0cc62",
+    "reference-056266-exp_cloud_berry_lips.png": "f0c85513c8aeba6381e63925c31a0b287159978198666fb4ae70970ff1512a19",
+    "reference-054109-exp_icy_silver.png": "47cfae781919d3e21b97f775d7b32bdff64a2cbca4a0eb39e69b58a384f2ea5b",
+    "reference-056266-exp_icy_silver.png": "50d74e6b57f85d798192ff8aa33e08f4c93ee94c8ade6a1bbb7ed2166aa68d7c"
+  },
+  "white_cast_fix_claimed": false,
+  "production_changed": false,
+  "local_checks": {
+    "makeup_specific_tests_passed": 11,
+    "gallery_images_loaded": 64,
+    "gallery_enlargement": "PASS",
+    "mobile390px": "PASS",
+    "script_errors": 0,
+    "source_photos_match_original_jpeg_pixels": true,
+    "existing_release_catalog_checks": "PASS",
+    "current_french_nails_source_and_package_hashes_unchanged": true
+  },
+  "guide": "docs/guides/makeup-expansion-completion.md",
+  "review_gallery": "artifacts/makeup-expansion-review-20261031/review-self-contained.html"
+}

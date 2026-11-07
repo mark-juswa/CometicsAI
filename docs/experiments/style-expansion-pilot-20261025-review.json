@@ -1,0 +1,176 @@
+{
+  "archive_sha256": "76a86c97ce2fdd0f5ac38e9f8fe3f1286a5275b54892dfe26fc441529b387bf4",
+  "review_directory": "I:\\HAIR\\.tmp\\style-expansion-review-25906382a3",
+  "archive_crc": "PASSED",
+  "embedded_source_matches": {
+    "scripts/inference_performance.py": true,
+    "scripts/unified_gate3_server.py": true,
+    "scripts/style_expansion_pilot.py": true,
+    "scripts/style_expansion_nails.py": true,
+    "scripts/style_expansion_bootstrap.py": true,
+    "backend/app/nails/geometry.py": true,
+    "data/style-expansion/STYLE-EXP-001/pilot.json": true
+  },
+  "portrait_status": "PILOT_FINISHED_REQUIRES_VISUAL_REVIEW",
+  "portrait_cases": 15,
+  "portrait_total_seconds": 967.2609136130002,
+  "portrait_median_seconds": 64.76393010200013,
+  "portrait_range_seconds": [
+    62.07139231899987,
+    66.65700779199994
+  ],
+  "startup_seconds": 53.003374777999966,
+  "restoration": [
+    {
+      "feature": "hairstyle",
+      "pixels_match": true
+    },
+    {
+      "feature": "makeup",
+      "pixels_match": true
+    }
+  ],
+  "gpu": "Tesla T4",
+  "peak_gpu_allocated_mib": 8311.68017578125,
+  "nail_cases": [
+    {
+      "candidate_id": "exp_raspberry_jelly",
+      "output": "exp_raspberry_jelly.png",
+      "renderer_seconds": 0.33899028799999087,
+      "rgb_sha256": "df6e61071805224a4a807f2fb4a747ed2bbdc2cd216539d1b8571d1fea8c9095",
+      "png_sha256": "4ecabace8e6f3b55f94d2b47f79fa34bb6f00b4dcb2e342329e83a1169e711a8",
+      "changed_outside_mask_pixels": 0,
+      "changed_pixels_per_component": [
+        4499,
+        2306,
+        3880,
+        3566,
+        1981
+      ],
+      "visual_verdict": "NEEDS_REVIEW"
+    },
+    {
+      "candidate_id": "exp_pink_aura",
+      "output": "exp_pink_aura.png",
+      "renderer_seconds": 0.28666129500004445,
+      "rgb_sha256": "68d1593a1ea17e94a627740fd5221f62c9add10eafc56b5788932abddd37e336",
+      "png_sha256": "44577513b08c9fd70240f8a18b268409ce1f15a7bc2217769cea4e4a9fdc8e9c",
+      "changed_outside_mask_pixels": 0,
+      "changed_pixels_per_component": [
+        4499,
+        2306,
+        3880,
+        3566,
+        1981
+      ],
+      "visual_verdict": "NEEDS_REVIEW"
+    },
+    {
+      "candidate_id": "exp_negative_space_microdots",
+      "output": "exp_negative_space_microdots.png",
+      "renderer_seconds": 0.26621183499992185,
+      "rgb_sha256": "9d24bb56b6f2e50421f1afa6bc2e109e084f286a06e8ac788edd501585a14fe8",
+      "png_sha256": "614da3d483199f3e29b23b827b1f777b460810fe9990a1f7b4deef04e6fe22af",
+      "changed_outside_mask_pixels": 0,
+      "changed_pixels_per_component": [
+        4499,
+        2306,
+        3880,
+        3566,
+        1981
+      ],
+      "visual_verdict": "NEEDS_REVIEW"
+    }
+  ],
+  "scratch": {
+    "status": "SELECTED",
+    "cache": "/tmp/beautycore-style-pilot-hf/beautycore-styles-a6dc22bde6fc/hub",
+    "minimum_free_bytes": 32212254720,
+    "volumes": [
+      {
+        "base": "/tmp",
+        "usable": true,
+        "free_bytes": 1125779857408
+      }
+    ]
+  },
+  "ordered_cases_match_plan": true,
+  "adapter_and_prompt_provenance": "PASSED",
+  "active_adapter_tensors_reported_verified": true,
+  "source_pixels_match_original_bundle": true,
+  "independent_nail_checks": [
+    {
+      "candidate_id": "exp_raspberry_jelly",
+      "outside_changed_pixels": 0,
+      "edited_components": 5
+    },
+    {
+      "candidate_id": "exp_pink_aura",
+      "outside_changed_pixels": 0,
+      "edited_components": 5
+    },
+    {
+      "candidate_id": "exp_negative_space_microdots",
+      "outside_changed_pixels": 0,
+      "edited_components": 5
+    }
+  ],
+  "restoration_recomputed_from_image_hashes": true,
+  "private_result_directory": "I:\\HAIR\\artifacts\\style-expansion-20261025\\pilot-review-01",
+  "date": "2026-10-25",
+  "status": "GPU_EXECUTION_VERIFIED_VISUAL_REVIEW_COMPLETE_NO_PRODUCTION_APPROVAL",
+  "visual_review_kind": "AI-assisted image inspection; salon/human acceptance pending",
+  "candidate_assessments": {
+    "exp_butterfly_cut": {
+      "verdict": "HOLD_RETEST_LONG_HAIR",
+      "preferred_adapter": null,
+      "observation": "Neither adapter produced the requested long Butterfly shape on the reused short-bob input. Test an appropriate input before deciding on retraining."
+    },
+    "exp_korean_two_block": {
+      "verdict": "HOLD_RETEST_VISIBLE_SIDES",
+      "preferred_adapter": null,
+      "observation": "TRAIN-001 changes are weak; TRAIN-002 changes the fringe but does not clearly show a shorter lower block."
+    },
+    "exp_comma_hair": {
+      "verdict": "ADVANCE_EXPERIMENTAL_VALIDATION",
+      "preferred_adapter": "hairstyle:train002",
+      "observation": "TRAIN-002 gives the clearest curved front strand; curl/fringe fidelity and preservation still require varied-input and stylist review."
+    },
+    "exp_cloud_berry_lips": {
+      "verdict": "HOLD_PRESERVATION_AND_FIDELITY",
+      "preferred_adapter": null,
+      "observation": "Berry pigment visible; edges defined rather than blurred, strong cheek pigment and substantial complexion lightening/smoothing."
+    },
+    "exp_icy_silver": {
+      "verdict": "HOLD_PRESERVATION_AND_RESTRAINT",
+      "preferred_adapter": null,
+      "observation": "Cool metallic eyelid effect visible; vivid red lip and strong complexion retouching exceed the requested edit."
+    },
+    "exp_raspberry_jelly": {
+      "verdict": "ADVANCE_AUTOMATIC_MASK_VALIDATION",
+      "preferred_adapter": "renderer",
+      "observation": "Translucent tint direction visible on one manual-mask hand; zero outside-mask pixel edits verified."
+    },
+    "exp_pink_aura": {
+      "verdict": "ADVANCE_AUTOMATIC_MASK_VALIDATION",
+      "preferred_adapter": "renderer",
+      "observation": "Central gradient visible and distinct from tip ombre; automatic masking and varied hands remain unverified."
+    },
+    "exp_negative_space_microdots": {
+      "verdict": "ADVANCE_AUTOMATIC_MASK_VALIDATION",
+      "preferred_adapter": "renderer",
+      "observation": "Small separated dots visible within supplied masks; automatic masking and varied hands remain unverified."
+    }
+  },
+  "training_performed": false,
+  "new_training_images_collected": 0,
+  "production_styles_enabled": false,
+  "cloud_configuration_changed": false,
+  "limitations": [
+    "One reused source portrait per feature and one manually masked hand.",
+    "No face-identity embedding/geometry or skin-tone metric was computed; portrait preservation comments are visual findings.",
+    "Old baselines also exhibit preservation problems; restoration equality is not a visual quality endorsement.",
+    "No automatic mask, browser, booking, Render or real-client acceptance in this pilot.",
+    "Timing is one worker observation per case, not a speed improvement claim."
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-31",
+  "status": "PUBLISHED_OPERATOR_ROLLOUT_PENDING",
+  "release_id": "styles-20261031-02",
+  "repository": "mark-juswa/CometicsAI",
+  "deployment_branch": "codex/render-kaggle-demo",
+  "commit": "63fc8512cb9f6c93c7e3e07d4d50a71cbf2e086a",
+  "remote_head_verified": true,
+  "published_source_files": 52,
+  "render_status": "BUILDING_DEPLOYING_REPORTED_BY_OPERATOR",
+  "kaggle_status": "NOT_STARTED_BY_CODEX",
+  "live_generation": "NEEDS VERIFICATION",
+  "database_changed": false,
+  "secrets_changed": false,
+  "makeup_model_settings_and_business_catalog_unchanged": true,
+  "new_makeup_styles_enabled": false,
+  "hair_additions": 5,
+  "nail_additions": 3,
+  "handoff_zip": {
+    "path": "artifacts/beautycore-hair-nails-deploy-20261031.zip",
+    "sha256": "1fca253c55cb7e7e9450bf8a95459cc59dfb6a3ecd53cd72e8180c26780a56b6"
+  },
+  "verification": {
+    "focused_release_backend_passed": 61,
+    "full_backend_passed": 826,
+    "full_backend_stale_pilot_assertion_corrected_and_affected_batch_passed": 53,
+    "isolated_public_hair_fixture_recheck_passed": 27,
+    "render_tests_passed": 33,
+    "business_tests_passed": 55,
+    "guest_tests_passed": 29,
+    "production_build": "PASS",
+    "catalog_and_source_archive_checks": "PASS"
+  },
+  "guide": "docs/guides/all-hair-nails-release-20261031.md",
+  "operator_next": "Render Manual Deploy latest commit63fc851; once Live, import new Kaggle starter with original GPU/new CPU, run3cells, then website rehearsal.",
+  "live_frontend_marker_check": "No new metadata markers observed yet; build still pending. Not proof of deployment failure."
+}

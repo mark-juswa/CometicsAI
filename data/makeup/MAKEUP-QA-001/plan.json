@@ -1,0 +1,65 @@
+{
+  "schema": "beautycore-makeup-quality-v1",
+  "production_enabled": false,
+  "experiment": "MAKEUP-QA-001",
+  "subjects": [
+    {
+      "id": "054109",
+      "filename": "054109.jpg",
+      "sha256": "81e57faca39e3989ed9920ebd6568efad563ae4f012f3fbb130918858d18e8ed",
+      "origin": "054109/bare.jpg",
+      "source_photo": {
+        "author": "Presidency Maldives",
+        "photo_title": "MK_NAIVAIDHOO1493",
+        "photo_url": "https://www.flickr.com/photos/presidencymaldives/5292667558/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Reused validation portrait for diagnostic development; private academic artifact, not new untouched final evaluation."
+    },
+    {
+      "id": "056266",
+      "filename": "056266.jpg",
+      "sha256": "d6b86be2fe5f505eb6ebe7f2b1c22a59f41ddef053953f55eba1ca0b859f1728",
+      "origin": "056266/bare.jpg",
+      "source_photo": {
+        "author": "Lori Thantos",
+        "photo_title": "IMG_1526.jpg",
+        "photo_url": "https://www.flickr.com/photos/lori_thantos/5121900493/",
+        "license": "Attribution-NonCommercial License",
+        "license_url": "https://creativecommons.org/licenses/by-nc/2.0/"
+      },
+      "source_dataset_license": "CC BY-NC-SA 4.0; retain original FFHQ photo author and license metadata",
+      "usage": "Reused validation portrait for diagnostic development; private academic artifact, not new untouched final evaluation."
+    }
+  ],
+  "styles": [
+    "natural_makeup",
+    "classic_red_lip"
+  ],
+  "conditions": [
+    {
+      "id": "foundation_only",
+      "adapter_weight": 0.0
+    },
+    {
+      "id": "current_adapter",
+      "adapter_weight": 1.0
+    },
+    {
+      "id": "reduced_adapter",
+      "adapter_weight": 0.5
+    }
+  ],
+  "inference": {
+    "width": 512,
+    "height": 512,
+    "steps": 20,
+    "guidance": 4.0,
+    "seed": 1977
+  },
+  "expected_outputs": 12,
+  "human_quality_review": "REQUIRED",
+  "automatic_promotion": false
+}

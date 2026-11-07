@@ -1,0 +1,29 @@
+{
+  "status": "DONE",
+  "evidence_status": "VERIFIED",
+  "prepared_date": "2026-11-07",
+  "repository": "https://github.com/mark-juswa/CometicsAI",
+  "visibility": "public",
+  "published_source_commit": "9f6b16b4932038e64bc8054d40d0177de01fa24c",
+  "parent_commit": "578330d34019e593fbb4b8fb4eaed898da3ff09d",
+  "source_tree": "b7ba4e3e039f4c52eef3f4b5bc4a06c685cc3b1a",
+  "files_in_snapshot": 1352,
+  "changed_files_vs_previous_deployment": 314,
+  "source_publication_branches": {
+    "main": "9f6b16b4932038e64bc8054d40d0177de01fa24c",
+    "codex/render-kaggle-demo": "9f6b16b4932038e64bc8054d40d0177de01fa24c",
+    "codex/client-handoff-20261107": "9f6b16b4932038e64bc8054d40d0177de01fa24c"
+  },
+  "push": "normal atomic push, no force",
+  "remote_heads_verified": true,
+  "default_branch": "main",
+  "shared_index_preserved": true,
+  "local_branch_preserved": "codex/look-details-performance",
+  "private_originals_and_artifacts_preserved": true,
+  "model_binaries_and_credentials_published": false,
+  "production_cloud_deploy_performed": false,
+  "client_push_access": "Public fork is available to anyone; direct upstream push requires named collaborator access",
+  "guide": "docs/guides/client-repository-handoff.md",
+  "validation": "docs/experiments/client-source-validation-20261107.json",
+  "live_kaggle_generation": "NEEDS VERIFICATION"
+}

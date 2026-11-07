@@ -1,6 +1,8 @@
 # Complete client source publication, 7 November 2026
 
-Status: IN PROGRESS. Publication and final validation are recorded separately below.
+Status: DONE source publication. VERIFIED remote heads. Full backend suite and live Kaggle limitations remain recorded separately below.
+
+Actual source commit `9f6b16b4932038e64bc8054d40d0177de01fa24c` is published on `main`, `codex/render-kaggle-demo` and `codex/client-handoff-20261107`. One normal atomic push fast forwards both existing branches and creates the handoff branch, with no force push. A subsequent independent `git ls-remote` returns this exact SHA for all three. The complete snapshot contains 1,352 files and 314 changed paths relative to the prior deployment head. All earlier deployment history is retained. The shared local index hash and original working branch remain unchanged. [Publication receipt](client-source-publication-20261107.json). A later documentation commit may advance these heads while retaining this source commit.
 
 The Supervisor explicitly requests pushing all completed project work so the client can use and change the repository. Their access preference is accessible to all. GitHub metadata confirms `mark-juswa/CometicsAI` is already public and the connected owner has administrative and push permission. Public read/fork access remains unchanged. No account invitation, ownership transfer, shared credential or unrestricted public write access is inferred. Direct writes require a named collaborator; anyone can push to their own fork.
 

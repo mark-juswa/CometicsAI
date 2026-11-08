@@ -1,0 +1,88 @@
+{
+  "date": "2026-11-08",
+  "research_status": "DONE",
+  "recommendation_status": "PROPOSED",
+  "preferred_first_migration": "Runpod Pods",
+  "alternatives": [
+    "Lightning Studios",
+    "Vast instances",
+    "Modal Functions"
+  ],
+  "report": "docs/research/gpu-hosting-alternatives-20261108.md",
+  "primary_sources": [
+    "https://www.runpod.io/pricing",
+    "https://docs.runpod.io/pods/storage/types",
+    "https://docs.runpod.io/pods/connect-to-a-pod",
+    "https://docs.runpod.io/pods/configuration/expose-ports",
+    "https://lightning.ai/pricing",
+    "https://docs.vast.ai/guides/instances/pricing",
+    "https://docs.vast.ai/guides/instances/storage/types",
+    "https://modal.com/pricing",
+    "https://modal.com/docs/guide/webhooks",
+    "https://modal.com/docs/guide/volumes",
+    "https://huggingface.co/docs/hub/spaces-gpus"
+  ],
+  "verified_local_constraints": {
+    "combined_min_host_ram_gib": 30,
+    "gate2_peak_process_gib": 22.887,
+    "base_snapshot_bytes": 15980131711,
+    "reviewed_gpu": "Tesla T4",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128",
+    "cuda": "12.8",
+    "endpoint_policy": "HTTPS trycloudflare.com roots only",
+    "secrets_provider": "kaggle_secrets",
+    "in_memory_state": [
+      "photos",
+      "jobs",
+      "consultations"
+    ],
+    "persistent_cache_change_needed": true
+  },
+  "cost_illustrations": {
+    "runpod": {
+      "gpu_hour": 0.5,
+      "network_volume_gb": 50,
+      "network_volume_gb_month": 0.07,
+      "storage_month": 3.5000000000000004,
+      "examples": [
+        {
+          "gpu_hours": 10,
+          "gpu_cost": 5,
+          "with_50gb_network_volume": 8.5
+        },
+        {
+          "gpu_hours": 40,
+          "gpu_cost": 20,
+          "with_50gb_network_volume": 23.5
+        },
+        {
+          "gpu_hours": 730,
+          "gpu_cost": 365,
+          "with_50gb_network_volume": 368.5
+        }
+      ]
+    },
+    "modal": {
+      "t4_second": 0.000164,
+      "l4_second": 0.000222,
+      "cpu_core_second": 0.0000131,
+      "ram_gib_second": 0.00000222,
+      "ram_gib": 32,
+      "cores": 1,
+      "t4_total_hour": 0.893304,
+      "l4_total_hour": 1.102104
+    }
+  },
+  "price_limitations": [
+    "Public listed rates, not final deployment quotes or verified available offers",
+    "No GPU instance, account eligibility, region, speed or quality tested",
+    "Storage products, idle load time, taxes and other services affect total",
+    "32 GiB allocation and one CPU core assumed for Modal arithmetic"
+  ],
+  "implementation_started": false,
+  "resources_purchased": false,
+  "cloud_settings_changed": false,
+  "model_or_dataset_changed": false,
+  "architecture_approved": false
+}

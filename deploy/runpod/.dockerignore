@@ -1,0 +1,10 @@
+*
+!Dockerfile
+!.dockerignore
+!runtime.py
+!release_setup.py
+!profile.json
+!registration.py
+!build-manifest.json
+!requirements/
+!requirements/**

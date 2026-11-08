@@ -1,0 +1,12 @@
+{
+  "schema": "beautycore-runpod-profile-v1",
+  "profile_id": "runpod-rtx3090-cu128-v1",
+  "evidence_status": "NEEDS VERIFICATION",
+  "python": "3.12.13",
+  "torch": "2.10.0+cu128",
+  "cuda": "12.8",
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "minimum_ram_bytes": 32212254720,
+  "minimum_vram_bytes": 21474836480,
+  "minimum_compute_capability": [8, 6]
+}

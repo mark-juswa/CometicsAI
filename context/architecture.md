@@ -1,5 +1,7 @@
 # Architecture
 
+2026-11-08 CONFIRMED preparation direction: add a Runpod Pod startup alongside the existing Kaggle fallback, preserving one shared foundation/adapter owner, the CPU facade, isolated Nails stages and existing website contracts. This is a deployment preparation approval, not verified Runpod operation. Reuse the current authenticated tunnel/registration for the first bounded candidate; native provider URL support, automatic failover and serverless state changes are deferred. Current image/GPU acceptance remains open. See [Runpod spec](../docs/specs/0019-runpod-serving.md).
+
 Source: Supervisor's CODEX HANDOFF 001, EXP-001, and later critical-path direction. The first-demo model path remains CONFIRMED. Earlier implementation statements below are dated history; current feature status is in [state](state.md).
 
 Current operational preparation (Deployment 01, 2026-09-28): the verified Next.js → central FastAPI → unified Kaggle worker topology remains unchanged. Additive image-free readiness/history endpoints and correlated transport logs instrument the existing clients and GPU owner. No automatic retry or idempotency protocol; ambiguous disconnects do not permit duplicate active work. Original separate destinations/runtimes remain explicit configuration rollback. The new repeatable startup notebook includes the already approved Nails step support. Fresh-session rehearsal is pending, not deployment acceptance. [Audit and local evidence](../docs/experiments/deployment01.md).

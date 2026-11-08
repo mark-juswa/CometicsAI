@@ -1,5 +1,7 @@
 # HAIR CAPSTONE
 
+**Runpod preparation:** the [Runpod server guide](docs/guides/runpod-serving.md) provides the separate container/private input setup while keeping Kaggle backup intact. Source/package checks pass. Linux image build, real Runpod GPU validation and live cutover remain unverified; this is not an already deployed Runpod endpoint.
+
 **Client source handoff, 7 November 2026:** start with [the current repository and deployment guide](docs/guides/client-repository-handoff.md). The complete source is published on `main`, including BeautyCore, mobile, backend, expanded Hair/Nails and the corrective Makeup workflow, tests and research history. The active catalog is 18 Hair, 13 Makeup and 8 Nails styles. Model packages and credentials are supplied separately. Render was last verified Live at `578330d`; the new Kaggle serving startup is still unresolved. The sections below retain earlier milestone instructions and limits; use the current handoff for serving and deployment.
 
 For a complete explanation of the actual AI training, data, web/mobile architecture, diagrams, defense answers and evidence limits, read the [capstone technical handoff](docs/guides/capstone-technical-handoff.md), inspected October 4, 2026.

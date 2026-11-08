@@ -1,0 +1,34 @@
+{
+  "status": "VERIFIED_LOCAL_PREPARATION",
+  "context_hashes": "PASS",
+  "private_binaries_absent_from_build_context": true,
+  "known_secret_matches": 0,
+  "kaggle_notebook_and_inputs_unchanged": true,
+  "runpod_tests": 28,
+  "makeup_api_runtime_startup_tests": 30,
+  "kaggle_backup_tests": 44,
+  "archive_assembly": {
+    "status": "VERIFIED",
+    "original_bundle_and_gate2_artifacts": "PASS",
+    "optimized_overlay": "PASS",
+    "corrective_overlay": "PASS",
+    "corrective_files_verified": 6,
+    "base_or_gpu_loaded": false,
+    "generation_requests": 0,
+    "original_kaggle_archives_changed": false
+  },
+  "base_image_index_digest": "sha256:4766d8b510c428e595d74b9cc5bbb2fae8e26316fffb4adc89908d79aacd58a2",
+  "base_image_digest_registry_verified": true,
+  "linux_image_build": "NOT VERIFIED: local Docker engine did not become available",
+  "runpod_gpu_validation": "NOT STARTED",
+  "container_registry_publication": "NOT STARTED",
+  "website_cutover": "NOT STARTED",
+  "paid_resources_started": false,
+  "models_and_generation_changed": false,
+  "assembly_source_identical_in_final_context": true,
+  "private_handoff": {
+    "path": "I:\\HAIR\\artifacts\\beautycore-runpod-20261108-v2.zip",
+    "sha256": "228cd016dfdc2660350d50248e0e586f895aede69dc5a1ad811efb7e20ba47f7",
+    "bytes": 246741306
+  }
+}

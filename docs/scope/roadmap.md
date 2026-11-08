@@ -1,5 +1,9 @@
 # Coarse build scope
 
+## Runpod serving preparation, 8 November 2026
+
+**DONE local source/private package and offline checks; IN PROGRESS overall serving migration.** [Spec 0019](../specs/0019-runpod-serving.md) governs the separate Runpod candidate with Kaggle backup. Exact real archive/preflight/overlays and 102 focused checks pass. Python base digest is pinned. Full Linux server image build is unverified because the local engine did not become available; registry publication, real GPU/profile/style/full hand checks, restart/cutover and rollback acceptance remain open. No paid GPU or cloud configuration change. [Guide](../guides/runpod-serving.md), [evidence](../experiments/runpod-preparation-20261108.md).
+
 Source: Supervisor's CODEX HANDOFF 001. This is planning scope, not implementation evidence. It is owned by the Supervisor with Project Lead advice; Codex updates progress only from inspected work.
 
 | Sequence | Slice | Progress | Gate |

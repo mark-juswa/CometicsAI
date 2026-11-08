@@ -2,6 +2,8 @@
 
 Date: 7 November 2026.
 
+Runpod preparation update, 8 November: a separate [Runpod server guide](runpod-serving.md) and private handoff are available. Kaggle remains backup. Local preparation checks pass; the Linux image build, actual GPU validation and provider cutover are still separate unverified gates. No Runpod image is claimed available for deployment until built and published.
+
 ## Get the complete source
 
 Repository: https://github.com/mark-juswa/CometicsAI

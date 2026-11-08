@@ -30,5 +30,17 @@
     "path": "I:\\HAIR\\artifacts\\beautycore-runpod-20261108-v2.zip",
     "sha256": "228cd016dfdc2660350d50248e0e586f895aede69dc5a1ad811efb7e20ba47f7",
     "bytes": 246741306
+  },
+  "source_publication": {
+    "status": "VERIFIED",
+    "commit": "f4b947f20e77ae427376114cc7f3a6577e8f1df6",
+    "branches": [
+      "main",
+      "codex/render-kaggle-demo",
+      "codex/runpod-serving"
+    ],
+    "private_zip_in_git": false,
+    "force_push": false,
+    "cloud_deploy_performed": false
   }
 }

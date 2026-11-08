@@ -69,4 +69,4 @@ The worker, model artifacts and external API already solve generation. Provider 
 
 ## Consequences
 
-Client operations can become a prepared image plus two private inputs, secrets and one start command. The Pod bills while running and storage bills while retained. New hardware quality, timing, memory and availability remain unverified. The local Docker CLI exists but its Linux engine is currently unavailable, so the image build must be reported separately from source/package checks.
+Client operations can become a prepared image plus two private inputs, secrets and one start command. The Pod bills while running and storage bills while retained. New hardware quality, timing, memory and availability remain unverified. The Linux image is now built and publicly published, with real local CPU model and notebook authentication checks recorded in the [separate build receipt](../experiments/runpod-docker-build-20261108.md). Actual Runpod GPU, application and cutover acceptance remain open, so this spec stays In Progress.

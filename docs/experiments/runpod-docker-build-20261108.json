@@ -1,0 +1,194 @@
+{
+  "date": "2026-11-08",
+  "progress": "DONE",
+  "evidence": "VERIFIED",
+  "scope": "Linux image build, local CPU/application acceptance and public image publication",
+  "publication": {
+    "status": "PUBLISHED_GPU_ACCEPTANCE_PENDING",
+    "verified_at_utc": "2026-11-08T04:28:41.035831+00:00",
+    "tag": "markuos/beautycore-runpod:styles-20261106-01-972550dfeb1c",
+    "image_digest": "sha256:972550dfeb1cc8f08189ac5106cd8fd7cc58dd1c9443b2fcc5dfb0f386ca66c0",
+    "immutable_image": "markuos/beautycore-runpod@sha256:972550dfeb1cc8f08189ac5106cd8fd7cc58dd1c9443b2fcc5dfb0f386ca66c0",
+    "platform": "linux/amd64",
+    "local_image_size_bytes": 5140735919,
+    "local_linux_checks": "LOCAL_LINUX_IMAGE_PASS_GPU_ACCEPTANCE_PENDING",
+    "private_models_in_image": false,
+    "real_gpu_generation": false,
+    "runpod_resources_created": false,
+    "website_cutover": false
+  },
+  "anonymous_pull": {
+    "status": "PASS",
+    "verified_at_utc": "2026-11-08T04:28:46.313303+00:00",
+    "anonymous_manifest_http": 200,
+    "digest": "sha256:972550dfeb1cc8f08189ac5106cd8fd7cc58dd1c9443b2fcc5dfb0f386ca66c0",
+    "platforms": [
+      {
+        "architecture": "amd64",
+        "os": "linux"
+      },
+      {
+        "architecture": "unknown",
+        "os": "unknown"
+      }
+    ],
+    "credentials_used": false,
+    "registry_password_required_for_pull": false
+  },
+  "image_checks": {
+    "image": "beautycore-runpod:styles-20261106-01-build-20261108-02",
+    "real_gpu_generation": false,
+    "checks": {
+      "image_imports": {
+        "python": "3.12.13",
+        "torch": "2.10.0+cu128",
+        "cuda": "12.8",
+        "cuda_available": false,
+        "source_inventory": "PASS"
+      },
+      "gpu_pip_check": "No broken requirements found.",
+      "api_pip_check": "No broken requirements found.",
+      "segment_pip_check": "No broken requirements found.",
+      "notebook_pip_check": "No broken requirements found.",
+      "real_linux_archive_assembly": "PASS",
+      "original_artifacts_gpu_packages_and_overlays": "PASS",
+      "real_cpu_segmenter_load": "PASS",
+      "real_cpu_landmarker_load": "PASS",
+      "jupyter_password_auth": {
+        "anonymous_status": 403,
+        "authenticated_status": 200,
+        "password_not_logged": true
+      }
+    },
+    "status": "LOCAL_LINUX_IMAGE_PASS_GPU_ACCEPTANCE_PENDING"
+  },
+  "runpod_unit_tests": {
+    "passed": 28,
+    "failed": 0,
+    "command": "python -m pytest backend/tests/test_runpod_preparation.py -q",
+    "note": "26 pass and 2 sandbox rename denials initially; all 28 pass unchanged outside the sandbox"
+  },
+  "context_manifest_sha256": "8702c09cd4acb6adbe2ad09b7aef30f9523049ce9928abe4148f680ea35e29b0",
+  "context_files": {
+    ".dockerignore": "68038b7b2d424c701ffa64bc8b610d3937f4e638d96eba54f8265be0305dfdfa",
+    "Dockerfile": "776b6888290973e7136a87f9fb0f0354fc45c5aa15da0d94df6ec666400e381c",
+    "profile.json": "29d1fbb49b4b245f44f1c9121d545c3cc7fbec9b0c9993e53e9e06a6deef4c9a",
+    "registration.py": "0284f1e966c2309fbf408d6b67c6ceb90e8e7f593e6b7e53674f3e35302cc88c",
+    "release_setup.py": "3347409f4800d2d6b9793de645c7606e8faf43ebc5e2341477d0efec2e1ae9aa",
+    "requirements/gpu.txt": "7fa8b4b348284259cad6d01af9afcf765167252addc940400b5c2a4e32ef126d",
+    "requirements/requirements-demo-constraints.txt": "01dbcf44be3c2db4a9b59a7f21956c9e0b160175a22e03f6d5c3b8f02cbf1c75",
+    "requirements/requirements-nails-segmenter.txt": "5384e170a67c051f018255935307ae890d0bfd59076edfa2de7c07c77137037f",
+    "requirements/requirements-nails.txt": "37b91f033927f7cd2acaafc708a6541b625a4ee3a26646572eaa0d6c78895f12",
+    "requirements/requirements.txt": "594f1e1d7e859869c3ba0f49a7f0842e1d0a49c8c9c551f77dfa0e8efa53f9f9",
+    "runtime.py": "202dc363388589795db41ac371ec3f901fae83e6b4d6c1da9cc81aa49661f370"
+  },
+  "notebook_sha256": "b4a4e1c1482fd060d194f19f5570b6221131379e8214d18c064a713452ab08fd",
+  "private_inputs": {
+    "capstone_train002_20260928_v1.bin": "f0d1fed52e00b6c5a1da2cade3731237675cdebbfc0b2cde3b2dbda99a4019ac",
+    "beautycore_makeup_release_20261106.bin": "0c657ae4d2b62e11bd8c5728321330d5416fbfd1d36354d8482ac548f1449357"
+  },
+  "catalog": {
+    "model_styles": {
+      "hairstyle": [
+        "bob_hair",
+        "bun",
+        "crew_cut",
+        "curtain_hair",
+        "exp_butterfly_cut",
+        "exp_comma_hair",
+        "exp_french_bob_wispy",
+        "exp_korean_two_block",
+        "exp_wolf_cut",
+        "layered_hair",
+        "perm_curls",
+        "pixie_cut",
+        "pompadour_undercut",
+        "ponytail",
+        "shag_hair",
+        "shoulder_length_hair",
+        "side_part_undercut",
+        "wavy_hair"
+      ],
+      "makeup": [
+        "bold_evening_glam",
+        "bronze_golden_glam",
+        "classic_red_lip",
+        "dewy_peach",
+        "exp_cloud_berry_lips",
+        "exp_icy_silver",
+        "exp_manga_lash",
+        "matte_nude",
+        "natural_makeup",
+        "no_makeup_makeup",
+        "rosy_pink",
+        "smoky_glam",
+        "soft_glam"
+      ],
+      "nails": [
+        "classic_red",
+        "glossy_black"
+      ]
+    },
+    "renderer_styles": [
+      "exp_negative_space_microdots",
+      "exp_pink_aura",
+      "exp_raspberry_jelly",
+      "french_tip",
+      "nude_pink",
+      "pink_ombre"
+    ]
+  },
+  "private_handoff_zip": {
+    "path": "artifacts/beautycore-runpod-20261108-v3.zip",
+    "bytes": 246741958,
+    "sha256": "f4b39d8317e23313558b6d7b7add141ba9c4e54a4360bc6cb2125d43ae86eacd"
+  },
+  "first_image": {
+    "status": "REJECTED",
+    "missing_native_libraries": [
+      "libGLESv2.so.2",
+      "libEGL.so.1"
+    ],
+    "fix": "Install libgles2 and libegl1, and load the native task library during the image build"
+  },
+  "original_inputs_and_notebook_unchanged": true,
+  "live_render_changes": false,
+  "kaggle_changes": false,
+  "runpod_resources_created": false,
+  "gpu_inference_verified": false,
+  "remaining": [
+    "Actual RTX 3090 environment and driver acceptance",
+    "Base and all adapters loaded on Runpod",
+    "Real representative Hair, corrective Makeup and full hand Nails outputs",
+    "Cross feature switching, full catalog readiness and restart",
+    "Website registration and signed in application validation"
+  ],
+  "logs": {
+    "runpod-docker-20261108/api-freeze.txt": "e68c8bc495f1ba6f089792e4c4e253e94a6dd95a411932eafae010745c494324",
+    "runpod-docker-20261108/build-01-recovered.log": "f71e85a3c6263a1287336c9b8ce650564d6dcd2535ba85ca9767ce9da467d9aa",
+    "runpod-docker-20261108/build-02-result.json": "f9a2de5b3da1412e0d60cb45d70ee2d7872a5ec702a49c6a7d83185f4f43b752",
+    "runpod-docker-20261108/build-02.log": "977efcc2d6b4cf19748af0e1906eb133d60f65b86653055e442aff882419419c",
+    "runpod-docker-20261108/checks-02/api-pip-check.log": "9261363b733079a641c2e4cc9bc46ffa1d8336945a87f807b6cf68847dbc9b09",
+    "runpod-docker-20261108/checks-02/gpu-pip-check.log": "9261363b733079a641c2e4cc9bc46ffa1d8336945a87f807b6cf68847dbc9b09",
+    "runpod-docker-20261108/checks-02/image-imports.log": "9a294cd10525169e4036fc16edf71e963a46916e2fd9e2af308b3e1d727c1c19",
+    "runpod-docker-20261108/checks-02/linux-artifacts.log": "aab6bbb2ee417212bdcefa26131c63ba1b2092ea28e8ce0eadcc7be9ff5d6f6e",
+    "runpod-docker-20261108/checks-02/linux-landmark-model.log": "d4a706a31013ffd280f1e7d8934c9be8411bcda422897199262c9d8243c6ab62",
+    "runpod-docker-20261108/checks-02/linux-segment-model.log": "be54407fecd89f50efc5c658f4e3e986ddc9d602c92a47c3b927a876d599a9fc",
+    "runpod-docker-20261108/checks-02/linux-stage.log": "650d8246cf82958bf79e7597eb0a50d3fcfbadd057ca90a3dbefb2cafee75a51",
+    "runpod-docker-20261108/checks-02/linux-verification.json": "df48aa010e1a99c1301eff56e4627892dc749d51543a315cac59adb103d4c76f",
+    "runpod-docker-20261108/checks-02/notebook-container-cleanup.log": "27355071b1fac764ee787bbfd2af586b01073e58f42414b55749a105ef4042b8",
+    "runpod-docker-20261108/checks-02/notebook-container-start.log": "e29b15f9cd9e8ea56a399cb383401d10fd15866cd624a28bb3ebaac5b86ffeee",
+    "runpod-docker-20261108/checks-02/notebook-container.log": "1cd3412b0a871614971dba1a732698f60833eafb52f953426e05fd1435cdbdc2",
+    "runpod-docker-20261108/checks-02/notebook-pip-check.log": "9261363b733079a641c2e4cc9bc46ffa1d8336945a87f807b6cf68847dbc9b09",
+    "runpod-docker-20261108/checks-02/notebook-port.log": "7e136ec49f4de5f1bbd5103e27dec8a705413512e6f8f6d87af1bc068b8a7366",
+    "runpod-docker-20261108/checks-02/segment-pip-check.log": "9261363b733079a641c2e4cc9bc46ffa1d8336945a87f807b6cf68847dbc9b09",
+    "runpod-docker-20261108/gpu-freeze.txt": "f853290eb8d8a0668983936ff821595047eb3df474477824afc95703020132be",
+    "runpod-docker-20261108/image-filesystem-size.log": "7b7632c14123085d0ffc210fdb7cad67f72b9652bf0c05677cc09c86b13d283a",
+    "runpod-docker-20261108/linux-landmark-model.log": "a89107c220b8138ce17f3aa0fef4dad20bdb7a8cca53f35850a99cf22b0e0c60",
+    "runpod-docker-20261108/notebook-freeze.txt": "9e4857326483b815b956a0c930a4f76f0c14683d7775fea04f440eb1ce84c1c1",
+    "runpod-docker-20261108/registry-push.log": "0818920e4a2936f663b7150b41e433056578c289d7c1750e0a00666fdd6d9402",
+    "runpod-docker-20261108/segment-freeze.txt": "8c9366ca060a4762ec5a9bba5b5ff3e7b09180492e2176ddbba1aae53eddde5f",
+    "runpod-docker-20261108/verify_runpod_docker_20261108.py": "07395c1d4e682a10628938b6158ecfd890549590a580645c6a49937c79c1d9e3",
+    "runpod-docker-20261108/verify_runpod_docker_20261108_02.py": "a8880a1ca2f6395155d2cff83d8df889b6c5763f387a89118845c033fdd65da0"
+  }
+}

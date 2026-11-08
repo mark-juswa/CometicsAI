@@ -9,3 +9,6 @@ data/makeup/MAKEUP-CORRECTION-001/quality-policy.json -text
 data/makeup/DATA-M001-CORRECTIVE-001/catalog.json -text
 notebooks/render_kaggle_makeup_corrective_demo.ipynb -text
 client/render_kaggle_makeup_corrective_demo.ipynb -text
+
+# Docker validation receipts bind these retained log/config bytes by SHA256.
+docs/experiments/runpod-docker-20261108/** -text

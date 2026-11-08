@@ -1,0 +1,123 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.38kB 0.0s done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/library/python:3.12.13-slim-bookworm@sha256:4766d8b510c428e595d74b9cc5bbb2fae8e26316fffb4adc89908d79aacd58a2
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 185B 0.0s done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 DONE 0.0s
+
+#5 [ 1/11] FROM docker.io/library/python:3.12.13-slim-bookworm@sha256:4766d8b510c428e595d74b9cc5bbb2fae8e26316fffb4adc89908d79aacd58a2
+#5 resolve docker.io/library/python:3.12.13-slim-bookworm@sha256:4766d8b510c428e595d74b9cc5bbb2fae8e26316fffb4adc89908d79aacd58a2 0.1s done
+#5 DONE 0.1s
+
+#4 [internal] load build context
+#4 transferring context: 122.89kB 0.0s done
+#4 DONE 0.1s
+
+#6 [ 2/11] RUN apt-get update && apt-get install -y --no-install-recommends     git ca-certificates libgomp1 libportaudio2 libgl1 libglib2.0-0     && rm -rf /var/lib/apt/lists/*
+#6 CACHED
+
+#7 [ 5/11] RUN python -m venv /opt/api     && /opt/api/bin/python -m pip install pip==25.3     && /opt/api/bin/python -m pip install -r /opt/requirements/requirements-nails.txt -c /opt/requirements/requirements-demo-constraints.txt     && /opt/api/bin/python -m pip check
+#7 CACHED
+
+#8 [ 3/11] COPY requirements/ /opt/requirements/
+#8 CACHED
+
+#9 [ 4/11] RUN python -m pip install pip==25.3     && python -m pip install torch==2.10.0+cu128 --index-url https://download.pytorch.org/whl/cu128     && python -m pip install -r /opt/requirements/gpu.txt     && python -m pip check
+#9 CACHED
+
+#10 [ 6/11] RUN python -m venv /opt/segment     && /opt/segment/bin/python -m pip install pip==25.3     && /opt/segment/bin/python -m pip install torch==2.10.0 torchvision==0.25.0 --index-url https://download.pytorch.org/whl/cpu     && /opt/segment/bin/python -m pip install -r /opt/requirements/requirements-nails-segmenter.txt     && /opt/segment/bin/python -m pip check
+#10 CACHED
+
+#11 [ 7/11] RUN python -m venv /opt/notebook     && /opt/notebook/bin/python -m pip install pip==25.3 jupyterlab==4.6.6
+#11 CACHED
+
+#12 [ 8/11] RUN apt-get update && apt-get install -y --no-install-recommends libegl1 libgles2     && rm -rf /var/lib/apt/lists/*
+#12 0.858 Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+#12 1.089 Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+#12 1.106 Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [34.8 kB]
+#12 1.123 Get:4 http://deb.debian.org/debian bookworm/main amd64 Packages [8790 kB]
+#12 1.597 Get:5 http://deb.debian.org/debian bookworm-updates/main amd64 Packages [6924 B]
+#12 1.609 Get:6 http://deb.debian.org/debian-security bookworm-security/main amd64 Packages [361 kB]
+#12 2.310 Fetched 9400 kB in 2s (5512 kB/s)
+#12 2.310 Reading package lists...
+#12 2.895 Reading package lists...
+#12 3.366 Building dependency tree...
+#12 3.503 Reading state information...
+#12 3.626 The following additional packages will be installed:
+#12 3.626   libegl-mesa0 libgbm1 libwayland-client0 libwayland-server0
+#12 3.700 The following NEW packages will be installed:
+#12 3.701   libegl-mesa0 libegl1 libgbm1 libgles2 libwayland-client0 libwayland-server0
+#12 3.762 0 upgraded, 6 newly installed, 0 to remove and 7 not upgraded.
+#12 3.762 Need to get 267 kB of archives.
+#12 3.762 After this operation, 867 kB of additional disk space will be used.
+#12 3.762 Get:1 http://deb.debian.org/debian bookworm/main amd64 libwayland-server0 amd64 1.21.0-1 [35.9 kB]
+#12 3.781 Get:2 http://deb.debian.org/debian bookworm/main amd64 libgbm1 amd64 22.3.6-1+deb12u2 [38.1 kB]
+#12 3.785 Get:3 http://deb.debian.org/debian bookworm/main amd64 libwayland-client0 amd64 1.21.0-1 [28.3 kB]
+#12 3.804 Get:4 http://deb.debian.org/debian bookworm/main amd64 libegl-mesa0 amd64 22.3.6-1+deb12u2 [114 kB]
+#12 3.810 Get:5 http://deb.debian.org/debian bookworm/main amd64 libgles2 amd64 1.6.0-1 [16.8 kB]
+#12 3.818 Get:6 http://deb.debian.org/debian bookworm/main amd64 libegl1 amd64 1.6.0-1 [33.7 kB]
+#12 4.003 debconf: delaying package configuration, since apt-utils is not installed
+#12 4.056 Fetched 267 kB in 0s (2423 kB/s)
+#12 4.132 Selecting previously unselected package libwayland-server0:amd64.
+#12 4.132 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 10596 files and directories currently installed.)
+#12 4.177 Preparing to unpack .../0-libwayland-server0_1.21.0-1_amd64.deb ...
+#12 4.206 Unpacking libwayland-server0:amd64 (1.21.0-1) ...
+#12 4.376 Selecting previously unselected package libgbm1:amd64.
+#12 4.377 Preparing to unpack .../1-libgbm1_22.3.6-1+deb12u2_amd64.deb ...
+#12 4.391 Unpacking libgbm1:amd64 (22.3.6-1+deb12u2) ...
+#12 4.519 Selecting previously unselected package libwayland-client0:amd64.
+#12 4.521 Preparing to unpack .../2-libwayland-client0_1.21.0-1_amd64.deb ...
+#12 4.535 Unpacking libwayland-client0:amd64 (1.21.0-1) ...
+#12 4.672 Selecting previously unselected package libegl-mesa0:amd64.
+#12 4.675 Preparing to unpack .../3-libegl-mesa0_22.3.6-1+deb12u2_amd64.deb ...
+#12 4.688 Unpacking libegl-mesa0:amd64 (22.3.6-1+deb12u2) ...
+#12 4.849 Selecting previously unselected package libgles2:amd64.
+#12 4.851 Preparing to unpack .../4-libgles2_1.6.0-1_amd64.deb ...
+#12 4.865 Unpacking libgles2:amd64 (1.6.0-1) ...
+#12 5.015 Selecting previously unselected package libegl1:amd64.
+#12 5.017 Preparing to unpack .../5-libegl1_1.6.0-1_amd64.deb ...
+#12 5.040 Unpacking libegl1:amd64 (1.6.0-1) ...
+#12 5.164 Setting up libwayland-server0:amd64 (1.21.0-1) ...
+#12 5.229 Setting up libgbm1:amd64 (22.3.6-1+deb12u2) ...
+#12 5.271 Setting up libgles2:amd64 (1.6.0-1) ...
+#12 5.322 Setting up libwayland-client0:amd64 (1.21.0-1) ...
+#12 5.363 Setting up libegl-mesa0:amd64 (22.3.6-1+deb12u2) ...
+#12 5.406 Setting up libegl1:amd64 (1.6.0-1) ...
+#12 5.447 Processing triggers for libc-bin (2.36-9+deb12u14) ...
+#12 DONE 5.7s
+
+#13 [ 9/11] COPY . /opt/server/
+#13 DONE 0.2s
+
+#14 [10/11] RUN python -c "import platform, torch; assert platform.python_version() == '3.12.13'; assert torch.__version__ == '2.10.0+cu128'; from diffusers import Flux2KleinPipeline"     && /opt/api/bin/python -c "import mediapipe; import ctypes.util; assert ctypes.util.find_library('portaudio'); from mediapipe.tasks.python.core.mediapipe_c_bindings import load_raw_library; load_raw_library()"     && /opt/segment/bin/python -c "import torch, torchvision; from ultralytics import YOLO; assert '+cpu' in torch.__version__; assert torchvision.extension._has_ops()"
+#14 11.90 Creating new Ultralytics Settings v0.0.6 file ✅ 
+#14 11.90 View Ultralytics Settings with 'yolo settings' or at '/root/.config/Ultralytics/settings.json'
+#14 11.90 Update Settings with 'yolo settings key=value', i.e. 'yolo settings runs_dir=path/to/dir'. For help see https://docs.ultralytics.com/quickstart/#ultralytics-settings.
+#14 DONE 12.6s
+
+#15 [11/11] WORKDIR /workspace
+#15 DONE 0.2s
+
+#16 exporting to image
+#16 exporting layers
+#16 exporting layers 0.7s done
+#16 exporting manifest sha256:c8a9171f83e2e85e62e330a235b7a303540b024bab66145b0067cf7fb180b7dc 0.1s done
+#16 exporting config sha256:f603a53b2b7167466180f63842d03b468b554f2493792648e4c744c00f01cf80 0.0s done
+#16 exporting attestation manifest sha256:00ddf1d248a5cfbd1dbfe890ddbfab4628027e514a1f04a166b4790dcc276935 0.1s done
+#16 exporting manifest list sha256:972550dfeb1cc8f08189ac5106cd8fd7cc58dd1c9443b2fcc5dfb0f386ca66c0
+#16 exporting manifest list sha256:972550dfeb1cc8f08189ac5106cd8fd7cc58dd1c9443b2fcc5dfb0f386ca66c0 0.0s done
+#16 naming to docker.io/library/beautycore-runpod:styles-20261106-01-build-20261108-02 done
+#16 unpacking to docker.io/library/beautycore-runpod:styles-20261106-01-build-20261108-02
+#16 unpacking to docker.io/library/beautycore-runpod:styles-20261106-01-build-20261108-02 0.4s done
+#16 DONE 1.4s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/q1g9z7adsr398q5v9zy3uvda5

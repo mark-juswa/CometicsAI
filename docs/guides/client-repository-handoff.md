@@ -2,7 +2,7 @@
 
 Date: 7 November 2026.
 
-Runpod preparation update, 8 November: a separate [Runpod server guide](runpod-serving.md) and private handoff are available. Kaggle remains backup. Local preparation checks pass; the Linux image build, actual GPU validation and provider cutover are still separate unverified gates. No Runpod image is claimed available for deployment until built and published.
+Runpod update, 8 November: the [Runpod server guide](runpod-serving.md) now provides a built and publicly published image with verified anonymous pull access, Linux staging, CPU model loads and notebook authentication. You can skip Docker build steps. Private inputs and secrets are supplied separately. Kaggle remains backup. Actual Runpod GPU validation and provider cutover remain open. [Build receipt](../experiments/runpod-docker-build-20261108.md).
 
 ## Get the complete source
 

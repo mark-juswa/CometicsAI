@@ -21,9 +21,12 @@ RUN python -m venv /opt/segment \
     && /opt/segment/bin/python -m pip check
 RUN python -m venv /opt/notebook \
     && /opt/notebook/bin/python -m pip install pip==25.3 jupyterlab==4.6.6
+# MediaPipe imports lazily; its native task library also needs EGL and GLES.
+RUN apt-get update && apt-get install -y --no-install-recommends libegl1 libgles2 \
+    && rm -rf /var/lib/apt/lists/*
 COPY . /opt/server/
 RUN python -c "import platform, torch; assert platform.python_version() == '3.12.13'; assert torch.__version__ == '2.10.0+cu128'; from diffusers import Flux2KleinPipeline" \
-    && /opt/api/bin/python -c "import mediapipe; import ctypes.util; assert ctypes.util.find_library('portaudio')" \
+    && /opt/api/bin/python -c "import mediapipe; import ctypes.util; assert ctypes.util.find_library('portaudio'); from mediapipe.tasks.python.core.mediapipe_c_bindings import load_raw_library; load_raw_library()" \
     && /opt/segment/bin/python -c "import torch, torchvision; from ultralytics import YOLO; assert '+cpu' in torch.__version__; assert torchvision.extension._has_ops()"
 WORKDIR /workspace
 EXPOSE 8888

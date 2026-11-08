@@ -1,6 +1,18 @@
 # BeautyCore Runpod setup and Kaggle backup
 
-This is the preparation guide for release `styles-20261106-01`, 18 Hair, 13 Makeup and 8 Nails styles. The Runpod profile is a candidate until its Linux image and actual GPU/application checks pass. Kaggle remains unchanged as backup. No retraining is required for this provider migration.
+This is the preparation guide for release `styles-20261106-01`, 18 Hair, 13 Makeup and 8 Nails styles. The Linux image is built, checked and published. The Runpod GPU profile remains a candidate until actual GPU/application checks pass. Kaggle remains unchanged as backup. No retraining is required for this provider migration.
+
+## Ready image
+
+Docker work is complete on 8 November 2026. You can skip building and publishing the image and continue at **Configure the Pod** using:
+
+```
+markuos/beautycore-runpod@sha256:972550dfeb1cc8f08189ac5106cd8fd7cc58dd1c9443b2fcc5dfb0f386ca66c0
+```
+
+Version tag: `markuos/beautycore-runpod:styles-20261106-01-972550dfeb1c`. Public pull access, exact dependency checks, real private archive staging, both CPU vision model loads and password protected Jupyter login pass. The image includes support for all 18 Hair, 13 Makeup and 8 Nails styles, including expanded styles. Upload the two private `.bin` inputs separately. Weights and credentials are not in the public image. [Build evidence](../experiments/runpod-docker-build-20261108.md).
+
+Use at least 30 GB container disk and 75 GB persistent storage mounted at `/workspace`. Actual GPU generation and website cutover remain separate acceptance steps. Kaggle backup remains intact.
 
 ## What is prepared
 
@@ -10,12 +22,14 @@ The default container opens password protected JupyterLab for familiar browser f
 
 ## Prepare and build the image once
 
-If you already have the prepared private ZIP, extract it into `artifacts/beautycore-runpod-20261108-v2/` under your repository checkout and skip the package creation command. Its `build-context/` is ready for the Docker command below. If you extract elsewhere, replace the final build context path in that command with your actual `build-context/` folder.
+These commands are optional when using the published image above. If rebuilding from a private package, use corrected v3 or a newly prepared context. The earlier v1 and v2 packages preserve the first recipe, which failed the real MediaPipe native model check.
+
+If you already have the prepared private ZIP, extract it into `artifacts/beautycore-runpod-20261108-v3/` under your repository checkout and skip the package creation command. Its `build-context/` is ready for the Docker command below. If you extract elsewhere, replace the final build context path in that command with your actual `build-context/` folder.
 
 From the repository root, with the original private `.bin` inputs in local `client/`:
 
 ```powershell
-python scripts/package_runpod.py --output artifacts/beautycore-runpod-20261108-v2
+python scripts/package_runpod.py --output artifacts/beautycore-runpod-20261108-v3
 ```
 
 Use a new output name for another build. Keep the resulting ZIP private. The `build-context/` subfolder contains source and requirements only, with an explicit Docker allowlist. It contains no portraits, adapters or credentials. Do not build with the full repository or the private input folder as context.
@@ -23,19 +37,19 @@ Use a new output name for another build. Keep the resulting ZIP private. The `bu
 On a machine with a running Linux Docker engine:
 
 ```powershell
-docker build --platform linux/amd64 -t YOUR_DOCKER_USERNAME/beautycore-runpod:styles-20261106-01 artifacts/beautycore-runpod-20261108-v2/build-context
+docker build --platform linux/amd64 -t YOUR_DOCKER_USERNAME/beautycore-runpod:styles-20261106-01 artifacts/beautycore-runpod-20261108-v3/build-context
 docker login
 docker push YOUR_DOCKER_USERNAME/beautycore-runpod:styles-20261106-01
 docker image inspect YOUR_DOCKER_USERNAME/beautycore-runpod:styles-20261106-01 --format '{{json .RepoDigests}}'
 ```
 
-Replace `YOUR_DOCKER_USERNAME` with your own registry account. No password belongs in these commands, Dockerfile or Git. Use the resulting `username/image@sha256:...` digest in Runpod, rather than a mutable latest tag. The source recipe pins Python 3.12.13 by registry digest and the reviewed GPU dependency versions. The official base digest was resolved through the registry on 8 November. The full server image must still be built, checked and published, with its own digest recorded. Image build does not require a local GPU. The current development PC has Docker installed but its Linux engine did not become available during the startup attempt, so no completed Linux build is claimed.
+Replace `YOUR_DOCKER_USERNAME` with your own registry account. No password belongs in these commands, Dockerfile or Git. Use the resulting `username/image@sha256:...` digest in Runpod, rather than a mutable latest tag. The source recipe pins Python 3.12.13 by registry digest and the reviewed GPU dependency versions. The official base digest was resolved through the registry on 8 November. The completed server image and its independent public registry verification are recorded above. Image build does not require a local GPU. The first image exposed missing MediaPipe native libraries during real model load; the published image includes the correction and passed the same check.
 
 ## Configure the Pod
 
 Use an on demand Linux amd64 Pod. The first prepared candidate accepts exactly **NVIDIA GeForce RTX 3090**, at least 20 GiB VRAM and 30 GiB allocated system RAM. Choose at least 32 GiB usable RAM, preferably a listing advertising 48 GB or more. Do not choose an inexpensive offer with only 25 GB host RAM. Another GPU requires a separate reviewed profile; changing a name to bypass the guard is not validation.
 
-Use the built image digest. Mount persistent storage at `/workspace`. Start with about 50 GB for Base/model cache, private inputs and run artifacts, plus adequate container disk for the image and temporary libraries. Actual image size must be measured after build. The existing Base download checks for 30 GiB available cache disk space before downloading, so verify free space on the mounted volume. Persistent storage continues billing while compute is stopped.
+Use the built image digest. Mount persistent storage at `/workspace`. Use 75 GB persistent storage for Base/model cache, private inputs and run artifacts, plus at least 30 GB container disk for the image and temporary libraries. The measured source/dependency filesystem uses about 9.7 GiB before model cache and runtime data. The existing Base download checks for 30 GiB available cache disk space before downloading, so verify free space on the mounted volume. Persistent storage continues billing while compute is stopped.
 
 Expose HTTP port **8888 only** for notebook setup. Leave 8765 and 8800 private. The existing authenticated CPU facade is exposed through a temporary Cloudflare tunnel, not an unprotected GPU proxy. Keep the default container command `notebook` for the initial setup.
 
@@ -89,4 +103,4 @@ The server monitors its owned processes. A failure or termination stops its chil
 
 Wait for admitted work to finish, then stop Runpod compute. Wait for its website lease to expire, start the original Kaggle notebook with its two matching private inputs and reviewed environment, and wait for its normal website connection acknowledgement. No database rewrite, model conversion, frontend redesign or new API contract is required. The original Kaggle startup version/input issues still need their own verified environment and attachment correction; preserving backup files does not establish that a fresh Kaggle session works.
 
-No paid Pod, container registry publication, website cutover or live generation is performed by preparing this package. Linux image build, provider environment acceptance and real application validation are separate milestones.
+The Docker image is built and publicly published. No paid Pod, website cutover or GPU generation was performed during preparation or local image verification. Provider environment acceptance and real application validation remain separate milestones.

@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/proof/staged/cpu-src/backend/app/nails/geometry.py", line 34, in __init__
+    self.detector = mp.tasks.vision.HandLandmarker.create_from_options(options)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/api/lib/python3.12/site-packages/mediapipe/tasks/python/vision/hand_landmarker.py", line 395, in create_from_options
+    lib = mediapipe_c_bindings.load_shared_library(_CTYPES_SIGNATURES)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/api/lib/python3.12/site-packages/mediapipe/tasks/python/core/mediapipe_c_bindings.py", line 83, in load_shared_library
+    raw_lib = load_raw_library()
+              ^^^^^^^^^^^^^^^^^^
+  File "/opt/api/lib/python3.12/site-packages/mediapipe/tasks/python/core/mediapipe_c_bindings.py", line 54, in load_raw_library
+    _shared_lib = ctypes.CDLL(absolute_lib_path)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/ctypes/__init__.py", line 379, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: libGLESv2.so.2: cannot open shared object file: No such file or directory

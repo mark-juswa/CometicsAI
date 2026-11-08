@@ -1,5 +1,7 @@
 # Runpod server preparation, 8 November 2026
 
+Follow up: the [Docker build and publication receipt](runpod-docker-build-20261108.md) records the later completed image, native dependency correction and Linux acceptance. This original preparation record is preserved below.
+
 **DONE local source, private package and offline preparation. NEEDS VERIFICATION Linux image build and Runpod GPU acceptance. NOT STARTED registry image publication, paid provider launch or website cutover.**
 
 VERIFIED public source publication: commit `f4b947f20e77ae427376114cc7f3a6577e8f1df6` is on `main`, `codex/render-kaggle-demo` and `codex/runpod-serving`, confirmed by an independent remote head read after a normal atomic push. Nineteen selected public source/report files were published through an isolated index; the active local branch/index and private artifacts remain intact. This publishes the server recipe, not a built container image or live endpoint.

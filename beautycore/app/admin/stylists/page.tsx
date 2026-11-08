@@ -23,6 +23,7 @@ import {
   useRevenueReport,
 } from "@/components/revenue-report";
 import { StylistAccountDialog } from "@/components/stylist-account-dialog";
+import { StylistServiceDialog } from "@/components/stylist-service-dialog";
 import { salonDay } from "@/lib/business/dates";
 import type {
   RevenuePeriod,
@@ -47,6 +48,9 @@ const initials = (name: string) =>
     .toUpperCase();
 
 export default function AdminStylistsPage() {
+  const [history, setHistory] = useState<{ id: string; name: string } | null>(
+    null,
+  );
   const [period, setPeriod] = useState<RevenuePeriod>("month"),
     [date, setDate] = useState(salonDay);
   const { report, loading, error, refresh } = useRevenueReport(period, date);
@@ -344,9 +348,14 @@ export default function AdminStylistsPage() {
                           {initials(row.name)}
                         </span>
                         <div className="min-w-0">
-                          <p className="text-sm font-medium text-white">
+                          <button
+                            type="button"
+                            onClick={() => setHistory(row)}
+                            aria-label={`View services by ${row.name}`}
+                            className="text-left text-sm font-medium text-white underline decoration-gold/40 underline-offset-4 hover:text-gold"
+                          >
                             {row.name}
-                          </p>
+                          </button>
                           <p
                             className="mt-0.5 max-w-[210px] truncate text-[11px] text-muted"
                             title={row.email}
@@ -444,6 +453,13 @@ export default function AdminStylistsPage() {
           </p>
         )}
       </Card>
+      {history && (
+        <StylistServiceDialog
+          key={history.id}
+          stylist={history}
+          onClose={() => setHistory(null)}
+        />
+      )}
       {editor && (
         <StylistAccountDialog
           key={editor.stylist?.id || "new"}

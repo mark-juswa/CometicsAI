@@ -1,0 +1,85 @@
+.booking-notification-bar {
+  position: fixed;
+  top: 54px;
+  left: 0;
+  right: 0;
+  z-index: 35;
+  height: 64px;
+  background: #20122ff5;
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid #b58bd940;
+  color: #fff;
+}
+.booking-notification-inner {
+  height: 64px;
+  max-width: 1600px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 24px;
+}
+.booking-notification-bell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  min-width: 42px;
+  border: 1px solid #bd9a5c55;
+  border-radius: 10px;
+  background: #3b254c;
+  color: #f3d18e;
+}
+.booking-notification-bell > span {
+  position: absolute;
+  top: -7px;
+  right: -6px;
+  border-radius: 20px;
+  min-width: 19px;
+  padding: 2px 4px;
+  background: #edaf12;
+  color: #1b102b;
+  font-size: 10px;
+  font-weight: 700;
+}
+.booking-notification-list {
+  position: absolute;
+  right: 16px;
+  top: 72px;
+  width: min(440px, calc(100vw - 32px));
+  border: 1px solid #a880c459;
+  border-radius: 14px;
+  background: #1d102e;
+  box-shadow: 0 20px 70px #0009;
+  overflow: hidden;
+  max-height: calc(100dvh - 142px);
+  overflow-y: auto;
+}
+.booking-notification-item {
+  display: flex;
+  align-items: start;
+  gap: 12px;
+  padding: 16px;
+  border-top: 1px solid #a880c41f;
+}
+.booking-notification-item:hover {
+  background: #342044;
+}
+.booking-notification-bar button:focus-visible,
+.booking-notification-bar a:focus-visible {
+  outline: 2px solid #edaf12;
+  outline-offset: 3px;
+}
+.booking-notification-bar button {
+  min-height: 32px;
+}
+@media (min-width: 1024px) {
+  .booking-notification-bar {
+    top: 0;
+    left: 240px;
+  }
+  .booking-notification-inner {
+    padding-inline: 40px;
+  }
+}

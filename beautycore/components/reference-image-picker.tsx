@@ -12,9 +12,11 @@ type ImageRow = {
 export function ReferenceImagePicker({
   disabled = false,
   onSelect,
+  purpose = "your new consultation",
 }: {
   disabled?: boolean;
   onSelect: (file: File) => void;
+  purpose?: string;
 }) {
   const [open, setOpen] = useState(false),
     [rows, setRows] = useState<ImageRow[]>([]),
@@ -159,8 +161,7 @@ export function ReferenceImagePicker({
                 className="max-h-64 w-full object-contain"
               />
               <p className="my-3 text-sm">
-                This image will become the reference photo for your new
-                consultation.
+                This image will become the reference photo for {purpose}.
               </p>
               <button
                 type="button"

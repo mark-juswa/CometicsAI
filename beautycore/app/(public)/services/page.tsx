@@ -114,19 +114,21 @@ export default function ServicesPage() {
                     {cat.title}
                   </h3>
                   <ul className="flex flex-col gap-3">
-                    {cat.items.map((s) => (
-                      <li
-                        key={s.name}
-                        className="flex items-baseline justify-between gap-4 border-b border-white/[0.04] pb-3 last:border-0 last:pb-0"
-                      >
-                        <span className="text-[13px] text-secondary">
-                          {s.name}
-                        </span>
-                        <span className="shrink-0 text-[13px] font-medium text-white">
-                          {s.price}
-                        </span>
-                      </li>
-                    ))}
+                    {cat.items
+                      .filter((service) => service.name !== "Men's Cut")
+                      .map((s) => (
+                        <li
+                          key={s.name}
+                          className="flex items-baseline justify-between gap-4 border-b border-white/[0.04] pb-3 last:border-0 last:pb-0"
+                        >
+                          <span className="text-[13px] text-secondary">
+                            {s.name}
+                          </span>
+                          <span className="shrink-0 text-[13px] font-medium text-white">
+                            {s.price}
+                          </span>
+                        </li>
+                      ))}
                   </ul>
                 </div>
               ))}

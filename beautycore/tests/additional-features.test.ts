@@ -16,6 +16,8 @@ import {
   type HistoryDependencies,
 } from "../lib/business/customer-history";
 import { workAvailability } from "../lib/business/work-availability";
+import { bookingNotifications } from "../lib/business/booking-notifications";
+import { stylistServiceHistory } from "../lib/business/stylist-history";
 import { signConsultationHandle } from "../lib/ai/consultation-handle";
 const C = "11111111-1111-4111-8111-111111111111",
   OTHER = "22222222-2222-4222-8222-222222222222",
@@ -45,7 +47,7 @@ const req = (path: string, method = "GET", body?: unknown, origin = ORIGIN) =>
 const book = (date = "2030-10-17T02:00:00Z", stylist: string | null = S) =>
   bookingApi(
     req("/api/appointments", "POST", {
-      serviceName: "Men's Cut",
+      serviceName: "Women's Cut & Blowdry",
       serviceType: "hair",
       appointmentDate: date,
       stylistId: stylist,
@@ -660,11 +662,49 @@ test('administrators and stylists cannot attach an unsubmitted private look by c
  const [look]=await query('SELECT id FROM ai_generations');
  await savedLooks(req('/api/saved-looks/'+look.id,'PATCH',{saved:true}),String(look.id),false,deps);
  actor=A;
- const body={clientId:C,lookId:look.id,serviceName:"Men's Cut",serviceType:'hair',appointmentDate:'2030-10-17T02:00:00Z',stylistId:S};
+ const body={clientId:C,lookId:look.id,serviceName:"Women's Cut & Blowdry",serviceType:'hair',appointmentDate:'2030-10-17T02:00:00Z',stylistId:S};
  assert.equal((await bookingApi(req('/api/appointments','POST',body),undefined,deps)).status,403);
  assert.equal((await savedLooks(req('/api/saved-looks/'+look.id+'/image'),String(look.id),true,deps)).status,404);
  actor=S;assert.equal((await bookingApi(req('/api/appointments','POST',body),undefined,deps)).status,403);
  assert.equal((await query('SELECT count(*)::int AS n FROM appointments'))[0].n,0);
  actor=C;assert.equal((await bookingApi(req('/api/appointments','POST',body),undefined,deps)).status,201);
  actor=A;assert.equal((await savedLooks(req('/api/saved-looks/'+look.id+'/image'),String(look.id),true,deps)).status,200);
+});
+
+test('booking alerts are scoped to the owner and assigned stylist, and update with assignment and cancellation',async()=>{
+ const response=await book('2030-10-17T02:00:00Z',null);assert.equal(response.status,201);
+ const id=(await query('SELECT id FROM appointments'))[0].id;
+ let alerts=await bookingNotifications(req('/api/booking-notifications?clientId='+OTHER),history);assert.equal(alerts.status,200);
+ const first=await alerts.json();assert.equal(first.ownerId,C);assert.equal(first.total,1);assert.equal(first.notifications[0].status,'pending');
+ actor=OTHER;assert.equal((await(await bookingNotifications(req('/api/booking-notifications'),history)).json()).total,0);
+ actor=S;assert.equal((await(await bookingNotifications(req('/api/booking-notifications'),history)).json()).total,0);
+ actor=A;assert.equal((await bookingNotifications(req('/api/booking-notifications'),history)).status,403);
+ const update=await bookingApi(req('/api/appointments/'+id,'PATCH',{stylistId:S}),String(id),deps);assert.equal(update.status,200);
+ actor=S;const assigned=await(await bookingNotifications(req('/api/booking-notifications'),history)).json();assert.equal(assigned.total,1);assert.equal(assigned.notifications[0].id,id);assert.equal(assigned.notifications[0].status,'confirmed');
+ assert.equal('clientId' in assigned.notifications[0],false);assert.equal('stylistId' in assigned.notifications[0],false);
+ actor=C;const changed=await(await bookingNotifications(req('/api/booking-notifications'),history)).json();assert.notEqual(changed.notifications[0].key,first.notifications[0].key);
+ assert.equal((await bookingApi(req('/api/appointments/'+id,'PATCH',{status:'cancelled'}),String(id),deps)).status,200);
+ assert.equal((await(await bookingNotifications(req('/api/booking-notifications'),history)).json()).total,0);
+ actor=S;assert.equal((await(await bookingNotifications(req('/api/booking-notifications'),history)).json()).total,0);
+ actor=null;assert.equal((await bookingNotifications(req('/api/booking-notifications'),history)).status,401);
+ assert.equal((await query('SELECT count(*)::int AS n FROM appointments'))[0].n,1);
+});
+
+test('stylist service history is admin-only, completed-only, and preserves zero and unconfirmed amounts',async()=>{
+ await query("INSERT INTO appointments(client_id,stylist_id,service_name,service_type,appointment_date,status,total_price) VALUES($1,$2,'Free completed service','hair','2030-10-16 16:30:00','completed',0),($1,$2,'Unpriced completed service','hair','2030-10-18 02:00:00','completed',NULL),($1,$2,'Upcoming service','hair','2030-10-19 02:00:00','confirmed',350)",[C,S]);
+ for(const role of [C,S]){actor=role;assert.equal((await stylistServiceHistory(req('/api/admin/stylists/'+S+'/services'),S,history)).status,403);}
+ actor=A;const all=await(await stylistServiceHistory(req('/api/admin/stylists/'+S+'/services'),S,history)).json();assert.equal(all.total,2);assert.equal(all.summary.amount,0);assert.equal(all.summary.unpriced,1);assert.equal(all.services.length,2);assert.ok(all.services.every((row:any)=>!('imageUrl' in row)));
+ const day=await(await stylistServiceHistory(req('/api/admin/stylists/'+S+'/services?from=2030-10-17&to=2030-10-17'),S,history)).json();assert.equal(day.total,1);assert.equal(day.services[0].serviceName,'Free completed service');assert.equal(day.services[0].totalPrice,0);
+ assert.equal((await stylistServiceHistory(req('/api/admin/stylists/'+S+'/services?from=2030-10-19&to=2030-10-17'),S,history)).status,400);
+ assert.equal((await stylistServiceHistory(req('/api/admin/stylists/'+C+'/services'),C,history)).status,404);
+});
+
+test('archived generated images can be downloaded privately without saving or generating again',async()=>{
+ const {handle,sessionId}=await archiveStart();await archiveGenerated(handle);
+ const detail=await(await consultationHistory(req('/api/consultation-history/'+sessionId),history,sessionId)).json();const image=detail.results[0];
+ assert.equal(image.savedAt,null);
+ const response=await savedLooks(req(image.imageUrl+'?download=1'),image.id,true,deps);assert.equal(response.status,200);assert.match(response.headers.get('Content-Disposition')??'',/^attachment; filename="andreas-.*\.png"$/);assert.equal(response.headers.get('Content-Type'),'image/png');assert.deepEqual(Buffer.from(await response.arrayBuffer()),png);
+ actor=OTHER;assert.equal((await savedLooks(req(image.imageUrl+'?download=1'),image.id,true,deps)).status,404);
+ actor=S;assert.equal((await savedLooks(req(image.imageUrl+'?download=1'),image.id,true,deps)).status,404);
+ assert.equal((await query('SELECT count(*)::int AS n FROM ai_generations'))[0].n,1);
 });

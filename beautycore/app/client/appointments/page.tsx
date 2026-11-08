@@ -1,17 +1,21 @@
-'use client';
+"use client";
 import {
   AppointmentServiceRecord,
   AppointmentReviewForm,
-} from '@/components/appointment-service-record';
-import type { ServiceRecord } from '@/lib/business/workflow-types';
-import { useAppointmentRefresh } from '@/lib/business/use-appointment-refresh';
+} from "@/components/appointment-service-record";
+import type { ServiceRecord } from "@/lib/business/workflow-types";
+import { useAppointmentRefresh } from "@/lib/business/use-appointment-refresh";
+import { useBookingTarget } from "@/lib/use-booking-target";
 
-import { AppointmentLookPreview, type AppointmentLook } from '@/components/appointment-look';
+import {
+  AppointmentLookPreview,
+  type AppointmentLook,
+} from "@/components/appointment-look";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { CalendarDays, Clock, User, X, Loader2 } from 'lucide-react';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { CalendarDays, Clock, User, X, Loader2 } from "lucide-react";
 import {
   PageHeader,
   Card,
@@ -21,8 +25,8 @@ import {
   formatDate,
   formatTime,
   formatPeso,
-} from '@/components/ui';
-import type { AppointmentStatus } from '@/db/schema';
+} from "@/components/ui";
+import type { AppointmentStatus } from "@/db/schema";
 
 interface Row extends ServiceRecord {
   look?: AppointmentLook | null;
@@ -36,16 +40,17 @@ interface Row extends ServiceRecord {
   stylist: { id: string; name: string } | null;
 }
 
-type Filter = 'upcoming' | 'past' | 'all';
+type Filter = "upcoming" | "past" | "all";
 
 export default function ClientAppointmentsPage() {
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<Filter>('upcoming');
+  const [filter, setFilter] = useState<Filter>("upcoming");
   const [cancelling, setCancelling] = useState<string | null>(null);
+  const bookingTarget = useBookingTarget(rows, () => setFilter("all"));
 
   const load = () => {
-    fetch('/api/appointments')
+    fetch("/api/appointments")
       .then((r) => r.json())
       .then((d) => setRows(d.appointments ?? []))
       .catch(() => setRows([]))
@@ -56,13 +61,13 @@ export default function ClientAppointmentsPage() {
   useAppointmentRefresh(load);
 
   const cancel = async (id: string) => {
-    if (!confirm('Cancel this appointment?')) return;
+    if (!confirm("Cancel this appointment?")) return;
     setCancelling(id);
     try {
       const res = await fetch(`/api/appointments/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: 'cancelled' }),
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "cancelled" }),
       });
       if (res.ok) load();
     } finally {
@@ -73,15 +78,17 @@ export default function ClientAppointmentsPage() {
   const now = Date.now();
   const filtered = rows.filter((r) => {
     const t = new Date(r.appointmentDate).getTime();
-    if (filter === 'upcoming') return t >= now && ['pending', 'confirmed'].includes(r.status);
-    if (filter === 'past') return t < now || ['cancelled', 'completed'].includes(r.status);
+    if (filter === "upcoming")
+      return t >= now && ["pending", "confirmed"].includes(r.status);
+    if (filter === "past")
+      return t < now || ["cancelled", "completed"].includes(r.status);
     return true;
   });
 
   const filters: Array<{ key: Filter; label: string }> = [
-    { key: 'upcoming', label: 'Upcoming' },
-    { key: 'past', label: 'Past' },
-    { key: 'all', label: 'All' },
+    { key: "upcoming", label: "Upcoming" },
+    { key: "past", label: "Past" },
+    { key: "all", label: "All" },
   ];
 
   return (
@@ -106,7 +113,9 @@ export default function ClientAppointmentsPage() {
             key={f.key}
             onClick={() => setFilter(f.key)}
             className={`relative flex-1 rounded-sm py-2 text-[11px] font-medium uppercase tracking-[1.5px] transition-colors ${
-              filter === f.key ? 'text-white' : 'text-muted hover:text-secondary'
+              filter === f.key
+                ? "text-white"
+                : "text-muted hover:text-secondary"
             }`}
           >
             {filter === f.key && (
@@ -130,14 +139,18 @@ export default function ClientAppointmentsPage() {
         <Card>
           <EmptyState
             icon={CalendarDays}
-            title={filter === 'upcoming' ? 'No upcoming appointments' : 'Nothing here'}
+            title={
+              filter === "upcoming"
+                ? "No upcoming appointments"
+                : "Nothing here"
+            }
             body={
-              filter === 'upcoming'
-                ? 'Book a service and it will appear here.'
-                : 'Try a different filter.'
+              filter === "upcoming"
+                ? "Book a service and it will appear here."
+                : "Try a different filter."
             }
             action={
-              filter === 'upcoming' ? (
+              filter === "upcoming" ? (
                 <Link
                   href="/booking"
                   className="bg-gold px-5 py-2.5 text-[10px] font-semibold uppercase tracking-[1.5px] text-card transition-colors hover:bg-gold-hover"
@@ -153,10 +166,12 @@ export default function ClientAppointmentsPage() {
           {filtered.map((r, i) => {
             const isUpcoming =
               new Date(r.appointmentDate).getTime() >= now &&
-              ['pending', 'confirmed'].includes(r.status);
+              ["pending", "confirmed"].includes(r.status);
             return (
               <motion.div
                 key={r.id}
+                id={"booking-" + r.id}
+                className={`scroll-mt-36 ${bookingTarget === r.id ? "rounded-lg ring-1 ring-gold/60" : ""}`}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.35, delay: Math.min(i * 0.05, 0.3) }}
@@ -164,7 +179,9 @@ export default function ClientAppointmentsPage() {
                 <Card className="flex flex-wrap items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
                     <div className="mb-2 flex flex-wrap items-center gap-3">
-                      <h3 className="font-serif text-lg text-white">{r.serviceName}</h3>
+                      <h3 className="font-serif text-lg text-white">
+                        {r.serviceName}
+                      </h3>
                       <StatusBadge status={r.status} />
                     </div>
                     <p className="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-muted">
@@ -185,8 +202,12 @@ export default function ClientAppointmentsPage() {
                     </p>
                     <AppointmentLookPreview look={r.look} />
                     <AppointmentServiceRecord record={r} />
-                    {r.status === 'completed' && r.stylist && (
-                      <AppointmentReviewForm id={r.id} review={r.review} onSubmitted={load} />
+                    {r.status === "completed" && r.stylist && (
+                      <AppointmentReviewForm
+                        id={r.id}
+                        review={r.review}
+                        onSubmitted={load}
+                      />
                     )}
                     {r.notes && (
                       <p className="mt-2 rounded-sm border border-purple-light/10 bg-surface/25 p-2.5 text-[12px] leading-relaxed text-secondary">
@@ -197,7 +218,9 @@ export default function ClientAppointmentsPage() {
 
                   <div className="flex shrink-0 flex-col items-end gap-2.5">
                     <span className="text-[15px] font-medium text-white">
-                      {r.totalPrice === null ? 'Price to be confirmed' : formatPeso(r.totalPrice)}
+                      {r.totalPrice === null
+                        ? "Price to be confirmed"
+                        : formatPeso(r.totalPrice)}
                     </span>
                     {isUpcoming && (
                       <button

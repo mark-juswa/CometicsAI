@@ -134,6 +134,7 @@ export default function BookingForm() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Unable to book appointment.');
 
+      window.dispatchEvent(new Event('appointments-updated'));
       setBookingStatus(data.appointment?.status||'pending');
       setSuccess(true);
       redirectTimer.current = setTimeout(() => router.push('/client/appointments'), 2000);

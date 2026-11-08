@@ -9,6 +9,7 @@ import { salonDay } from "@/lib/business/dates";
 import { AppointmentServiceRecord } from "@/components/appointment-service-record";
 import type { ServiceRecord } from "@/lib/business/workflow-types";
 import { useAppointmentRefresh } from "@/lib/business/use-appointment-refresh";
+import { useBookingTarget } from "@/lib/use-booking-target";
 
 import {
   AppointmentLookPreview,
@@ -136,6 +137,27 @@ export default function StylistAppointmentsPage() {
   const pages = Math.max(1, Math.ceil(filtered.length / 10)),
     current = Math.min(page, pages),
     visible = filtered.slice((current - 1) * 10, current * 10);
+  const bookingTarget = useBookingTarget(visible, (id) => {
+    setRange("all");
+    setQuery("");
+    setDateFilter("");
+    setStatusFilter("all");
+    const index = [...rows]
+      .sort(
+        (a, b) => Date.parse(a.appointmentDate) - Date.parse(b.appointmentDate),
+      )
+      .findIndex((row) => row.id === id);
+    setPage(index >= 0 ? Math.floor(index / 10) + 1 : 1);
+  });
+  useEffect(() => {
+    if (!bookingTarget) return;
+    const index = [...rows]
+      .sort(
+        (a, b) => Date.parse(a.appointmentDate) - Date.parse(b.appointmentDate),
+      )
+      .findIndex((row) => row.id === bookingTarget);
+    if (index >= 0) setPage(Math.floor(index / 10) + 1);
+  }, [bookingTarget, rows]);
   return (
     <PortalWorkspace>
       <PageHeader
@@ -273,7 +295,12 @@ export default function StylistAppointmentsPage() {
           />
         ) : (
           visible.map((r) => (
-            <details key={r.id} className="portal-record">
+            <details
+              key={r.id}
+              id={"booking-" + r.id}
+              open={bookingTarget === r.id ? true : undefined}
+              className={`portal-record scroll-mt-36 ${bookingTarget === r.id ? "ring-1 ring-inset ring-gold/60" : ""}`}
+            >
               <summary
                 aria-label={
                   "View visit: " +

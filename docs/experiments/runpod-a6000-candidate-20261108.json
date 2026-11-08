@@ -1,0 +1,190 @@
+{
+  "progress": "DONE",
+  "evidence": "VERIFIED",
+  "gpu_inference_verified": false,
+  "unit_tests_passed": 30,
+  "publication": {
+    "status": "PUBLISHED_GPU_ACCEPTANCE_PENDING",
+    "verified_at_utc": "2026-11-08T14:51:11.441621+00:00",
+    "tag": "markuos/beautycore-runpod:styles-20261106-01-a6000-ced910be7e93",
+    "image_digest": "sha256:ced910be7e93b84f178c8841aefc5bf47099f4442948d7538664c04fe84b0dd4",
+    "immutable_image": "markuos/beautycore-runpod@sha256:ced910be7e93b84f178c8841aefc5bf47099f4442948d7538664c04fe84b0dd4",
+    "platform": "linux/amd64",
+    "local_image_size_bytes": 5140735931,
+    "local_linux_checks": "LOCAL_LINUX_IMAGE_PASS_GPU_ACCEPTANCE_PENDING",
+    "private_models_in_image": false,
+    "real_gpu_generation": false,
+    "runpod_resources_created": false,
+    "website_cutover": false
+  },
+  "anonymous_pull": {
+    "status": "PASS",
+    "verified_at_utc": "2026-11-08T14:51:55.532030+00:00",
+    "anonymous_manifest_http": 200,
+    "digest": "sha256:ced910be7e93b84f178c8841aefc5bf47099f4442948d7538664c04fe84b0dd4",
+    "platforms": [
+      {
+        "architecture": "amd64",
+        "os": "linux"
+      },
+      {
+        "architecture": "unknown",
+        "os": "unknown"
+      }
+    ],
+    "credentials_used": false,
+    "registry_password_required_for_pull": false
+  },
+  "image_profile": {
+    "schema": "beautycore-runpod-profile-v1",
+    "profile_id": "runpod-rtx-a6000-cu128-v1",
+    "evidence_status": "NEEDS VERIFICATION",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128",
+    "cuda": "12.8",
+    "gpu": "NVIDIA RTX A6000",
+    "minimum_ram_bytes": 32212254720,
+    "minimum_vram_bytes": 47244640256,
+    "minimum_compute_capability": [
+      8,
+      6
+    ]
+  },
+  "build_context": {
+    "manifest": {
+      "schema": "beautycore-runpod-build-v1",
+      "notebook_sha256": "b4a4e1c1482fd060d194f19f5570b6221131379e8214d18c064a713452ab08fd",
+      "profile_id": "runpod-rtx-a6000-cu128-v1",
+      "release_id": "styles-20261106-01",
+      "catalog": {
+        "model_styles": {
+          "hairstyle": [
+            "bob_hair",
+            "bun",
+            "crew_cut",
+            "curtain_hair",
+            "exp_butterfly_cut",
+            "exp_comma_hair",
+            "exp_french_bob_wispy",
+            "exp_korean_two_block",
+            "exp_wolf_cut",
+            "layered_hair",
+            "perm_curls",
+            "pixie_cut",
+            "pompadour_undercut",
+            "ponytail",
+            "shag_hair",
+            "shoulder_length_hair",
+            "side_part_undercut",
+            "wavy_hair"
+          ],
+          "makeup": [
+            "bold_evening_glam",
+            "bronze_golden_glam",
+            "classic_red_lip",
+            "dewy_peach",
+            "exp_cloud_berry_lips",
+            "exp_icy_silver",
+            "exp_manga_lash",
+            "matte_nude",
+            "natural_makeup",
+            "no_makeup_makeup",
+            "rosy_pink",
+            "smoky_glam",
+            "soft_glam"
+          ],
+          "nails": [
+            "classic_red",
+            "glossy_black"
+          ]
+        },
+        "renderer_styles": [
+          "exp_negative_space_microdots",
+          "exp_pink_aura",
+          "exp_raspberry_jelly",
+          "french_tip",
+          "nude_pink",
+          "pink_ombre"
+        ]
+      },
+      "files": {
+        ".dockerignore": "68038b7b2d424c701ffa64bc8b610d3937f4e638d96eba54f8265be0305dfdfa",
+        "Dockerfile": "776b6888290973e7136a87f9fb0f0354fc45c5aa15da0d94df6ec666400e381c",
+        "profile.json": "82de69b53d6d8474229214ea00836361849a3c5bcdef4c37ba0afb974155956f",
+        "registration.py": "0284f1e966c2309fbf408d6b67c6ceb90e8e7f593e6b7e53674f3e35302cc88c",
+        "release_setup.py": "3347409f4800d2d6b9793de645c7606e8faf43ebc5e2341477d0efec2e1ae9aa",
+        "requirements/gpu.txt": "7fa8b4b348284259cad6d01af9afcf765167252addc940400b5c2a4e32ef126d",
+        "requirements/requirements-demo-constraints.txt": "01dbcf44be3c2db4a9b59a7f21956c9e0b160175a22e03f6d5c3b8f02cbf1c75",
+        "requirements/requirements-nails-segmenter.txt": "5384e170a67c051f018255935307ae890d0bfd59076edfa2de7c07c77137037f",
+        "requirements/requirements-nails.txt": "37b91f033927f7cd2acaafc708a6541b625a4ee3a26646572eaa0d6c78895f12",
+        "requirements/requirements.txt": "594f1e1d7e859869c3ba0f49a7f0842e1d0a49c8c9c551f77dfa0e8efa53f9f9",
+        "runtime.py": "202dc363388589795db41ac371ec3f901fae83e6b4d6c1da9cc81aa49661f370"
+      },
+      "private_inputs": {
+        "capstone_train002_20260928_v1.bin": "f0d1fed52e00b6c5a1da2cade3731237675cdebbfc0b2cde3b2dbda99a4019ac",
+        "beautycore_makeup_release_20261106.bin": "0c657ae4d2b62e11bd8c5728321330d5416fbfd1d36354d8482ac548f1449357"
+      },
+      "linux_image_built": false,
+      "real_gpu_validated": false,
+      "deployed": false,
+      "handoff_zip": {
+        "path": "I:\\HAIR\\artifacts\\beautycore-runpod-a6000-20261108.zip",
+        "sha256": "4ee4063c06c9cf97c80ba1ca5e5441d6effb07b93ca978541b6b1235bbd2e4e2",
+        "bytes": 246743382
+      }
+    },
+    "changed_context_files": [
+      "profile.json"
+    ]
+  },
+  "local_linux_checks": {
+    "image": "beautycore-runpod:styles-20261106-01-a6000-build-20261108",
+    "real_gpu_generation": false,
+    "checks": {
+      "image_imports": {
+        "python": "3.12.13",
+        "torch": "2.10.0+cu128",
+        "cuda": "12.8",
+        "cuda_available": false,
+        "source_inventory": "PASS"
+      },
+      "gpu_pip_check": "No broken requirements found.",
+      "api_pip_check": "No broken requirements found.",
+      "segment_pip_check": "No broken requirements found.",
+      "notebook_pip_check": "No broken requirements found.",
+      "real_linux_archive_assembly": "PASS",
+      "original_artifacts_gpu_packages_and_overlays": "PASS",
+      "real_cpu_segmenter_load": "PASS",
+      "real_cpu_landmarker_load": "PASS",
+      "jupyter_password_auth": {
+        "anonymous_status": 403,
+        "authenticated_status": 200,
+        "password_not_logged": true
+      }
+    },
+    "status": "LOCAL_LINUX_IMAGE_PASS_GPU_ACCEPTANCE_PENDING"
+  },
+  "paid_resources_created": false,
+  "website_cutover": false,
+  "logs": {
+    "runpod-docker-20261108/a6000/anonymous-registry-proof.json": "02a27ca3f275334e31eb34640be65620c2845682a9d764775de2ec8a1dfbc900",
+    "runpod-docker-20261108/a6000/build-02-result.json": "d2e3d3ff44756d0b6d4bce0d5bb3f877429f9025ebafcdb99706153d62730ae8",
+    "runpod-docker-20261108/a6000/build-02.log": "d6a5bb2d05c9dcdad99cf361a2e50397dc143063605ba5f5fc9d28fd1de8ada9",
+    "runpod-docker-20261108/a6000/checks-02/api-pip-check.log": "9261363b733079a641c2e4cc9bc46ffa1d8336945a87f807b6cf68847dbc9b09",
+    "runpod-docker-20261108/a6000/checks-02/gpu-pip-check.log": "9261363b733079a641c2e4cc9bc46ffa1d8336945a87f807b6cf68847dbc9b09",
+    "runpod-docker-20261108/a6000/checks-02/image-imports.log": "9a294cd10525169e4036fc16edf71e963a46916e2fd9e2af308b3e1d727c1c19",
+    "runpod-docker-20261108/a6000/checks-02/linux-artifacts.log": "aab6bbb2ee417212bdcefa26131c63ba1b2092ea28e8ce0eadcc7be9ff5d6f6e",
+    "runpod-docker-20261108/a6000/checks-02/linux-landmark-model.log": "5a3604f2d90bb7c67aa2882f0ca3534b205b2d14b4b7e21a2e83e77de5627794",
+    "runpod-docker-20261108/a6000/checks-02/linux-segment-model.log": "be54407fecd89f50efc5c658f4e3e986ddc9d602c92a47c3b927a876d599a9fc",
+    "runpod-docker-20261108/a6000/checks-02/linux-stage.log": "650d8246cf82958bf79e7597eb0a50d3fcfbadd057ca90a3dbefb2cafee75a51",
+    "runpod-docker-20261108/a6000/checks-02/linux-verification.json": "355013e28ae982c7c8afa3d790d7d42cbc43417e3098d1420b8974a10b354b72",
+    "runpod-docker-20261108/a6000/checks-02/notebook-container-cleanup.log": "681933bb012b8500252c6c6d4bbbfee41a066ad4931bb360accec95449ff3eb0",
+    "runpod-docker-20261108/a6000/checks-02/notebook-container-start.log": "e724449a57c72652197f18f62a86ebd366d9683682f497d463439591ecb3b25d",
+    "runpod-docker-20261108/a6000/checks-02/notebook-container.log": "7c5aade0c2a9a010e57396f5ea97f8b10db24cbcb1adf0fe008a0e6550fef536",
+    "runpod-docker-20261108/a6000/checks-02/notebook-pip-check.log": "9261363b733079a641c2e4cc9bc46ffa1d8336945a87f807b6cf68847dbc9b09",
+    "runpod-docker-20261108/a6000/checks-02/notebook-port.log": "36e6986426bb49a77cbe7ac13551fd5db79fe685ab34dc2b2168a0e43e324319",
+    "runpod-docker-20261108/a6000/checks-02/segment-pip-check.log": "9261363b733079a641c2e4cc9bc46ffa1d8336945a87f807b6cf68847dbc9b09",
+    "runpod-docker-20261108/a6000/image-profile-proof.json": "d7349e420e73c65f7e9ab136c04d1868204b66bdbbe016f6d092bea841c190c6",
+    "runpod-docker-20261108/a6000/publication.json": "94140f5e8e50b9e70e3a9c6f29f4c357f42caff59715bd4a8d642fdb39afebdb"
+  }
+}

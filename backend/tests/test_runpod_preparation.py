@@ -92,6 +92,29 @@ def test_candidate_profile_preserves_original_review_and_all_dependency_checks()
     assert reviewed == original and reviewed["gpu"] == "Tesla T4"
 
 
+def test_a6000_candidate_accepts_only_its_hardware_with_reviewed_dependencies():
+    actual, reviewed, default = profile_case()
+    candidate = json.loads((ROOT / "deploy/runpod/profiles/rtx-a6000.json").read_text())
+    actual.update(gpu=candidate["gpu"], gpu_total_bytes=48 * 1024**3)
+    runtime.check_profile(actual, reviewed, candidate, 32 * 1024**3)
+    # Neither image silently accepts the other's GPU, or a smaller virtual allocation.
+    with pytest.raises(ValueError, match="gpu"):
+        runtime.check_profile(actual, reviewed, default, 32 * 1024**3)
+    for field, bad in (("gpu", default["gpu"]), ("gpu_total_bytes", 24 * 1024**3),
+                       ("cuda", "13.0"), ("packages", {}), ("diffusers_commit", "changed")):
+        with pytest.raises(ValueError):
+            runtime.check_profile(dict(actual, **{field: bad}), reviewed, candidate, 32 * 1024**3)
+    with pytest.raises(ValueError):
+        runtime.check_profile(actual, reviewed, candidate, 25 * 1024**3)
+    assert default["gpu"] == "NVIDIA GeForce RTX 3090"
+
+
+def test_unknown_profile_fails_without_creating_output(tmp_path):
+    with pytest.raises(ValueError, match="Unknown Runpod GPU profile"):
+        package.build(tmp_path / "output", tmp_path, profile="anything")
+    assert not (tmp_path / "output").exists()
+
+
 @pytest.mark.parametrize("field", ["python", "torch", "cuda", "gpu", "packages", "diffusers_commit",
                                     "gpu_total_bytes", "compute_capability", "cuda_available", "ram"])
 def test_candidate_profile_rejects_wrong_or_insufficient_runtime(field):

@@ -1,0 +1,18 @@
+{
+  "started_at_utc": "2026-11-08T14:48:36.750503+00:00",
+  "finished_at_utc": "2026-11-08T14:49:20.615448+00:00",
+  "exit_code": 0,
+  "command": [
+    "docker",
+    "build",
+    "--platform",
+    "linux/amd64",
+    "--progress",
+    "plain",
+    "-t",
+    "beautycore-runpod:styles-20261106-01-a6000-build-20261108",
+    "--iidfile",
+    "I:\\HAIR\\artifacts\\runpod-a6000-20261108\\image-id-02.txt",
+    "I:\\HAIR\\artifacts\\beautycore-runpod-a6000-20261108\\build-context"
+  ]
+}

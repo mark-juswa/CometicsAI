@@ -12,6 +12,7 @@ NOTEBOOK_SHA = "b4a4e1c1482fd060d194f19f5570b6221131379e8214d18c064a713452ab08fd
 NAMES = ("capstone_train002_20260928_v1.bin", "beautycore_makeup_release_20261106.bin")
 DIGESTS = ("f0d1fed52e00b6c5a1da2cade3731237675cdebbfc0b2cde3b2dbda99a4019ac",
            "0c657ae4d2b62e11bd8c5728321330d5416fbfd1d36354d8482ac548f1449357")
+PROFILES = {"rtx3090": "profile.json", "rtx-a6000": "profiles/rtx-a6000.json"}
 
 
 def digest(path):
@@ -37,7 +38,11 @@ def helpers(notebook):
     return source
 
 
-def build(destination, inputs, *, private_zip=True):
+def build(destination, inputs, *, private_zip=True, profile="rtx3090"):
+    if profile not in PROFILES:
+        raise ValueError("Unknown Runpod GPU profile")
+    profile_path = ROOT / "deploy/runpod" / PROFILES[profile]
+    selected_profile = json.loads(profile_path.read_text(encoding="utf-8"))
     destination, inputs = Path(destination).resolve(), Path(inputs).resolve()
     if destination.exists():
         raise ValueError("Choose a new output directory; old artifacts are preserved")
@@ -48,8 +53,9 @@ def build(destination, inputs, *, private_zip=True):
     source = helpers(ROOT / "notebooks/render_kaggle_makeup_corrective_demo.ipynb")
     context = destination / "build-context"
     context.mkdir(parents=True)
-    for name in ("Dockerfile", ".dockerignore", "runtime.py", "profile.json"):
+    for name in ("Dockerfile", ".dockerignore", "runtime.py"):
         shutil.copyfile(ROOT / "deploy/runpod" / name, context / name)
+    shutil.copyfile(profile_path, context / "profile.json")
     (context / "release_setup.py").write_bytes(source.encode())
     shutil.copyfile(ROOT / "scripts/render_kaggle_registration.py", context / "registration.py")
     requirements = context / "requirements"
@@ -70,7 +76,7 @@ def build(destination, inputs, *, private_zip=True):
     if len(catalogs) != 1 or len(catalogs[0]["makeup"]) != 13 or len(capabilities["renderer_styles"]) != 6:
         raise ValueError("Complete serving catalog differs")
     manifest = {"schema": "beautycore-runpod-build-v1", "notebook_sha256": NOTEBOOK_SHA,
-                "profile_id": "runpod-rtx3090-cu128-v1", "release_id": "styles-20261106-01",
+                "profile_id": selected_profile["profile_id"], "release_id": "styles-20261106-01",
                 "catalog": {"model_styles": catalogs[0], "renderer_styles": capabilities["renderer_styles"]},
                 "files": {p.relative_to(context).as_posix(): digest(p)
                           for p in sorted(context.rglob("*")) if p.is_file()},
@@ -102,5 +108,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--inputs", type=Path, default=ROOT / "client")
+    parser.add_argument("--profile", choices=PROFILES, default="rtx3090")
     args = parser.parse_args()
-    print(json.dumps(build(args.output, args.inputs), indent=2))
+    print(json.dumps(build(args.output, args.inputs, profile=args.profile), indent=2))

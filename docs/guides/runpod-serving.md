@@ -2,7 +2,19 @@
 
 This is the preparation guide for release `styles-20261106-01`, 18 Hair, 13 Makeup and 8 Nails styles. The Linux image is built, checked and published. The Runpod GPU profile remains a candidate until actual GPU/application checks pass. Kaggle remains unchanged as backup. No retraining is required for this provider migration.
 
-## Ready image
+## RTX A6000 alternative candidate
+
+If selecting the reported Community RTX A6000 offer, change the image to:
+
+```
+markuos/beautycore-runpod@sha256:ced910be7e93b84f178c8841aefc5bf47099f4442948d7538664c04fe84b0dd4
+```
+
+Select exactly **NVIDIA RTX A6000 (48 GB)**. This separate candidate retains the same model/release/settings and enforces at least 44 GiB visible VRAM, 30 GiB allocated host RAM, the exact reviewed packages and compute capability 8.6 or newer. The original 3090 image below remains available for 3090 hardware. All local Linux checks and 30 tests pass; real A6000 GPU acceptance remains open. [Candidate evidence](../experiments/runpod-a6000-candidate-20261108.md).
+
+Keep the existing secrets, disks, HTTP8888 and default notebook startup. The upload/stage/start steps below are identical. Leave the website URL empty until real validation. The reported USD0.33/hour is a catalog GPU quote with allocation unconfirmed, not a promise of capacity or total cost. Rebuild this candidate using `--profile rtx-a6000` with the packaging command and a new output directory; the default packaging profile remains 3090.
+
+## Ready image (RTX 3090)
 
 Docker work is complete on 8 November 2026. You can skip building and publishing the image and continue at **Configure the Pod** using:
 

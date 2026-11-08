@@ -1,0 +1,78 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.38kB 0.0s done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/library/python:3.12.13-slim-bookworm@sha256:4766d8b510c428e595d74b9cc5bbb2fae8e26316fffb4adc89908d79aacd58a2
+#2 ...
+
+#3 [auth] library/python:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12.13-slim-bookworm@sha256:4766d8b510c428e595d74b9cc5bbb2fae8e26316fffb4adc89908d79aacd58a2
+#2 DONE 2.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 185B 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 DONE 0.0s
+
+#6 [ 1/11] FROM docker.io/library/python:3.12.13-slim-bookworm@sha256:4766d8b510c428e595d74b9cc5bbb2fae8e26316fffb4adc89908d79aacd58a2
+#6 resolve docker.io/library/python:3.12.13-slim-bookworm@sha256:4766d8b510c428e595d74b9cc5bbb2fae8e26316fffb4adc89908d79aacd58a2 0.1s done
+#6 DONE 0.1s
+
+#5 [internal] load build context
+#5 transferring context: 122.88kB 0.0s done
+#5 DONE 0.0s
+
+#7 [ 4/11] RUN python -m pip install pip==25.3     && python -m pip install torch==2.10.0+cu128 --index-url https://download.pytorch.org/whl/cu128     && python -m pip install -r /opt/requirements/gpu.txt     && python -m pip check
+#7 CACHED
+
+#8 [ 6/11] RUN python -m venv /opt/segment     && /opt/segment/bin/python -m pip install pip==25.3     && /opt/segment/bin/python -m pip install torch==2.10.0 torchvision==0.25.0 --index-url https://download.pytorch.org/whl/cpu     && /opt/segment/bin/python -m pip install -r /opt/requirements/requirements-nails-segmenter.txt     && /opt/segment/bin/python -m pip check
+#8 CACHED
+
+#9 [ 3/11] COPY requirements/ /opt/requirements/
+#9 CACHED
+
+#10 [ 2/11] RUN apt-get update && apt-get install -y --no-install-recommends     git ca-certificates libgomp1 libportaudio2 libgl1 libglib2.0-0     && rm -rf /var/lib/apt/lists/*
+#10 CACHED
+
+#11 [ 5/11] RUN python -m venv /opt/api     && /opt/api/bin/python -m pip install pip==25.3     && /opt/api/bin/python -m pip install -r /opt/requirements/requirements-nails.txt -c /opt/requirements/requirements-demo-constraints.txt     && /opt/api/bin/python -m pip check
+#11 CACHED
+
+#12 [ 7/11] RUN python -m venv /opt/notebook     && /opt/notebook/bin/python -m pip install pip==25.3 jupyterlab==4.6.6
+#12 CACHED
+
+#13 [ 8/11] RUN apt-get update && apt-get install -y --no-install-recommends libegl1 libgles2     && rm -rf /var/lib/apt/lists/*
+#13 CACHED
+
+#14 [ 9/11] COPY . /opt/server/
+#14 DONE 0.1s
+
+#15 [10/11] RUN python -c "import platform, torch; assert platform.python_version() == '3.12.13'; assert torch.__version__ == '2.10.0+cu128'; from diffusers import Flux2KleinPipeline"     && /opt/api/bin/python -c "import mediapipe; import ctypes.util; assert ctypes.util.find_library('portaudio'); from mediapipe.tasks.python.core.mediapipe_c_bindings import load_raw_library; load_raw_library()"     && /opt/segment/bin/python -c "import torch, torchvision; from ultralytics import YOLO; assert '+cpu' in torch.__version__; assert torchvision.extension._has_ops()"
+#15 37.08 Creating new Ultralytics Settings v0.0.6 file ✅ 
+#15 37.08 View Ultralytics Settings with 'yolo settings' or at '/root/.config/Ultralytics/settings.json'
+#15 37.08 Update Settings with 'yolo settings key=value', i.e. 'yolo settings runs_dir=path/to/dir'. For help see https://docs.ultralytics.com/quickstart/#ultralytics-settings.
+#15 DONE 37.8s
+
+#16 [11/11] WORKDIR /workspace
+#16 DONE 0.2s
+
+#17 exporting to image
+#17 exporting layers
+#17 exporting layers 0.5s done
+#17 exporting manifest sha256:dd6fcea64e2a49948731b1c53e572d94ed0e24bde3feb707ddaa64f982925997 0.0s done
+#17 exporting config sha256:839203e3050827abf5df90849a859bd97aed046485ce2b17446851ad97613413 0.0s done
+#17 exporting attestation manifest sha256:5f31e0936fc796df4f9d568c6aef010b710f6bb30fa2c2fa3fd200878f73ac30
+#17 exporting attestation manifest sha256:5f31e0936fc796df4f9d568c6aef010b710f6bb30fa2c2fa3fd200878f73ac30 0.1s done
+#17 exporting manifest list sha256:ced910be7e93b84f178c8841aefc5bf47099f4442948d7538664c04fe84b0dd4
+#17 exporting manifest list sha256:ced910be7e93b84f178c8841aefc5bf47099f4442948d7538664c04fe84b0dd4 0.1s done
+#17 naming to docker.io/library/beautycore-runpod:styles-20261106-01-a6000-build-20261108 done
+#17 unpacking to docker.io/library/beautycore-runpod:styles-20261106-01-a6000-build-20261108
+#17 unpacking to docker.io/library/beautycore-runpod:styles-20261106-01-a6000-build-20261108 0.2s done
+#17 DONE 1.1s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/dftbbh0n7chq9z1gdc5m6l0cn

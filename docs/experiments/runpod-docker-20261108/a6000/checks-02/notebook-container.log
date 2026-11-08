@@ -1,0 +1,13 @@
+[I 2026-11-08 14:50:37.300 LabApp] JupyterLab extension loaded from /opt/notebook/lib/python3.12/site-packages/jupyterlab
+[I 2026-11-08 14:50:37.300 LabApp] JupyterLab application directory is /opt/notebook/share/jupyter/lab
+[I 2026-11-08 14:50:37.300 LabApp] Extension Manager is 'pypi'.
+[C 2026-11-08 14:50:37.366 ServerApp] 
+    
+    To access the server, open this file in a browser:
+        file:///root/.local/share/jupyter/runtime/jpserver-1-open.html
+    Or copy and paste one of these URLs:
+        http://cc0eeca83fa0:8888/lab
+        http://127.0.0.1:8888/lab
+    The server is listening on all interfaces, so any hostname or IP of this machine will work.
+[W 2026-11-08 14:50:38.105 ServerApp] wrote error: 'Forbidden'
+[W 2026-11-08 14:50:38.105 ServerApp] 403 GET /api/contents (@172.17.0.1) 0.97ms referer=None

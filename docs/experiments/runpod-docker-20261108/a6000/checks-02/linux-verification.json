@@ -1,0 +1,27 @@
+{
+  "image": "beautycore-runpod:styles-20261106-01-a6000-build-20261108",
+  "real_gpu_generation": false,
+  "checks": {
+    "image_imports": {
+      "python": "3.12.13",
+      "torch": "2.10.0+cu128",
+      "cuda": "12.8",
+      "cuda_available": false,
+      "source_inventory": "PASS"
+    },
+    "gpu_pip_check": "No broken requirements found.",
+    "api_pip_check": "No broken requirements found.",
+    "segment_pip_check": "No broken requirements found.",
+    "notebook_pip_check": "No broken requirements found.",
+    "real_linux_archive_assembly": "PASS",
+    "original_artifacts_gpu_packages_and_overlays": "PASS",
+    "real_cpu_segmenter_load": "PASS",
+    "real_cpu_landmarker_load": "PASS",
+    "jupyter_password_auth": {
+      "anonymous_status": 403,
+      "authenticated_status": 200,
+      "password_not_logged": true
+    }
+  },
+  "status": "LOCAL_LINUX_IMAGE_PASS_GPU_ACCEPTANCE_PENDING"
+}

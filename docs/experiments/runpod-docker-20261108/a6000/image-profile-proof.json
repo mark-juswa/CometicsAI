@@ -1,0 +1,1 @@
+{"schema": "beautycore-runpod-profile-v1", "profile_id": "runpod-rtx-a6000-cu128-v1", "evidence_status": "NEEDS VERIFICATION", "python": "3.12.13", "torch": "2.10.0+cu128", "cuda": "12.8", "gpu": "NVIDIA RTX A6000", "minimum_ram_bytes": 32212254720, "minimum_vram_bytes": 47244640256, "minimum_compute_capability": [8, 6]}

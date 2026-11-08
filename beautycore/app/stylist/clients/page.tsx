@@ -1,8 +1,17 @@
-'use client';
+"use client";
+import { PortalWorkspace, PortalMetrics } from "@/components/portal-workspace";
+import { businessRequest } from "@/lib/business/client";
 
-import { useState, useEffect, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import { Search, Users, Mail, CalendarDays, Repeat } from 'lucide-react';
+import { useState, useEffect, useMemo } from "react";
+import {
+  Search,
+  Users,
+  Mail,
+  CalendarDays,
+  Repeat,
+  CheckCircle2,
+  Wallet,
+} from "lucide-react";
 import {
   PageHeader,
   Card,
@@ -10,8 +19,8 @@ import {
   Skeleton,
   formatDate,
   formatPeso,
-} from '@/components/ui';
-import type { AppointmentStatus } from '@/db/schema';
+} from "@/components/ui";
+import type { AppointmentStatus } from "@/db/schema";
 
 interface Row {
   id: string;
@@ -39,13 +48,14 @@ interface ClientSummary {
 export default function StylistClientsPage() {
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
-  const [query, setQuery] = useState('');
+  const [error, setError] = useState("");
+  const [query, setQuery] = useState("");
+  const [sort, setSort] = useState("recent");
 
   useEffect(() => {
-    fetch('/api/appointments')
-      .then((r) => r.json())
+    businessRequest("/api/appointments")
       .then((d) => setRows(d.appointments ?? []))
-      .catch(() => setRows([]))
+      .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, []);
 
@@ -58,7 +68,7 @@ export default function StylistClientsPage() {
 
       if (existing) {
         existing.visits += 1;
-        if (r.status === 'completed') existing.totalSpent += r.totalPrice ?? 0;
+        if (r.status === "completed") existing.totalSpent += r.totalPrice ?? 0;
         if (new Date(r.appointmentDate) > new Date(existing.lastVisit)) {
           existing.lastVisit = r.appointmentDate;
         }
@@ -72,135 +82,184 @@ export default function StylistClientsPage() {
           email: r.client.email,
           visits: 1,
           lastVisit: r.appointmentDate,
-          totalSpent: r.status === 'completed' ? (r.totalPrice ?? 0) : 0,
+          totalSpent: r.status === "completed" ? (r.totalPrice ?? 0) : 0,
           services: [r.serviceName],
         });
       }
     }
 
     return Array.from(map.values()).sort(
-      (a, b) => new Date(b.lastVisit).getTime() - new Date(a.lastVisit).getTime()
+      (a, b) =>
+        new Date(b.lastVisit).getTime() - new Date(a.lastVisit).getTime(),
     );
   }, [rows]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return clients;
-    return clients.filter(
-      (c) => c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q)
-    );
-  }, [clients, query]);
+    return clients
+      .filter(
+        (c) =>
+          !q ||
+          c.name.toLowerCase().includes(q) ||
+          c.email.toLowerCase().includes(q),
+      )
+      .sort((a, b) =>
+        sort === "name"
+          ? a.name.localeCompare(b.name)
+          : sort === "visits"
+            ? b.visits - a.visits
+            : Date.parse(b.lastVisit) - Date.parse(a.lastVisit),
+      );
+  }, [clients, query, sort]);
 
   const initials = (name: string) =>
     name
-      .split(' ')
+      .split(" ")
       .map((n) => n[0])
       .slice(0, 2)
-      .join('')
+      .join("")
       .toUpperCase();
 
   return (
-    <>
+    <PortalWorkspace>
       <PageHeader
         title="My Clients"
-        subtitle={`${clients.length} clients you've worked with`}
+        subtitle="People connected to your assigned appointments."
       />
-
-      <div className="relative mb-6 max-w-md">
-        <Search
-          size={14}
-          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted"
-        />
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search clients…"
-          className="w-full rounded-sm border border-purple-light/20 bg-surface/40 py-2.5 pl-9 pr-4 text-[13px] text-white placeholder-muted focus:border-purple-light focus:outline-none"
-        />
-      </div>
-
-      {loading ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {[0, 1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-48 w-full" />
-          ))}
+      {error && (
+        <p role="alert" className="portal-alert">
+          {error}
+        </p>
+      )}
+      <PortalMetrics
+        items={[
+          {
+            label: "Your clients",
+            value: loading ? "—" : clients.length,
+            icon: Users,
+            note: "Assigned bookings only",
+          },
+          {
+            label: "Returning clients",
+            value: loading ? "—" : clients.filter((c) => c.visits > 1).length,
+            icon: Repeat,
+            note: "More than one assigned booking",
+          },
+          {
+            label: "Completed visits",
+            value: loading
+              ? "—"
+              : rows.filter((r) => r.status === "completed").length,
+            icon: CheckCircle2,
+            note: "Services you completed",
+          },
+          {
+            label: "Recorded service revenue",
+            value: loading
+              ? "—"
+              : formatPeso(clients.reduce((sum, c) => sum + c.totalSpent, 0)),
+            icon: Wallet,
+            note: "Completed amounts · before any costs",
+          },
+        ]}
+      />
+      <section className="portal-panel">
+        <div className="portal-panel-heading">
+          <div>
+            <h2>Client directory</h2>
+            <p>
+              Only appointments assigned to you contribute to these summaries.
+            </p>
+          </div>
+          <span className="portal-pill">{filtered.length} clients</span>
         </div>
-      ) : filtered.length === 0 ? (
-        <Card>
+        <div className="portal-toolbar">
+          <label className="portal-search">
+            <Search size={16} />
+            <input
+              value={query}
+              aria-label="Search clients"
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search name or email"
+            />
+          </label>
+          <select
+            aria-label="Sort clients"
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+          >
+            <option value="recent">Latest scheduled first</option>
+            <option value="name">Name A–Z</option>
+            <option value="visits">Most bookings</option>
+          </select>
+        </div>
+        {loading ? (
+          <div className="p-5">
+            <Skeleton className="h-48 w-full" />
+          </div>
+        ) : !filtered.length ? (
           <EmptyState
             icon={Users}
-            title={query ? 'No clients match' : 'No clients yet'}
-            body={
-              query
-                ? 'Try a different search.'
-                : 'Clients appear here once appointments are assigned to you.'
-            }
+            title="No clients found"
+            body="Your assigned clients will appear here. Try another search."
           />
-        </Card>
-      ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((c, i) => (
-            <motion.div
-              key={c.id}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: Math.min(i * 0.05, 0.3) }}
-            >
-              <Card className="h-full">
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-purple text-[13px] font-semibold text-white">
-                    {initials(c.name)}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="truncate text-[14px] font-medium text-white">{c.name}</p>
-                    <p className="flex items-center gap-1 truncate text-[11px] text-muted">
-                      <Mail size={10} />
-                      {c.email}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mb-4 grid grid-cols-2 gap-3 border-t border-purple-light/10 pt-4">
-                  <div>
-                    <p className="mb-0.5 flex items-center gap-1 text-[10px] uppercase tracking-wide text-muted">
-                      <Repeat size={9} />
-                      Visits
-                    </p>
-                    <p className="text-[15px] text-white">{c.visits}</p>
-                  </div>
-                  <div>
-                    <p className="mb-0.5 text-[10px] uppercase tracking-wide text-muted">
-                      Revenue
-                    </p>
-                    <p className="text-[15px] text-gold">{formatPeso(c.totalSpent)}</p>
-                  </div>
-                </div>
-
-                <div className="mb-3 flex flex-wrap gap-1.5">
-                  {c.services.slice(0, 3).map((s) => (
-                    <span
-                      key={s}
-                      className="rounded-full border border-purple-light/20 px-2 py-0.5 text-[10px] text-muted"
-                    >
-                      {s}
-                    </span>
-                  ))}
-                  {c.services.length > 3 && (
-                    <span className="px-1 py-0.5 text-[10px] text-muted">
-                      +{c.services.length - 3}
-                    </span>
-                  )}
-                </div>
-
-                <p className="flex items-center gap-1.5 text-[10px] text-muted">
-                  <CalendarDays size={10} />
-                  Last seen {formatDate(c.lastVisit)}
-                </p>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-      )}
-    </>
+        ) : (
+          <div className="portal-table-scroll">
+            <table className="portal-table">
+              <thead>
+                <tr>
+                  <th>Client</th>
+                  <th>Bookings</th>
+                  <th>Latest scheduled visit</th>
+                  <th>Services</th>
+                  <th>Completed-service amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((c) => (
+                  <tr key={c.id}>
+                    <td>
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-purple/40 text-xs text-gold">
+                          {initials(c.name)}
+                        </div>
+                        <div>
+                          <strong>{c.name}</strong>
+                          <span className="mt-1 block text-xs text-muted">
+                            {c.email}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <strong>{c.visits}</strong>
+                      <span>assigned to you</span>
+                    </td>
+                    <td>
+                      <strong>{formatDate(c.lastVisit)}</strong>
+                    </td>
+                    <td>
+                      <div className="flex min-w-40 max-w-72 flex-wrap gap-1.5">
+                        {c.services.map((name) => (
+                          <span key={name} className="portal-pill">
+                            {name}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+                    <td>
+                      <strong className="text-gold">
+                        {formatPeso(c.totalSpent)}
+                      </strong>
+                      <span>Recorded completed amounts</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+    </PortalWorkspace>
   );
 }

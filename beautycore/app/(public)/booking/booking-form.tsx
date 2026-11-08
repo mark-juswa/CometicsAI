@@ -2,7 +2,7 @@
 import { LookInformation } from '@/components/look-information';
 import { featureFromType } from '@/lib/business/look-information';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { businessRequest, savedGroup, type SavedLook } from '@/lib/business/client';
 import { salonDay, salonDateTime } from '@/lib/business/dates';
@@ -34,16 +34,34 @@ export default function BookingForm() {
   const [notes, setNotes] = useState('');
 
   const [stylists, setStylists] = useState<Array<{ id: string; name: string }>>([]);
+  const [stylistsLoading, setStylistsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [bookingStatus,setBookingStatus]=useState('');
+  const redirectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (redirectTimer.current) clearTimeout(redirectTimer.current); }, []);
 
   useEffect(() => {
-    fetch('/api/stylists')
-      .then((r) => r.json())
-      .then((data) => setStylists(data.stylists || []))
-      .catch(() => setStylists([]));
-  }, []);
+    const controller = new AbortController();
+    const params = new URLSearchParams({ serviceType: group.serviceType, serviceName });
+    if (date && time) params.set('appointmentDate', new Date(salonDateTime(date, time)).toISOString());
+    setStylistsLoading(true);
+    fetch('/api/stylists?' + params, { signal: controller.signal })
+      .then(async (r) => {
+        const data = await r.json();
+        if (!r.ok) throw new Error(data.error || 'Could not check stylist availability.');
+        if (!controller.signal.aborted) {
+          const available = data.stylists || [];
+          setStylists(available);
+          if (stylistId && !available.some((stylist: { id: string }) => stylist.id === stylistId))
+            setStylistId('');
+        }
+      })
+      .catch(() => { if (!controller.signal.aborted) setStylists([]); })
+      .finally(() => { if (!controller.signal.aborted) setStylistsLoading(false); });
+    return () => controller.abort();
+  }, [group.serviceType, serviceName, date, time, stylistId]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -116,8 +134,9 @@ export default function BookingForm() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Unable to book appointment.');
 
+      setBookingStatus(data.appointment?.status||'pending');
       setSuccess(true);
-      setTimeout(() => router.push('/client/appointments'), 2000);
+      redirectTimer.current = setTimeout(() => router.push('/client/appointments'), 2000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not book your appointment.');
     } finally {
@@ -146,7 +165,8 @@ export default function BookingForm() {
           className="text-center"
         >
           <CheckCircle size={48} className="mx-auto mb-4 text-success" />
-          <h2 className="mb-2 font-serif text-3xl text-white">Appointment booked</h2>
+          <h2 className="mb-2 font-serif text-3xl text-white">{bookingStatus==='confirmed'?'Appointment confirmed':'Booking received'}</h2>
+          {bookingStatus!=='confirmed'&&<p className="mb-3 text-sm text-secondary">Your booking is pending a stylist assignment and schedule confirmation.</p>}
           <p className="text-muted">Redirecting you to your appointments…</p>
         </motion.div>
       </div>
@@ -312,12 +332,17 @@ export default function BookingForm() {
                 className="w-full rounded-sm border border-purple-light/20 bg-surface/40 px-4 py-2.5 text-[13px] text-white focus:border-purple-light focus:outline-none"
               >
                 <option value="">No preference</option>
+                {stylistsLoading && <option disabled>Checking qualified stylists…</option>}
+                {!stylistsLoading && serviceName && stylists.length === 0 && (
+                  <option disabled>No qualified stylists available at this time</option>
+                )}
                 {stylists.map((s) => (
                   <option key={s.id} value={s.id}>
                     {s.name}
                   </option>
                 ))}
               </select>
+              <p className="mt-2 text-xs text-muted">An available stylist confirms your booking automatically. Choosing no preference sends a pending request for salon assignment.</p>
             </div>
 
             {/* Notes */}

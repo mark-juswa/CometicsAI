@@ -1,14 +1,18 @@
 import { NextResponse } from 'next/server';
 import { eq, asc } from 'drizzle-orm';
-import { db } from '@/db';
-import { inventory, productStatusEnum, type ProductStatus } from '@/db/schema';
+import { db, databaseSql } from '@/db';
+import { inventory, type ProductStatus } from '@/db/schema';
 import { requireRole } from '@/lib/auth';
+import { mutationOrigin } from '@/lib/business/core';
 
 /** Keeps `status` consistent with the stock numbers. */
 function deriveStatus(stock: number, threshold: number): ProductStatus {
   if (stock <= 0) return 'out_of_stock';
   if (stock <= threshold) return 'low_stock';
   return 'in_stock';
+}
+function whole(value: unknown, min: number, max: number) {
+  return typeof value === 'number' && Number.isSafeInteger(value) && value >= min && value <= max;
 }
 
 /** GET /api/inventory — admin and stylists can read. */
@@ -18,7 +22,6 @@ export async function GET() {
     if (!session) {
       return NextResponse.json({ error: 'Not allowed.' }, { status: 403 });
     }
-
     const rows = await db
       .select()
       .from(inventory)
@@ -38,10 +41,11 @@ export async function POST(req: Request) {
     if (!session) {
       return NextResponse.json({ error: 'Admins only.' }, { status: 403 });
     }
+    mutationOrigin(req, process.env.RENDER_EXTERNAL_URL);
 
     const body = await req.json();
-    const productName = String(body.productName ?? '').trim();
-    const category = String(body.category ?? '').trim();
+    const productName = typeof body.productName === 'string' ? body.productName.trim() : '';
+    const category = typeof body.category === 'string' ? body.category.trim() : '';
     if (body.brand != null && (typeof body.brand !== 'string' || body.brand.trim().length > 120))
       return NextResponse.json({ error: 'Brand must be up to 120 characters.' }, { status: 400 });
 
@@ -52,28 +56,20 @@ export async function POST(req: Request) {
       );
     }
 
-    const currentStock = Number(body.currentStock ?? 0);
-    const minimumThreshold = Number(body.minimumThreshold ?? 10);
+    const currentStock = body.currentStock ?? 0;
+    const minimumThreshold = body.minimumThreshold ?? 10;
+    const unitPrice = body.unitPrice ?? null;
 
-    if (!Number.isFinite(currentStock) || currentStock < 0) {
-      return NextResponse.json({ error: 'Invalid stock value.' }, { status: 400 });
+    if (!whole(currentStock, 0, 10000000) || !whole(minimumThreshold, 0, 10000000) || (unitPrice !== null && !whole(unitPrice, 0, 100000000))) {
+      return NextResponse.json({ error: 'Stock, threshold, and price must be valid nonnegative whole numbers.' }, { status: 400 });
     }
+    const [created] = await databaseSql.query(
+      'SELECT * FROM beautycore_create_inventory_item($1,$2,$3,$4,$5,$6,$7)',
+      [productName, typeof body.brand === 'string' ? body.brand.trim() || null : null, category, currentStock, minimumThreshold, unitPrice, session.userId],
+    );
+    const item = created ? await db.query.inventory.findFirst({ where: eq(inventory.id, String(created.id)) }) : null;
 
-    const [created] = await db
-      .insert(inventory)
-      .values({
-        productName: productName.slice(0, 255),
-        brand: typeof body.brand === 'string' ? body.brand.trim() || null : null,
-        category: category.slice(0, 100),
-        currentStock,
-        minimumThreshold,
-        unitPrice: body.unitPrice != null ? Number(body.unitPrice) : null,
-        status: deriveStatus(currentStock, minimumThreshold),
-        lastRestocked: new Date(),
-      })
-      .returning();
-
-    return NextResponse.json({ item: created }, { status: 201 });
+    return NextResponse.json({ item }, { status: 201 });
   } catch (error) {
     console.error('[api/inventory POST]', error);
     return NextResponse.json({ error: 'Could not add product.' }, { status: 500 });
@@ -87,6 +83,7 @@ export async function PATCH(req: Request) {
     if (!session) {
       return NextResponse.json({ error: 'Admins only.' }, { status: 403 });
     }
+    mutationOrigin(req, process.env.RENDER_EXTERNAL_URL);
 
     const body = await req.json();
     const id = String(body.id ?? '');
@@ -101,6 +98,9 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: 'Product not found.' }, { status: 404 });
     }
 
+    if (body.currentStock !== undefined)
+      return NextResponse.json({ error: 'Use the stock transaction endpoint to record stock-in or stock-out.' }, { status: 400 });
+
     const updates: Partial<typeof inventory.$inferInsert> = {};
     if (body.brand !== undefined) {
       if (body.brand !== null && (typeof body.brand !== 'string' || body.brand.trim().length > 120))
@@ -108,30 +108,31 @@ export async function PATCH(req: Request) {
       updates.brand = typeof body.brand === 'string' ? body.brand.trim() || null : null;
     }
 
-    if (body.productName != null) updates.productName = String(body.productName).slice(0, 255);
-    if (body.category != null) updates.category = String(body.category).slice(0, 100);
-    if (body.unitPrice != null) updates.unitPrice = Number(body.unitPrice);
-
-    const stock = body.currentStock != null ? Number(body.currentStock) : existing.currentStock;
-    const threshold =
-      body.minimumThreshold != null ? Number(body.minimumThreshold) : existing.minimumThreshold;
-
-    if (body.currentStock != null) {
-      if (!Number.isFinite(stock) || stock < 0) {
-        return NextResponse.json({ error: 'Invalid stock value.' }, { status: 400 });
-      }
-      updates.currentStock = stock;
-      // Treat an increase as a restock.
-      if (stock > existing.currentStock) updates.lastRestocked = new Date();
+    if (body.productName !== undefined) {
+      if (typeof body.productName !== 'string' || !body.productName.trim() || body.productName.trim().length > 255)
+        return NextResponse.json({ error: 'Enter a product name up to 255 characters.' }, { status: 400 });
+      updates.productName = body.productName.trim();
     }
-    if (body.minimumThreshold != null) updates.minimumThreshold = threshold;
-
-    // Explicit status wins; otherwise keep it in step with the numbers.
-    if (body.status && productStatusEnum.enumValues.includes(body.status)) {
-      updates.status = body.status;
-    } else if (body.currentStock != null || body.minimumThreshold != null) {
-      updates.status = deriveStatus(stock, threshold);
+    if (body.category !== undefined) {
+      if (typeof body.category !== 'string' || !body.category.trim() || body.category.trim().length > 100)
+        return NextResponse.json({ error: 'Enter a category up to 100 characters.' }, { status: 400 });
+      updates.category = body.category.trim();
     }
+    if (body.unitPrice !== undefined) {
+      if (body.unitPrice !== null && !whole(body.unitPrice, 0, 100000000))
+        return NextResponse.json({ error: 'Enter a nonnegative whole-peso price.' }, { status: 400 });
+      updates.unitPrice = body.unitPrice as number | null;
+    }
+    if (body.minimumThreshold !== undefined) {
+      if (!whole(body.minimumThreshold, 0, 10000000))
+        return NextResponse.json({ error: 'Threshold must be a nonnegative whole number.' }, { status: 400 });
+      updates.minimumThreshold = body.minimumThreshold;
+      updates.status = deriveStatus(existing.currentStock, body.minimumThreshold);
+    }
+    if (body.status !== undefined)
+      return NextResponse.json({ error: 'Inventory status is calculated from stock and threshold.' }, { status: 400 });
+    if (!Object.keys(updates).length)
+      return NextResponse.json({ error: 'Provide at least one product detail to update.' }, { status: 400 });
 
     const [updated] = await db
       .update(inventory)
@@ -153,6 +154,7 @@ export async function DELETE(req: Request) {
     if (!session) {
       return NextResponse.json({ error: 'Admins only.' }, { status: 403 });
     }
+    mutationOrigin(req, process.env.RENDER_EXTERNAL_URL);
 
     const id = new URL(req.url).searchParams.get('id');
     if (!id) {

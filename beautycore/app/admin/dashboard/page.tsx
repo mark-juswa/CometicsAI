@@ -1,10 +1,11 @@
 'use client';
+import { businessRequest } from '@/lib/business/client';
+import { RevenueOverview } from '@/components/revenue-report';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
-  Wallet,
   CalendarDays,
   Users,
   AlertTriangle,
@@ -20,7 +21,6 @@ import {
   EmptyState,
   formatDate,
   formatTime,
-  formatPeso,
 } from '@/components/ui';
 import AnimatedCounter from '@/components/AnimatedCounter';
 import type { AppointmentStatus, ProductStatus } from '@/db/schema';
@@ -58,30 +58,23 @@ export default function AdminDashboard() {
   const [lowStock, setLowStock] = useState<LowStockItem[]>([]);
   const [appointments, setAppointments] = useState<AppointmentRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error,setError] = useState('');
 
   useEffect(() => {
     Promise.all([
-      fetch('/api/admin/stats').then((r) => r.json()),
-      fetch('/api/appointments').then((r) => r.json()),
+      businessRequest('/api/admin/stats'),
+      businessRequest('/api/appointments'),
     ])
       .then(([s, a]) => {
         setStats(s.stats ?? null);
         setLowStock(s.lowStockItems ?? []);
         setAppointments(a.appointments ?? []);
       })
-      .catch(() => undefined)
+      .catch(e => setError(e.message))
       .finally(() => setLoading(false));
   }, []);
 
   const metrics = [
-    {
-      label: 'Total Revenue',
-      value: stats?.totalRevenue ?? 0,
-      prefix: '₱',
-      icon: Wallet,
-      note: `${formatPeso(stats?.monthRevenue ?? 0)} this month`,
-      accent: 'text-gold',
-    },
     {
       label: 'Total Bookings',
       value: stats?.totalBookings ?? 0,
@@ -114,15 +107,17 @@ export default function AdminDashboard() {
 
   return (
     <>
+      {error&&<p role="alert" className="mb-4 text-sm text-error">{error}</p>}
       <PageHeader
         title="Dashboard"
         subtitle="Everything happening at Andrea's, at a glance."
       />
 
+      <RevenueOverview />
       {/* Metrics */}
-      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mb-8 grid gap-4 sm:grid-cols-3">
         {loading
-          ? [0, 1, 2, 3].map((i) => <Skeleton key={i} className="h-32 w-full" />)
+          ? [0, 1, 2].map((i) => <Skeleton key={i} className="h-32 w-full" />)
           : metrics.map((m, i) => (
               <motion.div
                 key={m.label}
@@ -138,7 +133,7 @@ export default function AdminDashboard() {
                     <m.icon size={16} className={m.accent} />
                   </div>
                   <p className={`mb-1.5 font-serif text-3xl ${m.accent}`}>
-                    <AnimatedCounter value={m.value} prefix={m.prefix} />
+                    <AnimatedCounter value={m.value} />
                   </p>
                   <p className="text-[11px] text-muted">{m.note}</p>
                 </Card>

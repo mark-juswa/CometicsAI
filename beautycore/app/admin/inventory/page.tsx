@@ -1,8 +1,9 @@
 'use client';
+import { businessRequest } from '@/lib/business/client';
 
 import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Plus, Minus, Trash2, Loader2, Package, X, AlertTriangle } from 'lucide-react';
+import { Search, Plus, Minus, Trash2, Loader2, Package, X, AlertTriangle, Pencil } from 'lucide-react';
 import { PageHeader, Card, EmptyState, Skeleton, formatDate, formatPeso } from '@/components/ui';
 import type { ProductStatus } from '@/db/schema';
 
@@ -17,6 +18,7 @@ interface Item {
   status: ProductStatus;
   lastRestocked: string | null;
 }
+interface Movement { id: string; productName: string; direction: 'in'|'out'; quantity: number; stockAfter: number; note: string | null; createdAt: string }
 
 const statusStyle: Record<ProductStatus, string> = {
   in_stock: 'border-success/30 bg-success/10 text-success',
@@ -37,6 +39,11 @@ export default function AdminInventoryPage() {
   const [category, setCategory] = useState('all');
   const [busy, setBusy] = useState<string | null>(null);
   const [showAdd, setShowAdd] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [movements, setMovements] = useState<Movement[]>([]);
+  const [actionError, setActionError] = useState('');
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editDraft, setEditDraft] = useState({ productName: '', brand: '', category: '', minimumThreshold: '', unitPrice: '' });
 
   const [form, setForm] = useState({
     productName: '',
@@ -48,26 +55,32 @@ export default function AdminInventoryPage() {
   });
 
   const load = () => {
-    fetch('/api/inventory')
-      .then((r) => r.json())
+    businessRequest('/api/inventory')
       .then((d) => setItems(d.inventory ?? []))
-      .catch(() => setItems([]))
+      .catch(e=>setActionError(e.message))
       .finally(() => setLoading(false));
+    businessRequest('/api/inventory/transactions')
+      .then((d) => setMovements(d.transactions ?? []))
+      .catch(e=>setActionError(e.message));
   };
 
   useEffect(load, []);
 
   const adjustStock = async (item: Item, delta: number) => {
-    const next = Math.max(0, item.currentStock + delta);
     setBusy(item.id);
     try {
-      const res = await fetch('/api/inventory', {
-        method: 'PATCH',
+      const res = await fetch('/api/inventory/transactions', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: item.id, currentStock: next }),
+        body: JSON.stringify({ id: item.id, direction: delta > 0 ? 'in' : 'out', quantity: 1 }),
       });
       const d = await res.json();
-      if (res.ok) setItems((xs) => xs.map((x) => (x.id === item.id ? d.item : x)));
+      if (res.ok) {
+        setItems((xs) => xs.map((x) => (x.id === item.id ? d.item : x)));
+        setMovements((xs) => [d.transaction, ...xs].slice(0, 100));
+        setActionError('');
+      } else setActionError(d.error || 'Could not adjust stock.');
+    } catch { setActionError('Could not adjust stock.');
     } finally {
       setBusy(null);
     }
@@ -78,10 +91,30 @@ export default function AdminInventoryPage() {
     setBusy(id);
     try {
       const res = await fetch(`/api/inventory?id=${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error((await res.json()).error||'Could not remove this product.');
       if (res.ok) setItems((xs) => xs.filter((x) => x.id !== id));
+    } catch(e) {
+      setActionError(e instanceof Error?e.message:'Could not remove this product.');
     } finally {
       setBusy(null);
     }
+  };
+
+  const startEdit = (item: Item) => {
+    setEditingId(item.id);
+    setEditDraft({ productName: item.productName, brand: item.brand ?? '', category: item.category, minimumThreshold: String(item.minimumThreshold), unitPrice: item.unitPrice === null ? '' : String(item.unitPrice) });
+  };
+  const saveEdit = async (item: Item) => {
+    setBusy(item.id); setActionError('');
+    try {
+      const response = await fetch('/api/inventory', { method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: item.id, productName: editDraft.productName, brand: editDraft.brand || null, category: editDraft.category, minimumThreshold: Number(editDraft.minimumThreshold), unitPrice: editDraft.unitPrice === '' ? null : Number(editDraft.unitPrice) }) });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Could not update product details.');
+      setItems((current) => current.map((row) => row.id === item.id ? data.item : row));
+      setEditingId(null);
+    } catch (cause) { setActionError(cause instanceof Error ? cause.message : 'Could not update product details.'); }
+    finally { setBusy(null); }
   };
 
   const add = async (e: React.FormEvent) => {
@@ -111,7 +144,8 @@ export default function AdminInventoryPage() {
           unitPrice: '',
         });
         load();
-      }
+      } else setActionError((await res.json()).error || 'Could not add product.');
+    } catch { setActionError('Could not add product.');
     } finally {
       setBusy(null);
     }
@@ -147,6 +181,9 @@ export default function AdminInventoryPage() {
           </button>
         }
       />
+      {actionError && <p role="alert" className="mb-4 rounded border border-error/30 p-3 text-error">{actionError}</p>}
+      <button type="button" onClick={() => setHistoryOpen((open) => !open)} className="mb-4 rounded border border-purple-light/20 px-4 py-2 text-xs text-secondary">{historyOpen ? 'Hide stock history' : 'View stock history'}</button>
+      {historyOpen && <Card className="mb-6"><h2 className="mb-3 font-serif text-lg text-white">Recent stock movements</h2>{movements.length ? <div className="overflow-x-auto"><table className="w-full text-left text-xs"><thead><tr className="text-muted"><th className="p-2">Date</th><th className="p-2">Product</th><th className="p-2">Movement</th><th className="p-2">Qty</th><th className="p-2">Balance</th><th className="p-2">Note</th></tr></thead><tbody>{movements.map((movement) => <tr key={movement.id} className="border-t border-white/5 text-secondary"><td className="p-2">{formatDate(movement.createdAt)}</td><td className="p-2">{movement.productName}</td><td className="p-2">Stock {movement.direction}</td><td className="p-2">{movement.quantity}</td><td className="p-2">{movement.stockAfter}</td><td className="p-2">{movement.note || '—'}</td></tr>)}</tbody></table></div> : <p className="text-sm text-muted">No stock movements recorded yet.</p>}</Card>}
 
       {/* Add form */}
       {showAdd && (
@@ -294,6 +331,7 @@ export default function AdminInventoryPage() {
                     >
                       <Minus size={12} />
                     </button>
+                    <button type="button" onClick={() => startEdit(item)} aria-label="Edit product details" className="rounded-sm border border-purple-light/25 p-1.5 text-muted transition-colors hover:text-white"><Pencil size={12} /></button>
                     <button
                       onClick={() => adjustStock(item, 1)}
                       disabled={busy === item.id}
@@ -322,6 +360,10 @@ export default function AdminInventoryPage() {
                       )}
                     </button>
                   </div>
+                  {editingId === item.id && <form onSubmit={(event) => { event.preventDefault(); void saveEdit(item); }} className="mt-4 grid gap-2 border-t border-purple-light/10 pt-3 sm:grid-cols-2">
+                    {([['productName','Product name'],['brand','Brand'],['category','Category'],['minimumThreshold','Min threshold'],['unitPrice','Unit price']] as const).map(([key,label]) => <label key={key} className="text-[10px] text-muted">{label}<input required={key !== 'brand' && key !== 'unitPrice'} type={key === 'minimumThreshold' || key === 'unitPrice' ? 'number' : 'text'} min={key === 'minimumThreshold' || key === 'unitPrice' ? 0 : undefined} value={editDraft[key]} onChange={(event) => setEditDraft((draft) => ({ ...draft, [key]: event.target.value }))} className="mt-1 w-full rounded border border-purple-light/20 bg-surface/40 p-2 text-xs text-white" /></label>)}
+                    <div className="flex gap-2 sm:col-span-2"><button disabled={busy === item.id} className="rounded bg-gold px-3 py-1.5 text-xs text-card">Save</button><button type="button" onClick={() => setEditingId(null)} className="rounded border border-purple-light/20 px-3 py-1.5 text-xs text-secondary">Cancel</button></div>
+                  </form>}
                 </Card>
               </motion.div>
             );

@@ -1,5 +1,7 @@
 import { featureFromType, resolveLookInformation, type LookDetails } from './look-information';
 import type { Actor } from './core';
+import { loadRevenueReport } from './revenue-store';
+import type { RevenueWindow } from './revenue-periods';
 export type Query = (text: string, values?: unknown[]) => Promise<Record<string, unknown>[]>;
 export type SavedInput = {
   styleType: string;
@@ -33,7 +35,7 @@ export function lookView(row: Record<string, unknown>) {
     imageUrl: `/api/saved-looks/${row.id}/image`,
   };
 }
-const appointmentFields = `a.id,a.client_id AS "clientId",a.stylist_id AS "stylistId",a.service_name AS "serviceName",a.service_type AS "serviceType",(a.appointment_date AT TIME ZONE 'UTC') AS "appointmentDate",a.status,a.total_price AS "totalPrice",a.notes,a.completed_at AS "completedAt",a.completed_by AS "completedBy",a.ai_generation_id AS "aiGenerationId"`;
+const appointmentFields = `a.id,a.client_id AS "clientId",a.stylist_id AS "stylistId",a.service_name AS "serviceName",a.service_type AS "serviceType",(a.appointment_date AT TIME ZONE 'UTC') AS "appointmentDate",a.duration_minutes AS "durationMinutes",a.status,a.total_price AS "totalPrice",a.notes,a.completed_at AS "completedAt",a.completed_by AS "completedBy",a.ai_generation_id AS "aiGenerationId"`;
 const lookJoin = `CASE WHEN g.id IS NULL THEN NULL ELSE json_build_object('id',g.id,'styleType',g.style_type,'styleName',g.style_name,'styleId',g.style_id,'lookDetails',g.look_details,'imageUrl','/api/saved-looks/'||g.id||'/image') END AS look`;
 const serviceRecords = `(SELECT json_build_object('rating',r.rating,'comment',r.comment,'createdAt',r.created_at) FROM appointment_reviews r WHERE r.appointment_id=a.id) AS review,
  coalesce((SELECT json_agg(json_build_object('inventoryId',p.inventory_id,'productName',p.product_name,'brand',p.brand,'quantity',p.quantity,'unit',p.unit,'unitCost',CASE WHEN $1='client' THEN NULL ELSE p.unit_cost END) ORDER BY p.created_at,p.id) FROM appointment_product_usage p WHERE p.appointment_id=a.id),'[]'::json) AS products`;
@@ -65,8 +67,13 @@ export function createBusinessStore(query: Query) {
       )
     )[0];
   return {
+    revenueReport: (window:RevenueWindow) => loadRevenueReport(query,window),
     currentUser: async (identity: string) =>
-      (await query('SELECT id,role FROM users WHERE id=$1', [identity]))[0] as Actor | undefined,
+      (await query('SELECT id,role FROM users WHERE id=$1 AND is_active=true', [identity]))[0] as Actor | undefined,
+    isQualifiedStylist: async (identity: string, serviceType: string) =>
+      (await query(`SELECT 1 FROM users u JOIN stylist_specialties ss ON ss.stylist_id=u.id WHERE u.id=$1 AND u.role='stylist' AND u.is_active AND ss.service_type=$2`, [identity,serviceType])).length > 0,
+    isAvailable: async (identity: string, date: string, durationMinutes: number, excludeId?: string) =>
+      (await query(`SELECT 1 WHERE beautycore_work_available($1,$2::timestamptz,$3) AND NOT EXISTS(SELECT 1 FROM appointments a WHERE a.stylist_id=$1 AND a.status IN ('pending','confirmed') AND ($4::uuid IS NULL OR a.id<>$4::uuid) AND ($2::timestamptz AT TIME ZONE 'UTC')<a.appointment_date+make_interval(mins=>a.duration_minutes) AND a.appointment_date<($2::timestamptz AT TIME ZONE 'UTC')+make_interval(mins=>$3))`, [identity,date,durationMinutes,excludeId ?? null])).length > 0,
     getLook,
     save,
     listLooks: async (
@@ -105,7 +112,7 @@ export function createBusinessStore(query: Query) {
     authorizedImage: async (identity: string, actor: Actor) =>
       (
         await query(
-          `SELECT g.generated_image_url AS image FROM ai_generations g WHERE g.id=$1 AND g.result_hash IS NOT NULL AND (g.client_id=$2 OR $3='admin' OR ($3='stylist' AND EXISTS(SELECT 1 FROM appointments a WHERE a.ai_generation_id=g.id AND a.stylist_id=$2)))`,
+          `SELECT g.generated_image_url AS image FROM ai_generations g WHERE g.id=$1 AND g.result_hash IS NOT NULL AND (g.client_id=$2 OR ($3='admin' AND EXISTS(SELECT 1 FROM appointments a WHERE a.ai_generation_id=g.id)) OR ($3='stylist' AND EXISTS(SELECT 1 FROM appointments a WHERE a.ai_generation_id=g.id AND a.stylist_id=$2)))`,
           [identity, actor.id, actor.role],
         )
       )[0],
@@ -124,17 +131,8 @@ export function createBusinessStore(query: Query) {
     createAppointment: async (input: Record<string, unknown>) =>
       (
         await query(
-          `INSERT INTO appointments(client_id,stylist_id,service_name,service_type,appointment_date,total_price,notes,ai_generation_id) VALUES($1,$2,$3,$4,$5::timestamptz AT TIME ZONE 'UTC',$6,$7,$8) RETURNING id`,
-          [
-            input.clientId,
-            input.stylistId,
-            input.serviceName,
-            input.serviceType,
-            input.date,
-            input.price,
-            input.notes,
-            input.lookId,
-          ],
+          'SELECT * FROM beautycore_create_appointment($1,$2,$3,$4,$5::timestamptz,$6,$7,$8,$9)',
+          [input.clientId,input.stylistId,input.serviceName,input.serviceType,input.date,input.durationMinutes,input.price,input.notes,input.lookId],
         )
       )[0],
     updateAppointment: async (identity: string, actor: Actor, updates: Record<string, unknown>) => {

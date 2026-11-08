@@ -52,6 +52,7 @@ for (const path of ['next/image', 'next/link']) {
   test.mock.module(path, { defaultExport: module.default.default ?? module.default });
 }
 const { AuthProvider } = await import('../context/AuthContext.tsx');
+const { default: LoginForm } = await import('../app/(public)/login/login-form.tsx');
 const { SavedLookActions } = await import('../components/saved-look-actions.tsx');
 const { default: NailsPage } = await import('../app/client/nail-studio/page.tsx');
 const { default: SavedLooksPage } = await import('../app/client/saved-looks/page.tsx');
@@ -64,6 +65,16 @@ const { default: StylistDashboard } = await import('../app/stylist/dashboard/pag
 const { default: ClientAppointments } = await import('../app/client/appointments/page.tsx');
 const { StylistPerformance } = await import('../components/stylist-performance.tsx');
 const { default: AdminAppointments } = await import('../app/admin/appointments/page.tsx');
+const { default: AdminStylists } = await import('../app/admin/stylists/page.tsx');
+const { RevenueOverview } = await import('../components/revenue-report.tsx');
+const { default: PublicServices } = await import('../app/(public)/services/page.tsx');
+const { default: AdminFinance } = await import('../app/admin/finance/page.tsx');
+const { default: StylistClients } = await import('../app/stylist/clients/page.tsx');
+const { WorkAvailability } = await import('../components/work-availability.tsx');
+const { ReferenceImagePicker } = await import('../components/reference-image-picker.tsx');
+const { ClientHistory } = await import('../components/client-history.tsx');
+const { workAvailability } = await import('../lib/business/work-availability.ts');
+const { clientHistory,clientImages,paymentHistory } = await import('../lib/business/customer-history.ts');
 const {
   bookingApi,
   savedLooks,
@@ -137,7 +148,7 @@ function mount(Component, props = {}, params = '', auth = false) {
 async function transport(input, init = {}) {
   const url = new URL(String(input), 'http://localhost:3000');
   const method = init.method ?? 'GET';
-  calls.push({ path: url.pathname, method, body: init.body });
+  calls.push({ path: url.pathname, method, body: init.body, search:url.search });
   if (url.origin !== 'http://localhost:3000')
     throw new Error('External requests are forbidden in this fixture.');
   if (url.pathname === '/api/auth/session') {
@@ -146,9 +157,18 @@ async function transport(input, init = {}) {
       : null;
     return Response.json({ user });
   }
+  if (url.pathname === '/api/stylists' && method==='PATCH'){
+    assert.equal(actor,A);
+    const body=JSON.parse(init.body);
+    const rows=await query('SELECT beautycore_update_stylist($1,$2,$3,$4,$5::text[]) AS updated',[body.id,body.name,body.email,body.isActive,body.specialties]);
+    return Response.json({stylist:{id:body.id},updated:rows[0].updated});
+  }
   if (url.pathname === '/api/stylists')
     return Response.json({
-      stylists: await query("SELECT id,name FROM users WHERE role='stylist'"),
+      stylists: await query(`SELECT u.id,u.name,u.email,u.is_active AS "isActive",
+        EXISTS(SELECT 1 FROM stylist_work_settings w WHERE w.stylist_id=u.id AND w.available) AS "workAvailable",
+        ARRAY(SELECT service_type FROM stylist_specialties s WHERE s.stylist_id=u.id) AS specialties
+        FROM users u WHERE u.role='stylist'`),
     });
   if (url.pathname === '/api/ai/features/nails/styles')
     return Response.json(
@@ -189,6 +209,10 @@ async function transport(input, init = {}) {
   const headers = new Headers(init.headers);
   if (method !== 'GET') headers.set('origin', 'http://localhost:3000');
   const req = new Request(url, { ...init, method, headers });
+  const extra={query,actor:deps.actor};
+  if(url.pathname==='/api/stylist/availability')return workAvailability(req,extra);
+  if(url.pathname.startsWith('/api/client-images'))return clientImages(req,extra,url.pathname.split('/').filter(Boolean)[2]);
+  if(url.pathname.startsWith('/api/admin/clients/')){const parts=url.pathname.split('/').filter(Boolean);return clientHistory(req,parts[3],extra,parts[4]==='payments');}
   if (url.pathname.startsWith('/api/saved-looks')) {
     const parts = url.pathname.split('/').filter(Boolean);
     return savedLooks(req, parts[2], parts[3] === 'image', deps);
@@ -205,6 +229,11 @@ async function transport(input, init = {}) {
   if (url.pathname.startsWith('/api/appointments'))
     return bookingApi(req, url.pathname.split('/')[3], deps);
   if (url.pathname === '/api/admin/daily-services') return dailyServices(req, deps);
+  if (url.pathname === '/api/admin/payments') return paymentHistory(req,extra);
+  if (url.pathname === '/api/admin/stats') return Response.json({
+    statusBreakdown:await query('SELECT status,count(*)::int AS n FROM appointments GROUP BY status'),
+    topServices:await query(`SELECT service_name AS "serviceName",count(*)::int AS bookings,coalesce(sum(total_price),0)::int AS revenue FROM appointments WHERE status='completed' GROUP BY service_name ORDER BY revenue DESC LIMIT 5`),
+  });
   throw new Error('Unexpected fixture request: ' + method + ' ' + url.pathname);
 }
 test.before(async () => {
@@ -215,6 +244,9 @@ test.before(async () => {
     '0003_saved_look_admission.sql',
     '0004_look_details.sql',
     '0005_service_completion.sql',
+    '0007_business_controls.sql',
+    '0008_work_availability.sql',
+    '0009_customer_history.sql',
   ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   png = await sharp({ create: { width: 64, height: 64, channels: 3, background: '#e1c9c2' } })
@@ -262,6 +294,8 @@ test.beforeEach(async () => {
       'not-a-login',
       role,
     ]);
+  await query("INSERT INTO stylist_specialties(stylist_id,service_type) SELECT $1,x FROM unnest(ARRAY['hair','nail','makeup','treatment','massage','aesthetic']) x", [S]);
+  await query(`INSERT INTO stylist_work_settings(stylist_id,available,hours) VALUES($1,true,$2::jsonb)`,[S,JSON.stringify(Array.from({length:7},(_,day)=>({day,start:'00:00',end:'23:59'})))]);
 });
 test.afterEach(() => cleanup());
 test.after(async () => {
@@ -269,6 +303,20 @@ test.after(async () => {
   await db.close();
   dom.window.close();
 });
+test('login displays a useful service error when the server returns a 404 HTML page',async()=>{
+ actor=null;
+ globalThis.fetch=async(input,init)=>String(input)==='/api/auth/login'?new Response('<!DOCTYPE html><html>Not found</html>',{status:404,headers:{'Content-Type':'text/html'}}):transport(input,init);
+ try{
+  mount(LoginForm,{},'',true);
+  fireEvent.change(screen.getByLabelText('Email'),{target:{value:'client@example.invalid'}});
+  fireEvent.change(screen.getByLabelText('Password'),{target:{value:'test-password'}});
+  fireEvent.click(screen.getByRole('button',{name:'Sign In',exact:true}));
+  await screen.findByText('The account service is unavailable. Refresh the page and try again.');
+  assert.equal(screen.queryByText(/Unexpected token/),null);
+  assert.equal(pushes.length,0);
+ }finally{globalThis.fetch=transport;}
+});
+
 test('standalone Nails generates once, saves once, and Book reuses the durable saved look', async () => {
   mount(NailsPage);
   await screen.findByText('Nude Pink Gloss');
@@ -325,7 +373,7 @@ test('saved gallery reload and removal use account data and preserve booked refe
   mount(SavedLooksPage);
   await screen.findByText('Nude Pink Gloss');
   fireEvent.click(screen.getByRole('button', { name: 'Remove from Saved' }));
-  await screen.findByText(/No saved looks yet/);
+  await screen.findByText('Your lookbook starts here');
   assert.equal((await query('SELECT count(*)::int AS n FROM ai_generations'))[0].n, 1);
 });
 test('look-aware booking and assigned stylist preview complete against the same database', async () => {
@@ -352,7 +400,7 @@ test('look-aware booking and assigned stylist preview complete against the same 
   fireEvent.change(screen.getByLabelText('Time', { exact: true }), { target: { value: '10:00' } });
   fireEvent.change(screen.getByLabelText(/Preferred Stylist/), { target: { value: S } });
   fireEvent.click(screen.getByRole('button', { name: 'Confirm Booking' }));
-  await screen.findByText('Appointment booked');
+  await screen.findByText('Appointment confirmed');
   const appointment = (
     await query('SELECT ai_generation_id,total_price,appointment_date FROM appointments')
   )[0];
@@ -363,6 +411,7 @@ test('look-aware booking and assigned stylist preview complete against the same 
   actor = S;
   mount(StylistPage);
   await screen.findByRole('heading', { name: 'Gel Manicure' });
+  fireEvent.click(screen.getByLabelText('View visit: Gel Manicure, Client One'));
   fireEvent.click(screen.getByRole('button', { name: /View requested look/ }));
   assert.ok(screen.getByRole('dialog').hasAttribute('open'));
   assert.match(screen.getByRole('dialog').textContent, /Nude Pink Gloss/);
@@ -409,7 +458,13 @@ test('admin can assign a stylist and confirm the recorded amount through the exi
   actor = A;
   mount(AdminAppointments);
   await screen.findByText('Makeup Application');
-  await waitFor(() => assert.ok(screen.getByRole('option', { name: 'Stylist One' })));
+  fireEvent.click(screen.getByRole('button', { name: 'View details for Makeup Application, Client One' }));
+  await waitFor(() =>
+    assert.equal(
+      screen.getByLabelText('Assigned stylist').querySelector(`option[value="${S}"]`)?.textContent,
+      'Stylist One',
+    ),
+  );
   fireEvent.change(screen.getByLabelText('Assigned stylist'), { target: { value: S } });
   fireEvent.change(screen.getByLabelText('Recorded amount (whole pesos)'), {
     target: { value: '450' },
@@ -456,6 +511,74 @@ test('look information displays named service prices and labels saved/current es
     screen.queryByText('Current service estimate; the original estimate was not recorded.'),
     null,
   );
+});
+
+test('stylist availability switch saves immediately and retains the existing booking',async()=>{
+ await transport('/api/appointments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({serviceName:"Men's Cut",serviceType:'hair',appointmentDate:'2030-10-17T02:00:00Z',stylistId:S})});
+ actor=S;mount(WorkAvailability);const toggle=await screen.findByRole('switch',{name:'Available to Work'});fireEvent.click(toggle);
+ await waitFor(async()=>assert.equal((await query('SELECT available FROM stylist_work_settings WHERE stylist_id=$1',[S]))[0].available,false));
+ assert.equal((await query('SELECT status FROM appointments'))[0].status,'confirmed');
+ await screen.findByRole('switch',{name:'Not Available'});
+});
+
+test('saved image picker previews and loads original image bytes without starting generation',async()=>{
+ await transport('/api/saved-looks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({feature:'nails',styleId:result.style.id,image:result.image.data_url,status:'completed',sourceKind:'manual'})});
+ let selected=null;mount(ReferenceImagePicker,{onSelect:file=>{selected=file;}});
+ fireEvent.click(screen.getByRole('button',{name:'Choose an existing image'}));
+ fireEvent.click(await screen.findByRole('button',{name:/AI-generated look/}));
+ assert.ok(screen.getByAltText('Preview of Nude Pink Gloss'));
+ fireEvent.click(screen.getByRole('button',{name:'Use this image'}));
+ await waitFor(()=>assert.ok(selected));assert.deepEqual(Buffer.from(await selected.arrayBuffer()),png);
+ assert.equal(calls.filter(call=>call.path.endsWith('/generation')&&call.method==='POST').length,0);
+});
+
+test('admin client history displays real services and records one actual payment receipt',async()=>{
+ await transport('/api/appointments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({serviceName:"Men's Cut",serviceType:'hair',appointmentDate:'2030-10-17T02:00:00Z',stylistId:S})});
+ actor=A;mount(ClientHistory,{clientId:C});await screen.findByRole('heading',{name:"Men's Cut"});
+ assert.ok(screen.getByText('No payment recorded'));
+ fireEvent.click(screen.getByRole('button',{name:'Record payment'}));
+ fireEvent.change(screen.getByLabelText('Amount (whole pesos)'),{target:{value:'50'}});
+ fireEvent.click(screen.getByRole('button',{name:'Save payment receipt'}));
+ await screen.findByText('Payment receipt recorded.');
+ await waitFor(async()=>assert.equal((await query('SELECT count(*)::int AS n FROM appointment_payments'))[0].n,1));
+ assert.equal(calls.filter(call=>call.path.startsWith('/api/client-images')).length,0);
+});
+
+test('dashboard revenue changes between daily, weekly, monthly and yearly periods using database records',async()=>{
+ await query("INSERT INTO appointments(client_id,stylist_id,service_name,service_type,appointment_date,status,total_price) VALUES($1,$2,'Completed cut','hair','2030-10-17 02:00:00','completed',250)",[C,S]);
+ actor=A;mount(RevenueOverview);
+ fireEvent.change(screen.getByLabelText('Revenue reference date'),{target:{value:'2030-10-17'}});
+ for(const [name,buckets] of [['Daily',24],['Weekly',7],['Monthly',31],['Yearly',12]]){
+  fireEvent.click(screen.getByRole('button',{name,exact:true}));
+  await waitFor(()=>assert.equal(screen.getByLabelText('Selected period revenue').textContent,'₱250'));
+  await waitFor(()=>assert.equal(screen.getByLabelText('Revenue trend chart').querySelectorAll('button').length,buckets));
+  assert.equal(screen.getByRole('button',{name,exact:true}).getAttribute('aria-pressed'),'true');
+ }
+ assert.ok(calls.some(call=>call.path==='/api/admin/stylist-performance'&&call.search.includes('period=year')));
+});
+
+test('stylist earnings roster shows day/month/year values and opens account editing only when requested',async()=>{
+ await query("INSERT INTO appointments(client_id,stylist_id,service_name,service_type,appointment_date,status,total_price) VALUES($1,$2,'Completed cut','hair','2030-10-17 02:00:00','completed',250)",[C,S]);
+ actor=A;mount(AdminStylists);
+ fireEvent.change(screen.getByLabelText('Stylist earnings reference date'),{target:{value:'2030-10-17'}});
+ const staff=await screen.findByText('Stylist One');
+ await waitFor(()=>assert.equal((staff.closest('tr').textContent.match(/₱250/g)||[]).length,3));
+ assert.equal(screen.queryByLabelText('Full name'),null);
+ fireEvent.click(screen.getByRole('button',{name:'Yearly',exact:true}));
+ await screen.findByRole('heading',{name:'2030',exact:true});
+ fireEvent.click(await screen.findByRole('button',{name:'Edit Stylist One'}));
+ await screen.findByRole('dialog',{name:'Edit stylist'});
+ fireEvent.change(screen.getByLabelText('Full name'),{target:{value:'Stylist Updated'}});
+ fireEvent.click(screen.getByRole('button',{name:'Save changes'}));
+ await screen.findByText('Stylist details saved.');
+ await screen.findByText('Stylist Updated');
+ assert.equal((await query('SELECT name FROM users WHERE id=$1',[S]))[0].name,'Stylist Updated');
+ assert.equal((await query('SELECT total_price,status FROM appointments'))[0].total_price,250);
+ fireEvent.click(screen.getByRole('button',{name:'Add stylist'}));
+ await screen.findByRole('dialog',{name:'Add a stylist'});
+ assert.ok(screen.getByLabelText(/Temporary password/));
+ fireEvent.click(screen.getByRole('button',{name:'Cancel',exact:true}));
+ await waitFor(()=>assert.equal(screen.queryByRole('dialog'),null));
 });
 
 test('admin navigation removes Market Trends and keeps Finance and Dashboard', async () => {
@@ -549,6 +672,7 @@ test('both home dashboards share the booked look; product completion enables a c
   assert.match(document.body.textContent, /Client One/);
   cleanup();
   mount(StylistPage);
+  fireEvent.click(await screen.findByLabelText('View visit: Gel Manicure, Client One'));
   fireEvent.click(await screen.findByRole('button', { name: 'Mark as Completed' }));
   fireEvent.click(screen.getByRole('button', { name: 'Add product used' }));
   fireEvent.change(screen.getByLabelText('Product name'), { target: { value: 'Top coat' } });
@@ -591,4 +715,80 @@ test('both home dashboards share the booked look; product completion enables a c
   assert.match(row.textContent, /₱350/);
   assert.equal((await query('SELECT count(*)::int AS n FROM appointment_reviews'))[0].n, 1);
   assert.equal((await query('SELECT count(*)::int AS n FROM appointment_product_usage'))[0].n, 1);
+});
+
+test('service deep links select the correct menu on arrival and on browser history navigation',async()=>{
+ for(const [id,label] of [['hair-design','Hair Design'],['nail-studio','Nail Studio'],['face-laser','Face & Laser']]){
+  window.history.replaceState(null,'','/services#'+id);
+  mount(PublicServices);
+  await screen.findByRole('heading',{level:2,name:label});
+  const category=screen.getByRole('link',{name:label,exact:true});
+  assert.equal(category.getAttribute('aria-current'),'page');
+  assert.equal(category.getAttribute('href'),'#'+id);
+  assert.equal(screen.getByRole('link',{name:'Book '+label}).getAttribute('href'),'/booking?service='+id);
+  cleanup();
+ }
+ window.history.replaceState(null,'','/services#hair-design');
+ mount(PublicServices);
+ await screen.findByRole('heading',{level:2,name:'Hair Design'});
+ window.history.replaceState(null,'','/services#nail-studio');
+ fireEvent(window,new Event('popstate'));
+ await screen.findByRole('heading',{level:2,name:'Nail Studio'});
+ window.history.replaceState(null,'','/');
+});
+
+test('admin booking details save notes, reschedule with Philippine time, and cancel while preserving history',async()=>{
+ await transport('/api/appointments',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({serviceName:'Makeup Application',serviceType:'makeup',appointmentDate:'2030-10-17T02:00:00Z'})});
+ actor=A;mount(AdminAppointments);
+ fireEvent.click(await screen.findByRole('button',{name:'View details for Makeup Application, Client One'}));
+ fireEvent.change(screen.getByLabelText('Appointment notes'),{target:{value:'Discuss warm colours before starting.'}});
+ fireEvent.click(screen.getByRole('button',{name:'Save notes'}));
+ await waitFor(async()=>assert.equal((await query('SELECT notes FROM appointments'))[0].notes,'Discuss warm colours before starting.'));
+ fireEvent.click(screen.getByText('Reschedule booking'));
+ fireEvent.change(screen.getByLabelText('New appointment date'),{target:{value:'2030-10-18'}});
+ fireEvent.change(screen.getByLabelText('New appointment time'),{target:{value:'11:30'}});
+ await waitFor(()=>assert.equal(screen.getByRole('button',{name:'Save new schedule'}).disabled,false));
+ fireEvent.click(screen.getByRole('button',{name:'Save new schedule'}));
+ await waitFor(async()=>assert.equal((await query("SELECT to_char(appointment_date,'YYYY-MM-DD HH24:MI') AS scheduled FROM appointments"))[0].scheduled,'2030-10-18 03:30'));
+ await waitFor(()=>assert.equal(screen.getByRole('button',{name:'Cancel appointment'}).disabled,false));
+ fireEvent.click(screen.getByRole('button',{name:'Cancel appointment'}));
+ assert.equal((await query('SELECT status FROM appointments'))[0].status,'pending');
+ fireEvent.click(screen.getByRole('button',{name:'Keep appointment'}));
+ assert.equal(screen.queryByRole('button',{name:'Confirm cancellation'}),null);
+ fireEvent.click(screen.getByRole('button',{name:'Cancel appointment'}));
+ fireEvent.click(screen.getByRole('button',{name:'Confirm cancellation'}));
+ await screen.findByRole('heading',{name:'Cancelled booking'});
+ assert.equal((await query('SELECT count(*)::int AS n FROM appointments'))[0].n,1);
+ assert.equal(screen.queryByRole('button',{name:'Mark as Completed'}),null);
+ assert.equal(screen.queryByRole('button',{name:'Save assignment / amount'}),null);
+});
+
+test('finance report navigation keeps receipts, service activity and team reports separate',async()=>{
+ actor=A;mount(AdminFinance);
+ await screen.findByRole('heading',{name:'Total Revenue'});
+ await screen.findByRole('heading',{name:'Service performance'});
+ fireEvent.click(screen.getByRole('button',{name:'Payment receipts'}));
+ await screen.findByRole('heading',{name:'Payments received'});
+ await waitFor(()=>assert.ok(calls.some(call=>call.path==='/api/admin/payments')));
+ assert.equal(screen.queryByRole('heading',{name:'Total Revenue'}),null);
+ fireEvent.click(screen.getByRole('button',{name:'Daily services'}));
+ await waitFor(()=>assert.ok(calls.some(call=>call.path==='/api/admin/daily-services')));
+ fireEvent.click(screen.getByRole('button',{name:'Team performance'}));
+ await waitFor(()=>assert.ok(calls.some(call=>call.path==='/api/admin/stylist-performance'&&!call.search.includes('period='))));
+ assert.equal(calls.filter(call=>call.method!=='GET').length,0);
+});
+
+test('stylist client directory derives searchable summaries only from their own assigned bookings',async()=>{
+ await transport('/api/appointments',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({serviceName:'Gel Manicure',serviceType:'nail',appointmentDate:'2030-10-17T02:00:00Z',stylistId:S})});
+ const outsider='77777777-7777-4777-8777-777777777777';
+ await query("INSERT INTO users(id,email,name,password_hash,role) VALUES($1,'private@example.invalid','Other Client','unused','client')",[outsider]);
+ await query("INSERT INTO appointments(client_id,service_name,service_type,appointment_date,status) VALUES($1,'Private service','hair','2030-10-18 10:00','pending')",[outsider]);
+ actor=S;mount(StylistClients);
+ await screen.findByText('Client One');
+ assert.equal(screen.queryByText('Other Client'),null);
+ fireEvent.change(screen.getByLabelText('Search clients'),{target:{value:'missing'}});
+ await screen.findByText('No clients found');
+ fireEvent.change(screen.getByLabelText('Search clients'),{target:{value:'client@example.invalid'}});
+ await screen.findByText('Client One');
+ assert.equal(calls.filter(call=>call.path.startsWith('/api/admin/clients')).length,0);
 });

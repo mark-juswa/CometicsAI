@@ -14,12 +14,6 @@ const roles: Array<{ value: UserRole; label: string }> = [
   { value: 'stylist', label: 'Stylist' },
 ];
 
-const demoAccounts = [
-  { email: 'maria@email.com', password: 'client123', role: 'client' },
-  { email: 'admin@andreas.com', password: 'admin123', role: 'admin' },
-  { email: 'lara@andreas.com', password: 'stylist123', role: 'stylist' },
-];
-
 export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -48,13 +42,7 @@ export default function LoginForm() {
     }
   };
 
-  const fillDemo = (acc: typeof demoAccounts[number]) => {
-    setEmail(acc.email);
-    setPassword(acc.password);
-    setRole(acc.role as UserRole);
-  };
-
-  return (
+return (
     <div className="flex min-h-screen items-center justify-center px-6 py-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -158,25 +146,7 @@ export default function LoginForm() {
             </Link>
           </p>
 
-          {/* Demo credentials */}
-          <div className="mt-8 border-t border-purple-light/15 pt-6">
-            <p className="mb-3 text-[10px] font-semibold uppercase tracking-[2px] text-gold">
-              Demo Accounts
-            </p>
-            <div className="flex flex-col gap-2">
-              {demoAccounts.map((acc) => (
-                <button
-                  key={acc.email}
-                  type="button"
-                  onClick={() => fillDemo(acc)}
-                  className="flex items-baseline justify-between rounded-sm border border-purple-light/15 bg-surface/20 px-3 py-2 text-left text-[12px] transition-colors hover:border-purple-light/40"
-                >
-                  <span className="text-secondary">{acc.email}</span>
-                  <span className="text-[10px] uppercase text-muted">{acc.role}</span>
-                </button>
-              ))}
-            </div>
-          </div>
+
         </div>
       </motion.div>
     </div>

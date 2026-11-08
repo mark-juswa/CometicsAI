@@ -1,213 +1,246 @@
-'use client';
-import { StylistPerformance } from '@/components/stylist-performance';
-import { DailyServices } from '@/components/daily-services';
-
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Wallet, TrendingUp, CalendarCheck, Receipt } from 'lucide-react';
-import { PageHeader, Card, Skeleton, EmptyState, formatPeso } from '@/components/ui';
-import AnimatedCounter from '@/components/AnimatedCounter';
-import type { AppointmentStatus } from '@/db/schema';
-
-interface Stats {
-  totalRevenue: number;
-  monthRevenue: number;
-  totalBookings: number;
-}
-
-interface StatusRow {
-  status: AppointmentStatus;
-  n: number;
-}
-
-interface ServiceRow {
-  serviceName: string;
-  serviceType: string;
-  bookings: number;
-  revenue: number;
-}
-
-const statusColor: Record<AppointmentStatus, string> = {
-  completed: 'bg-info',
-  confirmed: 'bg-success',
-  pending: 'bg-warning',
-  cancelled: 'bg-error',
-};
-
+"use client";
+import { useEffect, useState } from "react";
+import { businessRequest } from "@/lib/business/client";
+import { Skeleton, formatPeso } from "@/components/ui";
+import {
+  BarChart3,
+  Receipt,
+  Scissors,
+  Users,
+  ArrowUpRight,
+} from "lucide-react";
+import { PaymentHistory } from "@/components/payment-history";
+import { StylistPerformance } from "@/components/stylist-performance";
+import { DailyServices } from "@/components/daily-services";
+import { RevenueOverview } from "@/components/revenue-report";
+import { PortalWorkspace } from "@/components/portal-workspace";
+import Link from "next/link";
+const sections = [
+  {
+    id: "revenue",
+    title: "Revenue overview",
+    icon: BarChart3,
+    description:
+      "Explore completed-service revenue by day, week, month, or year. Compare periods and inspect the chart for each date.",
+  },
+  {
+    id: "payments",
+    title: "Payment receipts",
+    icon: Receipt,
+    description:
+      "Review recorded payment receipts separately from the service amounts shown in revenue reports.",
+  },
+  {
+    id: "services",
+    title: "Daily services",
+    icon: Scissors,
+    description:
+      "Review the actual services completed on a chosen date, including recorded amounts and products used.",
+  },
+  {
+    id: "team",
+    title: "Team performance",
+    icon: Users,
+    description:
+      "Compare completed services and recorded revenue attributed to each stylist over a selected date range.",
+  },
+] as const;
 export default function AdminFinancePage() {
-  const [stats, setStats] = useState<Stats | null>(null);
-  const [statusRows, setStatusRows] = useState<StatusRow[]>([]);
-  const [services, setServices] = useState<ServiceRow[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch('/api/admin/stats')
-      .then((r) => r.json())
-      .then((d) => {
-        setStats(d.stats ?? null);
-        setStatusRows(d.statusBreakdown ?? []);
-        setServices(d.topServices ?? []);
-      })
-      .catch(() => undefined)
-      .finally(() => setLoading(false));
-  }, []);
-
-  const completed = statusRows.find((s) => s.status === 'completed')?.n ?? 0;
-  const avgTicket = completed > 0 ? Math.round((stats?.totalRevenue ?? 0) / completed) : 0;
-  const totalStatuses = statusRows.reduce((sum, s) => sum + s.n, 0);
-  const maxServiceRevenue = Math.max(...services.map((s) => s.revenue), 1);
-
-  const cards = [
-    {
-      label: 'Total Revenue',
-      value: stats?.totalRevenue ?? 0,
-      prefix: '₱',
-      icon: Wallet,
-      note: 'Recorded completed-service amounts',
-      accent: 'text-gold',
-    },
-    {
-      label: 'This Month',
-      value: stats?.monthRevenue ?? 0,
-      prefix: '₱',
-      icon: TrendingUp,
-      note: 'Month to date',
-      accent: 'text-success',
-    },
-    {
-      label: 'Completed',
-      value: completed,
-      icon: CalendarCheck,
-      note: `of ${stats?.totalBookings ?? 0} bookings`,
-      accent: 'text-info',
-    },
-    {
-      label: 'Average Ticket',
-      value: avgTicket,
-      prefix: '₱',
-      icon: Receipt,
-      note: 'Per completed visit',
-      accent: 'text-purple-glow',
-    },
-  ];
-
+  const [active, setActive] =
+    useState<(typeof sections)[number]["id"]>("revenue");
+  const section = sections.find((section) => section.id === active)!;
   return (
-    <>
-      <PageHeader
-        title="Finance"
-        subtitle="Recorded amounts from completed appointments; these are not payment receipts."
-      />
-
-      <DailyServices />
-      <StylistPerformance />
-      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {loading
-          ? [0, 1, 2, 3].map((i) => <Skeleton key={i} className="h-32 w-full" />)
-          : cards.map((c, i) => (
-              <motion.div
-                key={c.label}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-              >
-                <Card>
-                  <div className="mb-3 flex items-start justify-between">
-                    <span className="text-[10px] font-semibold uppercase tracking-[1.5px] text-muted">
-                      {c.label}
-                    </span>
-                    <c.icon size={16} className={c.accent} />
-                  </div>
-                  <p className={`mb-1.5 font-serif text-3xl ${c.accent}`}>
-                    <AnimatedCounter value={c.value} prefix={c.prefix} />
-                  </p>
-                  <p className="text-[11px] text-muted">{c.note}</p>
-                </Card>
-              </motion.div>
-            ))}
+    <PortalWorkspace className="finance-workspace">
+      <header className="portal-hero">
+        <div>
+          <p className="portal-eyebrow">Business overview</p>
+          <h1>Finance</h1>
+          <p>
+            Understand service revenue, review receipts, and follow your team’s
+            contribution in one place.
+          </p>
+        </div>
+        <Link href="/admin/stylists" className="portal-button">
+          Stylist earnings
+          <ArrowUpRight size={15} />
+        </Link>
+      </header>
+      <nav className="finance-navigation" aria-label="Finance reports">
+        {sections.map((item) => (
+          <button
+            key={item.id}
+            aria-pressed={active === item.id}
+            onClick={() => setActive(item.id)}
+          >
+            <item.icon size={20} />
+            <span>{item.title}</span>
+            <ArrowUpRight size={14} />
+          </button>
+        ))}
+      </nav>
+      <div className="mb-6">
+        <h2 className="portal-section-title">{section.title}</h2>
+        <p className="portal-help mt-2 max-w-3xl">{section.description}</p>
       </div>
+      <div key={active}>
+        {active === "revenue" ? (
+          <>
+            <RevenueOverview />
+            <FinanceInsights />
+          </>
+        ) : active === "payments" ? (
+          <PaymentHistory />
+        ) : active === "services" ? (
+          <DailyServices />
+        ) : (
+          <StylistPerformance />
+        )}
+      </div>
+      <p className="portal-help rounded-xl border border-purple-light/15 p-4">
+        Service revenue uses recorded amounts on completed appointments. Receipt
+        totals reflect payments entered separately. Unconfirmed prices are
+        excluded from monetary totals.
+      </p>
+    </PortalWorkspace>
+  );
+}
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        {/* Revenue by service */}
-        <Card>
-          <h2 className="mb-5 font-serif text-xl text-white">Revenue by Service</h2>
-          {loading ? (
-            <div className="flex flex-col gap-3">
-              {[0, 1, 2, 3].map((i) => (
-                <Skeleton key={i} className="h-10 w-full" />
-              ))}
-            </div>
-          ) : services.length === 0 ? (
-            <EmptyState icon={Wallet} title="No revenue data yet" />
-          ) : (
-            <ul className="flex flex-col gap-4">
-              {services.map((s, i) => (
-                <li key={`${s.serviceName}-${i}`}>
-                  <div className="mb-1.5 flex items-baseline justify-between gap-3">
-                    <span className="truncate text-[12px] text-secondary">{s.serviceName}</span>
-                    <span className="shrink-0 text-[12px] font-medium text-white">
-                      {formatPeso(s.revenue)}
+function FinanceInsights() {
+  const [data, setData] = useState<{
+    statusBreakdown: { status: string; n: number }[];
+    topServices: { serviceName: string; serviceType?:string; bookings: number; revenue: number }[];
+  } | null>(null);
+  const [error, setError] = useState(""),
+    [revision, setRevision] = useState(0);
+  useEffect(() => {
+    const controller = new AbortController();
+    setError("");
+    businessRequest("/api/admin/stats", { signal: controller.signal })
+      .then((value) => {
+        if (!controller.signal.aborted) setData(value);
+      })
+      .catch((cause) => {
+        if (!controller.signal.aborted) setError(cause.message);
+      });
+    return () => controller.abort();
+  }, [revision]);
+  if (error)
+    return (
+      <p role="alert" className="portal-alert">
+        {error}{" "}
+        <button
+          className="underline"
+          onClick={() => setRevision((value) => value + 1)}
+        >
+          Retry service insights
+        </button>
+      </p>
+    );
+  if (!data) return <Skeleton className="mb-6 h-48 w-full" />;
+  const total = data.statusBreakdown.reduce(
+      (sum, row) => sum + Number(row.n),
+      0,
+    ),
+    max = Math.max(1, ...data.topServices.map((row) => row.revenue));
+  const colours: Record<string, string> = {
+    completed: "bg-info",
+    confirmed: "bg-success",
+    pending: "bg-warning",
+    cancelled: "bg-error",
+  };
+  return (
+    <div className="portal-grid">
+      <section className="portal-panel">
+        <div className="portal-panel-heading">
+          <div>
+            <h2>Service performance</h2>
+            <p>Popular services · all-time completed-service revenue</p>
+          </div>
+        </div>
+        <div className="portal-inset space-y-5">
+          {data.topServices.length ? (
+            data.topServices.map((service, index) => (
+              <div key={service.serviceType+':'+service.serviceName}>
+                <div className="mb-2 flex items-start justify-between gap-4 text-sm">
+                  <span className="text-secondary">
+                    <span className="mr-3 text-xs text-muted">
+                      {String(index + 1).padStart(2, "0")}
                     </span>
-                  </div>
-                  <div className="h-1.5 overflow-hidden rounded-full bg-surface/60">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${(s.revenue / maxServiceRevenue) * 100}%` }}
-                      transition={{ duration: 0.7, delay: i * 0.06, ease: 'easeOut' }}
-                      className="h-full rounded-full bg-gradient-to-r from-purple to-gold"
-                    />
-                  </div>
-                  <p className="mt-1 text-[10px] text-muted">
-                    {s.bookings} booking{s.bookings !== 1 ? 's' : ''}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Card>
-
-        {/* Booking status breakdown */}
-        <Card>
-          <h2 className="mb-5 font-serif text-xl text-white">Booking Status</h2>
-          {loading ? (
-            <Skeleton className="h-48 w-full" />
-          ) : totalStatuses === 0 ? (
-            <EmptyState icon={CalendarCheck} title="No bookings yet" />
-          ) : (
-            <>
-              {/* Stacked bar */}
-              <div className="mb-6 flex h-3 overflow-hidden rounded-full">
-                {statusRows.map((s) => (
-                  <motion.div
-                    key={s.status}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${(s.n / totalStatuses) * 100}%` }}
-                    transition={{ duration: 0.7, ease: 'easeOut' }}
-                    className={statusColor[s.status]}
-                    title={`${s.status}: ${s.n}`}
+                    {service.serviceName}
+                  </span>
+                  <span className="text-gold">
+                    {formatPeso(service.revenue)}
+                  </span>
+                </div>
+                <div className="h-1.5 overflow-hidden rounded-full bg-purple/20">
+                  <div
+                    className="h-full rounded-full bg-gold/70"
+                    style={{ width: (service.revenue / max) * 100 + "%" }}
                   />
-                ))}
+                </div>
+                <p className="mt-2 text-[11px] text-muted">
+                  {service.bookings} bookings across all statuses
+                </p>
               </div>
-
-              <ul className="flex flex-col gap-3">
-                {statusRows.map((s) => (
-                  <li key={s.status} className="flex items-center justify-between gap-3">
-                    <span className="flex items-center gap-2 text-[12px] capitalize text-secondary">
-                      <span className={`h-2.5 w-2.5 rounded-full ${statusColor[s.status]}`} />
-                      {s.status}
+            ))
+          ) : (
+            <p className="portal-help">No service bookings recorded yet.</p>
+          )}
+        </div>
+      </section>
+      <section className="portal-panel">
+        <div className="portal-panel-heading">
+          <div>
+            <h2>Booking status</h2>
+            <p>{total} bookings across all dates</p>
+          </div>
+        </div>
+        <div className="portal-inset">
+          <div
+            aria-hidden="true"
+            className="mb-6 flex h-3 overflow-hidden rounded-full bg-surface/50"
+          >
+            {data.statusBreakdown.map((row) => (
+              <span
+                key={row.status}
+                className={colours[row.status] ?? "bg-purple-light"}
+                style={{
+                  width: (total ? (Number(row.n) / total) * 100 : 0) + "%",
+                }}
+              />
+            ))}
+          </div>
+          <ul className="space-y-4">
+            {["completed", "confirmed", "pending", "cancelled"].map(
+              (status) => {
+                const count = Number(
+                  data.statusBreakdown.find((row) => row.status === status)
+                    ?.n ?? 0,
+                );
+                return (
+                  <li
+                    key={status}
+                    className="flex items-center justify-between border-b border-purple-light/10 pb-4 text-sm last:border-0"
+                  >
+                    <span className="flex items-center gap-3 capitalize text-secondary">
+                      <span
+                        className={"h-2 w-2 rounded-full " + colours[status]}
+                      />
+                      {status}
                     </span>
-                    <span className="text-[12px] text-white">
-                      {s.n}
-                      <span className="ml-1.5 text-[11px] text-muted">
-                        ({Math.round((s.n / totalStatuses) * 100)}%)
+                    <span className="text-white">
+                      {count}
+                      <span className="ml-3 text-xs text-muted">
+                        {total ? Math.round((count / total) * 100) : 0}%
                       </span>
                     </span>
                   </li>
-                ))}
-              </ul>
-            </>
-          )}
-        </Card>
-      </div>
-    </>
+                );
+              },
+            )}
+          </ul>
+        </div>
+      </section>
+    </div>
   );
 }

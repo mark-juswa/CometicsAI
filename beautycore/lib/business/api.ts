@@ -1,5 +1,5 @@
 import { PRODUCT_UNITS, type ProductUsage } from './workflow-types';
-import { allServices, parsePrice } from '../services';
+import { allServices, parsePrice, serviceDurationMinutes } from '../services';
 import {
   Actor,
   BusinessError,
@@ -17,6 +17,7 @@ import {
   validateLook,
 } from './core';
 import { BusinessStore, Settings, lookView } from './store';
+import { revenueWindow } from './revenue-periods';
 export type Dependencies = {
   actor: () => Promise<Actor | null>;
   store: BusinessStore;
@@ -39,6 +40,8 @@ async function controlled(action: () => Promise<Response>) {
     return await action();
   } catch (error) {
     if (error instanceof BusinessError) return json({ error: error.message }, error.status);
+    if (object(error) && ['23P01','23514','23503'].includes(String(error.code)))
+      return json({ error: 'The appointment conflicts with availability, an existing booking, or recorded payments. Reload and check its details.' },409);
     return json({ error: 'This feature is temporarily unavailable. Please try again.' }, 503);
   }
 }
@@ -194,6 +197,7 @@ export function bookingApi(
         ),
       });
     if (!identity && request.method === 'POST') {
+      if (actor.role === 'stylist') fail('Only customers and administrators can create bookings.',403);
       const body = await boundedJson(request);
       const allowed = [
         'serviceName',
@@ -221,6 +225,7 @@ export function bookingApi(
         fail('Choose an available stylist or no preference.');
       const lookId = body.lookId ? id(body.lookId) : null;
       if (lookId) {
+        if (actor.role !== 'client') fail('Only the customer can submit a saved look with a new booking.',403);
         enabled(deps);
         const look = await deps.store.getLook(lookId, owner);
         if (!look || !look.savedAt) fail('Choose one of this client’s saved looks.', 404);
@@ -237,11 +242,18 @@ export function bookingApi(
         serviceName: service.name,
         serviceType: service.serviceType,
         date,
+        durationMinutes: serviceDurationMinutes(service.name, service.serviceType),
         price: amount,
         notes: notes(body.notes),
         lookId,
       });
-      return json({ appointment }, 201);
+      if (appointment?.outcome === 'unqualified') fail('This stylist is not assigned to the selected service.', 400);
+      if (appointment?.outcome === 'unavailable') fail('That stylist is no longer available at this time. Choose another time or stylist.', 409);
+      if (appointment?.outcome === 'invalid_look') fail('Choose one of your saved looks that matches this service.', 404);
+      if (appointment?.outcome !== 'created' || typeof appointment.appointment_id !== 'string')
+        fail('The booking details could not be validated.', 409);
+      const recorded = await deps.store.appointment(appointment.appointment_id,actor);
+      return json({ appointment: { id: appointment.appointment_id, status: recorded?.status } }, 201);
     }
     if (!identity) fail('Operation not found.', 404);
     const row = await deps.store.appointment(identity, actor);
@@ -299,10 +311,20 @@ export function bookingApi(
     if (body.totalPrice !== undefined) update.totalPrice = price(body.totalPrice);
     if (body.stylistId !== undefined) {
       const stylist = body.stylistId === null ? null : id(body.stylistId);
-      if (stylist && (await deps.store.currentUser(stylist))?.role !== 'stylist')
+      if (stylist && stylist !== row.stylistId && (await deps.store.currentUser(stylist))?.role !== 'stylist')
         fail('Choose a valid stylist.');
+      if (stylist && stylist !== row.stylistId && !(await deps.store.isQualifiedStylist(stylist, String(row.serviceType))))
+        fail('This stylist is not assigned to the selected service.', 400);
       update.stylistId = stylist;
     }
+    const finalStylist = Object.hasOwn(update, 'stylistId')
+      ? (update.stylistId as string | null)
+      : (row.stylistId as string | null);
+    const finalDate = (update.appointmentDate as string | undefined) ?? new Date(row.appointmentDate as string).toISOString();
+    const assignmentChanged = finalStylist !== row.stylistId || new Date(finalDate).getTime() !== new Date(row.appointmentDate as string).getTime();
+    if (finalStylist && assignmentChanged &&
+      !(await deps.store.isAvailable(finalStylist, finalDate, Number(row.durationMinutes ?? 60), identity)))
+      fail('That stylist is no longer available at this time. Choose another time or stylist.', 409);
     const result = await deps.store.updateAppointment(identity, actor, update);
     if (!result) fail('Appointment assignment changed. Reload the page.', 409);
     return json({ appointment: result });
@@ -454,6 +476,13 @@ export function stylistPerformance(request: Request, deps: Dependencies) {
     if (actor.role !== 'admin') fail('Admin access is required.', 403);
     if (request.method !== 'GET') fail('Operation not found.', 404);
     const params = new URL(request.url).searchParams;
+    if(params.has('period')){
+      if(params.has('from')||params.has('to'))fail('Choose either a calendar period or a custom date range.');
+      let window;
+      try{window=revenueWindow(params.get('period'),params.get('date')??salonDay(deps.now?new Date(deps.now()):undefined));}
+      catch(cause){fail(cause instanceof Error?cause.message:'Choose a valid reporting period.');}
+      return json(await deps.store.revenueReport(window));
+    }
     const from = day(params.get('from') ?? salonDay());
     const to = day(params.get('to') ?? from);
     const span = (Date.parse(to) - Date.parse(from)) / 86400000;

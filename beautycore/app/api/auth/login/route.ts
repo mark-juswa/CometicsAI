@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       { status: 401 }
     );
 
-    if (!user) return invalid;
+    if (!user || !user.isActive) return invalid;
 
     const ok = await verifyPassword(password, user.passwordHash);
     if (!ok) return invalid;

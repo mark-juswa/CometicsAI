@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { PGlite } from "@electric-sql/pglite";
 import { applySavedLookMigrations } from "../scripts/saved-look-migrations";
+import { preservingBusinessRecords } from "../scripts/business-preservation";
 
 async function fixture() {
   const pg = new PGlite();
@@ -42,8 +43,11 @@ test("release runner uses single-statement queries, commits enum before use and 
       },
     ]);
     assert.equal(
-      (await pg.query<{ n: number }>("SELECT count(*)::int AS n FROM ai_generations")).rows[0]
-        .n,
+      (
+        await pg.query<{ n: number }>(
+          "SELECT count(*)::int AS n FROM ai_generations",
+        )
+      ).rows[0].n,
       2,
     );
   } finally {
@@ -70,9 +74,59 @@ test("a failed schema batch rolls back completely and does not run the next migr
     );
     assert.deepEqual(result.rows, [{ added: false, makeup: false }]);
     assert.equal(
-      (await pg.query<{ n: number }>("SELECT count(*)::int AS n FROM ai_generations")).rows[0]
-        .n,
+      (
+        await pg.query<{ n: number }>(
+          "SELECT count(*)::int AS n FROM ai_generations",
+        )
+      ).rows[0].n,
       1,
+    );
+  } finally {
+    await pg.close();
+  }
+});
+
+test("additional upgrade guard preserves records and rolls back an accidental record change", async () => {
+  const pg = await fixture();
+  try {
+    const tx = (statements: string[]) =>
+      pg.transaction(async (transaction) => {
+        const result = [];
+        for (const sql of statements) result.push(await transaction.query(sql));
+        return result;
+      });
+    await applySavedLookMigrations(tx);
+    const before = (
+      await pg.query(
+        "SELECT id,name,email,password_hash FROM users ORDER BY id",
+      )
+    ).rows;
+    await assert.rejects(
+      tx(
+        preservingBusinessRecords([
+          "UPDATE users SET name='Accidental update'",
+        ]),
+      ),
+    );
+    assert.deepEqual(
+      (
+        await pg.query(
+          "SELECT id,name,email,password_hash FROM users ORDER BY id",
+        )
+      ).rows,
+      before,
+    );
+    await applySavedLookMigrations(
+      (statements) => tx(preservingBusinessRecords(statements)),
+      true,
+    );
+    assert.deepEqual(
+      (
+        await pg.query(
+          "SELECT id,name,email,password_hash FROM users ORDER BY id",
+        )
+      ).rows,
+      before,
     );
   } finally {
     await pg.close();

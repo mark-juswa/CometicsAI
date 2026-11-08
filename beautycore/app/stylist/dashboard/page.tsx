@@ -1,14 +1,27 @@
-'use client';
-import { AppointmentServiceRecord } from '@/components/appointment-service-record';
-import type { ServiceRecord } from '@/lib/business/workflow-types';
-import { useAppointmentRefresh } from '@/lib/business/use-appointment-refresh';
-import { AppointmentLookPreview, type AppointmentLook } from '@/components/appointment-look';
+"use client";
+import { PortalWorkspace, PortalMetrics } from "@/components/portal-workspace";
+import { businessRequest } from "@/lib/business/client";
+import { WorkAvailability } from "@/components/work-availability";
+import { AppointmentServiceRecord } from "@/components/appointment-service-record";
+import type { ServiceRecord } from "@/lib/business/workflow-types";
+import { useAppointmentRefresh } from "@/lib/business/use-appointment-refresh";
+import {
+  AppointmentLookPreview,
+  type AppointmentLook,
+} from "@/components/appointment-look";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { CalendarDays, Clock, Users, CheckCircle2, ArrowRight, Sun } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import {
+  CalendarDays,
+  Clock,
+  Users,
+  CheckCircle2,
+  ArrowRight,
+  Sun,
+} from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 import {
   Card,
   StatusBadge,
@@ -17,10 +30,9 @@ import {
   formatDate,
   formatTime,
   formatPeso,
-} from '@/components/ui';
-import { salonDay } from '@/lib/business/dates';
-import AnimatedCounter from '@/components/AnimatedCounter';
-import type { AppointmentStatus } from '@/db/schema';
+} from "@/components/ui";
+import { salonDay } from "@/lib/business/dates";
+import type { AppointmentStatus } from "@/db/schema";
 
 interface Row extends ServiceRecord {
   look?: AppointmentLook | null;
@@ -39,12 +51,12 @@ export default function StylistDashboard() {
   const { user } = useAuth();
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const load = () => {
-    fetch('/api/appointments')
-      .then((r) => r.json())
+    businessRequest("/api/appointments")
       .then((d) => setRows(d.appointments ?? []))
-      .catch(() => setRows([]))
+      .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   };
   useEffect(load, []);
@@ -52,71 +64,108 @@ export default function StylistDashboard() {
 
   const now = new Date();
   const today = rows
-    .filter((r) => isSameDay(new Date(r.appointmentDate), now) && r.status !== 'cancelled')
-    .sort((a, b) => new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime());
+    .filter(
+      (r) =>
+        isSameDay(new Date(r.appointmentDate), now) && r.status !== "cancelled",
+    )
+    .sort(
+      (a, b) =>
+        new Date(a.appointmentDate).getTime() -
+        new Date(b.appointmentDate).getTime(),
+    );
 
   const upcoming = rows
     .filter(
       (r) =>
         new Date(r.appointmentDate).getTime() > now.getTime() &&
-        ['pending', 'confirmed'].includes(r.status),
+        ["pending", "confirmed"].includes(r.status),
     )
-    .sort((a, b) => new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime());
+    .sort(
+      (a, b) =>
+        new Date(a.appointmentDate).getTime() -
+        new Date(b.appointmentDate).getTime(),
+    );
 
-  const completed = rows.filter((r) => r.status === 'completed');
-  const uniqueClients = new Set(rows.map((r) => r.client?.id).filter(Boolean)).size;
+  const completed = rows.filter((r) => r.status === "completed");
+  const uniqueClients = new Set(rows.map((r) => r.client?.id).filter(Boolean))
+    .size;
   const earned = completed.reduce((sum, r) => sum + (r.totalPrice ?? 0), 0);
 
   const metrics = [
-    { label: "Today's Appointments", value: today.length, icon: Sun, accent: 'text-gold' },
-    { label: 'Upcoming', value: upcoming.length, icon: CalendarDays, accent: 'text-info' },
-    { label: 'Clients Served', value: uniqueClients, icon: Users, accent: 'text-purple-glow' },
-    { label: 'Completed', value: completed.length, icon: CheckCircle2, accent: 'text-success' },
+    {
+      label: "Today's Appointments",
+      value: today.length,
+      icon: Sun,
+      accent: "text-gold",
+    },
+    {
+      label: "Upcoming",
+      value: upcoming.length,
+      icon: CalendarDays,
+      accent: "text-info",
+    },
+    {
+      label: "Clients Served",
+      value: uniqueClients,
+      icon: Users,
+      accent: "text-purple-glow",
+    },
+    {
+      label: "Completed",
+      value: completed.length,
+      icon: CheckCircle2,
+      accent: "text-success",
+    },
   ];
 
-  const firstName = user?.name?.split(' ')[0] ?? '';
+  const firstName = user?.name?.split(" ")[0] ?? "";
 
   return (
-    <>
+    <PortalWorkspace>
+      {error && (
+        <p role="alert" className="mb-4 text-sm text-error">
+          {error}
+        </p>
+      )}
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="mb-8"
+        className="portal-hero"
       >
-        <h1 className="font-serif text-3xl text-white">Good day{firstName && `, ${firstName}`}</h1>
-        <p className="mt-1.5 text-[13px] text-muted">
-          {today.length > 0
-            ? `You have ${today.length} appointment${today.length > 1 ? 's' : ''} today.`
-            : 'Nothing on your schedule today.'}
-        </p>
+        <div>
+          <p className="portal-eyebrow">Your workday, organised</p>
+          <h1 className="font-serif text-3xl text-white">
+            Good day{firstName && `, ${firstName}`}
+          </h1>
+          <p className="mt-1.5 text-[13px] text-muted">
+            {today.length > 0
+              ? `You have ${today.length} appointment${today.length > 1 ? "s" : ""} today.`
+              : "Nothing on your schedule today."}
+          </p>
+        </div>
+        <Link
+          href="/stylist/appointments"
+          className="portal-button portal-primary"
+        >
+          Open my schedule
+          <ArrowRight size={15} />
+        </Link>
       </motion.div>
 
       {/* Metrics */}
-      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {loading
-          ? [0, 1, 2, 3].map((i) => <Skeleton key={i} className="h-28 w-full" />)
-          : metrics.map((m, i) => (
-              <motion.div
-                key={m.label}
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.35, delay: i * 0.07 }}
-              >
-                <Card>
-                  <div className="mb-2.5 flex items-start justify-between">
-                    <span className="text-[10px] font-semibold uppercase tracking-[1.5px] text-muted">
-                      {m.label}
-                    </span>
-                    <m.icon size={15} className={m.accent} />
-                  </div>
-                  <p className={`font-serif text-3xl ${m.accent}`}>
-                    <AnimatedCounter value={m.value} />
-                  </p>
-                </Card>
-              </motion.div>
-            ))}
-      </div>
+      <PortalMetrics
+        items={metrics.map((m) => ({
+          label: m.label,
+          value: loading ? "—" : m.value,
+          icon: m.icon,
+          note:
+            m.label === "Clients Served"
+              ? "Clients in your assigned bookings"
+              : "Your assigned appointments",
+        }))}
+      />
+      <WorkAvailability />
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Today */}
@@ -156,7 +205,7 @@ export default function StylistDashboard() {
                 >
                   <div className="shrink-0 text-center">
                     <p className="font-serif text-lg text-gold">
-                      {formatTime(r.appointmentDate).replace(/\s?[AP]M/i, '')}
+                      {formatTime(r.appointmentDate).replace(/\s?[AP]M/i, "")}
                     </p>
                     <p className="text-[9px] uppercase text-muted">
                       {formatTime(r.appointmentDate).match(/[AP]M/i)?.[0]}
@@ -167,12 +216,14 @@ export default function StylistDashboard() {
                       {r.serviceName}
                     </p>
                     <p className="truncate text-[11px] text-muted">
-                      {r.client?.name ?? 'Unknown client'}
+                      {r.client?.name ?? "Unknown client"}
                     </p>
                     <AppointmentLookPreview look={r.look} />
                     <AppointmentServiceRecord record={r} />
                     {r.notes && (
-                      <p className="mt-1.5 text-[11px] leading-relaxed text-secondary">{r.notes}</p>
+                      <p className="mt-1.5 text-[11px] leading-relaxed text-secondary">
+                        {r.notes}
+                      </p>
                     )}
                   </div>
                   <StatusBadge status={r.status} />
@@ -219,7 +270,9 @@ export default function StylistDashboard() {
                     <AppointmentLookPreview look={r.look} />
                   </div>
                   <span className="shrink-0 text-[12px] text-white">
-                    {formatPeso(r.totalPrice)}
+                    {r.totalPrice === null
+                      ? "Price unconfirmed"
+                      : formatPeso(r.totalPrice)}
                   </span>
                 </li>
               ))}
@@ -236,15 +289,17 @@ export default function StylistDashboard() {
               <p className="mb-1 text-[10px] font-semibold uppercase tracking-[1.5px] text-muted">
                 Revenue from Completed Services
               </p>
-              <p className="font-serif text-3xl text-gold">{formatPeso(earned)}</p>
+              <p className="font-serif text-3xl text-gold">
+                {formatPeso(earned)}
+              </p>
             </div>
             <p className="max-w-xs text-[11px] leading-relaxed text-muted">
               Across {completed.length} completed appointment
-              {completed.length !== 1 ? 's' : ''} assigned to you.
+              {completed.length !== 1 ? "s" : ""} assigned to you.
             </p>
           </div>
         </Card>
       )}
-    </>
+    </PortalWorkspace>
   );
 }

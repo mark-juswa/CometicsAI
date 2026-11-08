@@ -3,6 +3,7 @@ import {
   pgTable,
   uuid,
   text,
+  boolean,
   timestamp,
   varchar,
   integer,
@@ -12,6 +13,7 @@ import {
   bigint,
   index,
   uniqueIndex,
+  primaryKey,
   foreignKey,
   check,
 } from 'drizzle-orm/pg-core';
@@ -40,6 +42,8 @@ export const users = pgTable('users', {
   passwordHash: text('password_hash').notNull(),
   role: userRoleEnum('role').notNull().default('client'),
   avatar: text('avatar'),
+  phone: varchar('phone', { length: 40 }),
+  isActive: boolean('is_active').notNull().default(true),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
@@ -72,6 +76,7 @@ export const appointments = pgTable(
     serviceName: varchar('service_name', { length: 255 }).notNull(),
     serviceType: varchar('service_type', { length: 100 }).notNull(),
     appointmentDate: timestamp('appointment_date').notNull(),
+    durationMinutes: integer('duration_minutes').notNull().default(60),
     status: appointmentStatusEnum('status').notNull().default('pending'),
     totalPrice: integer('total_price'),
     notes: text('notes'),
@@ -90,6 +95,7 @@ export const appointments = pgTable(
     index('appointments_date_status_idx').on(table.appointmentDate, table.status),
     index('appointments_look_idx').on(table.aiGenerationId),
     index('appointments_completed_by_idx').on(table.completedBy),
+    check('appointment_duration_positive', sql`${table.durationMinutes} BETWEEN 1 AND 1440`),
   ],
 );
 
@@ -106,6 +112,32 @@ export const inventory = pgTable('inventory', {
   lastRestocked: timestamp('last_restocked'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
+
+// Stylist qualifications are stored as salon service groups, never inferred from names.
+export const stylistSpecialties = pgTable('stylist_specialties', {
+  stylistId: uuid('stylist_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  serviceType: varchar('service_type', { length: 40 }).notNull(),
+}, (t) => [
+  primaryKey({ name: 'stylist_specialties_pkey', columns: [t.stylistId, t.serviceType] }),
+  check('stylist_specialties_type_check', sql`${t.serviceType} IN ('hair','nail','makeup','treatment','massage','aesthetic')`),
+]);
+
+export const inventoryTransactions = pgTable('inventory_transactions', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  inventoryId: uuid('inventory_id').references(() => inventory.id, { onDelete: 'set null' }),
+  productName: varchar('product_name', { length: 255 }).notNull(),
+  direction: varchar('direction', { length: 3 }).notNull(),
+  quantity: integer('quantity').notNull(),
+  stockAfter: integer('stock_after').notNull(),
+  note: varchar('note', { length: 500 }),
+  recordedBy: uuid('recorded_by').notNull().references(() => users.id),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+}, (t) => [
+  index('inventory_transactions_item_created_idx').on(t.inventoryId, t.createdAt.desc()),
+  check('inventory_transactions_direction_check', sql`${t.direction} IN ('in','out')`),
+  check('inventory_transactions_quantity_check', sql`${t.quantity} > 0`),
+  check('inventory_transactions_stock_check', sql`${t.stockAfter} >= 0`),
+]);
 
 // ─── AI Generations ─────────────────────────────────────────────────────────
 export const aiGenerations = pgTable(
@@ -226,6 +258,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   clientAppointments: many(appointments, { relationName: 'clientAppointments' }),
   stylistAppointments: many(appointments, { relationName: 'stylistAppointments' }),
   generations: many(aiGenerations),
+  specialties: many(stylistSpecialties),
 }));
 
 export const clientProfilesRelations = relations(clientProfiles, ({ one }) => ({
@@ -233,6 +266,10 @@ export const clientProfilesRelations = relations(clientProfiles, ({ one }) => ({
     fields: [clientProfiles.userId],
     references: [users.id],
   }),
+}));
+
+export const stylistSpecialtiesRelations = relations(stylistSpecialties, ({ one }) => ({
+  stylist: one(users, { fields: [stylistSpecialties.stylistId], references: [users.id] }),
 }));
 
 export const appointmentsRelations = relations(appointments, ({ one }) => ({
@@ -277,6 +314,34 @@ export type ProductStatus = (typeof productStatusEnum.enumValues)[number];
 export type StyleType = (typeof styleTypeEnum.enumValues)[number];
 
 // Server-only endpoint metadata for the scheduled Kaggle demonstration.
+export const stylistWorkSettings = pgTable('stylist_work_settings', {
+  stylistId: uuid('stylist_id').primaryKey().references(() => users.id), available: boolean('available').notNull().default(false),
+  hours: jsonb('hours').$type<{ day: number; start: string; end: string }[]>().notNull().default([]),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+});
+export const clientConsultations = pgTable('client_consultations', {
+  id: uuid('id').primaryKey().defaultRandom(), clientId: uuid('client_id').notNull().references(() => users.id),
+  sourceKey: varchar('source_key', { length: 64 }).notNull(), feature: varchar('feature', { length: 20 }).notNull(),
+  snapshot: jsonb('snapshot').notNull().default({}), createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+}, t => [uniqueIndex('client_consultations_source_idx').on(t.clientId,t.sourceKey),uniqueIndex('client_consultations_id_owner_idx').on(t.id,t.clientId),check('client_consultations_feature_check',sql`${t.feature} IN ('hairstyle','nails','makeup')`)]);
+export const clientReferenceImages = pgTable('client_reference_images', {
+  id: uuid('id').primaryKey().defaultRandom(),clientId: uuid('client_id').notNull().references(() => users.id),consultationId: uuid('consultation_id').notNull(),imageData: text('image_data').notNull(),
+  imageHash: varchar('image_hash',{length:64}).notNull(),imageBytes: integer('image_bytes').notNull(),contentType: text('content_type').notNull(),width: integer('width').notNull(),height: integer('height').notNull(),
+  filename: varchar('filename',{length:255}).notNull(),createdAt: timestamp('created_at',{withTimezone:true}).notNull().defaultNow(),
+},t=>[foreignKey({columns:[t.consultationId,t.clientId],foreignColumns:[clientConsultations.id,clientConsultations.clientId]}),uniqueIndex('client_reference_images_session_hash_idx').on(t.consultationId,t.imageHash),index('client_reference_images_owner_idx').on(t.clientId,t.createdAt.desc(),t.id)]);
+export const clientConsultationResults = pgTable('client_consultation_results',{
+  consultationId:uuid('consultation_id').notNull(),clientId:uuid('client_id').notNull(),recommendationId:varchar('recommendation_id',{length:80}).notNull(),generationId:uuid('generation_id').notNull(),
+  createdAt:timestamp('created_at',{withTimezone:true}).notNull().defaultNow(),
+},t=>[primaryKey({columns:[t.consultationId,t.recommendationId,t.generationId]}),foreignKey({columns:[t.consultationId,t.clientId],foreignColumns:[clientConsultations.id,clientConsultations.clientId]}),foreignKey({columns:[t.generationId,t.clientId],foreignColumns:[aiGenerations.id,aiGenerations.clientId]})]);
+export const clientConsultationJobs = pgTable('client_consultation_jobs',{
+  jobId:uuid('job_id').primaryKey(),clientId:uuid('client_id').notNull(),consultationId:uuid('consultation_id').notNull(),recommendationId:varchar('recommendation_id',{length:80}).notNull(),
+},t=>[foreignKey({columns:[t.consultationId,t.clientId],foreignColumns:[clientConsultations.id,clientConsultations.clientId]})]);
+export const appointmentPayments = pgTable('appointment_payments',{
+  id:uuid('id').primaryKey().defaultRandom(),appointmentId:uuid('appointment_id').notNull().references(()=>appointments.id,{onDelete:'restrict'}),amount:integer('amount').notNull(),method:varchar('method',{length:20}).notNull(),reference:varchar('reference',{length:160}),
+  requestId:uuid('request_id').notNull().unique(),recordedBy:uuid('recorded_by').notNull().references(()=>users.id),createdAt:timestamp('created_at',{withTimezone:true}).notNull().defaultNow(),
+},t=>[index('appointment_payments_appointment_idx').on(t.appointmentId,t.createdAt),check('appointment_payments_amount_check',sql`${t.amount} BETWEEN 1 AND 100000000`),check('appointment_payments_method_check',sql`${t.method} IN ('cash','card','bank','other')`)]);
+
 export const aiRuntimeEndpoints = pgTable('ai_runtime_endpoints', {
   slot: text('slot').primaryKey(),
   sessionId: uuid('session_id').notNull(),

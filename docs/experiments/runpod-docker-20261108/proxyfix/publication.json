@@ -1,0 +1,14 @@
+{
+  "status": "PUBLISHED_GPU_ACCEPTANCE_PENDING",
+  "verified_at_utc": "2026-11-08T15:52:17.062615+00:00",
+  "tag": "markuos/beautycore-runpod:styles-20261106-01-a6000-proxyfix-614bddb4352e",
+  "image_digest": "sha256:614bddb4352ef3127251583f062240ef1fb749e08a7cb137027f3c1cbf090ffa",
+  "immutable_image": "markuos/beautycore-runpod@sha256:614bddb4352ef3127251583f062240ef1fb749e08a7cb137027f3c1cbf090ffa",
+  "platform": "linux/amd64",
+  "local_image_size_bytes": 5140736154,
+  "local_linux_checks": "LOCAL_LINUX_IMAGE_PASS_GPU_ACCEPTANCE_PENDING",
+  "private_models_in_image": false,
+  "real_gpu_generation": false,
+  "runpod_resources_created": false,
+  "website_cutover": false
+}

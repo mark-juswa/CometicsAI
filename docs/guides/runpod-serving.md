@@ -7,12 +7,18 @@ This is the preparation guide for release `styles-20261106-01`, 18 Hair, 13 Make
 If selecting the reported Community RTX A6000 offer, change the image to:
 
 ```
-markuos/beautycore-runpod@sha256:ced910be7e93b84f178c8841aefc5bf47099f4442948d7538664c04fe84b0dd4
+markuos/beautycore-runpod@sha256:614bddb4352ef3127251583f062240ef1fb749e08a7cb137027f3c1cbf090ffa
 ```
 
 Select exactly **NVIDIA RTX A6000 (48 GB)**. This separate candidate retains the same model/release/settings and enforces at least 44 GiB visible VRAM, 30 GiB allocated host RAM, the exact reviewed packages and compute capability 8.6 or newer. The original 3090 image below remains available for 3090 hardware. All local Linux checks and 30 tests pass; real A6000 GPU acceptance remains open. [Candidate evidence](../experiments/runpod-a6000-candidate-20261108.md).
 
 Keep the existing secrets, disks, HTTP8888 and default notebook startup. The upload/stage/start steps below are identical. Leave the website URL empty until real validation. The reported USD0.33/hour is a catalog GPU quote with allocation unconfirmed, not a promise of capacity or total cost. Rebuild this candidate using `--profile rtx-a6000` with the packaging command and a new output directory; the default packaging profile remains 3090.
+
+## Existing Pod login correction
+
+The corrected A6000 image above includes the Runpod reverse proxy origin fix. In the existing Pod's Edit settings, replace the image digest and preserve the volume, private secrets, HTTP8888 and empty startup override. Keep the notebook password at 20+ characters. Apply the image update, then open the Pod HTTPS8888 URL at `/lab` without any `?token=` query and log in. Provider variable `RUNPOD_POD_ID` binds the allowed origin to this Pod. Do not disable XSRF checks or allow wildcard origins. [Reproduced failure and verification](../experiments/runpod-jupyter-proxy-fix-20261108.md).
+
+The earlier A6000 image could serve login but reject its POST through the proxy. Local password auth alone did not establish Runpod proxy compatibility. The corrected image passes the actual proxy header regression as well as 31 unit tests and all earlier Linux checks. Live browser recovery still requires the Pod update. The Runpod readiness badge can continue probing with a token that this password protected server does not accept; the badge alone is not proof of browser login failure or success.
 
 ## Ready image (RTX 3090)
 
@@ -34,9 +40,9 @@ The default container opens password protected JupyterLab for familiar browser f
 
 ## Prepare and build the image once
 
-These commands are optional when using the published image above. If rebuilding from a private package, use corrected v3 or a newly prepared context. The earlier v1 and v2 packages preserve the first recipe, which failed the real MediaPipe native model check.
+These commands are optional when using the current published A6000 image above. For rebuilding, generate a fresh context from the current checkout. Historical v1/v2 packages lack the MediaPipe native fix; v3 and the first A6000 package predate the Runpod proxy correction. Do not use those historical contexts to claim the current login fix.
 
-If you already have the prepared private ZIP, extract it into `artifacts/beautycore-runpod-20261108-v3/` under your repository checkout and skip the package creation command. Its `build-context/` is ready for the Docker command below. If you extract elsewhere, replace the final build context path in that command with your actual `build-context/` folder.
+Choose a new package output directory when rebuilding. The path below is an example; do not overwrite an existing artifact. Add `--profile rtx-a6000` for A6000 hardware. The unchanged default is RTX3090, whose older published image does not include this new proxy fix.
 
 From the repository root, with the original private `.bin` inputs in local `client/`:
 

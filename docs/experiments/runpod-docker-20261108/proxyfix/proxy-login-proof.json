@@ -1,0 +1,12 @@
+{
+  "real_gpu_generation": false,
+  "cases": {
+    "baseline_login": 404,
+    "missing_xsrf": 403,
+    "unrelated_origin": 404,
+    "fixed_login": 302,
+    "authenticated_contents": 200,
+    "authenticated_lab": 200
+  },
+  "status": "PASS"
+}

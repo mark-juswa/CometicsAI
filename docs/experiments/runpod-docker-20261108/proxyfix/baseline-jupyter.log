@@ -1,0 +1,13 @@
+[I 2026-11-08 15:47:48.274 LabApp] JupyterLab extension loaded from /opt/notebook/lib/python3.12/site-packages/jupyterlab
+[I 2026-11-08 15:47:48.274 LabApp] JupyterLab application directory is /opt/notebook/share/jupyter/lab
+[I 2026-11-08 15:47:48.274 LabApp] Extension Manager is 'pypi'.
+[C 2026-11-08 15:47:48.341 ServerApp] 
+    
+    To access the server, open this file in a browser:
+        file:///root/.local/share/jupyter/runtime/jpserver-1-open.html
+    Or copy and paste one of these URLs:
+        http://10ff2712ce17:8888/lab
+        http://127.0.0.1:8888/lab
+    The server is listening on all interfaces, so any hostname or IP of this machine will work.
+[W 2026-11-08 15:47:48.927 ServerApp] Blocking Cross Origin API request for /login.  Origin: https://fixturepodabc-8888.proxy.runpod.net, Host: 100.65.37.38:60292
+[W 2026-11-08 15:47:48.931 ServerApp] 404 POST /login?next=%2Flab (@172.17.0.1) 4.63ms referer=https://fixturepodabc-8888.proxy.runpod.net/login

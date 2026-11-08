@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "verified_at_utc": "2026-11-08T15:53:01.409183+00:00",
+  "anonymous_manifest_http": 200,
+  "digest": "sha256:614bddb4352ef3127251583f062240ef1fb749e08a7cb137027f3c1cbf090ffa",
+  "platforms": [
+    {
+      "architecture": "amd64",
+      "os": "linux"
+    },
+    {
+      "architecture": "unknown",
+      "os": "unknown"
+    }
+  ],
+  "credentials_used": false,
+  "registry_password_required_for_pull": false
+}

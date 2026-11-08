@@ -346,6 +346,17 @@ def serve(workspace, inputs):
                 log.close()
 
 
+def notebook_proxy_config(pod_id):
+    """Permit only this Pod's HTTPS origin when Runpod forwards an internal Host."""
+    if not pod_id:
+        return ""
+    if not re.fullmatch(r"[a-z0-9]{5,64}", pod_id):
+        raise ValueError("Invalid RUNPOD_POD_ID")
+    origin = "https://" + pod_id + "-8888.proxy.runpod.net"
+    return ("c.ServerApp.allow_origin = " + repr(origin) + "\n"
+            "c.ServerApp.trust_xheaders = True\n")
+
+
 def notebook(workspace):
     password = os.environ.get("JUPYTER_PASSWORD", "")
     if len(password) < 16:
@@ -360,7 +371,8 @@ def notebook(workspace):
     config.write_text("from jupyter_server.auth.identity import PasswordIdentityProvider\n"
         "c.ServerApp.identity_provider_class = PasswordIdentityProvider\n"
         "c.PasswordIdentityProvider.hashed_password = " + repr(result.stdout.strip()) + "\n"
-        "c.ServerApp.root_dir = '/workspace'\n", encoding="utf-8")
+        "c.ServerApp.root_dir = '/workspace'\n" +
+        notebook_proxy_config(os.environ.get("RUNPOD_POD_ID", "")), encoding="utf-8")
     config.chmod(0o600)
     os.execv("/opt/notebook/bin/jupyter-lab", ["jupyter-lab", "--config", str(config), "--ip=0.0.0.0",
              "--port=8888", "--no-browser", "--allow-root", "--log-level=WARN"])

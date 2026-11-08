@@ -115,6 +115,20 @@ def test_unknown_profile_fails_without_creating_output(tmp_path):
     assert not (tmp_path / "output").exists()
 
 
+def test_notebook_proxy_trust_is_bound_to_this_pod_without_disabling_xsrf():
+    assert runtime.notebook_proxy_config("") == ""
+    source = runtime.notebook_proxy_config("fixturepodabc")
+    settings = SimpleNamespace(ServerApp=SimpleNamespace())
+    exec(source, {"c": settings})
+    assert settings.ServerApp.allow_origin == "https://fixturepodabc-8888.proxy.runpod.net"
+    assert settings.ServerApp.trust_xheaders is True
+    assert not hasattr(settings.ServerApp, "disable_check_xsrf")
+    assert "*" not in source
+    for invalid in ("../other", "https://example.com", "pod\nprint('bad')", "pod;bad"):
+        with pytest.raises(ValueError, match="RUNPOD_POD_ID"):
+            runtime.notebook_proxy_config(invalid)
+
+
 @pytest.mark.parametrize("field", ["python", "torch", "cuda", "gpu", "packages", "diffusers_commit",
                                     "gpu_total_bytes", "compute_capability", "cuda_available", "ram"])
 def test_candidate_profile_rejects_wrong_or_insufficient_runtime(field):

@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
-import ProtectedRoute from '@/components/ProtectedRoute';
-import ClientSidebar from '@/components/ClientSidebar';
+import ProtectedRoute from "@/components/ProtectedRoute";
+import ClientSidebar from "@/components/ClientSidebar";
+import { BookingNotifications } from "@/components/booking-notifications";
 
 export default function ClientLayout({
   children,
@@ -12,7 +13,8 @@ export default function ClientLayout({
     <ProtectedRoute role="client">
       <div className="min-h-screen">
         <ClientSidebar />
-        <div className="lg:pl-60">
+        <BookingNotifications />
+        <div className="pt-16 lg:pl-60">
           <main className="px-6 py-8 lg:px-10">{children}</main>
         </div>
       </div>

@@ -27,10 +27,11 @@ export interface ServiceGroup {
   categories: ServiceCategory[];
 }
 
+export const APPOINTMENT_DURATION_MINUTES = 90;
 const item = (name: string, price: string): ServiceItem => ({
   name,
   price,
-  durationMinutes: Number(/\((\d{2,3})\s*min\)/i.exec(name)?.[1] ?? 60),
+  durationMinutes: APPOINTMENT_DURATION_MINUTES,
 });
 
 export const serviceGroups: ServiceGroup[] = [
@@ -220,7 +221,7 @@ export const allServices = serviceGroups.flatMap((g) =>
 
 export function serviceDurationMinutes(name: string, serviceType: string): number {
   const service = allServices.find((item) => item.name === name && item.serviceType === serviceType);
-  return service?.durationMinutes ?? 60;
+  return service?.durationMinutes ?? APPOINTMENT_DURATION_MINUTES;
 }
 
 /** "Mula ₱1,500" -> 1500. Returns null for "Libre" / "Konsultasyon". */

@@ -1,0 +1,5 @@
+
+> beautycore@0.0.0 db:apply:scheduling
+> tsx scripts/apply-booking-scheduling.ts --apply
+
+{"applied":true,"durationMinutes":90,"existingRecordsPreserved":true,"preservedRecordCounts":[{"name":"ai_generations","count":"75"},{"name":"appointment_product_usage","count":"0"},{"name":"appointment_reviews","count":"0"},{"name":"appointments","count":"29"},{"name":"client_profiles","count":"9"},{"name":"inventory","count":"18"},{"name":"inventory_transactions","count":"0"},{"name":"stylist_specialties","count":"9"},{"name":"users","count":"14"}]}

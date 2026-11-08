@@ -17,6 +17,8 @@ for (const name of [
   'HTMLInputElement',
   'Event',
   'MouseEvent',
+  'CustomEvent',
+  'StorageEvent',
   'getComputedStyle',
 ])
   Object.defineProperty(globalThis, name, {
@@ -26,6 +28,7 @@ for (const name of [
   });
 Object.defineProperty(globalThis, 'navigator', { value: dom.window.navigator, configurable: true });
 globalThis.self = window;
+globalThis.localStorage = window.localStorage;
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 globalThis.confirm = () => true;
 window.matchMedia = () => ({
@@ -55,6 +58,13 @@ const { AuthProvider } = await import('../context/AuthContext.tsx');
 const { default: LoginForm } = await import('../app/(public)/login/login-form.tsx');
 const { SavedLookActions } = await import('../components/saved-look-actions.tsx');
 const { default: NailsPage } = await import('../app/client/nail-studio/page.tsx');
+const { default: HairPage } = await import('../app/client/hair-studio/page.tsx');
+const { default: MakeupPage } = await import('../app/client/makeup-studio/page.tsx');
+const { BookingNotifications } = await import('../components/booking-notifications.tsx');
+const { ConsultationHistory } = await import('../components/consultation-history.tsx');
+const { bookingAvailability } = await import('../lib/business/booking-availability.ts');
+const { bookingNotifications } = await import('../lib/business/booking-notifications.ts');
+const { stylistServiceHistory } = await import('../lib/business/stylist-history.ts');
 const { default: SavedLooksPage } = await import('../app/client/saved-looks/page.tsx');
 const { default: BookingForm } = await import('../app/(public)/booking/booking-form.tsx');
 const { default: StylistPage } = await import('../app/stylist/appointments/page.tsx');
@@ -74,7 +84,7 @@ const { WorkAvailability } = await import('../components/work-availability.tsx')
 const { ReferenceImagePicker } = await import('../components/reference-image-picker.tsx');
 const { ClientHistory } = await import('../components/client-history.tsx');
 const { workAvailability } = await import('../lib/business/work-availability.ts');
-const { clientHistory,clientImages,paymentHistory } = await import('../lib/business/customer-history.ts');
+const { clientHistory,clientImages,paymentHistory,consultationHistory,archiveConsultationResponse } = await import('../lib/business/customer-history.ts');
 const {
   bookingApi,
   savedLooks,
@@ -170,9 +180,9 @@ async function transport(input, init = {}) {
         ARRAY(SELECT service_type FROM stylist_specialties s WHERE s.stylist_id=u.id) AS specialties
         FROM users u WHERE u.role='stylist'`),
     });
-  if (url.pathname === '/api/ai/features/nails/styles')
+  if (/^\/api\/ai\/features\/(hairstyle|makeup|nails)\/styles$/.test(url.pathname))
     return Response.json(
-      Object.entries(catalog.nails).map(([id, info]) => ({
+      Object.entries(catalog[url.pathname.split('/')[4]]).map(([id, info]) => ({
         id,
         name: info.name,
         description: 'Fixture style',
@@ -210,6 +220,9 @@ async function transport(input, init = {}) {
   if (method !== 'GET') headers.set('origin', 'http://localhost:3000');
   const req = new Request(url, { ...init, method, headers });
   const extra={query,actor:deps.actor};
+  if(url.pathname==='/api/booking-notifications')return bookingNotifications(req,extra);
+  if(url.pathname.startsWith('/api/admin/stylists/'))return stylistServiceHistory(req,url.pathname.split('/')[4],extra);
+  if(url.pathname.startsWith('/api/consultation-history'))return consultationHistory(req,extra,url.pathname.split('/')[3]);
   if(url.pathname==='/api/stylist/availability')return workAvailability(req,extra);
   if(url.pathname.startsWith('/api/client-images'))return clientImages(req,extra,url.pathname.split('/').filter(Boolean)[2]);
   if(url.pathname.startsWith('/api/admin/clients/')){const parts=url.pathname.split('/').filter(Boolean);return clientHistory(req,parts[3],extra,parts[4]==='payments');}
@@ -226,6 +239,7 @@ async function transport(input, init = {}) {
     return Response.json({
       inventory: await query('SELECT id,product_name AS \"productName\",brand FROM inventory'),
     });
+  if(url.pathname==='/api/appointments/availability')return bookingAvailability(req,{query});
   if (url.pathname.startsWith('/api/appointments'))
     return bookingApi(req, url.pathname.split('/')[3], deps);
   if (url.pathname === '/api/admin/daily-services') return dailyServices(req, deps);
@@ -247,6 +261,7 @@ test.before(async () => {
     '0007_business_controls.sql',
     '0008_work_availability.sql',
     '0009_customer_history.sql',
+    '0010_ninety_minute_bookings.sql',
   ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   png = await sharp({ create: { width: 64, height: 64, channels: 3, background: '#e1c9c2' } })
@@ -277,6 +292,8 @@ test.before(async () => {
 });
 test.beforeEach(async () => {
   cleanup();
+  window.localStorage.clear();
+  window.history.replaceState(null,'','/');
   calls = [];
   pushes = [];
   actor = C;
@@ -397,8 +414,10 @@ test('look-aware booking and assigned stylist preview complete against the same 
   fireEvent.change(screen.getByLabelText(/Date \(Philippine time\)/), {
     target: { value: '2030-10-17' },
   });
-  fireEvent.change(screen.getByLabelText('Time', { exact: true }), { target: { value: '10:00' } });
+  await waitFor(()=>assert.equal(screen.getByLabelText(/Preferred Stylist/).disabled,false));
   fireEvent.change(screen.getByLabelText(/Preferred Stylist/), { target: { value: S } });
+  await waitFor(()=>assert.equal(screen.getByLabelText('Time', { exact: true }).disabled,false));
+  fireEvent.change(screen.getByLabelText('Time', { exact: true }), { target: { value: '10:00' } });
   fireEvent.click(screen.getByRole('button', { name: 'Confirm Booking' }));
   await screen.findByText('Appointment confirmed');
   const appointment = (
@@ -514,7 +533,7 @@ test('look information displays named service prices and labels saved/current es
 });
 
 test('stylist availability switch saves immediately and retains the existing booking',async()=>{
- await transport('/api/appointments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({serviceName:"Men's Cut",serviceType:'hair',appointmentDate:'2030-10-17T02:00:00Z',stylistId:S})});
+ await transport('/api/appointments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({serviceName:"Women's Cut & Blowdry",serviceType:'hair',appointmentDate:'2030-10-17T02:00:00Z',stylistId:S})});
  actor=S;mount(WorkAvailability);const toggle=await screen.findByRole('switch',{name:'Available to Work'});fireEvent.click(toggle);
  await waitFor(async()=>assert.equal((await query('SELECT available FROM stylist_work_settings WHERE stylist_id=$1',[S]))[0].available,false));
  assert.equal((await query('SELECT status FROM appointments'))[0].status,'confirmed');
@@ -533,8 +552,8 @@ test('saved image picker previews and loads original image bytes without startin
 });
 
 test('admin client history displays real services and records one actual payment receipt',async()=>{
- await transport('/api/appointments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({serviceName:"Men's Cut",serviceType:'hair',appointmentDate:'2030-10-17T02:00:00Z',stylistId:S})});
- actor=A;mount(ClientHistory,{clientId:C});await screen.findByRole('heading',{name:"Men's Cut"});
+ await transport('/api/appointments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({serviceName:"Women's Cut & Blowdry",serviceType:'hair',appointmentDate:'2030-10-17T02:00:00Z',stylistId:S})});
+ actor=A;mount(ClientHistory,{clientId:C});await screen.findByRole('heading',{name:"Women's Cut & Blowdry"});
  assert.ok(screen.getByText('No payment recorded'));
  fireEvent.click(screen.getByRole('button',{name:'Record payment'}));
  fireEvent.change(screen.getByLabelText('Amount (whole pesos)'),{target:{value:'50'}});
@@ -791,4 +810,135 @@ test('stylist client directory derives searchable summaries only from their own 
  fireEvent.change(screen.getByLabelText('Search clients'),{target:{value:'client@example.invalid'}});
  await screen.findByText('Client One');
  assert.equal(calls.filter(call=>call.path.startsWith('/api/admin/clients')).length,0);
+});
+
+test('public price list hides the mens cut while the booking catalog retains it',async()=>{
+ window.history.replaceState(null,'','/services#hair-design');mount(PublicServices);
+ await screen.findByRole('heading',{name:'Hair Design',level:2});
+ assert.ok(screen.getByText("Women's Cut & Blowdry"));assert.equal(screen.queryByText("Men's Cut"),null);
+ cleanup();mount(BookingForm,{},'service=hair-design',true);
+ const service=await screen.findByLabelText('Service',{exact:true});
+ await waitFor(()=>assert.ok([...service.options].some(option=>option.value==="Men's Cut")));
+ assert.equal(calls.filter(call=>call.method==='POST').length,0);
+});
+
+for(const [label,Component] of [['Hair',HairPage],['Makeup',MakeupPage],['Nail',NailsPage]]){
+ test(label+' studio reuses a private existing image without sending a generation request',async()=>{
+  await transport('/api/saved-looks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({feature:'nails',styleId:result.style.id,image:result.image.data_url,status:'completed',sourceKind:'manual'})});
+  mount(Component);fireEvent.click(screen.getByRole('button',{name:'Choose an existing image'}));
+  fireEvent.click(await screen.findByRole('button',{name:/AI-generated look/}));
+  fireEvent.click(screen.getByRole('button',{name:'Use this image'}));
+  await waitFor(()=>assert.ok(screen.queryByRole('button',{name:'Remove'})));
+  assert.equal(screen.queryByRole('button',{name:'Use this image'}),null);
+  assert.equal(calls.filter(call=>call.method==='POST'&&(call.path.endsWith('/generate')||call.path.endsWith('/generation'))).length,0);
+  assert.ok(calls.some(call=>call.path.endsWith('/image')&&call.method==='GET'));
+ });
+}
+
+test('client and stylist booking alerts remain visible, link to a booking, and keep read state per account',async()=>{
+ await transport('/api/appointments',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({serviceName:'Gel Manicure',serviceType:'nail',appointmentDate:'2030-10-17T02:00:00Z',stylistId:S})});
+ const first=(await query('SELECT id FROM appointments'))[0].id;
+ mount(BookingNotifications,{},'',true);
+ await screen.findByRole('button',{name:'Booking notifications, 1 unread'});
+ const link=screen.getByRole('link',{name:/1 unread booking update/});assert.equal(link.getAttribute('href'),'/client/appointments#booking-'+first);
+ let opened=null;const capture=event=>{opened=event.detail;};window.addEventListener('booking-notification-open',capture,{once:true});
+ fireEvent.click(link);await waitFor(()=>assert.equal(opened,first));
+ assert.ok(JSON.parse(window.localStorage.getItem('beautycore:booking-alerts:v1:client:'+C)).length===1);
+ await screen.findByRole('button',{name:'Booking notifications',exact:true});
+ await transport('/api/appointments',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({serviceName:'Makeup Application',serviceType:'makeup',appointmentDate:'2030-10-18T02:00:00Z',stylistId:S})});
+ fireEvent(window,new Event('appointments-updated'));
+ await screen.findByRole('button',{name:'Booking notifications, 1 unread'});
+ fireEvent.click(screen.getByRole('button',{name:'Booking notifications, 1 unread'}));
+ assert.ok(await screen.findByRole('heading',{name:'Booking updates'}));
+ assert.ok(screen.getAllByRole('link',{name:/Makeup Application/}).length>=1);
+ cleanup();actor=S;mount(BookingNotifications,{},'',true);
+ await screen.findByRole('button',{name:'Booking notifications, 2 unread'});
+ assert.match(screen.getByRole('link',{name:/2 unread booking updates/}).getAttribute('href'),/^\/stylist\/appointments#booking-/);
+});
+
+test('admin opens a stylist to inspect completed services and filter their history',async()=>{
+ await query("INSERT INTO appointments(client_id,stylist_id,service_name,service_type,appointment_date,status,total_price) VALUES($1,$2,'Completed cut','hair','2030-10-17 02:00:00','completed',350),($1,$2,'Pending cut','hair','2030-10-18 02:00:00','pending',350)",[C,S]);
+ actor=A;mount(AdminStylists);
+ fireEvent.click(await screen.findByRole('button',{name:'View services by Stylist One'}));
+ await screen.findByRole('dialog',{name:'Stylist One'});
+ assert.ok(await screen.findByText('Completed cut'));
+ assert.equal(screen.queryByText('Pending cut'),null);
+ fireEvent.change(screen.getByLabelText('Stylist services from'),{target:{value:'2030-10-18'}});
+ await screen.findByText('No completed services in this period');
+ fireEvent.click(screen.getByRole('button',{name:'All dates'}));
+ await screen.findByText('Completed cut');
+});
+
+test('consultation history offers an owner-bound download for an unsaved archived generated look',async()=>{
+ const {signConsultationHandle}=await import('../lib/ai/consultation-handle.ts');const {randomUUID}=await import('node:crypto');const secret='archive-download-test-secret-'.repeat(3);
+ const handle=await signConsultationHandle(C,randomUUID(),new Date(Date.now()+3600000).toISOString(),secret);
+ await archiveConsultationResponse(new Request('http://localhost:3000/api/ai/consultations',{method:'POST'}),Response.json({...consultationState,handle}),['consultations'],C,query,secret,134217728);
+ const session=(await query('SELECT id FROM client_consultations'))[0].id;
+ await archiveConsultationResponse(new Request('http://localhost:3000/api/ai/consultations/recommendations/rec-1/generation',{method:'POST',headers:{'x-ai-consultation-handle':handle}}),Response.json({generation:{recommendation_id:'rec-1',status:'completed'},result}),['consultations','recommendations','rec-1','generation'],C,query,secret,134217728);
+ mount(ConsultationHistory,{sessionId:session});const download=await screen.findByRole('link',{name:'Download Nude Pink Gloss'});
+ assert.match(download.getAttribute('href'),/\/api\/saved-looks\/.*\/image\?download=1$/);
+ const response=await transport(download.getAttribute('href'));assert.equal(response.status,200);assert.match(response.headers.get('Content-Disposition'),/^attachment/);assert.deepEqual(Buffer.from(await response.arrayBuffer()),png);
+ assert.equal((await query('SELECT saved_at FROM ai_generations'))[0].saved_at,null);
+ assert.equal(calls.filter(call=>call.path.endsWith('/generation')&&call.method==='POST').length,0);
+});
+
+test('a stylist booking link opens the requested visit even when it is on a later page',async()=>{
+ let target='';for(let index=0;index<12;index++){
+  const rows=await query("INSERT INTO appointments(client_id,stylist_id,service_name,service_type,appointment_date,status,total_price) VALUES($1,$2,$3,'hair',$4::timestamp,'confirmed',350) RETURNING id",[C,S,'Scheduled visit '+(index+1),'2030-10-'+String(17+index)+' 02:00:00']);
+  if(index===11)target=rows[0].id;
+ }
+ actor=S;window.history.replaceState(null,'','/stylist/appointments#booking-'+target);mount(StylistPage);
+ await screen.findByRole('heading',{name:'Scheduled visit 12'});
+ await waitFor(()=>assert.equal(document.getElementById('booking-'+target).open,true));
+ assert.match(screen.getByRole('navigation',{name:'Pagination'}).textContent,/Page 2 of 2/);
+});
+
+
+test('Book This Look recovers a lost save response with one saved record and no generation',async()=>{
+ let saves=0;globalThis.fetch=async(input,init)=>{
+  if(String(input)==='/api/saved-looks'&&init?.method==='POST'){
+   saves++;const response=await transport(input,init);if(saves===1)throw new TypeError('connection lost after commit');return response;
+  }
+  return transport(input,init);
+ };
+ try{
+  mount(SavedLookActions,{feature:'nails',result});
+  fireEvent.click(screen.getByRole('button',{name:'Book This Look'}));
+  await waitFor(()=>assert.equal(pushes.length,1),{timeout:4000});
+  assert.equal(saves,2);assert.match(pushes[0],/^\/booking\?look=/);
+  assert.equal((await query('SELECT count(*)::int AS n FROM ai_generations'))[0].n,1);
+  assert.equal(calls.some(c=>c.path.endsWith('/generate')),false);
+ }finally{globalThis.fetch=transport;}
+});
+
+test('calendar disables overlapping times and keeps the selected stylist',async()=>{
+ await transport('/api/appointments',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({serviceName:"Women's Cut & Blowdry",serviceType:'hair',appointmentDate:'2030-10-17T01:00:00Z',stylistId:S})});
+ mount(BookingForm,{},'service=hair-design',true);await screen.findByLabelText('Service',{exact:true});
+ fireEvent.change(screen.getByLabelText('Service',{exact:true}),{target:{value:"Women's Cut & Blowdry"}});
+ await waitFor(()=>assert.equal(screen.getByLabelText(/Preferred Stylist/).disabled,false));
+ fireEvent.change(screen.getByLabelText(/Preferred Stylist/),{target:{value:S}});
+ fireEvent.change(screen.getByLabelText(/Date \(Philippine time\)/),{target:{value:'2030-10-17'}});
+ await waitFor(()=>assert.equal(screen.getByLabelText('Time',{exact:true}).disabled,false));
+ const select=screen.getByLabelText('Time',{exact:true});
+ for(const time of ['09:00','09:30','10:00'])assert.equal([...select.options].find(o=>o.value===time)?.disabled,true);
+ assert.equal([...select.options].find(o=>o.value==='10:30')?.disabled,false);
+ assert.equal(screen.getByLabelText(/Preferred Stylist/).value,S);
+ fireEvent.change(select,{target:{value:'10:30'}});fireEvent.click(screen.getByRole('button',{name:'Confirm Booking'}));
+ await screen.findByText('Appointment confirmed');assert.equal((await query('SELECT count(*)::int AS n FROM appointments'))[0].n,2);
+});
+
+
+test('look-aware booking can reload a temporarily unavailable saved look',async()=>{
+ const response=await transport('/api/saved-looks',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({feature:'nails',styleId:result.style.id,image:result.image.data_url,status:'completed',sourceKind:'manual'})});
+ const id=(await response.json()).look.id;let reads=0;
+ globalThis.fetch=async(input,init)=>{
+  if(String(input)==='/api/saved-looks/'+id&&++reads===1)return Response.json({error:'Temporary saved look failure'},{status:503});
+  return transport(input,init);
+ };
+ try{
+  mount(BookingForm,{},'look='+id,true);await screen.findByText('Temporary saved look failure');
+  fireEvent.click(screen.getByRole('button',{name:'Retry loading look'}));
+  await screen.findByText('Booking with Nude Pink Gloss');assert.equal(reads,2);
+  assert.equal(screen.getByLabelText('Service',{exact:true}).options[1].value,'Classic Manicure');
+ }finally{globalThis.fetch=transport;}
 });

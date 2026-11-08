@@ -6,6 +6,7 @@ import {
   ArrowRight,
   ImageIcon,
   Sparkles,
+  Download,
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -206,18 +207,33 @@ export function ConsultationHistory({ sessionId }: { sessionId?: string }) {
                         Selected in this consultation
                       </p>
                     )}
-                    <button
-                      type="button"
-                      className="studio-secondary-button"
-                      disabled={!!busy || !!asset.savedAt}
-                      onClick={() => void save(asset)}
-                    >
-                      {busy === asset.id
-                        ? "Saving…"
-                        : asset.savedAt
-                          ? "Saved to My Looks"
-                          : "Save Look"}
-                    </button>
+                    <div className="flex flex-wrap gap-2">
+                      <a
+                        className="studio-secondary-button inline-flex items-center gap-2"
+                        href={asset.imageUrl + "?download=1"}
+                        download
+                        aria-label={"Download " + asset.name}
+                      >
+                        <Download size={14} />
+                        Download image
+                      </a>
+                      <button
+                        type="button"
+                        className="studio-secondary-button"
+                        disabled={!!busy || !!asset.savedAt}
+                        onClick={() => void save(asset)}
+                      >
+                        {busy === asset.id
+                          ? "Saving…"
+                          : asset.savedAt
+                            ? "Saved to My Looks"
+                            : "Save Look"}
+                      </button>
+                    </div>
+                    <p className="mt-3 text-xs leading-relaxed text-muted">
+                      Download this image to upload it in another AI
+                      consultation.
+                    </p>
                   </article>
                 ))}
               </div>

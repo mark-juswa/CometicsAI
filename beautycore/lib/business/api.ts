@@ -120,7 +120,8 @@ export function savedLooks(
         headers: {
           ...PRIVATE,
           'Content-Type': match[1],
-          'Content-Disposition': 'inline',
+          'Content-Disposition': new URL(request.url).searchParams.get('download') === '1'
+            ? `attachment; filename="andreas-${identity}.${match[1] === 'image/jpeg' ? 'jpg' : 'png'}"` : 'inline',
           'X-Content-Type-Options': 'nosniff',
           'Cross-Origin-Resource-Policy': 'same-origin',
         },

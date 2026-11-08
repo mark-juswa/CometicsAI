@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../components/portal-workspace.css";
+@import "../components/booking-notifications.css";
 
 @layer components {
   .management-shell { width: 100%; max-width: 1600px; margin-inline: auto; }

@@ -15,10 +15,17 @@ export async function applySavedLookMigrations(
       "0007_business_controls.sql",
       "0008_work_availability.sql",
       "0009_customer_history.sql",
+      "0010_ninety_minute_bookings.sql",
     ],
   ];
   for (const names of additionalOnly
-    ? [["0008_work_availability.sql", "0009_customer_history.sql"]]
+    ? [
+        [
+          "0008_work_availability.sql",
+          "0009_customer_history.sql",
+          "0010_ninety_minute_bookings.sql",
+        ],
+      ]
     : groups) {
     const statements = names.flatMap((name) =>
       readFileSync(new URL("../db/migrations/" + name, import.meta.url), "utf8")

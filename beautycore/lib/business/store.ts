@@ -35,7 +35,7 @@ export function lookView(row: Record<string, unknown>) {
     imageUrl: `/api/saved-looks/${row.id}/image`,
   };
 }
-const appointmentFields = `a.id,a.client_id AS "clientId",a.stylist_id AS "stylistId",a.service_name AS "serviceName",a.service_type AS "serviceType",(a.appointment_date AT TIME ZONE 'UTC') AS "appointmentDate",a.duration_minutes AS "durationMinutes",a.status,a.total_price AS "totalPrice",a.notes,a.completed_at AS "completedAt",a.completed_by AS "completedBy",a.ai_generation_id AS "aiGenerationId"`;
+const appointmentFields = `a.id,a.client_id AS "clientId",a.stylist_id AS "stylistId",a.service_name AS "serviceName",a.service_type AS "serviceType",(a.appointment_date AT TIME ZONE 'UTC') AS "appointmentDate",CASE WHEN a.status IN ('pending','confirmed') THEN greatest(a.duration_minutes,90) ELSE a.duration_minutes END AS "durationMinutes",a.status,a.total_price AS "totalPrice",a.notes,a.completed_at AS "completedAt",a.completed_by AS "completedBy",a.ai_generation_id AS "aiGenerationId"`;
 const lookJoin = `CASE WHEN g.id IS NULL THEN NULL ELSE json_build_object('id',g.id,'styleType',g.style_type,'styleName',g.style_name,'styleId',g.style_id,'lookDetails',g.look_details,'imageUrl','/api/saved-looks/'||g.id||'/image') END AS look`;
 const serviceRecords = `(SELECT json_build_object('rating',r.rating,'comment',r.comment,'createdAt',r.created_at) FROM appointment_reviews r WHERE r.appointment_id=a.id) AS review,
  coalesce((SELECT json_agg(json_build_object('inventoryId',p.inventory_id,'productName',p.product_name,'brand',p.brand,'quantity',p.quantity,'unit',p.unit,'unitCost',CASE WHEN $1='client' THEN NULL ELSE p.unit_cost END) ORDER BY p.created_at,p.id) FROM appointment_product_usage p WHERE p.appointment_id=a.id),'[]'::json) AS products`;
@@ -73,7 +73,7 @@ export function createBusinessStore(query: Query) {
     isQualifiedStylist: async (identity: string, serviceType: string) =>
       (await query(`SELECT 1 FROM users u JOIN stylist_specialties ss ON ss.stylist_id=u.id WHERE u.id=$1 AND u.role='stylist' AND u.is_active AND ss.service_type=$2`, [identity,serviceType])).length > 0,
     isAvailable: async (identity: string, date: string, durationMinutes: number, excludeId?: string) =>
-      (await query(`SELECT 1 WHERE beautycore_work_available($1,$2::timestamptz,$3) AND NOT EXISTS(SELECT 1 FROM appointments a WHERE a.stylist_id=$1 AND a.status IN ('pending','confirmed') AND ($4::uuid IS NULL OR a.id<>$4::uuid) AND ($2::timestamptz AT TIME ZONE 'UTC')<a.appointment_date+make_interval(mins=>a.duration_minutes) AND a.appointment_date<($2::timestamptz AT TIME ZONE 'UTC')+make_interval(mins=>$3))`, [identity,date,durationMinutes,excludeId ?? null])).length > 0,
+      (await query(`SELECT 1 WHERE beautycore_work_available($1,$2::timestamptz,$3) AND NOT EXISTS(SELECT 1 FROM appointments a WHERE a.stylist_id=$1 AND a.status IN ('pending','confirmed') AND ($4::uuid IS NULL OR a.id<>$4::uuid) AND ($2::timestamptz AT TIME ZONE 'UTC')<a.appointment_date+make_interval(mins=>greatest(a.duration_minutes,90)) AND a.appointment_date<($2::timestamptz AT TIME ZONE 'UTC')+make_interval(mins=>$3))`, [identity,date,durationMinutes,excludeId ?? null])).length > 0,
     getLook,
     save,
     listLooks: async (

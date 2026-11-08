@@ -76,7 +76,7 @@ export const appointments = pgTable(
     serviceName: varchar('service_name', { length: 255 }).notNull(),
     serviceType: varchar('service_type', { length: 100 }).notNull(),
     appointmentDate: timestamp('appointment_date').notNull(),
-    durationMinutes: integer('duration_minutes').notNull().default(60),
+    durationMinutes: integer('duration_minutes').notNull().default(90),
     status: appointmentStatusEnum('status').notNull().default('pending'),
     totalPrice: integer('total_price'),
     notes: text('notes'),

@@ -62,6 +62,7 @@ const { default: HairPage } = await import('../app/client/hair-studio/page.tsx')
 const { default: MakeupPage } = await import('../app/client/makeup-studio/page.tsx');
 const { BookingNotifications } = await import('../components/booking-notifications.tsx');
 const { ConsultationHistory } = await import('../components/consultation-history.tsx');
+const { bookingAvailability } = await import('../lib/business/booking-availability.ts');
 const { bookingNotifications } = await import('../lib/business/booking-notifications.ts');
 const { stylistServiceHistory } = await import('../lib/business/stylist-history.ts');
 const { default: SavedLooksPage } = await import('../app/client/saved-looks/page.tsx');
@@ -238,6 +239,7 @@ async function transport(input, init = {}) {
     return Response.json({
       inventory: await query('SELECT id,product_name AS \"productName\",brand FROM inventory'),
     });
+  if(url.pathname==='/api/appointments/availability')return bookingAvailability(req,{query});
   if (url.pathname.startsWith('/api/appointments'))
     return bookingApi(req, url.pathname.split('/')[3], deps);
   if (url.pathname === '/api/admin/daily-services') return dailyServices(req, deps);
@@ -259,6 +261,7 @@ test.before(async () => {
     '0007_business_controls.sql',
     '0008_work_availability.sql',
     '0009_customer_history.sql',
+    '0010_ninety_minute_bookings.sql',
   ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   png = await sharp({ create: { width: 64, height: 64, channels: 3, background: '#e1c9c2' } })
@@ -411,8 +414,10 @@ test('look-aware booking and assigned stylist preview complete against the same 
   fireEvent.change(screen.getByLabelText(/Date \(Philippine time\)/), {
     target: { value: '2030-10-17' },
   });
-  fireEvent.change(screen.getByLabelText('Time', { exact: true }), { target: { value: '10:00' } });
+  await waitFor(()=>assert.equal(screen.getByLabelText(/Preferred Stylist/).disabled,false));
   fireEvent.change(screen.getByLabelText(/Preferred Stylist/), { target: { value: S } });
+  await waitFor(()=>assert.equal(screen.getByLabelText('Time', { exact: true }).disabled,false));
+  fireEvent.change(screen.getByLabelText('Time', { exact: true }), { target: { value: '10:00' } });
   fireEvent.click(screen.getByRole('button', { name: 'Confirm Booking' }));
   await screen.findByText('Appointment confirmed');
   const appointment = (
@@ -886,4 +891,54 @@ test('a stylist booking link opens the requested visit even when it is on a late
  await screen.findByRole('heading',{name:'Scheduled visit 12'});
  await waitFor(()=>assert.equal(document.getElementById('booking-'+target).open,true));
  assert.match(screen.getByRole('navigation',{name:'Pagination'}).textContent,/Page 2 of 2/);
+});
+
+
+test('Book This Look recovers a lost save response with one saved record and no generation',async()=>{
+ let saves=0;globalThis.fetch=async(input,init)=>{
+  if(String(input)==='/api/saved-looks'&&init?.method==='POST'){
+   saves++;const response=await transport(input,init);if(saves===1)throw new TypeError('connection lost after commit');return response;
+  }
+  return transport(input,init);
+ };
+ try{
+  mount(SavedLookActions,{feature:'nails',result});
+  fireEvent.click(screen.getByRole('button',{name:'Book This Look'}));
+  await waitFor(()=>assert.equal(pushes.length,1),{timeout:4000});
+  assert.equal(saves,2);assert.match(pushes[0],/^\/booking\?look=/);
+  assert.equal((await query('SELECT count(*)::int AS n FROM ai_generations'))[0].n,1);
+  assert.equal(calls.some(c=>c.path.endsWith('/generate')),false);
+ }finally{globalThis.fetch=transport;}
+});
+
+test('calendar disables overlapping times and keeps the selected stylist',async()=>{
+ await transport('/api/appointments',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({serviceName:"Women's Cut & Blowdry",serviceType:'hair',appointmentDate:'2030-10-17T01:00:00Z',stylistId:S})});
+ mount(BookingForm,{},'service=hair-design',true);await screen.findByLabelText('Service',{exact:true});
+ fireEvent.change(screen.getByLabelText('Service',{exact:true}),{target:{value:"Women's Cut & Blowdry"}});
+ await waitFor(()=>assert.equal(screen.getByLabelText(/Preferred Stylist/).disabled,false));
+ fireEvent.change(screen.getByLabelText(/Preferred Stylist/),{target:{value:S}});
+ fireEvent.change(screen.getByLabelText(/Date \(Philippine time\)/),{target:{value:'2030-10-17'}});
+ await waitFor(()=>assert.equal(screen.getByLabelText('Time',{exact:true}).disabled,false));
+ const select=screen.getByLabelText('Time',{exact:true});
+ for(const time of ['09:00','09:30','10:00'])assert.equal([...select.options].find(o=>o.value===time)?.disabled,true);
+ assert.equal([...select.options].find(o=>o.value==='10:30')?.disabled,false);
+ assert.equal(screen.getByLabelText(/Preferred Stylist/).value,S);
+ fireEvent.change(select,{target:{value:'10:30'}});fireEvent.click(screen.getByRole('button',{name:'Confirm Booking'}));
+ await screen.findByText('Appointment confirmed');assert.equal((await query('SELECT count(*)::int AS n FROM appointments'))[0].n,2);
+});
+
+
+test('look-aware booking can reload a temporarily unavailable saved look',async()=>{
+ const response=await transport('/api/saved-looks',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({feature:'nails',styleId:result.style.id,image:result.image.data_url,status:'completed',sourceKind:'manual'})});
+ const id=(await response.json()).look.id;let reads=0;
+ globalThis.fetch=async(input,init)=>{
+  if(String(input)==='/api/saved-looks/'+id&&++reads===1)return Response.json({error:'Temporary saved look failure'},{status:503});
+  return transport(input,init);
+ };
+ try{
+  mount(BookingForm,{},'look='+id,true);await screen.findByText('Temporary saved look failure');
+  fireEvent.click(screen.getByRole('button',{name:'Retry loading look'}));
+  await screen.findByText('Booking with Nude Pink Gloss');assert.equal(reads,2);
+  assert.equal(screen.getByLabelText('Service',{exact:true}).options[1].value,'Classic Manicure');
+ }finally{globalThis.fetch=transport;}
 });

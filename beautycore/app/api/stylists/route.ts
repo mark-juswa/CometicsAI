@@ -34,7 +34,7 @@ export async function GET(request: Request) {
          AND ($2::text IS NULL OR ss.service_type=$2)
          AND ($3::timestamptz IS NULL OR NOT EXISTS(
            SELECT 1 FROM appointments a WHERE a.stylist_id=u.id AND a.status IN ('pending','confirmed')
-            AND ($3::timestamptz AT TIME ZONE 'UTC') < a.appointment_date + make_interval(mins=>a.duration_minutes)
+            AND ($3::timestamptz AT TIME ZONE 'UTC') < a.appointment_date + make_interval(mins=>greatest(a.duration_minutes,90))
             AND a.appointment_date < ($3::timestamptz AT TIME ZONE 'UTC') + make_interval(mins=>$4)))
        GROUP BY u.id ORDER BY u.name,u.id`,
       [manage, serviceType, date, duration],

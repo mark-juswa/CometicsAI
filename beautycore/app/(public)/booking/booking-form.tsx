@@ -1,82 +1,177 @@
-'use client';
-import { LookInformation } from '@/components/look-information';
-import { featureFromType } from '@/lib/business/look-information';
+"use client";
+import { LookInformation } from "@/components/look-information";
+import { featureFromType } from "@/lib/business/look-information";
 
-import { useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
-import { businessRequest, savedGroup, type SavedLook } from '@/lib/business/client';
-import { salonDay, salonDateTime } from '@/lib/business/dates';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { Calendar, Clock, User, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
-import { allServices, serviceGroups, parsePrice, type ServiceGroup } from '@/lib/services';
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+import {
+  businessRequest,
+  savedGroup,
+  type SavedLook,
+} from "@/lib/business/client";
+import { salonDay, salonDateTime } from "@/lib/business/dates";
+import { useRouter, useSearchParams } from "next/navigation";
+import { motion } from "framer-motion";
+import {
+  Calendar,
+  Clock,
+  User,
+  Loader2,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import {
+  allServices,
+  serviceGroups,
+  parsePrice,
+  type ServiceGroup,
+} from "@/lib/services";
 
 export default function BookingForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, loading: authLoading } = useAuth();
 
-  const lookId = searchParams.get('look');
+  const lookId = searchParams.get("look");
   const [look, setLook] = useState<SavedLook | null>(null);
   const [lookLoading, setLookLoading] = useState(!!lookId);
-  const [lookError, setLookError] = useState('');
-  const preselectedGroup = searchParams.get('service');
+  const [lookError, setLookError] = useState("");
+  const preselectedGroup = searchParams.get("service");
   const firstGroup = preselectedGroup
     ? serviceGroups.find((g) => g.id === preselectedGroup) || serviceGroups[0]
     : serviceGroups[0];
 
   const [group, setGroup] = useState<ServiceGroup>(firstGroup);
-  const [serviceName, setServiceName] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
-  const [stylistId, setStylistId] = useState('');
-  const [notes, setNotes] = useState('');
+  const [serviceName, setServiceName] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [stylistId, setStylistId] = useState("");
+  const [notes, setNotes] = useState("");
 
-  const [stylists, setStylists] = useState<Array<{ id: string; name: string }>>([]);
+  const [stylists, setStylists] = useState<Array<{ id: string; name: string }>>(
+    [],
+  );
   const [stylistsLoading, setStylistsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const [bookingStatus,setBookingStatus]=useState('');
+  const [bookingStatus, setBookingStatus] = useState("");
+  const [slots, setSlots] = useState<{ time: string; available: boolean }[]>(
+      [],
+    ),
+    [slotsLoading, setSlotsLoading] = useState(false),
+    [slotsError, setSlotsError] = useState(""),
+    [slotRevision, setSlotRevision] = useState(0),
+    [lookRevision, setLookRevision] = useState(0);
+  const bookingLock = useRef(false);
   const redirectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(() => () => { if (redirectTimer.current) clearTimeout(redirectTimer.current); }, []);
+  useEffect(
+    () => () => {
+      if (redirectTimer.current) clearTimeout(redirectTimer.current);
+    },
+    [],
+  );
 
   useEffect(() => {
     const controller = new AbortController();
-    const params = new URLSearchParams({ serviceType: group.serviceType, serviceName });
-    if (date && time) params.set('appointmentDate', new Date(salonDateTime(date, time)).toISOString());
+    const params = new URLSearchParams({
+      serviceType: group.serviceType,
+      serviceName,
+    });
+
     setStylistsLoading(true);
-    fetch('/api/stylists?' + params, { signal: controller.signal })
+    fetch("/api/stylists?" + params, { signal: controller.signal })
       .then(async (r) => {
         const data = await r.json();
-        if (!r.ok) throw new Error(data.error || 'Could not check stylist availability.');
+        if (!r.ok)
+          throw new Error(
+            data.error || "Could not check stylist availability.",
+          );
         if (!controller.signal.aborted) {
           const available = data.stylists || [];
           setStylists(available);
-          if (stylistId && !available.some((stylist: { id: string }) => stylist.id === stylistId))
-            setStylistId('');
+          setStylistId((current) =>
+            current &&
+            !available.some((stylist: { id: string }) => stylist.id === current)
+              ? ""
+              : current,
+          );
         }
       })
-      .catch(() => { if (!controller.signal.aborted) setStylists([]); })
-      .finally(() => { if (!controller.signal.aborted) setStylistsLoading(false); });
+      .catch(() => {
+        if (!controller.signal.aborted) setStylists([]);
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setStylistsLoading(false);
+      });
     return () => controller.abort();
-  }, [group.serviceType, serviceName, date, time, stylistId]);
+  }, [group.serviceType, serviceName]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    setSlots([]);
+    setSlotsError("");
+    if (!date || !serviceName) {
+      setSlotsLoading(false);
+      return;
+    }
+    setSlotsLoading(true);
+    const params = new URLSearchParams({ date, service: serviceName });
+    if (stylistId) params.set("stylist", stylistId);
+    businessRequest("/api/appointments/availability?" + params, {
+      signal: controller.signal,
+    })
+      .then((data) => {
+        if (!controller.signal.aborted) {
+          setSlots(data.slots ?? []);
+          setTime((current) =>
+            current &&
+            (data.slots ?? []).some(
+              (slot: { time: string; available: boolean }) =>
+                slot.time === current && slot.available,
+            )
+              ? current
+              : "",
+          );
+        }
+      })
+      .catch((cause) => {
+        if (!controller.signal.aborted) setSlotsError(cause.message);
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setSlotsLoading(false);
+      });
+    return () => controller.abort();
+  }, [date, serviceName, stylistId, slotRevision]);
+  useEffect(() => {
+    const refresh = () => setSlotRevision((value) => value + 1);
+    window.addEventListener("focus", refresh);
+    window.addEventListener("appointments-updated", refresh);
+    return () => {
+      window.removeEventListener("focus", refresh);
+      window.removeEventListener("appointments-updated", refresh);
+    };
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
     setLook(null);
-    setLookError('');
+    setLookError("");
     setLookLoading(!!lookId && !!user);
     if (!lookId || !user) return;
-    businessRequest('/api/saved-looks/' + encodeURIComponent(lookId), { signal: controller.signal })
+    businessRequest("/api/saved-looks/" + encodeURIComponent(lookId), {
+      signal: controller.signal,
+    })
       .then((data) => {
         if (controller.signal.aborted) return;
         setLook(data.look);
-        const group = serviceGroups.find((g) => g.id === savedGroup(data.look.styleType));
+        const group = serviceGroups.find(
+          (g) => g.id === savedGroup(data.look.styleType),
+        );
         if (group) {
           setGroup(group);
-          setServiceName('');
+          setServiceName("");
         }
       })
       .catch((cause) => {
@@ -86,40 +181,62 @@ export default function BookingForm() {
         if (!controller.signal.aborted) setLookLoading(false);
       });
     return () => controller.abort();
-  }, [lookId, user]);
+  }, [lookId, user?.id, lookRevision]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setLoading(true);
+    if (bookingLock.current) return;
+    setError("");
 
     if (!user) {
       router.push(
-        `/login?redirect=${encodeURIComponent('/booking' + (lookId ? '?look=' + encodeURIComponent(lookId) : ''))}`,
+        `/login?redirect=${encodeURIComponent("/booking" + (lookId ? "?look=" + encodeURIComponent(lookId) : ""))}`,
       );
       return;
     }
 
+    if (lookId && (lookLoading || lookError || !look)) {
+      setError(
+        "Wait for your selected look to load, or retry loading it below.",
+      );
+      return;
+    }
+    if (!serviceName) {
+      setError("Please choose the salon service for your look.");
+      return;
+    }
+    if (
+      slotsLoading ||
+      slotsError ||
+      !slots.some((slot) => slot.time === time && slot.available)
+    ) {
+      setError("Choose an available appointment time.");
+      return;
+    }
     if (!date || !time) {
-      setError('Please select a date and time.');
+      setError("Please select a date and time.");
       setLoading(false);
       return;
     }
 
     const appointmentDate = new Date(salonDateTime(date, time));
     if (appointmentDate.getTime() < Date.now()) {
-      setError('Please choose a future date and time.');
+      setError("Please choose a future date and time.");
       setLoading(false);
       return;
     }
 
     const selectedService = allServices.find((s) => s.name === serviceName);
-    const totalPrice = selectedService ? parsePrice(selectedService.price) : null;
+    const totalPrice = selectedService
+      ? parsePrice(selectedService.price)
+      : null;
 
+    bookingLock.current = true;
+    setLoading(true);
     try {
-      const res = await fetch('/api/appointments', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const data = await businessRequest("/api/appointments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           lookId: look?.id,
           serviceName,
@@ -131,16 +248,20 @@ export default function BookingForm() {
         }),
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? 'Unable to book appointment.');
-
-      window.dispatchEvent(new Event('appointments-updated'));
-      setBookingStatus(data.appointment?.status||'pending');
+      window.dispatchEvent(new Event("appointments-updated"));
+      setBookingStatus(data.appointment?.status || "pending");
       setSuccess(true);
-      redirectTimer.current = setTimeout(() => router.push('/client/appointments'), 2000);
+      redirectTimer.current = setTimeout(
+        () => router.push("/client/appointments"),
+        2000,
+      );
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not book your appointment.');
+      setError(
+        err instanceof Error ? err.message : "Could not book your appointment.",
+      );
+      setSlotRevision((value) => value + 1);
     } finally {
+      bookingLock.current = false;
       setLoading(false);
     }
   };
@@ -166,8 +287,17 @@ export default function BookingForm() {
           className="text-center"
         >
           <CheckCircle size={48} className="mx-auto mb-4 text-success" />
-          <h2 className="mb-2 font-serif text-3xl text-white">{bookingStatus==='confirmed'?'Appointment confirmed':'Booking received'}</h2>
-          {bookingStatus!=='confirmed'&&<p className="mb-3 text-sm text-secondary">Your booking is pending a stylist assignment and schedule confirmation.</p>}
+          <h2 className="mb-2 font-serif text-3xl text-white">
+            {bookingStatus === "confirmed"
+              ? "Appointment confirmed"
+              : "Booking received"}
+          </h2>
+          {bookingStatus !== "confirmed" && (
+            <p className="mb-3 text-sm text-secondary">
+              Your booking is pending a stylist assignment and schedule
+              confirmation.
+            </p>
+          )}
           <p className="text-muted">Redirecting you to your appointments…</p>
         </motion.div>
       </div>
@@ -177,8 +307,13 @@ export default function BookingForm() {
   return (
     <div className="min-h-screen px-6 py-12 lg:px-10">
       <div className="mx-auto max-w-2xl">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="mb-2 font-serif text-4xl text-white">Book an Appointment</h1>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <h1 className="mb-2 font-serif text-4xl text-white">
+            Book an Appointment
+          </h1>
           <p className="mb-8 text-[14px] text-secondary">
             Pick a service, choose a time, and we&apos;ll see you soon.
           </p>
@@ -195,13 +330,25 @@ export default function BookingForm() {
           {lookLoading && <p role="status">Loading your selected look…</p>}
           {lookError && (
             <p role="alert" className="studio-alert">
-              {lookError} Select a saved look again before booking.
+              {lookError}{" "}
+              <button
+                type="button"
+                className="underline"
+                onClick={() => setLookRevision((value) => value + 1)}
+              >
+                Retry loading look
+              </button>
             </p>
           )}
           {look && (
             <section className="business-panel mb-6">
               <h2>Booking with {look.styleName}</h2>
-              <LookInformation saved feature={featureFromType(look.styleType)} styleId={look.styleId} details={look.lookDetails} />
+              <LookInformation
+                saved
+                feature={featureFromType(look.styleType)}
+                styleId={look.styleId}
+                details={look.lookDetails}
+              />
               <div className="relative mt-3 h-56">
                 <Image
                   src={look.imageUrl}
@@ -212,8 +359,8 @@ export default function BookingForm() {
                 />
               </div>
               <p>
-                This preview will be available to your assigned stylist. Choose the salon service
-                below.
+                This preview will be available to your assigned stylist. Choose
+                the salon service below.
               </p>
             </section>
           )}
@@ -242,12 +389,14 @@ export default function BookingForm() {
                     disabled={!!look && g.id !== savedGroup(look.styleType)}
                     onClick={() => {
                       setGroup(g);
-                      setServiceName('');
+                      setServiceName("");
+                      setTime("");
+                      setStylistId("");
                     }}
                     className={`rounded-sm border px-4 py-2.5 text-left text-[13px] transition-colors ${
                       group.id === g.id
-                        ? 'border-gold/40 bg-gold/10 text-white'
-                        : 'border-purple-light/15 text-muted hover:border-purple-light/40'
+                        ? "border-gold/40 bg-gold/10 text-white"
+                        : "border-purple-light/15 text-muted hover:border-purple-light/40"
                     }`}
                   >
                     {g.label}
@@ -267,7 +416,11 @@ export default function BookingForm() {
               <select
                 id="service"
                 value={serviceName}
-                onChange={(e) => setServiceName(e.target.value)}
+                onChange={(e) => {
+                  setServiceName(e.target.value);
+                  setTime("");
+                  setStylistId("");
+                }}
                 required
                 className="w-full rounded-sm border border-purple-light/20 bg-surface/40 px-4 py-2.5 text-[13px] text-white focus:border-purple-light focus:outline-none"
               >
@@ -281,42 +434,10 @@ export default function BookingForm() {
             </div>
 
             {serviceName && (
-              <p className="mb-5 text-sm text-secondary">{selectedServiceLabel(serviceName)}</p>
+              <p className="mb-5 text-sm text-secondary">
+                {selectedServiceLabel(serviceName)}
+              </p>
             )}
-            {/* Date */}
-            <div className="mb-5 grid gap-4 sm:grid-cols-2">
-              <div>
-                <label htmlFor="date" className="mb-2 block text-[11px] font-medium text-secondary">
-                  <Calendar size={13} className="mr-1 inline" />
-                  Date (Philippine time)
-                </label>
-                <input
-                  id="date"
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  min={salonDay()}
-                  required
-                  className="w-full rounded-sm border border-purple-light/20 bg-surface/40 px-4 py-2.5 text-[13px] text-white focus:border-purple-light focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="time" className="mb-2 block text-[11px] font-medium text-secondary">
-                  <Clock size={13} className="mr-1 inline" />
-                  Time
-                </label>
-                <input
-                  id="time"
-                  type="time"
-                  value={time}
-                  onChange={(e) => setTime(e.target.value)}
-                  required
-                  className="w-full rounded-sm border border-purple-light/20 bg-surface/40 px-4 py-2.5 text-[13px] text-white focus:border-purple-light focus:outline-none"
-                />
-              </div>
-            </div>
-
             {/* Stylist */}
             <div className="mb-5">
               <label
@@ -329,13 +450,20 @@ export default function BookingForm() {
               <select
                 id="stylist"
                 value={stylistId}
-                onChange={(e) => setStylistId(e.target.value)}
+                onChange={(e) => {
+                  setStylistId(e.target.value);
+                  setTime("");
+                }}
                 className="w-full rounded-sm border border-purple-light/20 bg-surface/40 px-4 py-2.5 text-[13px] text-white focus:border-purple-light focus:outline-none"
               >
                 <option value="">No preference</option>
-                {stylistsLoading && <option disabled>Checking qualified stylists…</option>}
+                {stylistsLoading && (
+                  <option disabled>Checking qualified stylists…</option>
+                )}
                 {!stylistsLoading && serviceName && stylists.length === 0 && (
-                  <option disabled>No qualified stylists available at this time</option>
+                  <option disabled>
+                    No qualified stylists available at this time
+                  </option>
                 )}
                 {stylists.map((s) => (
                   <option key={s.id} value={s.id}>
@@ -343,12 +471,113 @@ export default function BookingForm() {
                   </option>
                 ))}
               </select>
-              <p className="mt-2 text-xs text-muted">An available stylist confirms your booking automatically. Choosing no preference sends a pending request for salon assignment.</p>
+              <p className="mt-2 text-xs text-muted">
+                An available stylist confirms your booking automatically.
+                Choosing no preference sends a pending request for salon
+                assignment.
+              </p>
+            </div>
+
+            {/* Date */}
+            <div className="mb-5 grid gap-4 sm:grid-cols-2">
+              <div>
+                <label
+                  htmlFor="date"
+                  className="mb-2 block text-[11px] font-medium text-secondary"
+                >
+                  <Calendar size={13} className="mr-1 inline" />
+                  Date (Philippine time)
+                </label>
+                <input
+                  id="date"
+                  type="date"
+                  value={date}
+                  onChange={(e) => {
+                    setDate(e.target.value);
+                    setTime("");
+                  }}
+                  min={salonDay()}
+                  required
+                  className="w-full rounded-sm border border-purple-light/20 bg-surface/40 px-4 py-2.5 text-[13px] text-white focus:border-purple-light focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="time"
+                  className="mb-2 block text-[11px] font-medium text-secondary"
+                >
+                  <Clock size={13} className="mr-1 inline" />
+                  Time
+                </label>
+                <select
+                  id="time"
+                  aria-label="Time"
+                  value={time}
+                  onChange={(event) => setTime(event.target.value)}
+                  required
+                  disabled={
+                    !date || !serviceName || slotsLoading || !!slotsError
+                  }
+                  className="w-full rounded-sm border border-purple-light/20 bg-surface/40 px-4 py-2.5 text-[13px] text-white disabled:opacity-50"
+                >
+                  <option value="">
+                    {slotsLoading
+                      ? "Checking available times…"
+                      : "Choose an available time"}
+                  </option>
+                  {slots.map((slot) => (
+                    <option
+                      key={slot.time}
+                      value={slot.time}
+                      disabled={!slot.available}
+                    >
+                      {new Date(
+                        salonDateTime(date, slot.time),
+                      ).toLocaleTimeString("en-PH", {
+                        hour: "numeric",
+                        minute: "2-digit",
+                        timeZone: "Asia/Manila",
+                      })}
+                      {slot.available ? "" : " · Unavailable"}
+                    </option>
+                  ))}
+                </select>
+                <p className="mt-2 text-xs text-muted">
+                  Every appointment reserves 1 hour and 30 minutes. Choose a
+                  stylist below to see their available times.
+                </p>
+                {slotsError && (
+                  <p role="alert" className="mt-2 text-xs text-error">
+                    {slotsError}{" "}
+                    <button
+                      type="button"
+                      className="underline"
+                      onClick={() => setSlotRevision((value) => value + 1)}
+                    >
+                      Retry available times
+                    </button>
+                  </p>
+                )}
+                {date &&
+                  serviceName &&
+                  !slotsLoading &&
+                  !slotsError &&
+                  !slots.some((slot) => slot.available) && (
+                    <p role="status" className="mt-2 text-xs text-warning">
+                      No available times for this date and stylist. Choose
+                      another date or stylist.
+                    </p>
+                  )}
+              </div>
             </div>
 
             {/* Notes */}
             <div className="mb-6">
-              <label htmlFor="notes" className="mb-2 block text-[11px] font-medium text-secondary">
+              <label
+                htmlFor="notes"
+                className="mb-2 block text-[11px] font-medium text-secondary"
+              >
                 Special Requests (optional)
               </label>
               <textarea
@@ -365,7 +594,10 @@ export default function BookingForm() {
             <button
               type="submit"
               disabled={
-                loading || (!!user && (lookLoading || (!!lookId && (!look || !!lookError))))
+                loading ||
+                slotsLoading ||
+                (!!user &&
+                  (lookLoading || (!!lookId && (!look || !!lookError))))
               }
               className="flex w-full items-center justify-center gap-2 bg-gold px-6 py-3 text-[11px] font-semibold uppercase tracking-[2px] text-card transition-all hover:bg-gold-hover disabled:cursor-not-allowed disabled:opacity-50"
             >
@@ -375,7 +607,7 @@ export default function BookingForm() {
                   Booking…
                 </>
               ) : (
-                'Confirm Booking'
+                "Confirm Booking"
               )}
             </button>
 
@@ -393,10 +625,10 @@ export default function BookingForm() {
 
 function selectedServiceLabel(name: string) {
   const item = allServices.find((s) => s.name === name);
-  if (!item) return '';
+  if (!item) return "";
   return parsePrice(item.price) === null
-    ? 'Price to be confirmed by the salon.'
-    : item.price.startsWith('Mula')
+    ? "Price to be confirmed by the salon."
+    : item.price.startsWith("Mula")
       ? `Starting price: ${item.price}. Final amount is confirmed by the salon.`
       : `Catalog price: ${item.price}`;
 }

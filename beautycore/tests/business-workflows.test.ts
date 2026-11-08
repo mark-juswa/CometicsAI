@@ -82,6 +82,7 @@ test.before(async () => {
     '0007_business_controls.sql',
     '0008_work_availability.sql',
     '0009_customer_history.sql',
+    '0010_ninety_minute_bookings.sql',
   ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   assert.equal(
@@ -100,6 +101,7 @@ test.before(async () => {
     '0007_business_controls.sql',
     '0008_work_availability.sql',
     '0009_customer_history.sql',
+    '0010_ninety_minute_bookings.sql',
   ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   image =
@@ -346,7 +348,7 @@ test('booking enforces specialty assignments and duration-aware overlap at the d
   assert.equal(first.status, 201, await first.clone().text());
   const overlap = await bookingApi(request('/api/appointments', 'POST', booking(undefined, '2030-10-17T02:30:00Z')), undefined, deps);
   assert.equal(overlap.status, 409);
-  const boundary = await bookingApi(request('/api/appointments', 'POST', booking(undefined, '2030-10-17T03:00:00Z')), undefined, deps);
+  const boundary = await bookingApi(request('/api/appointments', 'POST', booking(undefined, '2030-10-17T03:30:00Z')), undefined, deps);
   assert.equal(boundary.status, 201, await boundary.clone().text());
   assert.equal((await query('SELECT count(*)::int AS n FROM appointments'))[0].n, 2);
 });

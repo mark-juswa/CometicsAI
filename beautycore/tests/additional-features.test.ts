@@ -16,6 +16,9 @@ import {
   type HistoryDependencies,
 } from "../lib/business/customer-history";
 import { workAvailability } from "../lib/business/work-availability";
+import { bookingAvailability, availableBookingSlots } from "../lib/business/booking-availability";
+import { allServices, serviceDurationMinutes } from "../lib/services";
+import { preservingBusinessRecords } from "../scripts/business-preservation";
 import { bookingNotifications } from "../lib/business/booking-notifications";
 import { stylistServiceHistory } from "../lib/business/stylist-history";
 import { signConsultationHandle } from "../lib/ai/consultation-handle";
@@ -166,7 +169,7 @@ test("working hours, service duration, inactive staff, and overlap are checked i
   assert.equal((await book("2030-10-17T08:30:00Z")).status, 409);
   assert.equal((await book()).status, 201);
   assert.equal((await book("2030-10-17T02:30:00Z")).status, 409);
-  assert.equal((await book("2030-10-17T03:00:00Z")).status, 201);
+  assert.equal((await book("2030-10-17T03:30:00Z")).status, 201);
   await query("UPDATE users SET is_active=false WHERE id=$1", [S]);
   assert.equal((await book("2030-10-17T05:00:00Z")).status, 400);
 });
@@ -707,4 +710,59 @@ test('archived generated images can be downloaded privately without saving or ge
  actor=OTHER;assert.equal((await savedLooks(req(image.imageUrl+'?download=1'),image.id,true,deps)).status,404);
  actor=S;assert.equal((await savedLooks(req(image.imageUrl+'?download=1'),image.id,true,deps)).status,404);
  assert.equal((await query('SELECT count(*)::int AS n FROM ai_generations'))[0].n,1);
+});
+
+
+test("every catalog service reserves ninety minutes", () => {
+  for(const service of allServices) assert.equal(serviceDurationMinutes(service.name),90,service.name);
+});
+
+test("nine o'clock blocks ninety minutes for that stylist and exposes no client data", async () => {
+  assert.equal((await book('2030-10-17T01:00:00Z')).status,201);
+  assert.equal((await query('SELECT duration_minutes FROM appointments'))[0].duration_minutes,90);
+  const response=await bookingAvailability(req('/api/appointments/availability?'+new URLSearchParams({date:'2030-10-17',service:"Women's Cut & Blowdry",stylist:S})),{query});
+  assert.equal(response.status,200);assert.match(response.headers.get('Cache-Control'),/no-store/);
+  const body=await response.json();
+  for(const time of ['09:00','09:30','10:00'])assert.equal(body.slots.find(s=>s.time===time)?.available,false,time);
+  assert.equal(body.slots.find(s=>s.time==='10:30')?.available,true);
+  assert.ok(!body.slots.some(s=>s.time==='16:00'));
+  assert.equal(JSON.stringify(body).includes(C),false);
+  assert.equal((await book('2030-10-17T02:00:00Z')).status,409);
+  assert.equal((await book('2030-10-17T02:30:00Z')).status,201);
+});
+
+test("slots remain available for another stylist, and retain longer legacy reservations", () => {
+  const other='66666666-6666-4666-8666-666666666666';
+  const staff=[{id:S,hours},{id:other,hours}],reserved=[{stylistId:S,appointmentDate:'2030-10-17T01:00:00Z',durationMinutes:60}];
+  let slots=availableBookingSlots('2030-10-17',staff,reserved,new Date('2030-10-16'));
+  assert.equal(slots.find(s=>s.time==='09:00')?.available,true);
+  slots=availableBookingSlots('2030-10-17',[staff[0]],reserved,new Date('2030-10-16'));
+  assert.equal(slots.find(s=>s.time==='10:00')?.available,false);
+  assert.equal(slots.find(s=>s.time==='10:30')?.available,true);
+  reserved[0].durationMinutes=180;
+  slots=availableBookingSlots('2030-10-17',[staff[0]],reserved,new Date('2030-10-16'));
+  assert.equal(slots.find(s=>s.time==='11:30')?.available,false);
+  assert.equal(slots.find(s=>s.time==='12:00')?.available,true);
+});
+
+test("scheduling upgrade preserves old rows, blocks short legacy overlaps and forces legacy callers to ninety minutes", async()=>{
+  await query("INSERT INTO appointments(client_id,stylist_id,service_name,service_type,appointment_date,duration_minutes,status) VALUES($1,$2,'Legacy hair','hair','2030-10-17 01:00:00',60,'confirmed')",[C,S]);
+  const before=await query('SELECT to_jsonb(a) AS row FROM appointments a');
+  const statements=readFileSync('db/migrations/0010_ninety_minute_bookings.sql','utf8').split('--> statement-breakpoint').filter(s=>s.trim());
+  await db.transaction(async tx=>{for(const sql of preservingBusinessRecords(statements))await tx.query(sql);});
+  assert.deepEqual(await query('SELECT to_jsonb(a) AS row FROM appointments a'),before);
+  assert.equal((await book('2030-10-17T02:00:00Z')).status,409);
+  const created=await query("SELECT * FROM beautycore_create_appointment($1,$2,'Legacy caller','hair','2030-10-17T02:30:00Z',30,100,NULL,NULL)",[C,S]);
+  assert.equal(created[0].outcome,'created');
+  assert.equal((await query('SELECT duration_minutes FROM appointments WHERE id=$1',[created[0].appointment_id]))[0].duration_minutes,90);
+});
+
+test("availability rejects malformed inputs and excludes cancelled and off-duty bookings", async()=>{
+ for(const params of [{date:'2030-02-30',service:"Women's Cut & Blowdry"},{date:'2030-10-17',service:'unknown'},{date:'2030-10-17',service:"Women's Cut & Blowdry",stylist:'invalid'}])assert.equal((await bookingAvailability(req('/api/appointments/availability?'+new URLSearchParams(params)),{query})).status,400);
+ const response=await book('2030-10-17T01:00:00Z');const id=(await response.json()).appointment.id;
+ await query("UPDATE appointments SET status='cancelled' WHERE id=$1",[id]);
+ const path='/api/appointments/availability?'+new URLSearchParams({date:'2030-10-17',service:"Women's Cut & Blowdry",stylist:S});
+ let body=await (await bookingAvailability(req(path),{query})).json();assert.equal(body.slots.find(s=>s.time==='09:00').available,true);
+ await query('UPDATE stylist_work_settings SET available=false WHERE stylist_id=$1',[S]);
+ body=await (await bookingAvailability(req(path),{query})).json();assert.deepEqual(body.slots,[]);
 });

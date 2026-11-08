@@ -13,7 +13,7 @@ export default function AdminLayout({
       <div className="min-h-screen">
         <AdminSidebar />
         <div className="lg:pl-60">
-          <main className="px-6 py-8 lg:px-10">{children}</main>
+          <main className="management-shell min-w-0 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">{children}</main>
         </div>
       </div>
     </ProtectedRoute>

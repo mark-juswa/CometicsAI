@@ -6,6 +6,7 @@ import { drizzle } from 'drizzle-orm/pglite';
 import * as schema from '../db/schema.ts';
 const pg = new PGlite();
 await pg.exec(readFileSync('tests/fixtures/business-base.sql', 'utf8'));
+await pg.exec('ALTER TABLE users ADD COLUMN is_active boolean NOT NULL DEFAULT true');
 const orm = drizzle(pg, { schema });
 let role = 'admin';
 test.mock.module('../db/index.ts', { namedExports: { db: orm } });

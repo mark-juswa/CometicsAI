@@ -14,7 +14,7 @@ export async function GET() {
 
     const user = await db.query.users.findFirst({
       where: eq(users.id, session.userId),
-      columns: { id: true, name: true, email: true, role: true, avatar: true, createdAt: true },
+      columns: { id: true, name: true, email: true, role: true, avatar: true, phone: true, createdAt: true },
       with: { profile: true },
     });
 
@@ -29,7 +29,7 @@ export async function GET() {
   }
 }
 
-/** PATCH /api/profile — update name, avatar, and style preferences. */
+/** PATCH /api/profile — update this account's personal and contact details. */
 export async function PATCH(req: Request) {
   try {
     const session = await getSession();
@@ -38,11 +38,13 @@ export async function PATCH(req: Request) {
     }
 
     const body = await req.json();
-    const { name, avatar, hairPreferences, nailPreferences } = body ?? {};
+    if (!body || typeof body !== 'object' || Array.isArray(body))
+      return NextResponse.json({ error: 'Invalid profile details.' }, { status: 400 });
+    const { name, avatar, phone, hairPreferences, nailPreferences } = body;
 
     // Email and role are deliberately not editable here — changing email would
     // need re-verification, and role escalation must go through an admin.
-    if (typeof name === 'string' || typeof avatar === 'string') {
+    if (typeof name === 'string' || typeof avatar === 'string' || typeof phone === 'string') {
       const updates: Partial<typeof users.$inferInsert> = {};
       if (typeof name === 'string') {
         const trimmed = name.trim();
@@ -51,7 +53,17 @@ export async function PATCH(req: Request) {
         }
         updates.name = trimmed.slice(0, 255);
       }
-      if (typeof avatar === 'string') updates.avatar = avatar.slice(0, 2000) || null;
+      if (typeof avatar === 'string') {
+        if (avatar && (!/^data:image\/(?:png|jpeg);base64,[A-Za-z0-9+/]+={0,2}$/.test(avatar) || avatar.length > 550000))
+          return NextResponse.json({ error: 'Choose a PNG or JPEG profile image up to 400 KB.' }, { status: 400 });
+        updates.avatar = avatar || null;
+      }
+      if (typeof phone === 'string') {
+        const trimmed = phone.trim();
+        if (trimmed.length > 40 || (trimmed && !/^[+0-9(). -]{7,40}$/.test(trimmed)))
+          return NextResponse.json({ error: 'Enter a valid contact number.' }, { status: 400 });
+        updates.phone = trimmed || null;
+      }
 
       await db.update(users).set(updates).where(eq(users.id, session.userId));
     }
@@ -77,7 +89,7 @@ export async function PATCH(req: Request) {
 
     const updated = await db.query.users.findFirst({
       where: eq(users.id, session.userId),
-      columns: { id: true, name: true, email: true, role: true, avatar: true },
+      columns: { id: true, name: true, email: true, role: true, avatar: true, phone: true },
       with: { profile: true },
     });
 

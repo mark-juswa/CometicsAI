@@ -18,6 +18,7 @@ const links: SidebarLink[] = [
   { href: '/client/hair-studio', label: 'Hair Studio', icon: Scissors },
   { href: '/client/makeup-studio', label: 'Makeup Studio', icon: WandSparkles },
   { href: '/client/saved-looks', label: 'My Saved Looks', icon: Sparkles },
+  { href: '/client/consultation-history', label: 'Consultation History', icon: Sparkles },
   { href: '/client/appointments', label: 'Appointments', icon: CalendarDays },
   { href: '/client/profile', label: 'Profile', icon: UserCircle },
 ];

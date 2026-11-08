@@ -9,7 +9,9 @@ import 'server-only';
 import bcrypt from 'bcryptjs';
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
-import type { UserRole } from '@/db/schema';
+import { db } from '@/db';
+import { users, type UserRole } from '@/db/schema';
+import { eq } from 'drizzle-orm';
 
 const COOKIE_NAME = 'beautycore_session';
 const SESSION_DURATION_DAYS = 7;
@@ -91,7 +93,14 @@ export async function getSession(): Promise<SessionPayload | null> {
   const cookieStore = await cookies();
   const token = cookieStore.get(COOKIE_NAME)?.value;
   if (!token) return null;
-  return verifySession(token);
+  const session = await verifySession(token);
+  if (!session) return null;
+  const account = await db.query.users.findFirst({
+    where: eq(users.id, session.userId),
+    columns: { id: true, email: true, name: true, role: true, isActive: true },
+  });
+  if (!account || !account.isActive) return null;
+  return { ...session, email: account.email, name: account.name, role: account.role };
 }
 
 /** Clears the session cookie. */

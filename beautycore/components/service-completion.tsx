@@ -1,8 +1,12 @@
-'use client';
-import { useEffect, useRef, useState } from 'react';
-import { businessRequest } from '../lib/business/client';
-import { PRODUCT_UNITS } from '../lib/business/workflow-types';
-type CatalogProduct = { id: string; productName: string; brand?: string | null };
+"use client";
+import { useEffect, useRef, useState } from "react";
+import { businessRequest } from "../lib/business/client";
+import { PRODUCT_UNITS } from "../lib/business/workflow-types";
+type CatalogProduct = {
+  id: string;
+  productName: string;
+  brand?: string | null;
+};
 type Line = {
   inventoryId: string;
   productName: string;
@@ -12,70 +16,93 @@ type Line = {
   unitCost: string;
 };
 const blank = (): Line => ({
-  inventoryId: '',
-  productName: '',
-  brand: '',
-  quantity: '',
-  unit: '',
-  unitCost: '',
+  inventoryId: "",
+  productName: "",
+  brand: "",
+  quantity: "",
+  unit: "",
+  unitCost: "",
 });
-export function ServiceCompletion({ id, onCompleted }: { id: string; onCompleted: () => void }) {
+export function ServiceCompletion({
+  id,
+  onCompleted,
+  disabled = false,
+  onBusyChange,
+}: {
+  id: string;
+  onCompleted: () => void | Promise<void>;
+  disabled?: boolean;
+  onBusyChange?: (busy: boolean) => void;
+}) {
   const [open, setOpen] = useState(false);
   const [catalog, setCatalog] = useState<CatalogProduct[]>([]);
   const [lines, setLines] = useState<Line[]>([]);
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState('');
-  const [catalogError, setCatalogError] = useState('');
+  const [error, setError] = useState("");
+  const [catalogError, setCatalogError] = useState("");
   const lock = useRef(false);
   useEffect(() => {
     if (!open) return;
     const controller = new AbortController();
-    businessRequest('/api/inventory', { signal: controller.signal })
+    businessRequest("/api/inventory", { signal: controller.signal })
       .then((data) => setCatalog(data.inventory ?? []))
       .catch(() => {
         if (!controller.signal.aborted)
           setCatalogError(
-            'Inventory could not be loaded. You can still enter the actual products by name.',
+            "Inventory could not be loaded. You can still enter the actual products by name.",
           );
       });
     return () => controller.abort();
   }, [open]);
   function update(index: number, patch: Partial<Line>) {
-    setLines((current) => current.map((line, i) => (i === index ? { ...line, ...patch } : line)));
+    setLines((current) =>
+      current.map((line, i) => (i === index ? { ...line, ...patch } : line)),
+    );
   }
   async function submit(event: React.FormEvent) {
     event.preventDefault();
-    if (lock.current) return;
+    if (lock.current || disabled) return;
     lock.current = true;
     setBusy(true);
-    setError('');
+    onBusyChange?.(true);
+    setError("");
     try {
       await businessRequest(`/api/appointments/${id}/complete`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           products: lines.map((line) => ({
             inventoryId: line.inventoryId || null,
             productName: line.productName,
             brand: line.brand || null,
-            quantity: line.quantity === '' ? null : Number(line.quantity),
+            quantity: line.quantity === "" ? null : Number(line.quantity),
             unit: line.unit || null,
-            unitCost: line.unitCost === '' ? null : Number(line.unitCost),
+            unitCost: line.unitCost === "" ? null : Number(line.unitCost),
           })),
         }),
       });
       setOpen(false);
-      onCompleted();
+      await onCompleted();
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Could not complete this service.');
+      setError(
+        cause instanceof Error
+          ? cause.message
+          : "Could not complete this service.",
+      );
     } finally {
       lock.current = false;
       setBusy(false);
+      onBusyChange?.(false);
     }
   }
   if (!open)
     return (
-      <button type="button" className="studio-secondary-button" onClick={() => setOpen(true)}>
+      <button
+        type="button"
+        className="studio-secondary-button"
+        disabled={disabled || busy}
+        onClick={() => setOpen(true)}
+      >
         Mark as Completed
       </button>
     );
@@ -87,14 +114,15 @@ export function ServiceCompletion({ id, onCompleted }: { id: string; onCompleted
     >
       <h3>Complete service</h3>
       <p className="text-sm text-secondary">
-        Record the products actually used. Product lines, quantities and material costs are
-        optional. Leave unknown values blank. Stock is updated separately by the admin.
+        Record the products actually used. Product lines, quantities and
+        material costs are optional. Leave unknown values blank. Stock is
+        updated separately by the admin.
       </p>
       {catalogError && <p role="status">{catalogError}</p>}
       {lines.map((line, index) => (
         <fieldset
           key={index}
-          disabled={busy}
+          disabled={busy || disabled}
           className="my-3 grid gap-2 rounded border border-purple-light/20 p-3 sm:grid-cols-2"
         >
           <legend>Product {index + 1}</legend>
@@ -103,10 +131,14 @@ export function ServiceCompletion({ id, onCompleted }: { id: string; onCompleted
             <select
               value={line.inventoryId}
               onChange={(e) => {
-                const item = catalog.find((product) => product.id === e.target.value);
+                const item = catalog.find(
+                  (product) => product.id === e.target.value,
+                );
                 update(index, {
                   inventoryId: e.target.value,
-                  ...(item ? { productName: item.productName, brand: item.brand ?? '' } : {}),
+                  ...(item
+                    ? { productName: item.productName, brand: item.brand ?? "" }
+                    : {}),
                 });
               }}
             >
@@ -114,7 +146,7 @@ export function ServiceCompletion({ id, onCompleted }: { id: string; onCompleted
               {catalog.map((item) => (
                 <option key={item.id} value={item.id}>
                   {item.productName}
-                  {item.brand ? ` (${item.brand})` : ''}
+                  {item.brand ? ` (${item.brand})` : ""}
                 </option>
               ))}
             </select>
@@ -150,7 +182,7 @@ export function ServiceCompletion({ id, onCompleted }: { id: string; onCompleted
           <label>
             Unit
             <select
-              required={line.quantity !== '' || line.unitCost !== ''}
+              required={line.quantity !== "" || line.unitCost !== ""}
               value={line.unit}
               onChange={(e) => update(index, { unit: e.target.value })}
             >
@@ -176,7 +208,9 @@ export function ServiceCompletion({ id, onCompleted }: { id: string; onCompleted
           <button
             type="button"
             className="studio-text-button"
-            onClick={() => setLines((current) => current.filter((_, i) => i !== index))}
+            onClick={() =>
+              setLines((current) => current.filter((_, i) => i !== index))
+            }
           >
             Remove product {index + 1}
           </button>
@@ -186,18 +220,22 @@ export function ServiceCompletion({ id, onCompleted }: { id: string; onCompleted
         <button
           type="button"
           className="studio-secondary-button"
-          disabled={busy || lines.length >= 20}
+          disabled={busy || disabled || lines.length >= 20}
           onClick={() => setLines((current) => [...current, blank()])}
         >
           Add product used
         </button>
-        <button type="submit" className="studio-primary-button" disabled={busy}>
-          {busy ? 'Completing…' : 'Confirm completion'}
+        <button
+          type="submit"
+          className="studio-primary-button"
+          disabled={busy || disabled}
+        >
+          {busy ? "Completing…" : "Confirm completion"}
         </button>
         <button
           type="button"
           className="studio-secondary-button"
-          disabled={busy}
+          disabled={busy || disabled}
           onClick={() => setOpen(false)}
         >
           Keep appointment open

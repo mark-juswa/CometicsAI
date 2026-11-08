@@ -26,6 +26,8 @@ export async function GET(req: Request) {
         email: users.email,
         role: users.role,
         avatar: users.avatar,
+        phone: users.phone,
+        isActive: users.isActive,
         createdAt: users.createdAt,
         appointmentCount: sql<number>`(
           select count(*)::int from appointments a where a.client_id = ${users.id}
@@ -68,6 +70,17 @@ export async function PATCH(req: Request) {
       return NextResponse.json(
         { error: 'You cannot change your own role.' },
         { status: 400 }
+      );
+    }
+
+    const target = await db.query.users.findFirst({
+      where: eq(users.id, id),
+      columns: { id: true, role: true },
+    });
+    if (target?.role === 'stylist' || role === 'stylist') {
+      return NextResponse.json(
+        { error: 'Manage stylist roles, specialties, and status in Stylist Management.' },
+        { status: 400 },
       );
     }
 

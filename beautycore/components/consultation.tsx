@@ -12,6 +12,7 @@ import type { FeatureId, GenerateResponse } from "@/lib/ai/studio-api";
 import { createStudioConsultationApi, type GenerationDetail, type Preferences, type Recommendation } from "@/lib/ai/studio-consultation-api";
 import { readTrialSession, type GuestTrialStatus } from "@/lib/ai/guest-trial-client";
 import { rememberCustomPhoto } from "@/lib/ai/studio-photo-handoff";
+import { ReferenceImagePicker } from "@/components/reference-image-picker";
 
 type CardStatus = "pending" | "generating" | "completed" | "failed" | "unknown";
 type Card = { recommendation: Recommendation; status: CardStatus; result: GenerateResponse | null;
@@ -155,6 +156,7 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
   }
 
   function applyDetail(id: string, detail: GenerationDetail): boolean {
+    if ('archive_warning' in detail && typeof detail.archive_warning === 'string') setError(detail.archive_warning);
     if (detail.generation.status === "completed" && detail.result) {
       patchCard(id, { status: "completed", result: detail.result, error: "", canRetry: false });
       setActiveLookId((current) => current || id);
@@ -501,6 +503,7 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
           {file && <div className="studio-file-row"><strong>{file.name}</strong><button type="button" className="studio-text-button"
             disabled={busy} onClick={() => inputRef.current?.click()}>Change photo</button></div>}
           <p className="consult-photo-note">{trial ? "Your photo is used for your chosen preview." : "One photo is reused for all three results."} Your photo is not sent to the conversational AI.</p>
+          {!trial && <ReferenceImagePicker disabled={!!busy} onSelect={acceptFile} />}
         </aside>
       </div>
       <div className="consult-stage-footer"><button type="button" className="studio-secondary-button" disabled={busy || !!consultationId}

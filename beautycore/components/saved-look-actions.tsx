@@ -19,25 +19,27 @@ export function SavedLookActions({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const lock = useRef(false);
-  const latest = useRef(result);
-  latest.current = result;
+  const resultKey = `${feature}:${result.style.id}:${result.image.data_url}`;
+  const latestKey = useRef(resultKey);
+  latestKey.current = resultKey;
   useEffect(() => {
     setSaved(null);
     setError('');
-  }, [result]);
+  }, [resultKey]);
   async function run(book: boolean) {
     if (lock.current) return;
     lock.current = true;
     setBusy(true);
     setError('');
     const current = result;
+    const currentKey = resultKey;
     try {
       const look = saved ?? (await saveLook(feature, current, sourceKind));
-      if (latest.current !== current) return;
+      if (latestKey.current !== currentKey) return;
       setSaved(look);
       if (book) router.push(`/booking?look=${encodeURIComponent(look.id)}`);
     } catch (cause) {
-      if (latest.current === current)
+      if (latestKey.current === currentKey)
         setError(cause instanceof Error ? cause.message : 'Could not save this look.');
     } finally {
       lock.current = false;

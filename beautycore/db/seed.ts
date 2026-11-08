@@ -12,6 +12,8 @@ import {
   clientProfiles,
   appointments,
   inventory,
+  inventoryTransactions,
+  stylistSpecialties,
   aiGenerations,
   type NewUser,
   type NewAppointment,
@@ -37,6 +39,7 @@ async function seed() {
   await db.delete(appointments);
   await db.delete(aiGenerations);
   await db.delete(clientProfiles);
+  await db.delete(inventoryTransactions);
   await db.delete(inventory);
   await db.delete(users);
 
@@ -76,6 +79,15 @@ async function seed() {
   const nica   = byEmail('nica@email.com');
 
   console.log(`    ✓ ${insertedUsers.length} users`);
+
+  await db.insert(stylistSpecialties).values([
+    { stylistId: lara.id, serviceType: 'hair' },
+    { stylistId: lara.id, serviceType: 'treatment' },
+    { stylistId: joy.id, serviceType: 'nail' },
+    { stylistId: bea.id, serviceType: 'hair' },
+    { stylistId: bea.id, serviceType: 'nail' },
+    { stylistId: bea.id, serviceType: 'treatment' },
+  ]);
 
   // ─── Client Profiles ─────────────────────────────────────────────────────
   console.log('  Creating client profiles...');
@@ -164,7 +176,16 @@ async function seed() {
     { productName: 'Sanitising Solution (5L)',     category: 'Supplies',     currentStock: 11, minimumThreshold: 6,  unitPrice: 720,  status: 'in_stock',     lastRestocked: at(-13, 9) },
   ];
 
-  await db.insert(inventory).values(seedInventory);
+  const inventoryRows = await db.insert(inventory).values(seedInventory).returning();
+  await db.insert(inventoryTransactions).values(inventoryRows.filter((item) => item.currentStock > 0).map((item) => ({
+    inventoryId: item.id,
+    productName: item.productName,
+    direction: 'in' as const,
+    quantity: item.currentStock,
+    stockAfter: item.currentStock,
+    note: 'Opening demo stock',
+    recordedBy: admin.id,
+  })));
   console.log(`    ✓ ${seedInventory.length} inventory items`);
 
   // ─── AI Generations ──────────────────────────────────────────────────────

@@ -9,6 +9,14 @@ sees. Staff manage bookings, inventory, and finances from role-scoped portals.
 Built with Next.js 16 (App Router), React 19, TypeScript (strict), Tailwind 4,
 Drizzle ORM, and Neon PostgreSQL.
 
+For an existing database, the additional availability, client history, receipt,
+and private image archive upgrade is `npm run db:apply:enhancements`. It installs
+only migrations 0008/0009 and checks existing record fingerprints inside the
+transaction. This upgrade has already been installed in the configured database
+for the 9 November implementation. Existing staff must set their weekly hours
+and enable Work availability in the stylist dashboard. See the full report in
+`../docs/experiments/beautycore-additional-enhancements-20261109.md`.
+
 ---
 
 ## Quick start

@@ -44,17 +44,17 @@ async function saved() {
   assert.equal(response.status, 201, await response.clone().text());
   return (await response.json()).look.id as string;
 }
-const booking = (lookId?: string) => ({
+const booking = (lookId?: string, appointmentDate = '2030-10-17T02:00:00Z') => ({
   serviceName: "Men's Cut",
   serviceType: 'hair',
-  appointmentDate: '2030-10-17T02:00:00Z',
+  appointmentDate,
   stylistId: S,
   totalPrice: 1,
   ...(lookId ? { lookId } : {}),
 });
-async function book(lookId?: string) {
+async function book(lookId?: string, appointmentDate?: string) {
   const response = await bookingApi(
-    request('/api/appointments', 'POST', booking(lookId)),
+    request('/api/appointments', 'POST', booking(lookId, appointmentDate)),
     undefined,
     deps,
   );
@@ -79,6 +79,9 @@ test.before(async () => {
     '0003_saved_look_admission.sql',
     '0004_look_details.sql',
     '0005_service_completion.sql',
+    '0007_business_controls.sql',
+    '0008_work_availability.sql',
+    '0009_customer_history.sql',
   ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   assert.equal(
@@ -94,6 +97,9 @@ test.before(async () => {
     '0003_saved_look_admission.sql',
     '0004_look_details.sql',
     '0005_service_completion.sql',
+    '0007_business_controls.sql',
+    '0008_work_availability.sql',
+    '0009_customer_history.sql',
   ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   image =
@@ -128,6 +134,9 @@ test.beforeEach(async () => {
       'not-a-login',
       role,
     ]);
+  await query("INSERT INTO stylist_specialties(stylist_id,service_type) SELECT $1,x FROM unnest(ARRAY['hair','nail','makeup','treatment','massage','aesthetic']) x", [S]);
+  await query("INSERT INTO stylist_specialties(stylist_id,service_type) SELECT $1,x FROM unnest(ARRAY['hair','nail','makeup','treatment','massage','aesthetic']) x", [S2]);
+  await query(`INSERT INTO stylist_work_settings(stylist_id,available,hours) SELECT id,true,$1::jsonb FROM users WHERE role='stylist'`,[JSON.stringify(Array.from({length:7},(_,day)=>({day,start:'00:00',end:'23:59'})))]);
   actor = C;
   deps.settings = { enabled: true, clientLimit: 20, storageBudget: 128 * 1024 * 1024 };
 });
@@ -324,11 +333,41 @@ test('booking derives catalog price and rejects foreign or incompatible look ref
     ).status,
     400,
   );
-  await book();
+  await book(undefined, '2030-10-17T04:00:00Z');
   assert.equal((await query('SELECT count(*)::int AS n FROM appointments'))[0].n, 2);
+});
+test('booking enforces specialty assignments and duration-aware overlap at the database boundary', async () => {
+  await query("DELETE FROM stylist_specialties WHERE stylist_id=$1 AND service_type='hair'", [S]);
+  const unqualified = await bookingApi(request('/api/appointments', 'POST', booking()), undefined, deps);
+  assert.equal(unqualified.status, 400);
+  await query("INSERT INTO stylist_specialties(stylist_id,service_type) VALUES($1,'hair')", [S]);
+
+  const first = await bookingApi(request('/api/appointments', 'POST', booking()), undefined, deps);
+  assert.equal(first.status, 201, await first.clone().text());
+  const overlap = await bookingApi(request('/api/appointments', 'POST', booking(undefined, '2030-10-17T02:30:00Z')), undefined, deps);
+  assert.equal(overlap.status, 409);
+  const boundary = await bookingApi(request('/api/appointments', 'POST', booking(undefined, '2030-10-17T03:00:00Z')), undefined, deps);
+  assert.equal(boundary.status, 201, await boundary.clone().text());
+  assert.equal((await query('SELECT count(*)::int AS n FROM appointments'))[0].n, 2);
+});
+test('inventory stock movements are atomic, recorded and never allow negative stock', async () => {
+  const [item] = await query("INSERT INTO inventory(product_name,category,current_stock,minimum_threshold,status) VALUES('Polish','Nail',2,3,'low_stock') RETURNING id");
+  const insufficient = (await query("SELECT * FROM beautycore_inventory_move($1,$2,'out',3,NULL)", [item.id,A]))[0];
+  assert.equal(insufficient.outcome, 'insufficient');
+  assert.equal((await query('SELECT current_stock FROM inventory WHERE id=$1',[item.id]))[0].current_stock,2);
+  const removed = (await query("SELECT * FROM beautycore_inventory_move($1,$2,'out',1,'Used for service')", [item.id,A]))[0];
+  assert.equal(removed.outcome, 'updated');
+  assert.equal(removed.stock, 1);
+  const added = (await query("SELECT * FROM beautycore_inventory_move($1,$2,'in',5,'Restock')", [item.id,A]))[0];
+  assert.equal(added.stock, 6);
+  assert.equal((await query('SELECT count(*)::int AS n FROM inventory_transactions WHERE inventory_id=$1',[item.id]))[0].n,2);
+  assert.equal((await query('SELECT status FROM inventory WHERE id=$1',[item.id]))[0].status,'in_stock');
 });
 test('removed looks remain on booked appointments; image access follows stylist assignment', async () => {
   const identity = await saved();
+  const unselectedResponse = await save(saveBody('nails', 'nude_pink'));
+  assert.equal(unselectedResponse.status, 201, await unselectedResponse.clone().text());
+  const unselectedIdentity = (await unselectedResponse.json()).look.id as string;
   const bookingId = await book(identity);
   assert.equal(
     (
@@ -362,6 +401,22 @@ test('removed looks remain on booked appointments; image access follows stylist 
     404,
   );
   actor = A;
+  assert.equal(
+    (await savedLooks(request('/api/saved-looks/' + identity + '/image'), identity, true, deps))
+      .status,
+    200,
+  );
+  assert.equal(
+    (
+      await savedLooks(
+        request('/api/saved-looks/' + unselectedIdentity + '/image'),
+        unselectedIdentity,
+        true,
+        deps,
+      )
+    ).status,
+    404,
+  );
   assert.equal(
     (
       await bookingApi(

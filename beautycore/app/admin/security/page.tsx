@@ -1,4 +1,5 @@
 'use client';
+import { businessRequest } from '@/lib/business/client';
 
 import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
@@ -40,14 +41,14 @@ export default function AdminSecurityPage() {
   const [notice, setNotice] = useState<{ kind: 'ok' | 'err'; text: string } | null>(null);
 
   useEffect(() => {
-    fetch('/api/users')
-      .then((r) => r.json())
+    businessRequest('/api/users')
       .then((d) => setRows(d.users ?? []))
-      .catch(() => setRows([]))
+      .catch(e=>setNotice({kind:'err',text:e.message}))
       .finally(() => setLoading(false));
   }, []);
 
   const changeRole = async (id: string, role: UserRole) => {
+    if (!confirm(`Change this account's role to ${role}?`)) return;
     setBusy(id);
     setNotice(null);
     try {
@@ -237,7 +238,7 @@ export default function AdminSecurityPage() {
                               disabled={busy === u.id}
                               className="rounded-sm border border-purple-light/20 bg-surface/40 px-2.5 py-1.5 text-[11px] text-white focus:border-purple-light focus:outline-none disabled:opacity-50"
                             >
-                              {userRoleEnum.enumValues.map((r) => (
+                              {(u.role === 'stylist' ? ['stylist'] : ['client', 'admin'] as UserRole[]).map((r) => (
                                 <option key={r} value={r}>
                                   {r}
                                 </option>

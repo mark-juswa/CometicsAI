@@ -1,17 +1,30 @@
-'use client';
+"use client";
+import { PortalWorkspace, PortalMetrics } from "@/components/portal-workspace";
 import {
   AppointmentServiceRecord,
   AppointmentReviewForm,
-} from '@/components/appointment-service-record';
-import type { ServiceRecord } from '@/lib/business/workflow-types';
-import { useAppointmentRefresh } from '@/lib/business/use-appointment-refresh';
-import { AppointmentLookPreview, type AppointmentLook } from '@/components/appointment-look';
+} from "@/components/appointment-service-record";
+import type { ServiceRecord } from "@/lib/business/workflow-types";
+import { businessRequest } from "@/lib/business/client";
+import { useAppointmentRefresh } from "@/lib/business/use-appointment-refresh";
+import {
+  AppointmentLookPreview,
+  type AppointmentLook,
+} from "@/components/appointment-look";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { Sparkles, CalendarDays, Hand, Scissors, ArrowRight, Clock } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import {
+  Sparkles,
+  CalendarDays,
+  Heart,
+  History,
+  ArrowRight,
+  Clock,
+  CheckCircle2,
+} from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 import {
   Card,
   StatusBadge,
@@ -20,8 +33,8 @@ import {
   formatDate,
   formatTime,
   formatPeso,
-} from '@/components/ui';
-import type { AppointmentStatus } from '@/db/schema';
+} from "@/components/ui";
+import type { AppointmentStatus } from "@/db/schema";
 
 interface AppointmentRow extends ServiceRecord {
   look?: AppointmentLook | null;
@@ -36,28 +49,28 @@ interface AppointmentRow extends ServiceRecord {
 
 const quickActions = [
   {
-    href: '/client/ai-consultation',
+    href: "/client/ai-consultation",
     icon: Sparkles,
-    title: 'AI Consultation',
-    body: 'Talk through your direction and explore three generated looks',
+    title: "AI Consultation",
+    body: "Talk through your direction and explore three generated looks",
   },
   {
-    href: '/booking',
+    href: "/booking",
     icon: CalendarDays,
-    title: 'Book',
-    body: 'Reserve your next appointment',
+    title: "Book",
+    body: "Reserve your next appointment",
   },
   {
-    href: '/client/nail-studio',
-    icon: Hand,
-    title: 'Nail Studio',
-    body: 'Try a supported nail style on your hand photo',
+    href: "/client/saved-looks",
+    icon: Heart,
+    title: "My Saved Looks",
+    body: "Revisit your saved previews or book a look you love",
   },
   {
-    href: '/client/hair-studio',
-    icon: Scissors,
-    title: 'Hair Studio',
-    body: 'Try a supported hairstyle on your portrait',
+    href: "/client/consultation-history",
+    icon: History,
+    title: "Consultation History",
+    body: "Your private conversations, reference photos, and results",
   },
 ];
 
@@ -65,12 +78,15 @@ export default function ClientDashboard() {
   const { user } = useAuth();
   const [appointments, setAppointments] = useState<AppointmentRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const load = () => {
-    fetch('/api/appointments')
-      .then((r) => r.json())
-      .then((value) => setAppointments(value.appointments ?? []))
-      .catch(() => setAppointments([]))
+    businessRequest("/api/appointments")
+      .then((value) => {
+        setAppointments(value.appointments ?? []);
+        setError("");
+      })
+      .catch((cause) => setError(cause.message))
       .finally(() => setLoading(false));
   };
   useEffect(load, []);
@@ -80,12 +96,17 @@ export default function ClientDashboard() {
   const upcoming = appointments
     .filter(
       (a) =>
-        new Date(a.appointmentDate).getTime() >= now && ['pending', 'confirmed'].includes(a.status),
+        new Date(a.appointmentDate).getTime() >= now &&
+        ["pending", "confirmed"].includes(a.status),
     )
-    .sort((a, b) => new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime());
+    .sort(
+      (a, b) =>
+        new Date(a.appointmentDate).getTime() -
+        new Date(b.appointmentDate).getTime(),
+    );
 
   const completed = appointments
-    .filter((a) => a.status === 'completed')
+    .filter((a) => a.status === "completed")
     .sort(
       (a, b) =>
         Date.parse(b.completedAt ?? b.appointmentDate) -
@@ -93,26 +114,74 @@ export default function ClientDashboard() {
     )
     .slice(0, 4);
 
-  const firstName = user?.name?.split(' ')[0] ?? '';
+  const firstName = user?.name?.split(" ")[0] ?? "";
 
   return (
-    <>
+    <PortalWorkspace>
       {/* Welcome */}
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="mb-8"
+        className="portal-hero"
       >
-        <h1 className="font-serif text-3xl text-white">
-          Welcome back{firstName && `, ${firstName}`}
-        </h1>
-        <p className="mt-1.5 text-[13px] text-muted">
-          {upcoming.length > 0
-            ? `You have ${upcoming.length} upcoming appointment${upcoming.length > 1 ? 's' : ''}.`
-            : 'No upcoming appointments — book when you’re ready.'}
-        </p>
+        <div>
+          <p className="portal-eyebrow">Your beauty journal</p>
+          <h1 className="font-serif text-3xl text-white">
+            Welcome back{firstName && `, ${firstName}`}
+          </h1>
+          <p className="mt-1.5 text-[13px] text-muted">
+            {upcoming.length > 0
+              ? `You have ${upcoming.length} upcoming appointment${upcoming.length > 1 ? "s" : ""}.`
+              : "No upcoming appointments — book when you’re ready."}
+          </p>
+        </div>
+        <Link href="/booking" className="portal-button portal-primary">
+          Book a visit
+          <ArrowRight size={15} />
+        </Link>
       </motion.div>
+      {error && (
+        <p role="alert" className="portal-alert">
+          {error}
+        </p>
+      )}
+      <PortalMetrics
+        items={[
+          {
+            label: "Upcoming visits",
+            value: loading ? "—" : upcoming.length,
+            icon: CalendarDays,
+            note: "Your next moments of care",
+          },
+          {
+            label: "Completed visits",
+            value: loading
+              ? "—"
+              : appointments.filter((a) => a.status === "completed").length,
+            icon: CheckCircle2,
+            note: "Your service history",
+          },
+          {
+            label: "Next appointment",
+            value: loading
+              ? "—"
+              : upcoming[0]
+                ? formatDate(upcoming[0].appointmentDate)
+                : "Not booked",
+            icon: Clock,
+            note: upcoming[0]
+              ? formatTime(upcoming[0].appointmentDate)
+              : "Choose a time that suits you",
+          },
+          {
+            label: "Your account",
+            value: "Private",
+            icon: Heart,
+            note: "Looks and consultations belong to you",
+          },
+        ]}
+      />
 
       {/* Quick actions */}
       <div className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -130,11 +199,18 @@ export default function ClientDashboard() {
               <div className="mb-3.5 inline-flex h-10 w-10 items-center justify-center rounded-full border border-gold/25 bg-gold/10">
                 <a.icon size={17} className="text-gold" />
               </div>
-              <h3 className="mb-1.5 font-serif text-base text-white">{a.title}</h3>
-              <p className="mb-3 flex-1 text-[12px] leading-relaxed text-muted">{a.body}</p>
+              <h3 className="mb-1.5 font-serif text-base text-white">
+                {a.title}
+              </h3>
+              <p className="mb-3 flex-1 text-[12px] leading-relaxed text-muted">
+                {a.body}
+              </p>
               <span className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[1.5px] text-gold">
                 Open
-                <ArrowRight size={11} className="transition-transform group-hover:translate-x-1" />
+                <ArrowRight
+                  size={11}
+                  className="transition-transform group-hover:translate-x-1"
+                />
               </span>
             </Link>
           </motion.div>
@@ -143,23 +219,35 @@ export default function ClientDashboard() {
 
       {!loading && completed.length > 0 && (
         <Card className="mb-6">
-          <h2 className="mb-4 font-serif text-xl text-white">Recently Completed</h2>
+          <h2 className="mb-4 font-serif text-xl text-white">
+            Recently Completed
+          </h2>
           <Link href="/client/appointments" className="text-gold">
             All appointments and reviews
           </Link>
           {completed.map((a) => (
-            <section key={a.id} className="my-4 border-t border-purple-light/20 pt-3">
+            <section
+              key={a.id}
+              className="my-4 border-t border-purple-light/20 pt-3"
+            >
               <h3>{a.serviceName}</h3>
               <StatusBadge status={a.status} />
               <p>
-                {formatDate(a.appointmentDate)} at {formatTime(a.appointmentDate)} ·{' '}
-                {a.stylist?.name ?? 'Unassigned stylist'} · Recorded amount:{' '}
-                {a.totalPrice === null ? 'Price to be confirmed' : formatPeso(a.totalPrice)}
+                {formatDate(a.appointmentDate)} at{" "}
+                {formatTime(a.appointmentDate)} ·{" "}
+                {a.stylist?.name ?? "Unassigned stylist"} · Recorded amount:{" "}
+                {a.totalPrice === null
+                  ? "Price to be confirmed"
+                  : formatPeso(a.totalPrice)}
               </p>
               <AppointmentLookPreview look={a.look} />
               <AppointmentServiceRecord record={a} />
               {a.stylist && (
-                <AppointmentReviewForm id={a.id} review={a.review} onSubmitted={load} />
+                <AppointmentReviewForm
+                  id={a.id}
+                  review={a.review}
+                  onSubmitted={load}
+                />
               )}
             </section>
           ))}
@@ -218,13 +306,17 @@ export default function ClientDashboard() {
                         <Clock size={11} />
                         {formatTime(a.appointmentDate)}
                       </span>
-                      <span>with {a.stylist?.name ?? 'Unassigned stylist'}</span>
+                      <span>
+                        with {a.stylist?.name ?? "Unassigned stylist"}
+                      </span>
                     </p>
                     <AppointmentLookPreview look={a.look} />
                   </div>
                   <div className="flex shrink-0 flex-col items-end gap-1.5">
                     <StatusBadge status={a.status} />
-                    <span className="text-[11px] text-muted">{formatPeso(a.totalPrice)}</span>
+                    <span className="text-[11px] text-muted">
+                      {formatPeso(a.totalPrice)}
+                    </span>
                   </div>
                 </li>
               ))}
@@ -244,14 +336,15 @@ export default function ClientDashboard() {
             </Link>
           </div>
           <p className="mb-5 text-sm leading-relaxed text-secondary">
-            Start with a short consultation or choose an AI style yourself. Your photo stays in this
-            session.
+            Start with a short consultation or choose an AI style yourself.
+            Revisit your uploaded references and archived results in
+            Consultation History.
           </p>
           <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-1">
             {[
-              { href: '/client/hair-studio', name: 'Hairstyle' },
-              { href: '/client/makeup-studio', name: 'Makeup' },
-              { href: '/client/nail-studio', name: 'Nails' },
+              { href: "/client/hair-studio", name: "Hairstyle" },
+              { href: "/client/makeup-studio", name: "Makeup" },
+              { href: "/client/nail-studio", name: "Nails" },
             ].map((item) => (
               <Link
                 key={item.href}
@@ -265,6 +358,6 @@ export default function ClientDashboard() {
           </div>
         </Card>
       </div>
-    </>
+    </PortalWorkspace>
   );
 }

@@ -89,6 +89,9 @@ test.beforeEach(async () => {
       'not-a-login',
       role,
     ]);
+  await query("INSERT INTO stylist_specialties(stylist_id,service_type) SELECT $1,x FROM unnest(ARRAY['hair','nail','makeup','treatment','massage','aesthetic']) x", [S]);
+  await query("INSERT INTO stylist_specialties(stylist_id,service_type) SELECT $1,x FROM unnest(ARRAY['hair','nail','makeup','treatment','massage','aesthetic']) x", [S2]);
+  await query(`INSERT INTO stylist_work_settings(stylist_id,available,hours) SELECT id,true,$1::jsonb FROM users WHERE role='stylist'`,[JSON.stringify(Array.from({length:7},(_,day)=>({day,start:'00:00',end:'23:59'})))]);
 });
 test.after(async () => db.close());
 test('completion retries keep one timestamp and one set of product records without stock deduction', async () => {
@@ -292,7 +295,7 @@ test('performance counts appointments once despite multiple products; ratings, u
   const second = await appointment('completed', S, null, '2030-10-17 15:59:59');
   await review(second, 2, null);
   await appointment('completed', S, 999, '2030-10-17 16:00:00');
-  await appointment('pending', S, 777);
+  await appointment('pending', null, 777);
   actor = A;
   const response = await stylistPerformance(
     request('/api/admin/stylist-performance?from=2030-10-17&to=2030-10-17', 'GET'),

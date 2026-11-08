@@ -1,265 +1,434 @@
-'use client';
-import { AppointmentServiceRecord } from '@/components/appointment-service-record';
-import type { ServiceRecord } from '@/lib/business/workflow-types';
-import { useAppointmentRefresh } from '@/lib/business/use-appointment-refresh';
-
-import { AdminBookingControls } from '@/components/admin-booking-controls';
-import { AppointmentLookPreview, type AppointmentLook } from '@/components/appointment-look';
-
-import { ServiceCompletion } from '@/components/service-completion';
-import { useState, useEffect, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import { Search, Trash2, Loader2, CalendarDays, Clock } from 'lucide-react';
+"use client";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  CalendarDays,
+  CheckCircle2,
+  Clock,
+  Search,
+  SlidersHorizontal,
+  UserRound,
+  RefreshCw,
+} from "lucide-react";
+import { AdminAppointmentDialog } from "@/components/admin-appointment-dialog";
 import {
   PageHeader,
-  Card,
   StatusBadge,
   EmptyState,
   Skeleton,
   formatDate,
   formatTime,
   formatPeso,
-} from '@/components/ui';
-import { appointmentStatusEnum, type AppointmentStatus } from '@/db/schema';
-
-interface Row extends ServiceRecord {
-  look?: AppointmentLook | null;
-  stylistId: string | null;
-  id: string;
-  serviceName: string;
-  serviceType: string;
-  appointmentDate: string;
-  status: AppointmentStatus;
-  totalPrice: number | null;
-  notes: string | null;
-  client: { id: string; name: string; email: string } | null;
-  stylist: { id: string; name: string } | null;
-}
+} from "@/components/ui";
+import {
+  PortalWorkspace,
+  PortalMetrics,
+  PortalPagination,
+} from "@/components/portal-workspace";
+import { businessRequest } from "@/lib/business/client";
+import { useAppointmentRefresh } from "@/lib/business/use-appointment-refresh";
+import {
+  appointmentCounts,
+  filterAppointments,
+  DEFAULT_APPOINTMENT_FILTERS,
+  type AppointmentFilters,
+  type AdminAppointment,
+  type AdminStylistOption,
+} from "@/lib/business/appointment-list";
+import { appointmentStatusEnum } from "@/db/schema";
 
 export default function AdminAppointmentsPage() {
-  const [stylists, setStylists] = useState<{ id: string; name: string }[]>([]);
-  useEffect(() => {
-    let active = true;
-    fetch('/api/stylists')
-      .then((r) => r.json())
-      .then((d) => {
-        if (active) setStylists(d.stylists ?? []);
-      })
-      .catch(() => {});
-    return () => {
-      active = false;
-    };
-  }, []);
-  const [rows, setRows] = useState<Row[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [query, setQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<AppointmentStatus | 'all'>('all');
-  const [busy, setBusy] = useState<string | null>(null);
-  const [actionError, setActionError] = useState('');
-
-  const load = () => {
-    fetch('/api/appointments')
-      .then((r) => r.json())
-      .then((d) => setRows(d.appointments ?? []))
-      .catch(() => setRows([]))
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(load, []);
-  useAppointmentRefresh(load);
-
-  const setStatus = async (id: string, status: AppointmentStatus) => {
-    setBusy(id);
-    setActionError('');
+  const [rows, setRows] = useState<AdminAppointment[]>([]),
+    [stylists, setStylists] = useState<AdminStylistOption[]>([]),
+    [directoryReady, setDirectoryReady] = useState(false);
+  const [loading, setLoading] = useState(true),
+    [refreshing, setRefreshing] = useState(false),
+    [error, setError] = useState(""),
+    [directoryError, setDirectoryError] = useState(""),
+    [notice, setNotice] = useState("");
+  const [filters, setFilters] = useState<AppointmentFilters>({
+      ...DEFAULT_APPOINTMENT_FILTERS,
+    }),
+    [advanced, setAdvanced] = useState(false),
+    [page, setPage] = useState(1),
+    [selected, setSelected] = useState<string | null>(null);
+  const request = useRef(0);
+  const load = useCallback(async () => {
+    const version = ++request.current;
+    setRefreshing(true);
     try {
-      const res = await fetch(`/api/appointments/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status }),
-      });
-      if (!res.ok) throw new Error((await res.json()).error || 'Could not update the appointment.');
-      if (res.ok) {
-        setRows((rs) => rs.map((r) => (r.id === id ? { ...r, status } : r)));
+      const data = await businessRequest("/api/appointments");
+      if (version === request.current) {
+        setRows(data.appointments ?? []);
+        setError("");
       }
     } catch (cause) {
-      setActionError(cause instanceof Error ? cause.message : 'Could not update the appointment.');
+      if (version === request.current)
+        setError(
+          cause instanceof Error
+            ? cause.message
+            : "Could not load appointments.",
+        );
     } finally {
-      setBusy(null);
+      if (version === request.current) {
+        setLoading(false);
+        setRefreshing(false);
+      }
     }
+  }, []);
+  useEffect(() => {
+    void load();
+    let active = true;
+    businessRequest("/api/stylists?manage=true")
+      .then((data) => {
+        if (active) {
+          setStylists(data.stylists ?? []);
+          setDirectoryReady(true);
+        }
+      })
+      .catch(() => {
+        if (active)
+          setDirectoryError(
+            "The stylist directory could not be loaded. Assignment changes are temporarily unavailable.",
+          );
+      });
+    return () => {
+      active = false;
+      request.current++;
+    };
+  }, [load]);
+  useAppointmentRefresh(load);
+  const counts = appointmentCounts(rows),
+    filtered = useMemo(
+      () => filterAppointments(rows, filters),
+      [rows, filters],
+    );
+  const pages = Math.max(1, Math.ceil(filtered.length / 12)),
+    current = Math.min(page, pages),
+    visible = filtered.slice((current - 1) * 12, current * 12),
+    appointment = rows.find((row) => row.id === selected);
+  const update = (patch: Partial<AppointmentFilters>) => {
+    setFilters((previous) => ({ ...previous, ...patch }));
+    setPage(1);
   };
-
-  const remove = async (id: string) => {
-    if (!confirm('Delete this appointment permanently?')) return;
-    setBusy(id);
-    setActionError('');
-    try {
-      const res = await fetch(`/api/appointments/${id}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error((await res.json()).error || 'Could not update the appointment.');
-      if (res.ok) setRows((rs) => rs.filter((r) => r.id !== id));
-    } catch (cause) {
-      setActionError(cause instanceof Error ? cause.message : 'Could not update the appointment.');
-    } finally {
-      setBusy(null);
-    }
+  const changed = async (message: string) => {
+    await load();
+    setNotice(message);
   };
-
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return rows.filter((r) => {
-      if (statusFilter !== 'all' && r.status !== statusFilter) return false;
-      if (!q) return true;
-      return (
-        r.serviceName.toLowerCase().includes(q) ||
-        r.client?.name.toLowerCase().includes(q) ||
-        r.client?.email.toLowerCase().includes(q) ||
-        r.stylist?.name.toLowerCase().includes(q)
-      );
-    });
-  }, [rows, query, statusFilter]);
-
   return (
-    <>
-      <PageHeader title="Appointments" subtitle={`${rows.length} total · managing all bookings`} />
-
-      {/* Controls */}
-      <div className="mb-6 flex flex-wrap gap-3">
-        <div className="relative min-w-[240px] flex-1">
-          <Search
-            size={14}
-            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted"
-          />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search client, service, or stylist…"
-            className="w-full rounded-sm border border-purple-light/20 bg-surface/40 py-2.5 pl-9 pr-4 text-[13px] text-white placeholder-muted focus:border-purple-light focus:outline-none"
-          />
+    <PortalWorkspace>
+      <PageHeader
+        title="Appointments"
+        subtitle="A clear view of every visit, from booking to completion."
+      />
+      <PortalMetrics
+        items={[
+          {
+            label: "Scheduled today",
+            value: loading ? "—" : counts.today,
+            icon: CalendarDays,
+            note: "Philippine time",
+          },
+          {
+            label: "Upcoming visits",
+            value: loading ? "—" : counts.upcoming,
+            icon: Clock,
+            note: "Pending and confirmed",
+          },
+          {
+            label: "Needs assignment",
+            value: loading ? "—" : counts.unassigned,
+            icon: UserRound,
+            note: "Active bookings",
+          },
+          {
+            label: "Completed services",
+            value: loading ? "—" : counts.completed,
+            icon: CheckCircle2,
+            note: "All recorded visits",
+          },
+        ]}
+      />
+      {error && (
+        <div role="alert" className="portal-alert">
+          {error}{" "}
+          <button onClick={() => void load()} className="underline">
+            Try again
+          </button>
         </div>
-
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value as AppointmentStatus | 'all')}
-          className="rounded-sm border border-purple-light/20 bg-surface/40 px-4 py-2.5 text-[13px] text-white focus:border-purple-light focus:outline-none"
-        >
-          <option value="all">All statuses</option>
-          {appointmentStatusEnum.enumValues.map((s) => (
-            <option key={s} value={s}>
-              {s.charAt(0).toUpperCase() + s.slice(1)}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {actionError && <p role="alert">{actionError}</p>}
-      {loading ? (
-        <div className="flex flex-col gap-3">
-          {[0, 1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-20 w-full" />
+      )}
+      {directoryError && (
+        <p role="alert" className="portal-alert">
+          {directoryError}
+        </p>
+      )}
+      {notice && (
+        <p role="status" className="portal-notice">
+          {notice}
+        </p>
+      )}
+      <section className="portal-panel">
+        <div className="portal-panel-heading">
+          <div>
+            <h2>Booking register</h2>
+            <p>{rows.length} bookings · times shown in the Philippines</p>
+          </div>
+          <button
+            className="portal-button"
+            disabled={refreshing}
+            onClick={() => void load()}
+          >
+            <RefreshCw size={14} className={refreshing ? "animate-spin" : ""} />
+            Refresh
+          </button>
+        </div>
+        <div className="portal-tabs" aria-label="Appointment views">
+          {(
+            [
+              ["all", "All bookings"],
+              ["today", "Today"],
+              ["upcoming", "Upcoming"],
+              ["unassigned", "Needs assignment"],
+            ] as const
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              aria-pressed={filters.view === value}
+              onClick={() =>
+                update({
+                  view: value,
+                  sort: value === "upcoming" ? "soonest" : filters.sort,
+                })
+              }
+            >
+              {label}
+            </button>
           ))}
         </div>
-      ) : filtered.length === 0 ? (
-        <Card>
+        <div className="portal-toolbar">
+          <label className="portal-search">
+            <Search size={16} />
+            <input
+              aria-label="Search appointments"
+              placeholder="Search client, service, or stylist"
+              value={filters.query}
+              onChange={(event) => update({ query: event.target.value })}
+            />
+          </label>
+          <select
+            aria-label="Filter by status"
+            value={filters.status}
+            onChange={(event) =>
+              update({
+                status: event.target.value as AppointmentFilters["status"],
+              })
+            }
+          >
+            <option value="all">All statuses</option>
+            {appointmentStatusEnum.enumValues.map((value) => (
+              <option key={value} value={value}>
+                {value[0].toUpperCase() + value.slice(1)}
+              </option>
+            ))}
+          </select>
+          <button
+            className="portal-button"
+            aria-expanded={advanced}
+            onClick={() => setAdvanced((value) => !value)}
+          >
+            <SlidersHorizontal size={14} />
+            Filters
+          </button>
+        </div>
+        {advanced && (
+          <div className="portal-filter-grid">
+            <label>
+              From date
+              <input
+                type="date"
+                value={filters.from}
+                onChange={(event) => update({ from: event.target.value })}
+              />
+            </label>
+            <label>
+              Through date
+              <input
+                type="date"
+                value={filters.to}
+                onChange={(event) => update({ to: event.target.value })}
+              />
+            </label>
+            <label>
+              Service
+              <select
+                aria-label="Filter by service"
+                value={filters.service}
+                onChange={(event) => update({ service: event.target.value })}
+              >
+                <option value="all">All services</option>
+                {[...new Set(rows.map((row) => row.serviceType))]
+                  .sort()
+                  .map((value) => (
+                    <option key={value} value={value}>
+                      {value}
+                    </option>
+                  ))}
+              </select>
+            </label>
+            <label>
+              Stylist
+              <select
+                aria-label="Filter by stylist"
+                value={filters.stylist}
+                onChange={(event) => update({ stylist: event.target.value })}
+              >
+                <option value="all">All stylists</option>
+                <option value="unassigned">Unassigned</option>
+                {stylists.map((stylist) => (
+                  <option key={stylist.id} value={stylist.id}>
+                    {stylist.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Sort by
+              <select
+                value={filters.sort}
+                onChange={(event) =>
+                  update({
+                    sort: event.target.value as AppointmentFilters["sort"],
+                  })
+                }
+              >
+                <option value="latest">Latest scheduled first</option>
+                <option value="soonest">Earliest scheduled first</option>
+                <option value="client">Client name</option>
+              </select>
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={filters.unpriced}
+                onChange={(event) => update({ unpriced: event.target.checked })}
+              />
+              Amount unconfirmed
+            </label>
+          </div>
+        )}
+        <div className="flex items-center justify-between gap-3 px-5 py-3 text-xs text-muted">
+          <p>{filtered.length} matching bookings</p>
+          <button
+            className="text-gold hover:underline"
+            onClick={() => {
+              setFilters({ ...DEFAULT_APPOINTMENT_FILTERS });
+              setPage(1);
+            }}
+          >
+            Reset filters
+          </button>
+        </div>
+        {filters.from && filters.to && filters.from > filters.to && (
+          <p role="alert" className="portal-alert mx-5">
+            The end date must be on or after the start date.
+          </p>
+        )}
+        {loading ? (
+          <div className="p-5 space-y-3">
+            {[0, 1, 2].map((value) => (
+              <Skeleton key={value} className="h-20 w-full" />
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
           <EmptyState
             icon={CalendarDays}
             title="No appointments match"
-            body="Try a different search or filter."
+            body="Choose another view or reset the filters."
           />
-        </Card>
-      ) : (
-        <div className="flex flex-col gap-3">
-          {filtered.map((r, i) => (
-            <motion.div
-              key={r.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: Math.min(i * 0.03, 0.25) }}
-            >
-              <Card className="flex flex-wrap items-start justify-between gap-4">
-                <div className="min-w-0 flex-1">
-                  <div className="mb-2 flex flex-wrap items-center gap-3">
-                    <h3 className="font-serif text-lg text-white">{r.serviceName}</h3>
-                    <StatusBadge status={r.status} />
-                  </div>
-                  <p className="mb-1 text-[12px] text-secondary">
-                    {r.client?.name ?? 'Unknown client'}
-                    {r.client?.email && <span className="text-muted"> · {r.client.email}</span>}
-                  </p>
-                  <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted">
-                    <span className="flex items-center gap-1.5">
-                      <CalendarDays size={11} />
-                      {formatDate(r.appointmentDate)}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <Clock size={11} />
-                      {formatTime(r.appointmentDate)}
-                    </span>
-                    <span>{r.stylist?.name ?? 'Unassigned'}</span>
-                    <span className="text-white">
-                      {r.totalPrice === null ? 'Price to be confirmed' : formatPeso(r.totalPrice)}
-                    </span>
-                  </p>
-                  <AppointmentLookPreview look={r.look} />
-                  <AppointmentServiceRecord record={r} />
-                  {r.status !== 'cancelled' && (
-                    <AdminBookingControls
-                      lockedAssignment={r.status === 'completed'}
-                      id={r.id}
-                      stylistId={r.stylistId ?? r.stylist?.id ?? null}
-                      totalPrice={r.totalPrice}
-                      onUpdated={load}
-                      stylists={stylists}
-                    />
-                  )}
-                  {r.notes && (
-                    <p className="mt-2 rounded-sm border border-purple-light/10 bg-surface/25 p-2.5 text-[12px] text-secondary">
-                      {r.notes}
-                    </p>
-                  )}
-                </div>
-
-                <div className="flex w-full flex-col items-stretch gap-2 lg:max-w-lg">
-                  {['pending', 'confirmed'].includes(r.status) && (
-                    <ServiceCompletion id={r.id} onCompleted={load} />
-                  )}
-                  <select
-                    value={r.status}
-                    onChange={(e) => setStatus(r.id, e.target.value as AppointmentStatus)}
-                    disabled={busy === r.id || ['completed', 'cancelled'].includes(r.status)}
-                    aria-label="Appointment status"
-                    className="rounded-sm border border-purple-light/20 bg-surface/40 px-3 py-2 text-[11px] text-white focus:border-purple-light focus:outline-none disabled:opacity-50"
-                  >
-                    {(
-                      [
-                        'pending',
-                        'confirmed',
-                        'cancelled',
-                        ...(r.status === 'completed' ? ['completed'] : []),
-                      ] as AppointmentStatus[]
-                    ).map((s) => (
-                      <option key={s} value={s}>
-                        {s.charAt(0).toUpperCase() + s.slice(1)}
-                      </option>
-                    ))}
-                  </select>
-
-                  <button
-                    onClick={() => remove(r.id)}
-                    disabled={busy === r.id || r.status === 'completed'}
-                    aria-label="Delete appointment"
-                    className="rounded-sm border border-error/30 p-2 text-error transition-colors hover:bg-error/10 disabled:opacity-50"
-                  >
-                    {busy === r.id ? (
-                      <Loader2 size={13} className="animate-spin" />
-                    ) : (
-                      <Trash2 size={13} />
-                    )}
-                  </button>
-                </div>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
+        ) : (
+          <div className="portal-table-scroll">
+            <table className="portal-table">
+              <thead>
+                <tr>
+                  <th>Visit</th>
+                  <th>Client</th>
+                  <th>Service & stylist</th>
+                  <th>Recorded amount</th>
+                  <th>Status</th>
+                  <th>
+                    <span className="sr-only">Actions</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {visible.map((row) => (
+                  <tr key={row.id}>
+                    <td>
+                      <strong>{formatDate(row.appointmentDate)}</strong>
+                      <span>
+                        {formatTime(row.appointmentDate)} ·{" "}
+                        {row.durationMinutes ?? 60} min
+                      </span>
+                    </td>
+                    <td>
+                      <strong>{row.client?.name ?? "Unknown client"}</strong>
+                      <span>{row.client?.email ?? "Email unavailable"}</span>
+                    </td>
+                    <td>
+                      <strong>{row.serviceName}</strong>
+                      <span className={!row.stylistId ? "text-gold" : ""}>
+                        {row.stylist?.name ?? "Needs assignment"}
+                      </span>
+                    </td>
+                    <td>
+                      <strong className="text-gold">
+                        {row.totalPrice === null
+                          ? "Unconfirmed"
+                          : formatPeso(row.totalPrice)}
+                      </strong>
+                    </td>
+                    <td>
+                      <StatusBadge status={row.status} />
+                    </td>
+                    <td>
+                      <button
+                        className="portal-button"
+                        aria-label={`View details for ${row.serviceName}, ${row.client?.name ?? "unknown client"}`}
+                        onClick={() => {
+                          setNotice("");
+                          setSelected(row.id);
+                        }}
+                      >
+                        View details
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        <PortalPagination
+          page={current}
+          pages={pages}
+          total={filtered.length}
+          onChange={setPage}
+        />
+      </section>
+      {appointment && (
+        <AdminAppointmentDialog
+          key={appointment.id}
+          appointment={appointment}
+          stylists={stylists}
+          directoryReady={directoryReady}
+          onClose={() => setSelected(null)}
+          onChanged={changed}
+          onDeleted={async (id) => {
+            setRows((previous) => previous.filter((row) => row.id !== id));
+            setSelected(null);
+            await changed("Appointment deleted.");
+          }}
+        />
       )}
-    </>
+    </PortalWorkspace>
   );
 }

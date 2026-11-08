@@ -10,6 +10,7 @@ import {
 } from 'react';
 import { useRouter } from 'next/navigation';
 import type { UserRole } from '@/db/schema';
+import { authUserFromResponse, readAuthResponse } from '@/lib/auth-response';
 
 export interface AuthUser {
   id: string;
@@ -47,8 +48,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const loadSession = useCallback(async () => {
     try {
       const res = await fetch('/api/auth/session', { cache: 'no-store' });
-      const data = await res.json();
-      setUser(data.user ?? null);
+      const data = await readAuthResponse(res, 'Could not restore your session.');
+      setUser(data.user == null ? null : authUserFromResponse(data.user));
     } catch {
       setUser(null);
     }
@@ -66,11 +67,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? 'Unable to sign in.');
-
-      setUser(data.user);
-      return data.user as AuthUser;
+      const data = await readAuthResponse(res, 'Unable to sign in.');
+      const signedIn = authUserFromResponse(data.user);
+      setUser(signedIn);
+      return signedIn;
     },
     []
   );
@@ -82,11 +82,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? 'Unable to create your account.');
-
-      setUser(data.user);
-      return data.user as AuthUser;
+      const data = await readAuthResponse(res, 'Unable to create your account.');
+      const registered = authUserFromResponse(data.user);
+      setUser(registered);
+      return registered;
     },
     []
   );

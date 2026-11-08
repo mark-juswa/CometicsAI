@@ -1,4 +1,26 @@
 @import "tailwindcss";
+@import "../components/portal-workspace.css";
+
+@layer components {
+  .management-shell { width: 100%; max-width: 1600px; margin-inline: auto; }
+  .management-shell input:not([type='checkbox']):not([type='radio']),
+  .management-shell select, .management-shell textarea {
+    width: 100%; min-width: 0; min-height: 42px; margin-top: .35rem;
+    border: 1px solid var(--color-purple-light); border-color: color-mix(in srgb, var(--color-purple-light) 28%, transparent);
+    border-radius: .375rem; padding: .6rem .75rem; background: var(--color-card); color: var(--color-primary); font-size: .8125rem;
+  }
+  .management-shell input[type='checkbox'], .management-shell input[type='radio'] { accent-color: var(--color-gold); width: 1rem; height: 1rem; flex-shrink: 0; }
+  .management-shell input:disabled, .management-shell select:disabled { opacity: .65; cursor: not-allowed; }
+  .management-shell button { min-height: 36px; cursor: pointer; }
+  .management-shell button:disabled { cursor: not-allowed; opacity: .55; }
+  .management-shell table { border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  .management-shell th { padding: .8rem 1rem; text-align: left; color: var(--color-muted); font-size: .6875rem; font-weight: 600; letter-spacing: .04em; }
+  .management-shell td { padding: 1rem; vertical-align: top; }
+  .management-shell tbody tr { border-top: 1px solid color-mix(in srgb, var(--color-purple-light) 12%, transparent); }
+  .management-shell tbody tr:hover { background: color-mix(in srgb, var(--color-surface) 25%, transparent); }
+  .management-shell h1 { overflow-wrap: anywhere; }
+  .management-shell [role='alert'] { overflow-wrap: anywhere; }
+}
 
 /* ─── Design tokens ────────────────────────────────────────────────────────
    Exposed to Tailwind as utilities: bg-deep, text-gold, border-purple-light…

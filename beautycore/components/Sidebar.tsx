@@ -34,8 +34,11 @@ export default function Sidebar({ links, portalLabel }: SidebarProps) {
   // Lock body scroll while the mobile drawer is open.
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
+    const close=(event:KeyboardEvent)=>{if(event.key==='Escape')setOpen(false);};
+    document.addEventListener('keydown',close);
     return () => {
       document.body.style.overflow = '';
+      document.removeEventListener('keydown',close);
     };
   }, [open]);
 
@@ -63,7 +66,7 @@ export default function Sidebar({ links, portalLabel }: SidebarProps) {
       </div>
 
       {/* Links */}
-      <nav className="scrollbar-thin flex-1 overflow-y-auto px-3 py-5">
+      <nav aria-label={`${portalLabel} navigation`} className="scrollbar-thin flex-1 overflow-y-auto px-3 py-5">
         <ul className="flex flex-col gap-1">
           {links.map(({ href, label, icon: Icon }) => {
             // Exact match, or a nested route below this link.
@@ -130,6 +133,7 @@ export default function Sidebar({ links, portalLabel }: SidebarProps) {
         <button
           onClick={() => setOpen(true)}
           aria-label="Open navigation"
+          aria-expanded={open}
           className="p-1 text-white"
         >
           <Menu size={20} />

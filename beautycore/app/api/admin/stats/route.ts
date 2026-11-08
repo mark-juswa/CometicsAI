@@ -53,7 +53,7 @@ export async function GET() {
       db
         .select({ n: sql<number>`count(*)::int` })
         .from(users)
-        .where(eq(users.role, 'stylist')),
+        .where(and(eq(users.role, 'stylist'),eq(users.isActive,true))),
 
       db
         .select({

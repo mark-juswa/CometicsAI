@@ -9,6 +9,7 @@
 export interface ServiceItem {
   name: string;
   price: string;
+  durationMinutes: number;
 }
 
 export interface ServiceCategory {
@@ -26,7 +27,11 @@ export interface ServiceGroup {
   categories: ServiceCategory[];
 }
 
-const item = (name: string, price: string): ServiceItem => ({ name, price });
+const item = (name: string, price: string): ServiceItem => ({
+  name,
+  price,
+  durationMinutes: Number(/\((\d{2,3})\s*min\)/i.exec(name)?.[1] ?? 60),
+});
 
 export const serviceGroups: ServiceGroup[] = [
   {
@@ -212,6 +217,11 @@ export const allServices = serviceGroups.flatMap((g) =>
     })),
   ),
 );
+
+export function serviceDurationMinutes(name: string, serviceType: string): number {
+  const service = allServices.find((item) => item.name === name && item.serviceType === serviceType);
+  return service?.durationMinutes ?? 60;
+}
 
 /** "Mula ₱1,500" -> 1500. Returns null for "Libre" / "Konsultasyon". */
 export function parsePrice(price: string): number | null {

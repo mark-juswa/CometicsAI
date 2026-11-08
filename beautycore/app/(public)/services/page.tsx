@@ -1,13 +1,34 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
-import { serviceGroups } from '@/lib/services';
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { serviceGroups } from "@/lib/services";
 
 export default function ServicesPage() {
   const [active, setActive] = useState(serviceGroups[0].id);
+  useEffect(() => {
+    const syncCategory = () => {
+      const id = window.location.hash.slice(1);
+      if (serviceGroups.some((group) => group.id === id)) setActive(id);
+      else if (!id) setActive(serviceGroups[0].id);
+    };
+    syncCategory();
+    window.addEventListener("hashchange", syncCategory);
+    window.addEventListener("popstate", syncCategory);
+    return () => {
+      window.removeEventListener("hashchange", syncCategory);
+      window.removeEventListener("popstate", syncCategory);
+    };
+  }, []);
+  useEffect(() => {
+    if (window.location.hash !== `#${active}`) return;
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById(active)?.scrollIntoView?.({ block: "start" });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [active]);
   const group = serviceGroups.find((g) => g.id === active) ?? serviceGroups[0];
 
   return (
@@ -37,11 +58,15 @@ export default function ServicesPage() {
       <section className="sticky top-[73px] z-30 border-b border-purple-light/15 bg-deep/85 backdrop-blur-md">
         <div className="scrollbar-thin mx-auto flex max-w-7xl gap-1 overflow-x-auto px-6 lg:px-10">
           {serviceGroups.map((g) => (
-            <button
+            <a
               key={g.id}
+              href={`#${g.id}`}
+              aria-current={active === g.id ? "page" : undefined}
               onClick={() => setActive(g.id)}
               className={`relative whitespace-nowrap px-4 py-4 text-[11px] font-medium uppercase tracking-[1.5px] transition-colors ${
-                active === g.id ? 'text-gold' : 'text-muted hover:text-secondary'
+                active === g.id
+                  ? "text-gold"
+                  : "text-muted hover:text-secondary"
               }`}
             >
               {g.label}
@@ -51,7 +76,7 @@ export default function ServicesPage() {
                   className="absolute bottom-0 left-0 h-px w-full bg-gold"
                 />
               )}
-            </button>
+            </a>
           ))}
         </div>
       </section>
@@ -59,65 +84,73 @@ export default function ServicesPage() {
       {/* Panel */}
       <section className="px-6 py-16 lg:px-10">
         <div className="mx-auto max-w-7xl">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={group.id}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="mb-10 max-w-2xl">
-                <h2 className="mb-2 font-serif text-3xl text-white">{group.label}</h2>
-                <p className="mb-4 text-[11px] uppercase tracking-[2px] text-gold">
-                  {group.sub}
-                </p>
-                <p className="text-[14px] leading-relaxed text-secondary">{group.intro}</p>
-              </div>
+          <motion.div
+            key={group.id}
+            id={group.id}
+            className="scroll-mt-48"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="mb-10 max-w-2xl">
+              <h2 className="mb-2 font-serif text-3xl text-white">
+                {group.label}
+              </h2>
+              <p className="mb-4 text-[11px] uppercase tracking-[2px] text-gold">
+                {group.sub}
+              </p>
+              <p className="text-[14px] leading-relaxed text-secondary">
+                {group.intro}
+              </p>
+            </div>
 
-              <div className="grid gap-6 lg:grid-cols-2">
-                {group.categories.map((cat) => (
-                  <div
-                    key={cat.title}
-                    className="rounded-sm border border-purple-light/15 bg-card p-6"
-                  >
-                    <h3 className="mb-5 border-b border-purple-light/15 pb-3 text-[11px] font-semibold uppercase tracking-[2.5px] text-gold">
-                      {cat.title}
-                    </h3>
-                    <ul className="flex flex-col gap-3">
-                      {cat.items.map((s) => (
-                        <li
-                          key={s.name}
-                          className="flex items-baseline justify-between gap-4 border-b border-white/[0.04] pb-3 last:border-0 last:pb-0"
-                        >
-                          <span className="text-[13px] text-secondary">{s.name}</span>
-                          <span className="shrink-0 text-[13px] font-medium text-white">
-                            {s.price}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
+            <div className="grid gap-6 lg:grid-cols-2">
+              {group.categories.map((cat) => (
+                <div
+                  key={cat.title}
+                  className="rounded-sm border border-purple-light/15 bg-card p-6"
+                >
+                  <h3 className="mb-5 border-b border-purple-light/15 pb-3 text-[11px] font-semibold uppercase tracking-[2.5px] text-gold">
+                    {cat.title}
+                  </h3>
+                  <ul className="flex flex-col gap-3">
+                    {cat.items.map((s) => (
+                      <li
+                        key={s.name}
+                        className="flex items-baseline justify-between gap-4 border-b border-white/[0.04] pb-3 last:border-0 last:pb-0"
+                      >
+                        <span className="text-[13px] text-secondary">
+                          {s.name}
+                        </span>
+                        <span className="shrink-0 text-[13px] font-medium text-white">
+                          {s.price}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
 
-              <div className="mt-10 flex flex-wrap gap-3">
-                <Link
-                  href={`/booking?service=${group.id}`}
-                  className="group flex items-center gap-2 bg-gold px-7 py-3.5 text-[11px] font-semibold uppercase tracking-[2px] text-card transition-all hover:bg-gold-hover"
-                >
-                  Book {group.label}
-                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-                </Link>
-                <Link
-                  href="/contact"
-                  className="border border-purple-light/40 px-7 py-3.5 text-[11px] font-semibold uppercase tracking-[2px] text-secondary transition-all hover:border-purple-light hover:text-white"
-                >
-                  Ask a Question
-                </Link>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+            <div className="mt-10 flex flex-wrap gap-3">
+              <Link
+                href={`/booking?service=${group.id}`}
+                className="group flex items-center gap-2 bg-gold px-7 py-3.5 text-[11px] font-semibold uppercase tracking-[2px] text-card transition-all hover:bg-gold-hover"
+              >
+                Book {group.label}
+                <ArrowRight
+                  size={14}
+                  className="transition-transform group-hover:translate-x-1"
+                />
+              </Link>
+              <Link
+                href="/contact"
+                className="border border-purple-light/40 px-7 py-3.5 text-[11px] font-semibold uppercase tracking-[2px] text-secondary transition-all hover:border-purple-light hover:text-white"
+              >
+                Ask a Question
+              </Link>
+            </div>
+          </motion.div>
         </div>
       </section>
     </>

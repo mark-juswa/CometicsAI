@@ -714,15 +714,15 @@ test('archived generated images can be downloaded privately without saving or ge
 
 
 test("every catalog service reserves ninety minutes", () => {
-  for(const service of allServices) assert.equal(serviceDurationMinutes(service.name),90,service.name);
+  for(const service of allServices) assert.equal(serviceDurationMinutes(service.name, service.serviceType),90,service.name);
 });
 
 test("nine o'clock blocks ninety minutes for that stylist and exposes no client data", async () => {
   assert.equal((await book('2030-10-17T01:00:00Z')).status,201);
   assert.equal((await query('SELECT duration_minutes FROM appointments'))[0].duration_minutes,90);
   const response=await bookingAvailability(req('/api/appointments/availability?'+new URLSearchParams({date:'2030-10-17',service:"Women's Cut & Blowdry",stylist:S})),{query});
-  assert.equal(response.status,200);assert.match(response.headers.get('Cache-Control'),/no-store/);
-  const body=await response.json();
+  assert.equal(response.status,200);assert.match(response.headers.get('Cache-Control') ?? '',/no-store/);
+  const body=await response.json() as {slots:{time:string;available:boolean}[]};
   for(const time of ['09:00','09:30','10:00'])assert.equal(body.slots.find(s=>s.time===time)?.available,false,time);
   assert.equal(body.slots.find(s=>s.time==='10:30')?.available,true);
   assert.ok(!body.slots.some(s=>s.time==='16:00'));
@@ -758,11 +758,11 @@ test("scheduling upgrade preserves old rows, blocks short legacy overlaps and fo
 });
 
 test("availability rejects malformed inputs and excludes cancelled and off-duty bookings", async()=>{
- for(const params of [{date:'2030-02-30',service:"Women's Cut & Blowdry"},{date:'2030-10-17',service:'unknown'},{date:'2030-10-17',service:"Women's Cut & Blowdry",stylist:'invalid'}])assert.equal((await bookingAvailability(req('/api/appointments/availability?'+new URLSearchParams(params)),{query})).status,400);
+ for(const params of ([{date:'2030-02-30',service:"Women's Cut & Blowdry"},{date:'2030-10-17',service:'unknown'},{date:'2030-10-17',service:"Women's Cut & Blowdry",stylist:'invalid'}] as Record<string,string>[]))assert.equal((await bookingAvailability(req('/api/appointments/availability?'+new URLSearchParams(params)),{query})).status,400);
  const response=await book('2030-10-17T01:00:00Z');const id=(await response.json()).appointment.id;
  await query("UPDATE appointments SET status='cancelled' WHERE id=$1",[id]);
  const path='/api/appointments/availability?'+new URLSearchParams({date:'2030-10-17',service:"Women's Cut & Blowdry",stylist:S});
- let body=await (await bookingAvailability(req(path),{query})).json();assert.equal(body.slots.find(s=>s.time==='09:00').available,true);
+ let body=await (await bookingAvailability(req(path),{query})).json() as {slots:{time:string;available:boolean}[]};assert.equal(body.slots.find(s=>s.time==='09:00')?.available,true);
  await query('UPDATE stylist_work_settings SET available=false WHERE stylist_id=$1',[S]);
  body=await (await bookingAvailability(req(path),{query})).json();assert.deepEqual(body.slots,[]);
 });

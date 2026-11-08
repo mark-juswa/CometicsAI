@@ -12,7 +12,7 @@
     "db:push": "drizzle-kit push",
     "db:seed": "tsx db/seed.ts",
     "db:studio": "drizzle-kit studio",
-    "test:business": "node --experimental-test-module-mocks --import tsx --test --test-concurrency=1 tests/business-workflows.test.ts tests/business-ui.test.mjs tests/finance-stats.test.mjs tests/saved-look-migrations.test.ts tests/look-information.test.ts tests/service-completion.test.ts tests/additional-features.test.ts tests/auth-response.test.ts tests/revenue-report.test.ts tests/appointment-list.test.ts tests/saved-look-retry.test.ts",
+    "test:business": "node --experimental-test-module-mocks --import tsx --test --test-concurrency=1 tests/business-workflows.test.ts tests/business-ui.test.mjs tests/finance-stats.test.mjs tests/saved-look-migrations.test.ts tests/look-information.test.ts tests/service-completion.test.ts tests/additional-features.test.ts tests/auth-response.test.ts tests/revenue-report.test.ts tests/appointment-list.test.ts tests/saved-look-retry.test.ts tests/saved-look-image.test.ts",
     "db:check:saved-looks": "tsx scripts/apply-saved-looks.ts --check",
     "db:apply:enhancements": "tsx scripts/apply-saved-looks.ts --apply --additional-only --schema-only",
     "test:guest-trial": "node --experimental-test-module-mocks --import tsx --test tests/guest-trial.test.ts tests/guest-trial-ui.test.mjs",

@@ -1,0 +1,17 @@
+{
+  "status": "VERIFIED",
+  "browser": "ChatGPT in-app browser",
+  "fixture": "Synthetic 2048x2048 RGB PNG, compressionLevel 0; no personal image or AI call",
+  "originalBytes": 12605186,
+  "originalRejectedStatus": 413,
+  "preparedAcceptedStatus": 200,
+  "originalUnchanged": true,
+  "savedCopyBytes": 25337,
+  "savedCopyDimensions": [
+    2048,
+    2048
+  ],
+  "savedCopyMime": "image/jpeg",
+  "liveDatabaseWrites": 0,
+  "mobileSafariVerification": "NEEDS VERIFICATION"
+}

@@ -55,15 +55,19 @@ def decode_image(payload):
     return raw
 
 
-def run(work):
-    from kaggle_secrets import UserSecretsClient
+def run(work, *, secret_client=None, archive_directory=None, display_result=True,
+        execution_provider="kaggle"):
+    if secret_client is None:
+        from kaggle_secrets import UserSecretsClient
+        secret_client = UserSecretsClient()
     work = Path(work)
     cpu, gpu = work / "cpu-src", work / "gpu-src"
     output = work / "application-results"
     output.mkdir(exist_ok=False)
     report = {"schema": "makeup-corrective-application-results-v1", "status": "IN_PROGRESS",
-              "production_registered": False, "automatic_generation_retries": 0, "cases": []}
-    secret = UserSecretsClient()
+              "production_registered": False, "automatic_generation_retries": 0, "cases": [],
+              "execution_provider": execution_provider}
+    secret = secret_client
     api_headers = {"X-AI-Backend-Key": secret.get_secret("AI_BACKEND_API_KEY"),
                    "X-AI-User-Id": "corrective-application-validation"}
     gpu_headers = {"X-API-Key": secret.get_secret("AI_REMOTE_API_KEY")}
@@ -145,7 +149,7 @@ def run(work):
         report["status"] = "TECHNICAL_PASS_VISUAL_REVIEW_PENDING"
         report["limits"] = ["Reused development subjects, fresh user upload unverified.",
             "Nails prepared crop tests adapter switching, full hand application unchanged and not retested.",
-            "No live website, save/book or mobile acceptance in this local Kaggle API test."]
+            "No live website, save/book or mobile acceptance in this private API test."]
     except Exception as error:
         # Preserve outputs and exact exception category, not secret-bearing URLs/headers.
         report["status"], report["error_type"] = "FAILED_OR_UNCERTAIN_NO_REPLAY", type(error).__name__
@@ -156,13 +160,57 @@ def run(work):
             '<style>body{font:16px sans-serif;background:#eee}div{display:flex;flex-wrap:wrap}img{width:32%;min-width:260px}</style>'
             '<h1>Original | Accepted model RAW | Application RAW</h1><p>Production remains on hold. Technical status: '
             + escape(report["status"]) + '</p>' + ''.join(panels), encoding="utf-8")
-        archive = Path("/kaggle/working/makeup_corrective001_application_results.zip")
+        archive_name = ("runpod_application_results.zip" if execution_provider == "runpod"
+                        else "makeup_corrective001_application_results.zip")
+        archive = Path(archive_directory or "/kaggle/working") / archive_name
         if archive.exists():
-            archive = archive.with_name("makeup_corrective001_application_results_" + uuid4().hex[:8] + ".zip")
+            archive = archive.with_name(archive.stem + "_" + uuid4().hex[:8] + ".zip")
         with ZipFile(archive, "x", ZIP_DEFLATED) as bundle:
             for path in output.iterdir():
                 bundle.write(path, path.name)
         print("RESULT:", archive, report["status"], "cases", len(report["cases"]), flush=True)
-        from IPython.display import display, FileLink
-        display(FileLink(str(archive)))
+        if display_result:
+            from IPython.display import display, FileLink
+            display(FileLink(str(archive)))
     return report
+
+
+def runpod_main(argv=None):
+    """Run the existing fixed cases against an already ready, unregistered Pod."""
+    import argparse
+    import os
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("provider", choices=("runpod",))
+    parser.add_argument("--workspace", type=Path,
+                        default=Path(os.environ.get("RUNPOD_WORKSPACE", "/workspace/beautycore")))
+    args = parser.parse_args(argv)
+    workspace = args.workspace.resolve()
+    work = Path((workspace / "latest-run.txt").read_text()).resolve()
+    if not work.is_relative_to(workspace / "runs"):
+        raise ValueError("Latest run is outside the private workspace")
+    session = json.loads((work / "session.json").read_text())
+    if (session.get("status") != "READY_FOR_RUNPOD_VALIDATION"
+            or session.get("release_id") != "styles-20261106-01"
+            or os.environ.get("BEAUTYCORE_PUBLIC_URL", "").strip()):
+        raise ValueError("Use a ready validation-only Runpod session before website registration")
+
+    class EnvironmentSecrets:
+        def get_secret(self, name):
+            minimum = {"AI_BACKEND_API_KEY": 32, "AI_REMOTE_API_KEY": 24}[name]
+            value = os.environ.get(name, "")
+            if len(value) < minimum:
+                raise ValueError("Missing or short environment secret: " + name)
+            return value
+
+    secrets = EnvironmentSecrets()
+    for name in ("AI_BACKEND_API_KEY", "AI_REMOTE_API_KEY"):
+        secrets.get_secret(name)
+    archive_directory = workspace / "validation"
+    archive_directory.mkdir(exist_ok=True, mode=0o700)
+    result = run(work, secret_client=secrets, archive_directory=archive_directory,
+                 display_result=False, execution_provider="runpod")
+    return 0 if result["status"] == "TECHNICAL_PASS_VISUAL_REVIEW_PENDING" else 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(runpod_main())

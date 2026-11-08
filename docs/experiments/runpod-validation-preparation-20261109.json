@@ -1,0 +1,28 @@
+{
+  "progress": "DONE",
+  "evidence": "VERIFIED",
+  "scope": "Probe preparation and local synthetic tests only",
+  "user_reported_runtime_status": "READY_FOR_RUNPOD_VALIDATION",
+  "run_path": "/workspace/beautycore/runs/94a17b8710e34e48a7cd9a8596d11eb4",
+  "release": "styles-20261106-01",
+  "catalog_counts": {
+    "hair": 18,
+    "makeup": 13,
+    "nails": 8
+  },
+  "planned_real_requests": 16,
+  "planned_cases": {
+    "makeup": 13,
+    "hair": 2,
+    "nails_prepared_crop": 1
+  },
+  "script_sha256_local": "0f7733be21cb55b51c6a55bb98bd51284ceb4d992b7fffa77966f9b0771365c7",
+  "tests": {
+    "passed": 55,
+    "deselected": 1,
+    "historical_failure": "Candidate packager expects superseded legacy contract; outside changed probe path"
+  },
+  "real_generation_run": false,
+  "visual_review": "NOT STARTED",
+  "website_registered": false
+}

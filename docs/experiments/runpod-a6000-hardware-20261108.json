@@ -1,0 +1,17 @@
+{
+  "evidence": "VERIFIED",
+  "source": "User supplied output of instructed Jupyter Terminal command",
+  "gpu": "NVIDIA RTX A6000",
+  "gpu_vram_gib_rounded": 47.4,
+  "allocated_ram_gib_rounded": 46.57,
+  "torch": "2.10.0+cu128",
+  "compiled_cuda": "12.8",
+  "cuda_initialization": "PASS",
+  "distribution_inventory": "PASS (preceding verify_distribution completed without exception)",
+  "reported_workspace_free_gib": 297843.98,
+  "workspace_note": "Filesystem free-space report does not establish allocated volume quota; UI configured 75 GB Volume Disk.",
+  "profile_checks": "GPU/RAM/VRAM/compiled CUDA match candidate; full startup still enforces all package/artifact checks",
+  "base_loaded": false,
+  "generation_verified": false,
+  "render_registered": false
+}

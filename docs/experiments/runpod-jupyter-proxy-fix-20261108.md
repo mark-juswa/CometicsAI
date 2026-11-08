@@ -29,3 +29,5 @@ Sanitized synthetic logs and structured receipts are retained under `docs/experi
 ## Apply to the existing Pod
 
 Edit the existing Pod image to the corrected digest, preserving its volume, 20+ character notebook password, other secrets, HTTP8888 and empty start command. Apply the change and allow container startup. Do not delete the Pod or create a duplicate. Use its HTTPS8888 URL with /lab and no token query, then log in with the existing notebook password. Runpod's token based unauthenticated API status probe may still receive403 with this password protected setup; successful browser login is a separate check. Actual hardware, private input staging, Base startup and real output validation still follow. Render is not connected by this image change.
+
+Live recovery follow up: user supplied browser screenshot now shows the authenticated JupyterLab Launcher after the corrected image instructions. Live browser login/GUI recovery is visually established. Actual terminal operation, GPU/RAM/disk checks, Base load and AI/website acceptance remain unverified.

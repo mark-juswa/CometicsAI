@@ -107,6 +107,16 @@ Startup verifies the image distribution, both complete archives, source pair, ex
 
 Logs, environment/readiness records and per run status are under `RUNPOD_WORKSPACE/runs/`. `latest-run.txt` records the latest run directory. Share only the needed sanitized failure stage, not environment dumps, secrets or portrait files. Startup never submits a generation request and never automatically retries one.
 
+## Run the existing generation comparisons
+
+After READY_FOR_RUNPOD_VALIDATION, keep the server terminal running. Upload the current repository file `scripts/makeup_corrective_application_probe.py` to `/workspace/makeup_corrective_application_probe.py` in Jupyter. Open a second Terminal and run:
+
+```bash
+python /workspace/makeup_corrective_application_probe.py runpod
+```
+
+Run once. This reuses the accepted13 Makeup comparisons, two Hair cases and one Nails crop switching case, with environment secrets and private persistent results. Download `/workspace/beautycore/validation/runpod_application_results.zip` through Jupyter and review the images before website connection. On failure or uncertain completion, preserve results and do not replay the command. It never registers the website. The crop does not validate full-hand Nails. [Preparation and test evidence](../experiments/runpod-validation-preparation-20261109.md).
+
 ## Real validation and cutover
 
 Before calling this a completed migration, capture the image digest, actual GPU profile/environment, Base and adapter readiness, all 39 style IDs and actual representative Hair, corrective Makeup and full hand Nails results. Check a new portrait for identity/complexion/style fidelity, including the accepted strong complete Makeup direction. Check cross feature adapter restoration, Consultation, save/booking as applicable, then a full stop/start using the persistent cache. Reuse existing reviewed comparisons; do not replace visual inspection with health or tensor checks. No real Runpod quality or speed is established by local tests.

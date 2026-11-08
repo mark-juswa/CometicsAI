@@ -1,5 +1,7 @@
 # Engineering facts
 
+2026-11-09 application probe portability: the existing Makeup corrective application probe now accepts optional secret client, archive directory and display/provider parameters while retaining Kaggle defaults. Its standalone runpod CLI gates on validation-only readiness and reads environment credentials; it runs the same16 fixed API cases once and writes a private persistent ZIP.55 checks pass with one historical legacy candidate packaging test excluded. No model/runtime contract or immutable archive changes. [Evidence](../docs/experiments/runpod-validation-preparation-20261109.md).
+
 2026-11-08 Jupyter proxy fix: notebook startup now derives an exact HTTPS8888 allowed origin from validated RUNPOD_POD_ID and trusts forwarded scheme/address headers. Password and XSRF checks remain enforced. Real installed Jupyter reproduces the old internal-Host/public-Origin POST404 and corrected image login302/lab200, while wrong origin and missing XSRF fail. 31 tests and Linux checks pass. Existing Pod update remains unverified. [Evidence](../docs/experiments/runpod-jupyter-proxy-fix-20261108.md).
 
 2026-11-08 A6000 extension: `package_runpod.py --profile rtx-a6000` selects a separately hash bound exact hardware profile; default rtx3090 remains unchanged. Runtime guard implementation and generated worker/model code are unchanged. Separate image and Linux verification pass; actual A6000 inference remains unverified. [Evidence](../docs/experiments/runpod-a6000-candidate-20261108.md).

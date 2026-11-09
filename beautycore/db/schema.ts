@@ -377,3 +377,7 @@ export const aiGuestTrials = pgTable('ai_guest_trials', {
   check('ai_guest_trials_network_tag_check', sql`${t.networkTag} ~ '^[a-f0-9]{64}$'`),
   check('ai_guest_trials_state_check', sql`${t.state} IN ('available','reserved','spent')`),
 ]);
+
+export const salonServices = pgTable('salon_services', { id:text('id').primaryKey(),name:text('name').notNull(),serviceType:text('service_type').notNull(),groupId:text('group_id').notNull(),groupLabel:text('group_label').notNull(),price:text('price').notNull(),active:boolean('active').notNull().default(true) });
+export const presetServices = pgTable('preset_services',{feature:text('feature').notNull(),styleId:text('style_id').notNull(),serviceId:text('service_id').notNull().references(()=>salonServices.id)},t=>[primaryKey({columns:[t.feature,t.styleId]})]);
+export const appointmentServices = pgTable('appointment_services',{appointmentId:uuid('appointment_id').primaryKey().references(()=>appointments.id,{onDelete:'cascade'}),serviceId:text('service_id').notNull().references(()=>salonServices.id)});

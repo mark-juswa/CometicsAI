@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import sharp from 'sharp';
 import { publicStyle, snapshotLookInformation } from './look-information';
 import type { UserRole } from '../../db/schema';
+import { MAX_SAVED_LOOK_BYTES } from './saved-look-limits';
 export type Actor = { id: string; role: UserRole };
 export class BusinessError extends Error {
   constructor(
@@ -12,7 +13,7 @@ export class BusinessError extends Error {
   }
 }
 export const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-export const MAX_IMAGE = 8 * 1024 * 1024;
+export const MAX_IMAGE = MAX_SAVED_LOOK_BYTES;
 export const MAX_SAVE_BODY = Math.ceil((MAX_IMAGE * 4) / 3) + 16384;
 export const PRIVATE = { 'Cache-Control': 'private, no-store' };
 export function object(value: unknown): value is Record<string, unknown> {

@@ -1,5 +1,6 @@
 import type { LookDetails } from "./look-information";
 import type { FeatureId, GeneratedResult } from "../ai/browser-client";
+import { prepareSavedLookImage } from "./saved-look-image";
 export type SavedLook = {
   id: string;
   styleType: "hair" | "nail" | "makeup";
@@ -54,13 +55,14 @@ export async function saveLook(
   result: GeneratedResult,
   sourceKind: "manual" | "consultation",
 ): Promise<SavedLook> {
+  const image = await prepareSavedLookImage(result.image.data_url);
   const init: RequestInit = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       feature,
       styleId: result.style.id,
-      image: result.image.data_url,
+      image,
       status: result.status,
       sourceKind,
     }),

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { saveLook, type SavedLook } from "../lib/business/client";
 import type { FeatureId, GeneratedResult } from "../lib/ai/browser-client";
+import { needsSavedLookCopy } from "../lib/business/saved-look-image";
 export function SavedLookActions({
   feature,
   result,
@@ -73,6 +74,12 @@ export function SavedLookActions({
           {bookLabel}
         </button>
       </div>
+      {needsSavedLookCopy(result.image.data_url) && (
+        <p>
+          Large previews use a smaller saved copy. Download keeps the original
+          image.
+        </p>
+      )}
       {saved && (
         <p role="status">
           Saved to your account. You can find it in My Saved Looks.

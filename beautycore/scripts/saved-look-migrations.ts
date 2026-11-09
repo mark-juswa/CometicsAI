@@ -16,6 +16,7 @@ export async function applySavedLookMigrations(
       "0008_work_availability.sql",
       "0009_customer_history.sql",
       "0010_ninety_minute_bookings.sql",
+      "0011_booking_services.sql",
     ],
   ];
   for (const names of additionalOnly
@@ -24,6 +25,7 @@ export async function applySavedLookMigrations(
           "0008_work_availability.sql",
           "0009_customer_history.sql",
           "0010_ninety_minute_bookings.sql",
+      "0011_booking_services.sql",
         ],
       ]
     : groups) {

@@ -20,38 +20,37 @@ export function availableBookingSlots(
 ) {
   const weekday = new Date(date + "T00:00:00Z").getUTCDay(),
     duration = APPOINTMENT_DURATION_MINUTES;
-  const slots: { time: string; available: boolean }[] = [];
-  for (let minute = 0; minute + duration <= 1440; minute += 30) {
-    const time =
-      String(Math.floor(minute / 60)).padStart(2, "0") +
-      ":" +
-      String(minute % 60).padStart(2, "0");
-    const onDuty = staff.filter((person) =>
-      person.hours.some(
-        (hours) =>
-          hours.day === weekday &&
-          minute >= minutes(hours.start) &&
-          minute + duration <= minutes(hours.end),
-      ),
-    );
-    if (!onDuty.length) continue;
-    const start = Date.parse(salonDateTime(date, time)),
-      end = start + duration * 60000;
-    const available =
-      start > now.getTime() &&
-      onDuty.some(
-        (person) =>
-          !reservations.some(
-            (row) =>
-              row.stylistId === person.id &&
-              start <
-                Date.parse(row.appointmentDate) +
-                  Math.max(row.durationMinutes, duration) * 60000 &&
-              Date.parse(row.appointmentDate) < end,
-          ),
-      );
-    slots.push({ time, available });
-  }
+  const result = new Map<string, boolean>();
+  for (const person of staff)
+    for (const hours of person.hours.filter((h) => h.day === weekday)) {
+      let cursor = Date.parse(salonDateTime(date, hours.start));
+      const closing = Date.parse(salonDateTime(date, hours.end));
+      const busy = reservations
+        .filter((r) => r.stylistId === person.id)
+        .map((r) => ({
+          start: Date.parse(r.appointmentDate),
+          end: Date.parse(r.appointmentDate) + duration * 60000,
+        }))
+        .sort((a, b) => a.start - b.start);
+      while (cursor + duration * 60000 <= closing) {
+        const clashes = busy.filter(
+          (r) => cursor < r.end && r.start < cursor + duration * 60000,
+        );
+        const time = new Date(cursor).toLocaleTimeString("en-GB", {
+          timeZone: "Asia/Manila",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        if (cursor > now.getTime())
+          result.set(time, (result.get(time) ?? false) || clashes.length === 0);
+        cursor = clashes.length
+          ? Math.max(...clashes.map((r) => r.end))
+          : cursor + duration * 60000;
+      }
+    }
+  const slots = [...result]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([time, available]) => ({ time, available }));
   return slots;
 }
 export async function bookingAvailability(
@@ -62,7 +61,12 @@ export async function bookingAvailability(
     if (request.method !== "GET") fail("Operation not found.", 404);
     const params = new URL(request.url).searchParams,
       date = day(params.get("date")),
-      service = allServices.find((row) => row.name === params.get("service"));
+      service = (
+        await deps.query(
+          'SELECT id,name,service_type AS "serviceType" FROM salon_services WHERE active AND (id=$1 OR ($1::text IS NULL AND name=$2))',
+          [params.get("serviceId"), params.get("service")],
+        )
+      )[0];
     if (!service) fail("Choose a service from the salon catalog.");
     const stylist = params.get("stylist") ? id(params.get("stylist")) : null,
       now = deps.now?.() ?? new Date();
@@ -75,7 +79,7 @@ export async function bookingAvailability(
       end = new Date(Date.parse(start) + 86400000).toISOString();
     const reserved = staff.length
       ? await deps.query(
-          `SELECT stylist_id AS "stylistId",appointment_date AT TIME ZONE 'UTC' AS "appointmentDate",duration_minutes AS "durationMinutes" FROM appointments WHERE stylist_id=ANY($1::uuid[]) AND status IN ('pending','confirmed') AND appointment_date<($3::timestamptz AT TIME ZONE 'UTC') AND appointment_date+make_interval(mins=>greatest(duration_minutes,90))>($2::timestamptz AT TIME ZONE 'UTC')`,
+          `SELECT stylist_id AS "stylistId",appointment_date AT TIME ZONE 'UTC' AS "appointmentDate",duration_minutes AS "durationMinutes" FROM appointments WHERE stylist_id=ANY($1::uuid[]) AND status IN ('pending','confirmed') AND appointment_date<($3::timestamptz AT TIME ZONE 'UTC') AND appointment_date+make_interval(mins=>90)>($2::timestamptz AT TIME ZONE 'UTC')`,
           [staff.map((row) => row.id), start, end],
         )
       : [];

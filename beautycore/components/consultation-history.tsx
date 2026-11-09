@@ -11,13 +11,7 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { businessRequest } from "@/lib/business/client";
-import {
-  Card,
-  PageHeader,
-  Skeleton,
-  EmptyState,
-  formatDate,
-} from "@/components/ui";
+import { Card, Skeleton, EmptyState, formatDate } from "@/components/ui";
 type Session = {
   id: string;
   feature: string;
@@ -36,6 +30,19 @@ type Asset = {
   savedAt?: string | null;
   recommendationId?: string;
 };
+type HistoryFilters = { q: string; from: string; to: string; feature: string };
+const emptyFilters = (): HistoryFilters => ({
+  q: "",
+  from: "",
+  to: "",
+  feature: "",
+});
+function historyParams(filters: HistoryFilters, page: number) {
+  const params = new URLSearchParams({ page: String(page) });
+  for (const [key, value] of Object.entries(filters))
+    if (value.trim()) params.set(key, value.trim());
+  return params;
+}
 export function ConsultationHistory({ sessionId }: { sessionId?: string }) {
   const [sessions, setSessions] = useState<Session[]>([]),
     [session, setSession] = useState<Session | null>(null),
@@ -47,14 +54,51 @@ export function ConsultationHistory({ sessionId }: { sessionId?: string }) {
     [error, setError] = useState(""),
     [message, setMessage] = useState(""),
     [busy, setBusy] = useState("");
+  const [draft, setDraft] = useState<HistoryFilters>(emptyFilters),
+    [filters, setFilters] = useState<HistoryFilters>(emptyFilters),
+    [initialized, setInitialized] = useState(false),
+    [filterError, setFilterError] = useState(""),
+    [revision, setRevision] = useState(0);
+  const filtered = Object.values(filters).some(Boolean);
+  const params = historyParams(filters, page);
   useEffect(() => {
+    const search = new URLSearchParams(window.location.search);
+    const initial = {
+      q: search.get("q") ?? "",
+      from: search.get("from") ?? "",
+      to: search.get("to") ?? "",
+      feature: search.get("feature") ?? "",
+    };
+    const requestedPage = Number(search.get("page") || 1);
+    setDraft(initial);
+    setFilters(initial);
+    setPage(
+      Number.isSafeInteger(requestedPage) &&
+        requestedPage >= 1 &&
+        requestedPage <= 10000
+        ? requestedPage
+        : 1,
+    );
+    setInitialized(true);
+  }, [sessionId]);
+  useEffect(() => {
+    if (!initialized) return;
     let active = true;
+    const controller = new AbortController();
     setLoading(true);
     setError("");
+    if (!sessionId) {
+      setSessions([]);
+      setTotal(0);
+      const url = new URL(window.location.href);
+      url.search = historyParams(filters, page).toString();
+      window.history.replaceState(window.history.state, "", url);
+    }
     businessRequest(
       sessionId
         ? `/api/consultation-history/${sessionId}`
-        : `/api/consultation-history?page=${page}`,
+        : `/api/consultation-history?${historyParams(filters, page)}`,
+      { signal: controller.signal },
     )
       .then((d) => {
         if (!active) return;
@@ -75,8 +119,25 @@ export function ConsultationHistory({ sessionId }: { sessionId?: string }) {
       });
     return () => {
       active = false;
+      controller.abort();
     };
-  }, [sessionId, page]);
+  }, [sessionId, page, filters, initialized, revision]);
+  function applyFilters(event: React.FormEvent) {
+    event.preventDefault();
+    if (draft.from && draft.to && draft.from > draft.to) {
+      setFilterError("The start date must be on or before the end date.");
+      return;
+    }
+    setFilterError("");
+    setPage(1);
+    setFilters({ ...draft, q: draft.q.trim() });
+  }
+  function clearFilters() {
+    setDraft(emptyFilters());
+    setFilters(emptyFilters());
+    setPage(1);
+    setFilterError("");
+  }
   async function save(asset: Asset) {
     if (busy) return;
     setBusy(asset.id);
@@ -127,14 +188,102 @@ export function ConsultationHistory({ sessionId }: { sessionId?: string }) {
       {sessionId && (
         <Link
           className="mb-5 inline-block text-sm text-gold underline"
-          href="/client/consultation-history"
+          href={`/client/consultation-history?${params}`}
         >
           ← All consultations
         </Link>
       )}
+      {!sessionId && (
+        <form
+          onSubmit={applyFilters}
+          className="portal-panel mb-5 p-4 sm:p-6"
+          aria-label="Filter consultation history"
+        >
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <label className="block text-sm text-secondary">
+              Search consultations
+              <input
+                type="search"
+                maxLength={120}
+                value={draft.q}
+                placeholder="Messages, preferences, looks or filenames"
+                aria-describedby="history-filter-help"
+                onChange={(e) => setDraft((d) => ({ ...d, q: e.target.value }))}
+                className="mt-2 w-full rounded border border-purple-light/25 bg-deep p-2.5 text-white"
+              />
+            </label>
+            <label className="block text-sm text-secondary">
+              Feature
+              <select
+                value={draft.feature}
+                onChange={(e) =>
+                  setDraft((d) => ({ ...d, feature: e.target.value }))
+                }
+                className="mt-2 w-full rounded border border-purple-light/25 bg-deep p-2.5 text-white"
+              >
+                <option value="">All features</option>
+                <option value="hairstyle">Hair</option>
+                <option value="nails">Nails</option>
+                <option value="makeup">Makeup</option>
+              </select>
+            </label>
+            <label className="block text-sm text-secondary">
+              Consulted from
+              <input
+                type="date"
+                value={draft.from}
+                onChange={(e) =>
+                  setDraft((d) => ({ ...d, from: e.target.value }))
+                }
+                className="mt-2 w-full rounded border border-purple-light/25 bg-deep p-2.5 text-white"
+              />
+            </label>
+            <label className="block text-sm text-secondary">
+              Consulted through
+              <input
+                type="date"
+                value={draft.to}
+                onChange={(e) =>
+                  setDraft((d) => ({ ...d, to: e.target.value }))
+                }
+                className="mt-2 w-full rounded border border-purple-light/25 bg-deep p-2.5 text-white"
+              />
+            </label>
+          </div>
+          <p id="history-filter-help" className="mt-3 text-xs text-muted">
+            Search your conversation messages, preferences, generated look names
+            or uploaded photo filenames. Dates include the whole selected day in
+            Philippine time.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <button className="portal-button portal-primary" type="submit">
+              Apply filters
+            </button>
+            <button
+              className="portal-button"
+              type="button"
+              onClick={clearFilters}
+            >
+              Clear filters
+            </button>
+          </div>
+          {filterError && (
+            <p role="alert" className="mt-3 text-sm text-error">
+              {filterError}
+            </p>
+          )}
+        </form>
+      )}
       {error && (
         <p role="alert" className="portal-alert">
-          {error}
+          {error}{" "}
+          <button
+            type="button"
+            className="underline"
+            onClick={() => setRevision((r) => r + 1)}
+          >
+            Retry
+          </button>
         </p>
       )}
       {message && (
@@ -143,7 +292,10 @@ export function ConsultationHistory({ sessionId }: { sessionId?: string }) {
         </p>
       )}
       {loading ? (
-        <Skeleton className="h-64 w-full" />
+        <div role="status" aria-label="Loading consultations">
+          <span className="sr-only">Loading consultations…</span>
+          <Skeleton className="h-64 w-full" />
+        </div>
       ) : sessionId && session ? (
         <div className="space-y-6">
           <Card>
@@ -274,11 +426,11 @@ export function ConsultationHistory({ sessionId }: { sessionId?: string }) {
                   <History size={20} className="text-gold" />
                   Your consultations
                 </h2>
-                <p>
+                <p role="status">
                   {error
                     ? "Your archived conversations"
                     : total +
-                      " archived " +
+                      (filtered ? " matching " : " archived ") +
                       (total === 1 ? "consultation" : "consultations")}{" "}
                   · open a record to revisit photos, looks, and messages.
                 </p>
@@ -293,7 +445,9 @@ export function ConsultationHistory({ sessionId }: { sessionId?: string }) {
                 {sessions.map((row) => (
                   <Link
                     key={row.id}
-                    href={"/client/consultation-history/" + row.id}
+                    href={
+                      "/client/consultation-history/" + row.id + "?" + params
+                    }
                     className="history-card"
                   >
                     <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-gold/25 bg-gold/5 text-gold">
@@ -329,8 +483,16 @@ export function ConsultationHistory({ sessionId }: { sessionId?: string }) {
               {sessions.length === 0 && !error && (
                 <EmptyState
                   icon={History}
-                  title="No consultation history yet"
-                  body="New consultations and their uploaded photos will appear here. Earlier temporary AI sessions cannot be recovered after they have expired."
+                  title={
+                    filtered
+                      ? "No matching consultations"
+                      : "No consultation history yet"
+                  }
+                  body={
+                    filtered
+                      ? "Try another keyword, feature or date range, or clear the filters."
+                      : "New consultations and their uploaded photos will appear here. Earlier temporary AI sessions cannot be recovered after they have expired."
+                  }
                 />
               )}
             </div>

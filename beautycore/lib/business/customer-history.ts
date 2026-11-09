@@ -113,9 +113,15 @@ export function clientHistory(
     const { page, offset } = paging(params);
     const status = params.get("status") || "all";
     if (
-      !["all", "pending", "confirmed", "in_progress", "completed", "no_show", "cancelled"].includes(
-        status,
-      )
+      ![
+        "all",
+        "pending",
+        "confirmed",
+        "in_progress",
+        "completed",
+        "no_show",
+        "cancelled",
+      ].includes(status)
     )
       fail("Invalid status.");
     const from =
@@ -246,15 +252,41 @@ export function consultationHistory(
   return historyAction(request, deps, "client", async (actor) => {
     if (request.method !== "GET") fail("Operation not found.", 404);
     if (!sessionId) {
-      const { page, offset } = paging(new URL(request.url).searchParams);
-      const rows = await deps.query(
-        `SELECT c.id,c.feature,c.created_at AS "createdAt",c.updated_at AS "updatedAt",(SELECT count(*)::int FROM client_reference_images r WHERE r.consultation_id=c.id) AS uploads,(SELECT count(*)::int FROM client_consultation_results r WHERE r.consultation_id=c.id) AS results,count(*) OVER()::int AS total FROM client_consultations c WHERE c.client_id=$1 ORDER BY c.created_at DESC,c.id LIMIT 12 OFFSET $2`,
-        [actor.id, offset],
-      );
+      const search = new URL(request.url).searchParams;
+      const { page, offset } = paging(search);
+      const from = search.get("from") ? day(search.get("from")) : null;
+      const through = search.get("to") ? day(search.get("to")) : null;
+      if (from && through && from > through)
+        fail("The start date must be on or before the end date.");
+      const feature = search.get("feature") || null;
+      if (feature && !["hairstyle", "nails", "makeup"].includes(feature))
+        fail("Choose Hair, Nails or Makeup.");
+      const keyword = (search.get("q") ?? "").trim();
+      if (keyword.length > 120) fail("Search must be 120 characters or fewer.");
+      const values = [actor.id, from, through, feature, keyword];
+      const where = `c.client_id=$1
+        AND ($2::text IS NULL OR c.created_at>=($2::date::timestamp AT TIME ZONE 'Asia/Manila'))
+        AND ($3::text IS NULL OR c.created_at<(($3::date+1)::timestamp AT TIME ZONE 'Asia/Manila'))
+        AND ($4::text IS NULL OR c.feature=$4)
+        AND ($5::text='' OR strpos(lower(CASE c.feature WHEN 'hairstyle' THEN 'hair hairstyle consultation' WHEN 'nails' THEN 'nail nails consultation' ELSE 'makeup make-up consultation' END),lower($5))>0
+          OR EXISTS(SELECT 1 FROM jsonb_array_elements(CASE WHEN jsonb_typeof(c.snapshot->'messages')='array' THEN c.snapshot->'messages' ELSE '[]'::jsonb END) m WHERE strpos(lower(coalesce(m->>'content','')),lower($5))>0)
+          OR strpos(lower(coalesce((c.snapshot->'preferences')::text,'')),lower($5))>0
+          OR EXISTS(SELECT 1 FROM client_reference_images r WHERE r.consultation_id=c.id AND r.client_id=c.client_id AND strpos(lower(r.filename),lower($5))>0)
+          OR EXISTS(SELECT 1 FROM client_consultation_results r JOIN ai_generations g ON g.id=r.generation_id AND g.client_id=r.client_id WHERE r.consultation_id=c.id AND r.client_id=c.client_id AND strpos(lower(g.style_name),lower($5))>0))`;
+      const [rows, summary] = await Promise.all([
+        deps.query(
+          `SELECT c.id,c.feature,c.created_at AS "createdAt",c.updated_at AS "updatedAt",(SELECT count(*)::int FROM client_reference_images r WHERE r.consultation_id=c.id AND r.client_id=c.client_id) AS uploads,(SELECT count(*)::int FROM client_consultation_results r WHERE r.consultation_id=c.id AND r.client_id=c.client_id) AS results FROM client_consultations c WHERE ${where} ORDER BY c.created_at DESC,c.id LIMIT 12 OFFSET $6`,
+          [...values, offset],
+        ),
+        deps.query(
+          `SELECT count(*)::int AS total FROM client_consultations c WHERE ${where}`,
+          values,
+        ),
+      ]);
       return privateJson({
         sessions: rows,
         page,
-        total: Number(rows[0]?.total ?? 0),
+        total: Number(summary[0]?.total ?? 0),
       });
     }
     id(sessionId);

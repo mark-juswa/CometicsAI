@@ -879,6 +879,52 @@ test('admin opens a stylist to inspect completed services and filter their histo
  await screen.findByText('Completed cut');
 });
 
+test('consultation history applies combined filters, keeps them through paging and clears them',async()=>{
+ for(let n=0;n<13;n++)await query("INSERT INTO client_consultations(client_id,source_key,feature,snapshot,created_at) VALUES($1,$2,'hairstyle',$3::jsonb,$4::timestamptz)",[C,'history-'+n,JSON.stringify({messages:[{content:'Wedding preparation'}]}),'2030-10-17T02:'+String(n).padStart(2,'0')+':00Z']);
+ await query("INSERT INTO client_consultations(client_id,source_key,feature,created_at) VALUES($1,'other','nails','2030-10-18T02:00:00Z')",[C]);
+ mount(ConsultationHistory);
+ await screen.findByText('14 archived consultations',{exact:false});
+ fireEvent.click(screen.getByRole('button',{name:'Next',exact:true}));
+ await waitFor(()=>assert.match(screen.getByRole('navigation',{name:'Consultation history pagination'}).textContent,/Page 2 of 2/));
+ fireEvent.change(screen.getByLabelText('Search consultations'),{target:{value:' wedding '}});
+ fireEvent.change(screen.getByLabelText('Feature',{exact:true}),{target:{value:'hairstyle'}});
+ fireEvent.change(screen.getByLabelText('Consulted from'),{target:{value:'2030-10-17'}});
+ fireEvent.change(screen.getByLabelText('Consulted through'),{target:{value:'2030-10-17'}});
+ fireEvent.click(screen.getByRole('button',{name:'Apply filters'}));
+ await screen.findByText('13 matching consultations',{exact:false});
+ assert.match(screen.getByRole('navigation',{name:'Consultation history pagination'}).textContent,/Page 1 of 2/);
+ fireEvent.click(screen.getByRole('button',{name:'Next',exact:true}));
+ await waitFor(()=>assert.match(screen.getByRole('navigation',{name:'Consultation history pagination'}).textContent,/Page 2 of 2/));
+ const link=screen.getByRole('link',{name:/Hair consultation/});const detailUrl=link.getAttribute('href');const params=new URL(detailUrl,'http://localhost:3000').searchParams;
+ assert.equal(params.get('q'),'wedding');assert.equal(params.get('from'),'2030-10-17');assert.equal(params.get('to'),'2030-10-17');assert.equal(params.get('feature'),'hairstyle');assert.equal(params.get('page'),'2');
+ fireEvent.click(screen.getByRole('button',{name:'Clear filters'}));
+ await screen.findByText('14 archived consultations',{exact:false});assert.equal(screen.getByLabelText('Search consultations').value,'');assert.equal(screen.getByLabelText('Consulted from').value,'');
+ cleanup();window.history.replaceState(null,'',detailUrl);
+ mount(ConsultationHistory,{sessionId:detailUrl.split('/').at(-1).split('?')[0]});
+ const back=await screen.findByRole('link',{name:/All consultations/});
+ await waitFor(()=>assert.equal(new URL(back.getAttribute('href'),'http://localhost:3000').searchParams.get('page'),'2'));
+ assert.equal(new URL(back.getAttribute('href'),'http://localhost:3000').searchParams.get('q'),'wedding');
+ assert.equal(screen.queryByRole('form',{name:'Filter consultation history'}),null);
+});
+
+test('history restores URL filters, shows no matches and rejects reversed dates',async()=>{
+ window.history.replaceState(null,'','/client/consultation-history?q=missing&feature=makeup&from=2030-10-17&to=2030-10-17');
+ mount(ConsultationHistory);await screen.findByText('No matching consultations');
+ assert.equal(screen.getByLabelText('Search consultations').value,'missing');assert.equal(screen.getByLabelText('Feature',{exact:true}).value,'makeup');
+ fireEvent.change(screen.getByLabelText('Consulted from'),{target:{value:'2030-10-18'}});fireEvent.click(screen.getByRole('button',{name:'Apply filters'}));
+ await screen.findByText('The start date must be on or before the end date.');
+ fireEvent.click(screen.getByRole('button',{name:'Clear filters'}));await screen.findByText('No consultation history yet');
+});
+
+test('history shows a retriable request failure without pretending the archive is empty',async()=>{
+ let fail=true;globalThis.fetch=async(input,init)=>String(input).startsWith('/api/consultation-history?')&&fail?Response.json({error:'History temporarily unavailable.'},{status:503}):transport(input,init);
+ try{
+  mount(ConsultationHistory);await screen.findByText('History temporarily unavailable.',{exact:false});
+  assert.equal(screen.queryByText('No consultation history yet'),null);
+  fail=false;fireEvent.click(screen.getByRole('button',{name:'Retry',exact:true}));await screen.findByText('No consultation history yet');
+ }finally{globalThis.fetch=transport;}
+});
+
 test('consultation history offers an owner-bound download for an unsaved archived generated look',async()=>{
  const {signConsultationHandle}=await import('../lib/ai/consultation-handle.ts');const {randomUUID}=await import('node:crypto');const secret='archive-download-test-secret-'.repeat(3);
  const handle=await signConsultationHandle(C,randomUUID(),new Date(Date.now()+3600000).toISOString(),secret);

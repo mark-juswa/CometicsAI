@@ -65,6 +65,48 @@ const state = {
   generations: [],
   selected_recommendation_id: null,
 };
+test("consultation history filters whole Philippine dates and combines the selected feature", async () => {
+  const entries = [
+    ["before", "hairstyle", "2030-10-16T15:59:59.999Z"],
+    ["start", "hairstyle", "2030-10-16T16:00:00Z"],
+    ["last", "nails", "2030-10-17T15:59:59.999Z"],
+    ["after", "hairstyle", "2030-10-17T16:00:00Z"],
+  ];
+  for (const [key, feature, date] of entries)
+    await query("INSERT INTO client_consultations(client_id,source_key,feature,created_at) VALUES($1,$2,$3,$4::timestamptz)", [C,key,feature,date]);
+  await query("INSERT INTO client_consultations(client_id,source_key,feature,created_at) VALUES($1,'foreign','hairstyle','2030-10-17T02:00:00Z')", [OTHER]);
+  const load = async (params: string) => (await consultationHistory(req('/api/consultation-history?'+params),history)).json();
+  const both=await load('from=2030-10-17&to=2030-10-17');
+  assert.equal(both.total,2);assert.deepEqual(both.sessions.map((s: {feature:string})=>s.feature),['nails','hairstyle']);
+  const hair=await load('from=2030-10-17&to=2030-10-17&feature=hairstyle');
+  assert.equal(hair.total,1);assert.equal(hair.sessions[0].feature,'hairstyle');
+  assert.equal((await load('from=2030-10-17')).total,3);
+  assert.equal((await load('to=2030-10-17')).total,3);
+});
+test("consultation search finds messages, preferences, look names and filenames privately and literally", async () => {
+  const {handle,sessionId}=await archiveStart();await archiveGenerated(handle);
+  await query("UPDATE client_consultations SET snapshot=$2::jsonb WHERE id=$1",[sessionId,JSON.stringify({messages:[{role:'user',content:'Wedding 100%_done'}],preferences:{occasion:'Graduation'}})]);
+  await query("INSERT INTO client_reference_images(client_id,consultation_id,image_data,image_hash,image_bytes,content_type,width,height,filename) VALUES($1,$2,$3,$4,$5,'image/png',32,32,'Beach Portrait.png')",[C,sessionId,'data:image/png;base64,'+png.toString('base64'),'a'.repeat(64),png.length]);
+  await query("INSERT INTO client_consultations(client_id,source_key,feature,snapshot) VALUES($1,'foreign','makeup',$2::jsonb),($3,'malformed','makeup',$4::jsonb)",[OTHER,JSON.stringify({messages:[{content:'Hidden secret'}]}),C,JSON.stringify({messages:{content:'not an array'}})]);
+  for(const keyword of [' WEDDING ','graduation','Crew Cut','portrait.PNG','100%_','hair']){
+    const response=await consultationHistory(req('/api/consultation-history?'+new URLSearchParams({q:keyword})),history);
+    assert.equal(response.status,200,keyword);const body=await response.json();assert.equal(body.total,1,keyword);assert.equal(body.sessions[0].id,sessionId);
+  }
+  for(const keyword of ['Hidden secret',"x' OR 1=1 --",'%','_']){
+    const body=await(await consultationHistory(req('/api/consultation-history?'+new URLSearchParams({q:keyword})),history)).json();
+    assert.equal(body.total,keyword==='%'||keyword==='_'?1:0);
+  }
+  actor=OTHER;const foreign=await(await consultationHistory(req('/api/consultation-history?q=Wedding'),history)).json();assert.equal(foreign.total,0);
+});
+test("consultation filters validate requests and retain the true total on empty later pages", async () => {
+  for(let n=0;n<13;n++)await query("INSERT INTO client_consultations(client_id,source_key,feature,created_at) VALUES($1,$2,'makeup',$3::timestamptz)",[C,'page-'+n,'2030-10-17T02:'+String(n).padStart(2,'0')+':00Z']);
+  const first=await(await consultationHistory(req('/api/consultation-history?feature=makeup&page=1'),history)).json();
+  const second=await(await consultationHistory(req('/api/consultation-history?feature=makeup&page=2'),history)).json();
+  const later=await(await consultationHistory(req('/api/consultation-history?feature=makeup&page=3'),history)).json();
+  assert.equal(first.sessions.length,12);assert.equal(second.sessions.length,1);assert.equal(new Set([...first.sessions,...second.sessions].map(s=>s.id)).size,13);
+  assert.equal(later.total,13);assert.deepEqual(later.sessions,[]);
+  for(const params of ['from=2030-02-30','to=not-a-date','from=2030-10-18&to=2030-10-17','feature=unknown','page=0','page=1.5','q='+ 'x'.repeat(121)])assert.equal((await consultationHistory(req('/api/consultation-history?'+params),history)).status,400,params);
+});
 async function archiveStart() {
   const handle = await signConsultationHandle(
     C,

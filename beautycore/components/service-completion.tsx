@@ -27,14 +27,16 @@ export function ServiceCompletion({
   id,
   onCompleted,
   disabled = false,
+  initiallyOpen = false,
   onBusyChange,
 }: {
   id: string;
   onCompleted: () => void | Promise<void>;
   disabled?: boolean;
+  initiallyOpen?: boolean;
   onBusyChange?: (busy: boolean) => void;
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(initiallyOpen);
   const [catalog, setCatalog] = useState<CatalogProduct[]>([]);
   const [lines, setLines] = useState<Line[]>([]);
   const [busy, setBusy] = useState(false);

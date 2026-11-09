@@ -48,7 +48,7 @@ export const DEFAULT_APPOINTMENT_FILTERS: AppointmentFilters = {
   sort: "latest",
 };
 export function activeAppointment(row: AdminAppointment) {
-  return row.status === "pending" || row.status === "confirmed";
+  return row.status === "pending" || row.status === "confirmed" || row.status === "in_progress";
 }
 export function appointmentCounts(rows: AdminAppointment[], now = Date.now()) {
   const today = salonDay(new Date(now));

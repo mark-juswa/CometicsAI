@@ -9,6 +9,8 @@ type Reservation = {
   stylistId: string;
   appointmentDate: string;
   durationMinutes: number;
+  status?: string;
+  releasedAt?: string | null;
 };
 const minutes = (time: string) =>
   Number(time.slice(0, 2)) * 60 + Number(time.slice(3));
@@ -24,12 +26,36 @@ export function availableBookingSlots(
   for (const person of staff)
     for (const hours of person.hours.filter((h) => h.day === weekday)) {
       let cursor = Date.parse(salonDateTime(date, hours.start));
+      const released = reservations.some(
+        (r) =>
+          r.stylistId === person.id &&
+          r.releasedAt &&
+          ["no_show", "cancelled", "completed"].includes(r.status ?? "") &&
+          Date.parse(r.releasedAt) <= now.getTime() &&
+          Date.parse(r.appointmentDate) + duration * 60000 > now.getTime(),
+      );
+      if (released)
+        cursor = Math.max(
+          cursor,
+          Math.floor(now.getTime() / 60000) * 60000 + 60000,
+        );
       const closing = Date.parse(salonDateTime(date, hours.end));
       const busy = reservations
-        .filter((r) => r.stylistId === person.id)
+        .filter(
+          (r) =>
+            r.stylistId === person.id &&
+            (!r.status ||
+              ["pending", "confirmed", "in_progress"].includes(r.status)),
+        )
         .map((r) => ({
           start: Date.parse(r.appointmentDate),
-          end: Date.parse(r.appointmentDate) + duration * 60000,
+          end:
+            r.status === "in_progress"
+              ? Math.max(
+                  Date.parse(r.appointmentDate) + duration * 60000,
+                  Math.floor(now.getTime() / 60000) * 60000 + 91 * 60000,
+                )
+              : Date.parse(r.appointmentDate) + duration * 60000,
         }))
         .sort((a, b) => a.start - b.start);
       while (cursor + duration * 60000 <= closing) {
@@ -59,6 +85,7 @@ export async function bookingAvailability(
 ) {
   try {
     if (request.method !== "GET") fail("Operation not found.", 404);
+    await deps.query("SELECT beautycore_process_no_shows() AS processed");
     const params = new URL(request.url).searchParams,
       date = day(params.get("date")),
       service = (
@@ -79,7 +106,7 @@ export async function bookingAvailability(
       end = new Date(Date.parse(start) + 86400000).toISOString();
     const reserved = staff.length
       ? await deps.query(
-          `SELECT stylist_id AS "stylistId",appointment_date AT TIME ZONE 'UTC' AS "appointmentDate",duration_minutes AS "durationMinutes" FROM appointments WHERE stylist_id=ANY($1::uuid[]) AND status IN ('pending','confirmed') AND appointment_date<($3::timestamptz AT TIME ZONE 'UTC') AND appointment_date+make_interval(mins=>90)>($2::timestamptz AT TIME ZONE 'UTC')`,
+          `SELECT stylist_id AS "stylistId",appointment_date AT TIME ZONE 'UTC' AS "appointmentDate",duration_minutes AS "durationMinutes",status,(SELECT release_at FROM appointment_service_tracking t WHERE t.appointment_id=appointments.id) AS "releasedAt" FROM appointments WHERE stylist_id=ANY($1::uuid[]) AND status IN ('pending','confirmed','in_progress','no_show','cancelled','completed') AND appointment_date<($3::timestamptz AT TIME ZONE 'UTC') AND (status='in_progress' OR appointment_date+make_interval(mins=>90)>($2::timestamptz AT TIME ZONE 'UTC'))`,
           [staff.map((row) => row.id), start, end],
         )
       : [];

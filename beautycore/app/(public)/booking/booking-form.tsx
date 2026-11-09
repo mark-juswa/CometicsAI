@@ -161,9 +161,11 @@ export default function BookingForm() {
   }, [date, serviceName, stylistId, slotRevision, catalog]);
   useEffect(() => {
     const refresh = () => setSlotRevision((value) => value + 1);
+    const timer=setInterval(()=>{if(document.visibilityState==="visible")refresh();},10000);
     window.addEventListener("focus", refresh);
     window.addEventListener("appointments-updated", refresh);
     return () => {
+      clearInterval(timer);
       window.removeEventListener("focus", refresh);
       window.removeEventListener("appointments-updated", refresh);
     };

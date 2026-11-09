@@ -131,7 +131,7 @@ export function DailyServices() {
               setPage(1);
             }}
           >
-            {['all', 'pending', 'confirmed', 'completed', 'cancelled'].map((s) => (
+            {['all', 'pending', 'confirmed', 'in_progress', 'completed', 'no_show', 'cancelled'].map((s) => (
               <option key={s} value={s}>
                 {s === 'all' ? 'All statuses' : s}
               </option>

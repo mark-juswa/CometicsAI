@@ -26,6 +26,8 @@ export const appointmentStatusEnum = pgEnum('appointment_status', [
   'confirmed',
   'completed',
   'cancelled',
+  'in_progress',
+  'no_show',
 ]);
 export const productStatusEnum = pgEnum('product_status', [
   'in_stock',
@@ -381,3 +383,7 @@ export const aiGuestTrials = pgTable('ai_guest_trials', {
 export const salonServices = pgTable('salon_services', { id:text('id').primaryKey(),name:text('name').notNull(),serviceType:text('service_type').notNull(),groupId:text('group_id').notNull(),groupLabel:text('group_label').notNull(),price:text('price').notNull(),active:boolean('active').notNull().default(true) });
 export const presetServices = pgTable('preset_services',{feature:text('feature').notNull(),styleId:text('style_id').notNull(),serviceId:text('service_id').notNull().references(()=>salonServices.id)},t=>[primaryKey({columns:[t.feature,t.styleId]})]);
 export const appointmentServices = pgTable('appointment_services',{appointmentId:uuid('appointment_id').primaryKey().references(()=>appointments.id,{onDelete:'cascade'}),serviceId:text('service_id').notNull().references(()=>salonServices.id)});
+
+export const appointmentLifecyclePolicy=pgTable('appointment_lifecycle_policy',{id:boolean('id').primaryKey().default(true),enabledAt:timestamp('enabled_at',{withTimezone:true}).notNull().defaultNow()});
+export const appointmentServiceTracking=pgTable('appointment_service_tracking',{appointmentId:uuid('appointment_id').primaryKey().references(()=>appointments.id,{onDelete:'cascade'}),arrivedAt:timestamp('arrived_at',{withTimezone:true}),startedAt:timestamp('started_at',{withTimezone:true}),endedAt:timestamp('ended_at',{withTimezone:true}),noShowAt:timestamp('no_show_at',{withTimezone:true}),noShowBy:uuid('no_show_by').references(()=>users.id),releaseAt:timestamp('release_at',{withTimezone:true}),lastActor:uuid('last_actor').references(()=>users.id),stopReason:text('stop_reason'),explanation:varchar('explanation',{length:1000})});
+export const appointmentActivity=pgTable('appointment_activity',{id:uuid('id').primaryKey().defaultRandom(),appointmentId:uuid('appointment_id').notNull().references(()=>appointments.id,{onDelete:'cascade'}),action:text('action').notNull(),previousStatus:text('previous_status'),status:text('status').notNull(),actorId:uuid('actor_id').references(()=>users.id),source:text('source').notNull(),happenedAt:timestamp('happened_at',{withTimezone:true}).notNull().defaultNow(),explanation:varchar('explanation',{length:1000}),details:jsonb('details').notNull().default({})});

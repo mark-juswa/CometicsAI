@@ -113,7 +113,7 @@ export function clientHistory(
     const { page, offset } = paging(params);
     const status = params.get("status") || "all";
     if (
-      !["all", "pending", "confirmed", "completed", "cancelled"].includes(
+      !["all", "pending", "confirmed", "in_progress", "completed", "no_show", "cancelled"].includes(
         status,
       )
     )

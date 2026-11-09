@@ -1,0 +1,14 @@
+import { spawn } from 'node:child_process';
+import { createRequire } from 'node:module';
+import { startNoShowWorker } from './no-show-worker.mjs';
+const require=createRequire(import.meta.url);
+const args=process.argv.slice(2),dev=args[0]==='--dev';
+if(dev)args.shift();
+const child=spawn(process.execPath,[require.resolve('next/dist/bin/next'),dev?'dev':'start',...args],{stdio:'inherit'});
+const stop=startNoShowWorker();
+let ending=false;
+const shutdown=signal=>{if(ending)return;ending=true;stop();child.kill(signal);};
+process.once('SIGINT',()=>shutdown('SIGINT'));
+process.once('SIGTERM',()=>shutdown('SIGTERM'));
+child.once('error',()=>{stop();process.exitCode=1;});
+child.once('exit',(code)=>{stop();process.exitCode=code??0;});

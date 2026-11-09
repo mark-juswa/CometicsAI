@@ -63,7 +63,7 @@ export function StudioPhoto({ src, alt }: { src: string; alt: string }) {
   return <div className="studio-photo"><Image src={src} alt={alt} fill unoptimized sizes="(max-width: 900px) 100vw, 50vw" className="object-contain" /></div>;
 }
 
-export function GenerationProgress({ feature, mock = false }: { feature: FeatureId; mock?: boolean }) {
+export function GenerationProgress({ feature, mock = false, onBrowse }: { feature: FeatureId; mock?: boolean; onBrowse?: () => void }) {
   const [seconds, setSeconds] = useState(0);
   useEffect(() => {
     const timer = window.setInterval(() => setSeconds((value) => value + 1), 1000);
@@ -71,13 +71,14 @@ export function GenerationProgress({ feature, mock = false }: { feature: Feature
   }, []);
   const label = feature === "nails" ? "Applying your nail look" : feature === "makeup" ? "Creating your makeup look" : "Creating your hairstyle";
   return <div className="studio-processing-backdrop">
-    <div className="studio-processing" role="status" aria-live="polite" aria-label={`${label}. Please keep this page open.`}>
+    <div className="studio-processing" role="status" aria-live="polite" aria-label={label}>
       <div className="studio-processing-emblem" aria-hidden="true"><span className="studio-processing-ring" /><span>✦</span></div>
       <p className="studio-eyebrow">A LITTLE BEAUTY IN PROGRESS</p>
       <h2>{mock ? "Preparing your preview" : label}<span className="studio-ellipsis" aria-hidden="true">…</span></h2>
       <p>{mock ? "Your preview is on its way." : feature === "nails" ? "We’re working across your nails. This can take a few minutes." : "Your image is being processed. This can take a little while."}</p>
       <div className="studio-progress-track" aria-hidden="true"><span /></div>
-      <small aria-hidden="true">Time elapsed {Math.floor(seconds / 60)}:{String(seconds % 60).padStart(2, "0")} · Keep this page open</small>
+      <small aria-hidden="true">Time elapsed {Math.floor(seconds / 60)}:{String(seconds % 60).padStart(2, "0")}</small>
+      {onBrowse && <button type="button" className="studio-secondary-button" onClick={onBrowse}>Continue browsing</button>}
     </div>
   </div>;
 }

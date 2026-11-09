@@ -31,6 +31,6 @@ export async function GET() {
     return NextResponse.json({ user });
   } catch (error) {
     console.error('[auth/session]', error);
-    return NextResponse.json({ user: null });
+    return NextResponse.json({ error: 'The account service is temporarily unavailable.' }, { status: 503 });
   }
 }

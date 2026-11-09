@@ -11,11 +11,10 @@ import {
 } from "@/components/ai-studio";
 import {
   API_BASE_URL,
-  generate as generateFeature,
   getStyles,
-  type GenerateResponse,
   type Style,
 } from "@/lib/ai/studio-api";
+import { useStudioGeneration } from "@/components/generation-provider";
 import { takeCustomPhoto } from "@/lib/ai/studio-photo-handoff";
 
 const MAX_BYTES = 8 * 1024 * 1024;
@@ -31,16 +30,11 @@ export default function NailsPage() {
   const [styles, setStyles] = useState<Style[]>([]);
   const [loading, setLoading] = useState(true);
   const [stylesError, setStylesError] = useState("");
-  const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState("");
-  const [styleId, setStyleId] = useState("");
-  const [error, setError] = useState("");
-  const [working, setWorking] = useState(false);
-  const [result, setResult] = useState<GenerateResponse | null>(null);
-  const [resultOpen, setResultOpen] = useState(false);
+  const job = useStudioGeneration("nails");
+  const { file, preview, styleId, result, resultOpen, generating: working } = job;
+  const [uploadError, setError] = useState("");
+  const error = uploadError || job.error;
   const input = useRef<HTMLInputElement>(null);
-  const previewRef = useRef("");
-  const submitting = useRef(false);
 
   useEffect(() => {
     let active = true;
@@ -51,9 +45,7 @@ export default function NailsPage() {
       transferred.size > 0 &&
       transferred.size <= MAX_BYTES
     ) {
-      previewRef.current = URL.createObjectURL(transferred);
-      setPreview(previewRef.current);
-      setFile(transferred);
+      job.setFile(transferred);
     }
     getStyles("nails")
       .then((items) => {
@@ -68,13 +60,11 @@ export default function NailsPage() {
       });
     return () => {
       active = false;
-      if (previewRef.current) URL.revokeObjectURL(previewRef.current);
     };
   }, []);
 
   function resetResult() {
-    setResultOpen(false);
-    setResult(null);
+    job.open(false);
   }
 
   function choose(event: ChangeEvent<HTMLInputElement>) {
@@ -84,7 +74,7 @@ export default function NailsPage() {
   }
 
   function acceptFile(next: File) {
-    if (submitting.current) return;
+    if (job.locked || !job.ready) return;
     if (
       !["image/jpeg", "image/png"].includes(next.type) ||
       next.size < 1 ||
@@ -93,44 +83,18 @@ export default function NailsPage() {
       setError("Choose a JPG or PNG image up to 8 MB.");
       return;
     }
-    if (previewRef.current) URL.revokeObjectURL(previewRef.current);
-    previewRef.current = URL.createObjectURL(next);
-    setPreview(previewRef.current);
-    setFile(next);
+    job.setFile(next);
     setError("");
     resetResult();
   }
 
   function clear() {
-    if (previewRef.current) URL.revokeObjectURL(previewRef.current);
-    previewRef.current = "";
-    setPreview("");
-    setFile(null);
+    job.setFile(null);
     resetResult();
     setError("");
   }
 
-  async function generate() {
-    if (!file || !styleId || submitting.current) return;
-    submitting.current = true;
-    setWorking(true);
-    setError("");
-    resetResult();
-    try {
-      const generated = await generateFeature("nails", file, styleId);
-      setResult(generated);
-      setResultOpen(true);
-    } catch (cause) {
-      setError(
-        cause instanceof Error
-          ? cause.message
-          : "Preview failed. Please try again.",
-      );
-    } finally {
-      submitting.current = false;
-      setWorking(false);
-    }
-  }
+  async function generate() { setError(""); await job.run(); }
 
   const selectedStyle = styles.find((style) => style.id === styleId);
   return (
@@ -155,7 +119,7 @@ export default function NailsPage() {
             type="file"
             accept="image/jpeg,image/png"
             onChange={choose}
-            disabled={working}
+            disabled={!job.ready || job.locked}
             aria-label="Choose a hand photo"
           />
           {preview ? (
@@ -186,7 +150,7 @@ export default function NailsPage() {
                 <button
                   type="button"
                   className="studio-text-button"
-                  disabled={working}
+                  disabled={!job.ready || job.locked}
                   onClick={() => input.current?.click()}
                 >
                   Replace
@@ -194,7 +158,7 @@ export default function NailsPage() {
                 <button
                   type="button"
                   className="studio-text-button"
-                  disabled={working}
+                  disabled={!job.ready || job.locked}
                   onClick={clear}
                 >
                   Remove
@@ -203,7 +167,7 @@ export default function NailsPage() {
             </div>
           )}
           <ReferenceImagePicker
-            disabled={working}
+            disabled={!job.ready || job.locked}
             onSelect={acceptFile}
             purpose="Nail Studio"
           />
@@ -230,10 +194,10 @@ export default function NailsPage() {
                 key={style.id}
                 type="button"
                 className="studio-nail-card"
-                disabled={working}
+                disabled={!job.ready || job.locked}
                 aria-pressed={styleId === style.id}
                 onClick={() => {
-                  setStyleId(style.id);
+                  job.select(style.id);
                   resetResult();
                   setError("");
                 }}
@@ -274,7 +238,7 @@ export default function NailsPage() {
         <button
           type="button"
           className="studio-primary-button"
-          disabled={!file || !styleId || working}
+          disabled={!job.ready || !file || !styleId || job.busy}
           onClick={() => void generate()}
         >
           {working ? "Applying nail style…" : "Try this style"}{" "}
@@ -286,16 +250,17 @@ export default function NailsPage() {
           {error}
         </p>
       )}
+      {job.phase === "unknown" && <button type="button" className="studio-text-button" onClick={() => void job.recover()}>Check existing preview</button>}
       {result && !resultOpen && (
         <button
           type="button"
           className="studio-view-result"
-          onClick={() => setResultOpen(true)}
+          onClick={() => job.open(true)}
         >
           View your result again
         </button>
       )}
-      {working && <GenerationProgress feature="nails" />}
+      {working && job.progressOpen && <GenerationProgress onBrowse={job.hideProgress} feature="nails" />}
       <ResultDialog
         feature="nails"
         result={result}
@@ -317,7 +282,7 @@ export default function NailsPage() {
             ? "Nail styling is unavailable in this development preview."
             : "AI previews may differ from real polish. Check the comparison before downloading."
         }
-        onClose={() => setResultOpen(false)}
+        onClose={() => job.open(false)}
         onRegenerate={() => void generate()}
       />
     </StudioShell>

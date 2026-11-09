@@ -9,6 +9,7 @@ export type Choice = {
 export type Recommendation = { id: string; primary: Choice; reason: string; complements: Choice[] };
 export type GenerationStatus = { recommendation_id: string; status: 'pending' | 'generating' | 'completed' | 'failed'; error: string | null; attempts: number; result_available: boolean };
 export type GeneratedResult = { image: { data_url: string; content_type: string; width: number; height: number }; style: AiStyle; status: string };
+export type JobOptions = { onAccepted?: (jobId: string) => void; signal?: AbortSignal };
 export type GenerationDetail = { generation: GenerationStatus; result: GeneratedResult | null };
 export type ConsultationView = {
   primary_service: FeatureId; stage: 'collecting' | 'recommended';
@@ -85,12 +86,14 @@ function detail(value: unknown): GenerationDetail {
 }
 /** Both synchronous local responses and asynchronous hosted responses use the same UI contract. */
 export async function resolveGenerationJob(value: unknown, read: (path: string) => Promise<unknown>,
-                                           pollMs = 2000): Promise<unknown> {
+                                           pollMs = 2000, options: JobOptions = {}): Promise<unknown> {
   if (!object(value) || !('job_id' in value)) return value;
   if (typeof value.job_id !== 'string' ||
       !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value.job_id))
     throw new AiClientError('The generation ticket is invalid.', 502, true);
   const path = 'jobs/' + value.job_id;
+  options.signal?.throwIfAborted();
+  options.onAccepted?.(value.job_id);
   const deadline = Date.now() + 30 * 60 * 1000;
   let status: unknown = value;
   const readAccepted = async (url: string): Promise<unknown> => {
@@ -101,6 +104,7 @@ export async function resolveGenerationJob(value: unknown, read: (path: string) 
     }
   };
   while (true) {
+    options.signal?.throwIfAborted();
     if (!object(status) || status.job_id !== value.job_id ||
         !['generating', 'completed', 'failed'].includes(String(status.status)))
       throw new AiClientError('The generation status is invalid. No new request was sent.', 502, true);
@@ -108,6 +112,7 @@ export async function resolveGenerationJob(value: unknown, read: (path: string) 
     if (Date.now() >= deadline)
       throw new AiClientError('Generation is still unresolved. Check status before retrying.', 504, true);
     await new Promise(resolve => setTimeout(resolve, pollMs));
+    options.signal?.throwIfAborted();
     status = await readAccepted(path);
   }
 }
@@ -193,17 +198,24 @@ export function createBrowserClient(base: '/api/ai/' | '/api/ai-trial/' = '/api/
       throw new AiClientError('Styles are unavailable.', 502);
     return value as AiStyle[];
   }
-  async function generateCustom(service: FeatureId, file: File, styleId: string): Promise<GeneratedResult> {
-    const body = new FormData(); body.append('image', file); body.append('style_id', styleId);
-    const initial = await request('features/' + service + '/generate', { method: 'POST', body });
-    const value = await resolveGenerationJob(initial, path => request(path));
+  function generated(value: unknown): GeneratedResult {
     if (!object(value) || !object(value.image) || typeof value.image.data_url !== 'string' ||
         !/^data:image\/(png|jpeg);base64,/.test(value.image.data_url))
-      throw new AiClientError('The generated image response is invalid.', 502);
+      throw new AiClientError('The generated image response is invalid.', 502, true);
     return value as GeneratedResult;
+  }
+  async function resumeCustom(jobId: string, options: JobOptions = {}): Promise<GeneratedResult> {
+    // Resolve the existing ticket only. This function never submits generation.
+    return generated(await resolveGenerationJob({ job_id: jobId, status: 'generating' },
+      path => request(path, { signal: options.signal }), 2000, options));
+  }
+  async function generateCustom(service: FeatureId, file: File, styleId: string, options: JobOptions = {}): Promise<GeneratedResult> {
+    const body = new FormData(); body.append('image', file); body.append('style_id', styleId);
+    const initial = await request('features/' + service + '/generate', { method: 'POST', body });
+    return generated(await resolveGenerationJob(initial, path => request(path, { signal: options.signal }), 2000, options));
   }
 
   async function getConsultationState(handle: string): Promise<ConsultationView> { return state(await request('consultations/state', {}, handle)); }
-  return { getMode, createConsultation, uploadPhoto, updatePreferences, sendTurn, getRecommendations, generateRecommendation, getGenerationStatus, selectRecommendation, getStyles, generateCustom, getConsultationState };
+  return { getMode, createConsultation, uploadPhoto, updatePreferences, sendTurn, getRecommendations, generateRecommendation, getGenerationStatus, selectRecommendation, getStyles, generateCustom, resumeCustom, getConsultationState };
 }
-export const { getMode, createConsultation, uploadPhoto, updatePreferences, sendTurn, getRecommendations, generateRecommendation, getGenerationStatus, selectRecommendation, getStyles, generateCustom, getConsultationState } = createBrowserClient();
+export const { getMode, createConsultation, uploadPhoto, updatePreferences, sendTurn, getRecommendations, generateRecommendation, getGenerationStatus, selectRecommendation, getStyles, generateCustom, resumeCustom, getConsultationState } = createBrowserClient();

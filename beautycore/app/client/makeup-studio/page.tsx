@@ -11,11 +11,10 @@ import {
 } from "@/components/ai-studio";
 import {
   API_BASE_URL,
-  generate,
   getStyles,
-  type GenerateResponse,
   type Style,
 } from "@/lib/ai/studio-api";
+import { useStudioGeneration } from "@/components/generation-provider";
 import { takeCustomPhoto } from "@/lib/ai/studio-photo-handoff";
 
 const MAX_FILE_BYTES = 8 * 1024 * 1024;
@@ -25,17 +24,11 @@ export default function MakeupPage() {
   const [styles, setStyles] = useState<Style[]>([]);
   const [stylesLoading, setStylesLoading] = useState(true);
   const [stylesError, setStylesError] = useState("");
-  const [file, setFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState("");
-  const [selectedId, setSelectedId] = useState("");
+  const job = useStudioGeneration("makeup");
+  const { file, preview: previewUrl, styleId: selectedId, result, resultOpen, generating } = job;
   const [uploadError, setUploadError] = useState("");
-  const [generateError, setGenerateError] = useState("");
-  const [generating, setGenerating] = useState(false);
-  const [result, setResult] = useState<GenerateResponse | null>(null);
-  const [resultOpen, setResultOpen] = useState(false);
+  const generateError = job.error;
   const inputRef = useRef<HTMLInputElement>(null);
-  const submittingRef = useRef(false);
-  const previewRef = useRef("");
 
   async function loadStyles() {
     setStylesLoading(true);
@@ -60,9 +53,7 @@ export default function MakeupPage() {
       transferred.size > 0 &&
       transferred.size <= MAX_FILE_BYTES
     ) {
-      previewRef.current = URL.createObjectURL(transferred);
-      setPreviewUrl(previewRef.current);
-      setFile(transferred);
+      job.setFile(transferred);
     }
     getStyles("makeup")
       .then((loaded) => {
@@ -79,13 +70,11 @@ export default function MakeupPage() {
       });
     return () => {
       mounted = false;
-      if (previewRef.current) URL.revokeObjectURL(previewRef.current);
     };
   }, []);
 
   function resetResult() {
-    setResultOpen(false);
-    setResult(null);
+    job.open(false);
   }
 
   function onFileChange(event: ChangeEvent<HTMLInputElement>) {
@@ -95,7 +84,7 @@ export default function MakeupPage() {
   }
 
   function acceptFile(chosen: File) {
-    if (submittingRef.current) return;
+    if (job.locked || !job.ready) return;
     if (!ACCEPTED_TYPES.has(chosen.type)) {
       setUploadError("Choose a JPG or PNG portrait.");
       return;
@@ -104,46 +93,18 @@ export default function MakeupPage() {
       setUploadError("Choose an image between 1 byte and 8 MB.");
       return;
     }
-    if (previewRef.current) URL.revokeObjectURL(previewRef.current);
-    previewRef.current = URL.createObjectURL(chosen);
-    setPreviewUrl(previewRef.current);
-    setFile(chosen);
+    job.setFile(chosen);
     setUploadError("");
-    setGenerateError("");
     resetResult();
   }
 
   function clearImage() {
-    if (previewRef.current) URL.revokeObjectURL(previewRef.current);
-    previewRef.current = "";
-    setFile(null);
-    setPreviewUrl("");
+    job.setFile(null);
     resetResult();
     setUploadError("");
-    setGenerateError("");
   }
 
-  async function onGenerate() {
-    if (!file || !selectedId || submittingRef.current) return;
-    submittingRef.current = true;
-    setGenerating(true);
-    setGenerateError("");
-    resetResult();
-    try {
-      const generated = await generate("makeup", file, selectedId);
-      setResult(generated);
-      setResultOpen(true);
-    } catch (error) {
-      setGenerateError(
-        error instanceof Error
-          ? error.message
-          : "Makeup generation failed. Please try again.",
-      );
-    } finally {
-      submittingRef.current = false;
-      setGenerating(false);
-    }
-  }
+  async function onGenerate() { await job.run(); }
 
   const selectedStyle = styles.find((style) => style.id === selectedId);
   const liveMode = styles.some((style) => style.status === "trained_preset");
@@ -176,7 +137,7 @@ export default function MakeupPage() {
             type="file"
             accept="image/jpeg,image/png"
             onChange={onFileChange}
-            disabled={generating}
+            disabled={!job.ready || job.locked}
             aria-label="Upload your portrait"
             aria-describedby="makeup-upload-help makeup-upload-error"
           />
@@ -211,7 +172,7 @@ export default function MakeupPage() {
                 <button
                   type="button"
                   className="studio-text-button"
-                  disabled={generating}
+                  disabled={!job.ready || job.locked}
                   onClick={() => inputRef.current?.click()}
                 >
                   Replace
@@ -219,7 +180,7 @@ export default function MakeupPage() {
                 <button
                   type="button"
                   className="studio-text-button"
-                  disabled={generating}
+                  disabled={!job.ready || job.locked}
                   onClick={clearImage}
                 >
                   Remove
@@ -233,7 +194,7 @@ export default function MakeupPage() {
             </p>
           )}
           <ReferenceImagePicker
-            disabled={generating}
+            disabled={!job.ready || job.locked}
             onSelect={acceptFile}
             purpose="Makeup Studio"
           />
@@ -263,12 +224,11 @@ export default function MakeupPage() {
                   key={style.id}
                   type="button"
                   className="studio-style-card"
-                  disabled={generating}
+                  disabled={!job.ready || job.locked}
                   onClick={() => {
-                    setSelectedId(style.id);
+                    job.select(style.id);
                     resetResult();
-                    setGenerateError("");
-                  }}
+                                  }}
                   aria-pressed={selectedId === style.id}
                 >
                   <span
@@ -318,7 +278,7 @@ export default function MakeupPage() {
         <button
           type="button"
           className="studio-primary-button"
-          disabled={!file || !selectedId || generating}
+          disabled={!job.ready || !file || !selectedId || job.busy}
           onClick={() => void onGenerate()}
         >
           {generating
@@ -336,16 +296,17 @@ export default function MakeupPage() {
           {generateError}
         </p>
       )}
+      {job.phase === "unknown" && <button type="button" className="studio-text-button" onClick={() => void job.recover()}>Check existing preview</button>}
       {result && !resultOpen && (
         <button
           type="button"
           className="studio-view-result"
-          onClick={() => setResultOpen(true)}
+          onClick={() => job.open(true)}
         >
           View your result again
         </button>
       )}
-      {generating && <GenerationProgress feature="makeup" mock={!liveMode} />}
+      {generating && job.progressOpen && <GenerationProgress onBrowse={job.hideProgress} feature="makeup" mock={!liveMode} />}
       <ResultDialog
         feature="makeup"
         result={result}
@@ -365,7 +326,7 @@ export default function MakeupPage() {
             ? "Generated with FLUX.2 Klein Base + MAKEUP-001. This AI preview may change facial details, skin tone, lighting or texture; it is not an exact prediction of real cosmetics."
             : "No makeup was applied. This is your normalized original image, not an AI makeup transformation."
         }
-        onClose={() => setResultOpen(false)}
+        onClose={() => job.open(false)}
         onRegenerate={() => void onGenerate()}
       />
     </StudioShell>

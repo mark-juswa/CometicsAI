@@ -55,6 +55,8 @@ for (const path of ['next/image', 'next/link']) {
   test.mock.module(path, { defaultExport: module.default.default ?? module.default });
 }
 const { AuthProvider } = await import('../context/AuthContext.tsx');
+const { GenerationContext } = await import('../components/generation-provider.tsx');
+const { GenerationStore } = await import('../lib/ai/generation-store.ts');
 const { default: LoginForm } = await import('../app/(public)/login/login-form.tsx');
 const { inventoryApi } = await import('../lib/business/inventory.ts');
 const { ServiceCompletion } = await import('../components/service-completion.tsx');
@@ -147,6 +149,11 @@ const router = {
 const query = async (text, values = []) => (await db.query(text, values)).rows;
 function mount(Component, props = {}, params = '', auth = false) {
   let content = React.createElement(Component, props);
+  // These page tests model their client layout; persistence is covered separately.
+  const workspace = new GenerationStore(actor, { storage: window.localStorage,
+    assets: { read: async () => undefined, write: async () => {}, remove: async () => {} } });
+  workspace.getSnapshot().ready = true;
+  content = React.createElement(GenerationContext.Provider, { value: workspace }, content);
   if (auth) content = React.createElement(AuthProvider, null, content);
   return render(
     React.createElement(

@@ -6,10 +6,12 @@ import {
   useState,
   useEffect,
   useCallback,
+  useRef,
   type ReactNode,
 } from 'react';
 import { useRouter } from 'next/navigation';
 import type { UserRole } from '@/db/schema';
+import { clearGenerationDrafts } from '@/lib/ai/generation-storage';
 import { authUserFromResponse, readAuthResponse } from '@/lib/auth-response';
 
 export interface AuthUser {
@@ -44,20 +46,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const previousOwner = useRef<string | null>(null);
+  const sessionVersion = useRef(0);
+  const signingOut = useRef(false);
+  const sessionResolved = useRef(false);
+  useEffect(() => {
+    if (previousOwner.current && previousOwner.current !== user?.id) clearGenerationDrafts(previousOwner.current);
+    previousOwner.current = user?.id || null;
+  }, [user?.id]);
 
   const loadSession = useCallback(async () => {
+    if (signingOut.current) return;
+    const version = ++sessionVersion.current;
     try {
       const res = await fetch('/api/auth/session', { cache: 'no-store' });
+      if ((res.status === 401 || res.status === 403) && version === sessionVersion.current) {
+        sessionResolved.current = true; setUser(null); return;
+      }
       const data = await readAuthResponse(res, 'Could not restore your session.');
-      setUser(data.user == null ? null : authUserFromResponse(data.user));
+      const restored = data.user == null ? null : authUserFromResponse(data.user);
+      if (version === sessionVersion.current) { sessionResolved.current = true; setUser(restored); }
     } catch {
-      setUser(null);
+      // A transient refresh failure must not erase an active workspace.
+      if (version === sessionVersion.current && !sessionResolved.current) setUser(null);
     }
   }, []);
 
   // Restore the session on first mount so a refresh keeps you signed in.
   useEffect(() => {
     loadSession().finally(() => setLoading(false));
+    const refreshOnFocus = () => { void loadSession(); };
+    const changed = (event: StorageEvent) => {
+      if (event.key === 'beautycore:generation:v1:auth') void loadSession();
+    };
+    window.addEventListener('focus', refreshOnFocus);
+    window.addEventListener('storage', changed);
+    return () => { window.removeEventListener('focus', refreshOnFocus); window.removeEventListener('storage', changed); };
   }, [loadSession]);
 
   const login = useCallback(
@@ -69,6 +93,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       const data = await readAuthResponse(res, 'Unable to sign in.');
       const signedIn = authUserFromResponse(data.user);
+      sessionVersion.current++;
+      sessionResolved.current = true;
       setUser(signedIn);
       return signedIn;
     },
@@ -84,6 +110,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       const data = await readAuthResponse(res, 'Unable to create your account.');
       const registered = authUserFromResponse(data.user);
+      sessionVersion.current++;
+      sessionResolved.current = true;
       setUser(registered);
       return registered;
     },
@@ -91,14 +119,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const logout = useCallback(async () => {
+    signingOut.current = true;
+    sessionVersion.current++;
+    if (user) clearGenerationDrafts(user.id);
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
     } finally {
       // Clear locally even if the request failed — the user asked to leave.
       setUser(null);
+      signingOut.current = false;
       router.push('/login');
     }
-  }, [router]);
+  }, [router, user]);
 
   return (
     <AuthContext.Provider

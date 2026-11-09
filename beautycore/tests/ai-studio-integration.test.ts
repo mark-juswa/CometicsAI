@@ -10,6 +10,8 @@ import NailsPage from '../app/client/nail-studio/page';
 import { createConsultation, uploadConsultationPhoto } from '../lib/ai/studio-consultation-api';
 import { generate, getStyles } from '../lib/ai/studio-api';
 import { rememberCustomPhoto, takeCustomPhoto } from '../lib/ai/studio-photo-handoff';
+import { GenerationContext } from '../components/generation-provider';
+import { GenerationStore } from '../lib/ai/generation-store';
 
 test('the imported AI studio presents all four real Client destinations', () => {
   const pages = [
@@ -19,7 +21,8 @@ test('the imported AI studio presents all four real Client destinations', () => 
     { Page: NailsPage, current: '/client/nail-studio' },
   ];
   for (const { Page, current } of pages) {
-    const html = renderToStaticMarkup(React.createElement(Page));
+    const html = renderToStaticMarkup(React.createElement(GenerationContext.Provider,
+      { value: new GenerationStore('static-render-fixture') }, React.createElement(Page)));
     for (const route of ['/client/ai-consultation', '/client/hair-studio',
       '/client/makeup-studio', '/client/nail-studio'].filter((route) => route !== current))
       assert.ok(html.includes(route));

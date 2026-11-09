@@ -1,6 +1,6 @@
 import type { FeatureId } from './browser-client';
 
-// One navigation in this browser process. Never put a private photo in a URL or storage.
+// One navigation in this process. The handoff itself never serializes a photo.
 let pending: { feature: FeatureId; file: File } | null = null;
 
 export function rememberCustomPhoto(feature: FeatureId, file: File): void {
@@ -13,3 +13,5 @@ export function takeCustomPhoto(feature: FeatureId): File | null {
   pending = null;
   return file;
 }
+
+export function clearCustomPhotos(): void { pending = null; }

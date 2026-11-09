@@ -1,11 +1,12 @@
 "use client";
+import { useConsultationState, useConsultationRef, useManualGenerationBusy } from "@/components/generation-provider";
 import { LookInformation } from "@/components/look-information";
 import { GuestTrialIndicator, GuestTrialLimitDialog, type TrialFeedbackState } from "@/components/guest-trial-feedback";
 import { LockKeyhole } from "lucide-react";
 
 import Link from "next/link";
 import { SavedLookActions } from "@/components/saved-look-actions";
-import { type ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
+import { type ChangeEvent, useEffect, useMemo, useRef } from "react";
 
 import { StudioPhoto, StudioShell } from "@/components/ai-studio";
 import type { FeatureId, GenerateResponse } from "@/lib/ai/studio-api";
@@ -29,49 +30,83 @@ const MAX_BYTES = 8 * 1024 * 1024;
 const wait = (milliseconds: number) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
 export default function Consultation({ trial = false }: { trial?: boolean }) {
+  const manualBusy = useManualGenerationBusy();
   const api = useMemo(() => createStudioConsultationApi(trial ? '/api/ai-trial/' : '/api/ai/'), [trial]);
   const { createConsultation, generateRecommendation, getConsultationMode, getGenerationDetail,
     recommendConsultation, sendConsultationTurn, selectRecommendation, updateConsultation, uploadConsultationPhoto } = api;
-  const [trialStatus, setTrialStatus] = useState<GuestTrialStatus | null>(null);
-  const [trialLoading, setTrialLoading] = useState(trial);
-  const [trialLimitOpen, setTrialLimitOpen] = useState(false);
+  const [trialStatus, setTrialStatus] = useConsultationState<GuestTrialStatus | null>("trialStatus", null, trial);
+  const [trialLoading, setTrialLoading] = useConsultationState("trialLoading", trial, trial);
+  const [trialLimitOpen, setTrialLimitOpen] = useConsultationState("trialLimitOpen", false, trial);
   const trialUsedAnnounced = useRef(false);
   async function refreshTrial() {
     const state = await readTrialSession(); setTrialStatus(state); return state;
   }
-  const [service, setService] = useState<FeatureId | null>(null);
-  const [step, setStep] = useState<Step>(1);
-  const [activeLookId, setActiveLookId] = useState("");
-  const [showMorePreferences, setShowMorePreferences] = useState(false);
-  const [dragging, setDragging] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState("");
-  const previewRef = useRef("");
+  const [service, setService] = useConsultationState<FeatureId | null>("service", null, trial);
+  const [step, setStep] = useConsultationState<Step>("step", 1, trial);
+  const [activeLookId, setActiveLookId] = useConsultationState("activeLookId", "", trial);
+  const [showMorePreferences, setShowMorePreferences] = useConsultationState("showMorePreferences", false, trial);
+  const [dragging, setDragging] = useConsultationState("dragging", false, trial);
+  const [file, setFile] = useConsultationState<File | null>("file", null, trial);
+  const [preview, setPreview] = useConsultationState("preview", "", trial);
+  const previewRef = useConsultationRef("previewRef", preview, trial);
   const inputRef = useRef<HTMLInputElement>(null);
-  const running = useRef(false);
-  const selecting = useRef(false);
-  const [selectionBusy,setSelectionBusy] = useState(false);
-  const [occasion, setOccasion] = useState("");
-  const [vibe, setVibe] = useState("");
-  const [avoids, setAvoids] = useState("");
-  const [notes, setNotes] = useState("");
-  const [servicePreference, setServicePreference] = useState("");
-  const [providerMode, setProviderMode] = useState<"loading" | "deterministic" | "gemini">("loading");
-  const [chatInput, setChatInput] = useState("");
-  const [chatMessages, setChatMessages] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
-  const [conversationReady, setConversationReady] = useState(false);
-  const [phase, setPhase] = useState<Phase>("setup");
-  const [consultationId, setConsultationId] = useState("");
-  const [cards, setCards] = useState<Card[]>([]);
-  const [selectedId, setSelectedId] = useState("");
-  const [error, setError] = useState("");
+  const running = useConsultationRef("running", false, trial);
+  const selecting = useConsultationRef("selecting", false, trial);
+  const [selectionBusy,setSelectionBusy] = useConsultationState("selectionBusy", false, trial);
+  const [occasion, setOccasion] = useConsultationState("occasion", "", trial);
+  const [vibe, setVibe] = useConsultationState("vibe", "", trial);
+  const [avoids, setAvoids] = useConsultationState("avoids", "", trial);
+  const [notes, setNotes] = useConsultationState("notes", "", trial);
+  const [servicePreference, setServicePreference] = useConsultationState("servicePreference", "", trial);
+  const [providerMode, setProviderMode] = useConsultationState<"loading" | "deterministic" | "gemini">("providerMode", "loading", trial);
+  const [chatInput, setChatInput] = useConsultationState("chatInput", "", trial);
+  const [chatMessages, setChatMessages] = useConsultationState<{ role: "user" | "assistant"; content: string }[]>("chatMessages", [], trial);
+  const [conversationReady, setConversationReady] = useConsultationState("conversationReady", false, trial);
+  const [phase, setPhase] = useConsultationState<Phase>("phase", "setup", trial);
+  const [consultationId, setConsultationId] = useConsultationState("consultationId", "", trial);
+  const [cards, setCards] = useConsultationState<Card[]>("cards", [], trial);
+  const [selectedId, setSelectedId] = useConsultationState("selectedId", "", trial);
+  const [error, setError] = useConsultationState("error", "", trial);
 
-  useEffect(() => () => { if (previewRef.current) URL.revokeObjectURL(previewRef.current); }, []);
+  useEffect(() => () => { if (trial && previewRef.current) URL.revokeObjectURL(previewRef.current); }, []);
 
   useEffect(() => {
     let active = true;
     async function initialize() {
       try {
+        if (!trial && consultationId && !running.current) {
+          try {
+            const existing = await api.getConsultation(consultationId);
+            if (!active) return;
+            setService(existing.primary_service);
+            setChatMessages(existing.messages);
+            setSelectedId(existing.selected_recommendation_id || "");
+            setConversationReady(!!existing.recommendations);
+            const rows = (existing.recommendations?.recommendations || []).map(recommendation => {
+              const cached = cards.find(card => card.recommendation.id === recommendation.id);
+              const status = existing.generations.find(item => item.recommendation_id === recommendation.id);
+              return { recommendation, status: (status?.status === 'generating' ? 'unknown' : status?.status || 'pending') as CardStatus,
+                result: cached?.result || null, error: '', canRetry: status?.status === 'failed' };
+            });
+            setCards(rows);
+            if (rows.length) { setStep(3); setActiveLookId(current => current || rows[0].recommendation.id); }
+            else setStep(2);
+            setPhase(rows.some(row => row.status === 'unknown' || row.status === 'pending') ? 'attention' : 'ready');
+            for (const row of rows) {
+              if (!active) return;
+              if ((row.status === 'completed' && !row.result) || row.status === 'unknown') {
+                try {
+                  const detail = await api.getGenerationDetail(consultationId, row.recommendation.id);
+                  if (active) applyDetail(row.recommendation.id, detail);
+                } catch {
+                  if (active) patchCard(row.recommendation.id, { status: 'unknown', error: 'The existing preview could not be recovered. No replacement was sent.', canRetry: false });
+                }
+              }
+            }
+          } catch {
+            if (active) { setError('Your previous consultation is unavailable or expired. No replacement generation was sent.'); setPhase('attention'); }
+          }
+        }
         if (trial) {
           const status = await readTrialSession('POST');
           if (!active) return;
@@ -282,6 +317,7 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
   }
 
   async function retry(card: Card) {
+    if (manualBusy) return;
     if (trial || !consultationId || !card.canRetry || running.current) return;
     running.current = true;
     setPhase("generating");
@@ -303,6 +339,7 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
   }
 
   async function continuePending() {
+    if (manualBusy) return;
     if (trial || !consultationId || running.current || cards.some((card) => card.status === "unknown")) return;
     running.current = true;
     try { await generatePending(consultationId, cards.filter((card) => card.status === "pending").map((card) => card.recommendation)); }
@@ -310,6 +347,7 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
   }
 
   async function generateLooks() {
+    if (manualBusy) return;
     if (!consultationId || running.current || cards.length !== 3) return;
     if (trial) {
       const chosen = cards.find(card => card.recommendation.id === activeLookId);
@@ -406,6 +444,7 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
     {trial && step !== 3 && trialStatus?.state !== "available" && !trialLoading &&
       <GuestTrialIndicator state={trialFeedback} onOpen={() => setTrialLimitOpen(true)} />}
     {error && <p role="alert" className="studio-alert">{error}</p>}
+    {manualBusy && <p role="status" className="studio-alert">Another studio preview is running. Your consultation stays available; you can generate these looks when that preview finishes.</p>}
 
     {step === 1 && <section key="service" className="consult-stage consult-service-stage" aria-labelledby="consult-service-title">
       <div className="consult-stage-heading"><span className="studio-eyebrow">01 / CHOOSE A SERVICE</span>
@@ -517,7 +556,7 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
       {trial && <GuestTrialIndicator state={trialFeedback} onOpen={() => setTrialLimitOpen(true)} />}
       {cards.length === 3 && cards.every((card) => card.status === "pending") && (!trial || trialStatus?.state === "available") && <div className="consult-generate-intro">
         <div><strong>Your recommendations are ready.</strong><p>{trial ? "Use the recommendation cards below to choose your preview, then generate that one image." : "Generate three visual previews using your uploaded photo. Each look begins after the previous one finishes."}</p></div>
-        <button type="button" className="studio-primary-button" disabled={busy} onClick={() => void generateLooks()}>{trial ? "Generate " + (activeCard?.recommendation.primary.style_name || "This Look") : "Generate My Looks"} <span aria-hidden="true">✦</span></button>
+        <button type="button" className="studio-primary-button" disabled={busy || manualBusy} onClick={() => void generateLooks()}>{trial ? "Generate " + (activeCard?.recommendation.primary.style_name || "This Look") : "Generate My Looks"} <span aria-hidden="true">✦</span></button>
       </div>}
       {cards.length > 0 && <div className="consult-look-layout">
         {activeCard && <div className={`consult-featured-look ${activeCard.status === "completed" ? "has-result" : ""}`} aria-label="Featured look">
@@ -535,7 +574,7 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
               disabled={selectionBusy} onClick={() => void select(activeCard)}>{selectedId === activeCard.recommendation.id ? "Selected" : "Select This Look"}</button></>}
               <a className="studio-secondary-button" href={activeCard.result!.image.data_url}
                 download={`andreas-${activeCard.recommendation.primary.style_id}.${activeCard.result!.image.content_type === "image/jpeg" ? "jpg" : "png"}`}>Download</a></>}
-              {!trial && activeCard.canRetry && <button type="button" className="studio-secondary-button" disabled={busy}
+              {!trial && activeCard.canRetry && <button type="button" className="studio-secondary-button" disabled={busy || manualBusy}
                 onClick={() => void retry(activeCard)}>Retry this look</button>}
               {activeCard.status === "unknown" && <button type="button" className="studio-secondary-button"
                 onClick={() => void checkStatus(activeCard)}>Check status</button>}</div>
@@ -554,7 +593,7 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
         </article>)}</div>
       </div>}
       {!trial && phase === "attention" && cards.some((card) => card.status === "pending") && !cards.some((card) => card.status === "unknown")
-        && <button type="button" className="studio-secondary-button consult-continue" onClick={() => void continuePending()}>Continue remaining looks</button>}
+        && <button type="button" className="studio-secondary-button consult-continue" disabled={manualBusy} onClick={() => void continuePending()}>Continue remaining looks</button>}
       {!trial && selected && <section className="consult-selection" aria-label="Selected recommendation"><p className="studio-eyebrow">YOUR SELECTED LOOK</p>
         <h2>{selected.recommendation.primary.style_name}</h2><p>Selected for this consultation. Use Save Look to keep this selected result, or Book Selected Look to arrange an appointment. No booking has been made.</p>
         <LookInformation feature={selected.recommendation.primary.feature} styleId={selected.recommendation.primary.style_id} />

@@ -3,6 +3,7 @@
 import ProtectedRoute from "@/components/ProtectedRoute";
 import ClientSidebar from "@/components/ClientSidebar";
 import { BookingNotifications } from "@/components/booking-notifications";
+import { GenerationProvider } from "@/components/generation-provider";
 
 export default function ClientLayout({
   children,
@@ -15,7 +16,7 @@ export default function ClientLayout({
         <ClientSidebar />
         <BookingNotifications />
         <div className="pt-16 lg:pl-60">
-          <main className="px-6 py-8 lg:px-10">{children}</main>
+          <main className="px-6 py-8 lg:px-10"><GenerationProvider>{children}</GenerationProvider></main>
         </div>
       </div>
     </ProtectedRoute>

@@ -2,7 +2,7 @@
 
 **Date**: 2026-11-09
 **Decision**: CONFIRMED requested by Supervisor. Native browser capture and existing page conventions are local implementation choices.
-**Progress**: DONE local implementation and verification. Publication and production integration are separate milestones.
+**Progress**: DONE local implementation, verification, publication and Render production integration on 10 November 2026. Real device acceptance remains NEEDS VERIFICATION. [Release receipt](../experiments/camera-deployment-20261110.md).
 
 ## Requirements
 

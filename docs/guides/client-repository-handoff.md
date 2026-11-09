@@ -71,7 +71,7 @@ After correcting Git line ending conversion, a clean public source export passed
 
 Website: https://beautycore-demo.onrender.com
 
-The latest directly observed Live Render web release is commit `4689b4c5b4ba6e0312d9333f0f7411cd9aee5770` on 9 November 2026, including the client enhancements and generation recovery fix. The dashboard confirms branch `main` and `beautycore` root. Build is `npm ci --include=dev && npm run build`; start is `npm run start -- --hostname 0.0.0.0 --port $PORT`; health is `/api/health`. Auto Deploy is Off in both the dashboard and versioned Blueprint. [Release receipt](../experiments/generation-recovery-deployment-20261109.md).
+The latest directly observed Live Render web release is commit `7119a3942ca035ad3d5d9cc80b01276a1046abdc` on 10 November 2026, including the client enhancements, generation recovery, camera photo entry and public AI methodology page. The dashboard confirms branch `main` and `beautycore` root. Build is `npm ci --include=dev && npm run build`; start is `npm run start -- --hostname 0.0.0.0 --port $PORT`; health is `/api/health`. Auto Deploy is Off in both the dashboard and versioned Blueprint. [Release receipt](../experiments/camera-deployment-20261110.md).
 
 After reviewing a website change, merge and push it to `main` through the repository's normal workflow. The current service does not require updating the historical serving branch. Preserve that branch and earlier releases for reference.
 

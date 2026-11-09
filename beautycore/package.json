@@ -18,7 +18,8 @@
     "test:guest-trial": "node --experimental-test-module-mocks --import tsx --test tests/guest-trial.test.ts tests/guest-trial-ui.test.mjs",
     "db:check:guest-trial": "tsx scripts/apply-guest-trial.ts --check",
     "test:style-release": "node --experimental-test-module-mocks --import tsx --test tests/style-release.test.ts tests/ai-runtime-registry.test.ts",
-    "db:apply:scheduling": "tsx scripts/apply-booking-scheduling.ts --apply"
+    "db:apply:scheduling": "tsx scripts/apply-booking-scheduling.ts --apply",
+    "db:apply:booking-context": "tsx scripts/apply-booking-context.ts --apply"
   },
   "dependencies": {
     "@google/genai": "^1.31.0",

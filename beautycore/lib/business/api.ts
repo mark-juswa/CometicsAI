@@ -152,7 +152,7 @@ export function savedLooks(
     if (!row) fail('Look not found.', 404);
     if (request.method === 'GET') {
       if (!row.savedAt) fail('Look is no longer saved.', 404);
-      return json({ look: lookView(row) });
+      return json({ look: {...lookView(row), bookingService: await deps.store.bookingService(row.styleType==='hair'?'hairstyle':row.styleType==='nail'?'nails':'makeup',String(row.styleId))} });
     }
     if (request.method === 'PATCH') {
       const body = await boundedJson(request);
@@ -201,6 +201,7 @@ export function bookingApi(
       if (actor.role === 'stylist') fail('Only customers and administrators can create bookings.',403);
       const body = await boundedJson(request);
       const allowed = [
+        'serviceId',
         'serviceName',
         'serviceType',
         'appointmentDate',
@@ -211,9 +212,7 @@ export function bookingApi(
         'clientId',
       ];
       if (Object.keys(body).some((k) => !allowed.includes(k))) fail('Unexpected booking field.');
-      const service = allServices.find(
-        (s) => s.name === body.serviceName && s.serviceType === body.serviceType,
-      );
+      const service = (await deps.store.serviceCatalog()).find(s => body.serviceId ? s.id === body.serviceId : s.name === body.serviceName && s.serviceType === body.serviceType) as unknown as (typeof allServices[number] & {id:string}) | undefined;
       if (!service) fail('Choose a service from the salon catalog.');
       const owner = actor.role === 'client' ? actor.id : id(body.clientId);
       if (actor.role === 'client' && body.clientId !== undefined && body.clientId !== actor.id)
@@ -238,6 +237,7 @@ export function bookingApi(
           ? price(body.totalPrice)
           : parsePrice(service.price);
       const appointment = await deps.store.createAppointment({
+        serviceId: service.id,
         clientId: owner,
         stylistId: stylist,
         serviceName: service.name,

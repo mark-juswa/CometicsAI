@@ -161,6 +161,7 @@ async function transport(input, init = {}) {
   calls.push({ path: url.pathname, method, body: init.body, search:url.search });
   if (url.origin !== 'http://localhost:3000')
     throw new Error('External requests are forbidden in this fixture.');
+  if(url.pathname==='/api/services')return Response.json({services:await deps.store.serviceCatalog()});
   if (url.pathname === '/api/auth/session') {
     const user = actor
       ? (await query('SELECT id,name,email,role,avatar FROM users WHERE id=$1', [actor]))[0]
@@ -262,6 +263,7 @@ test.before(async () => {
     '0008_work_availability.sql',
     '0009_customer_history.sql',
     '0010_ninety_minute_bookings.sql',
+    '0011_booking_services.sql',
   ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   png = await sharp({ create: { width: 64, height: 64, channels: 3, background: '#e1c9c2' } })
@@ -417,7 +419,7 @@ test('look-aware booking and assigned stylist preview complete against the same 
   await waitFor(()=>assert.equal(screen.getByLabelText(/Preferred Stylist/).disabled,false));
   fireEvent.change(screen.getByLabelText(/Preferred Stylist/), { target: { value: S } });
   await waitFor(()=>assert.equal(screen.getByLabelText('Time', { exact: true }).disabled,false));
-  fireEvent.change(screen.getByLabelText('Time', { exact: true }), { target: { value: '10:00' } });
+  fireEvent.change(screen.getByLabelText('Time', { exact: true }), { target: { value: '10:30' } });
   fireEvent.click(screen.getByRole('button', { name: 'Confirm Booking' }));
   await screen.findByText('Appointment confirmed');
   const appointment = (
@@ -425,7 +427,7 @@ test('look-aware booking and assigned stylist preview complete against the same 
   )[0];
   assert.equal(appointment.ai_generation_id, identity);
   assert.equal(appointment.total_price, 350);
-  assert.match(String(appointment.appointment_date), /02:00:00/);
+  assert.match(String(appointment.appointment_date), /02:30:00/);
   cleanup();
   actor = S;
   mount(StylistPage);
@@ -920,7 +922,7 @@ test('calendar disables overlapping times and keeps the selected stylist',async(
  fireEvent.change(screen.getByLabelText(/Date \(Philippine time\)/),{target:{value:'2030-10-17'}});
  await waitFor(()=>assert.equal(screen.getByLabelText('Time',{exact:true}).disabled,false));
  const select=screen.getByLabelText('Time',{exact:true});
- for(const time of ['09:00','09:30','10:00'])assert.equal([...select.options].find(o=>o.value===time)?.disabled,true);
+ for(const time of ['09:00','09:30','10:00'])assert.notEqual([...select.options].find(o=>o.value===time)?.disabled,false);
  assert.equal([...select.options].find(o=>o.value==='10:30')?.disabled,false);
  assert.equal(screen.getByLabelText(/Preferred Stylist/).value,S);
  fireEvent.change(select,{target:{value:'10:30'}});fireEvent.click(screen.getByRole('button',{name:'Confirm Booking'}));
@@ -939,7 +941,7 @@ test('look-aware booking can reload a temporarily unavailable saved look',async(
   mount(BookingForm,{},'look='+id,true);await screen.findByText('Temporary saved look failure');
   fireEvent.click(screen.getByRole('button',{name:'Retry loading look'}));
   await screen.findByText('Booking with Nude Pink Gloss');assert.equal(reads,2);
-  assert.equal(screen.getByLabelText('Service',{exact:true}).options[1].value,'Classic Manicure');
+  assert.equal(screen.getByLabelText('Service',{exact:true}).value,'Classic Manicure');
  }finally{globalThis.fetch=transport;}
 });
 
@@ -979,11 +981,24 @@ for(const feature of ['nails','hairstyle','makeup'])test(feature+' oversized gen
   fireEvent.change(screen.getByLabelText(/Preferred Stylist/),{target:{value:S}});
   fireEvent.change(screen.getByLabelText(/Date \(Philippine time\)/),{target:{value:'2030-10-17'}});
   await waitFor(()=>assert.equal(screen.getByLabelText('Time',{exact:true}).disabled,false));
-  fireEvent.change(screen.getByLabelText('Time',{exact:true}),{target:{value:'10:00'}});
+  fireEvent.change(screen.getByLabelText('Time',{exact:true}),{target:{value:'10:30'}});
   fireEvent.click(screen.getByRole('button',{name:'Confirm Booking'}));await screen.findByText('Appointment confirmed');
   assert.equal((await query('SELECT ai_generation_id FROM appointments'))[0].ai_generation_id,row.id);
  }finally{
   proto.getContext=getContext;proto.toDataURL=toDataURL;
   if(imageDescriptor)Object.defineProperty(globalThis,'Image',imageDescriptor);else Reflect.deleteProperty(globalThis,'Image');
  }
+});
+
+
+test('saved preset preselects its database service and preserves manual choice on date changes',async()=>{
+ const response=await transport('/api/saved-looks',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({feature:'nails',styleId:result.style.id,image:result.image.data_url,status:'completed',sourceKind:'manual'})});
+ const id=(await response.json()).look.id;mount(BookingForm,{},'look='+id,true);await screen.findByText('Booking with Nude Pink Gloss');
+ await waitFor(()=>assert.equal(screen.getByLabelText('Service',{exact:true}).value,'Classic Manicure'));
+ fireEvent.change(screen.getByLabelText('Service',{exact:true}),{target:{value:'Gel Manicure'}});
+ fireEvent.change(screen.getByLabelText(/Date \(Philippine time\)/),{target:{value:'2030-10-17'}});
+ await waitFor(()=>assert.equal(screen.getByLabelText('Time',{exact:true}).disabled,false));
+ assert.equal(screen.getByLabelText('Service',{exact:true}).value,'Gel Manicure');
+ fireEvent.change(screen.getByLabelText(/Date \(Philippine time\)/),{target:{value:'2030-10-18'}});
+ await waitFor(()=>assert.equal(screen.getByLabelText('Time',{exact:true}).disabled,false));assert.equal(screen.getByLabelText('Service',{exact:true}).value,'Gel Manicure');
 });

@@ -83,6 +83,7 @@ test.before(async () => {
     '0008_work_availability.sql',
     '0009_customer_history.sql',
     '0010_ninety_minute_bookings.sql',
+    '0011_booking_services.sql',
   ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   assert.equal(
@@ -102,6 +103,7 @@ test.before(async () => {
     '0008_work_availability.sql',
     '0009_customer_history.sql',
     '0010_ninety_minute_bookings.sql',
+    '0011_booking_services.sql',
   ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   image =
@@ -705,6 +707,7 @@ test('expanded Hair looks save with server-owned descriptions and survive catalo
   const oldPrice = service.price;
   try {
     service.price = '₱999';
+    await query('UPDATE salon_services SET price=$1 WHERE name=$2',['₱999',service.name]);
     const read = await savedLooks(request('/api/saved-looks/' + look.id), look.id, false, deps);
     assert.deepEqual((await read.json()).look.lookDetails, original);
     const duplicate = await save(saveBody('hairstyle', 'bun'));
@@ -728,6 +731,7 @@ test('expanded Hair looks save with server-owned descriptions and survive catalo
     );
   } finally {
     service.price = oldPrice;
+    await query('UPDATE salon_services SET price=$1 WHERE name=$2',[oldPrice,service.name]);
   }
 });
 

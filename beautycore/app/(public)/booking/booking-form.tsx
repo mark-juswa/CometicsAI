@@ -42,6 +42,19 @@ export default function BookingForm() {
     ? serviceGroups.find((g) => g.id === preselectedGroup) || serviceGroups[0]
     : serviceGroups[0];
 
+  const [catalog, setCatalog] = useState<
+    ((typeof allServices)[number] & { id?: string })[]
+  >([]);
+  const [catalogError, setCatalogError] = useState("");
+  useEffect(() => {
+    const c = new AbortController();
+    businessRequest("/api/services", { signal: c.signal })
+      .then((d) => setCatalog(d.services))
+      .catch((e) => {
+        if (!c.signal.aborted) setCatalogError(e.message);
+      });
+    return () => c.abort();
+  }, []);
   const [group, setGroup] = useState<ServiceGroup>(firstGroup);
   const [serviceName, setServiceName] = useState("");
   const [date, setDate] = useState("");
@@ -118,6 +131,8 @@ export default function BookingForm() {
     }
     setSlotsLoading(true);
     const params = new URLSearchParams({ date, service: serviceName });
+    const selected = catalog.find((s) => s.name === serviceName);
+    if (selected?.id) params.set("serviceId", selected.id);
     if (stylistId) params.set("stylist", stylistId);
     businessRequest("/api/appointments/availability?" + params, {
       signal: controller.signal,
@@ -143,7 +158,7 @@ export default function BookingForm() {
         if (!controller.signal.aborted) setSlotsLoading(false);
       });
     return () => controller.abort();
-  }, [date, serviceName, stylistId, slotRevision]);
+  }, [date, serviceName, stylistId, slotRevision, catalog]);
   useEffect(() => {
     const refresh = () => setSlotRevision((value) => value + 1);
     window.addEventListener("focus", refresh);
@@ -167,11 +182,14 @@ export default function BookingForm() {
         if (controller.signal.aborted) return;
         setLook(data.look);
         const group = serviceGroups.find(
-          (g) => g.id === savedGroup(data.look.styleType),
+          (g) =>
+            g.id ===
+            (data.look.bookingService?.groupId ??
+              savedGroup(data.look.styleType)),
         );
         if (group) {
           setGroup(group);
-          setServiceName("");
+          setServiceName(data.look.bookingService?.name ?? "");
         }
       })
       .catch((cause) => {
@@ -226,7 +244,7 @@ export default function BookingForm() {
       return;
     }
 
-    const selectedService = allServices.find((s) => s.name === serviceName);
+    const selectedService = catalog.find((s) => s.name === serviceName);
     const totalPrice = selectedService
       ? parsePrice(selectedService.price)
       : null;
@@ -239,6 +257,7 @@ export default function BookingForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           lookId: look?.id,
+          serviceId: selectedService?.id,
           serviceName,
           serviceType: group.serviceType,
           appointmentDate: appointmentDate.toISOString(),
@@ -266,7 +285,7 @@ export default function BookingForm() {
     }
   };
 
-  const serviceOptions = allServices
+  const serviceOptions = catalog
     .filter((s) => s.groupId === group.id)
     .map((s) => ({ value: s.name, label: `${s.name} — ${s.price}` }));
 
@@ -375,6 +394,7 @@ export default function BookingForm() {
             </motion.div>
           )}
 
+          {catalogError && <p role="alert">{catalogError}</p>}
           <form onSubmit={handleSubmit} className="glass rounded-sm p-6">
             {/* Category */}
             <div className="mb-5">
@@ -386,7 +406,7 @@ export default function BookingForm() {
                   <button
                     key={g.id}
                     type="button"
-                    disabled={!!look && g.id !== savedGroup(look.styleType)}
+
                     onClick={() => {
                       setGroup(g);
                       setServiceName("");
@@ -418,6 +438,13 @@ export default function BookingForm() {
                 value={serviceName}
                 onChange={(e) => {
                   setServiceName(e.target.value);
+                  const selected = catalog.find(
+                    (s) => s.name === e.target.value,
+                  );
+                  const category = serviceGroups.find(
+                    (g) => g.id === selected?.groupId,
+                  );
+                  if (category) setGroup(category);
                   setTime("");
                   setStylistId("");
                 }}
@@ -435,7 +462,7 @@ export default function BookingForm() {
 
             {serviceName && (
               <p className="mb-5 text-sm text-secondary">
-                {selectedServiceLabel(serviceName)}
+                {catalog.find((s) => s.name === serviceName)?.price}
               </p>
             )}
             {/* Stylist */}
@@ -543,9 +570,32 @@ export default function BookingForm() {
                     </option>
                   ))}
                 </select>
+                <div
+                  className="mt-3 flex flex-wrap gap-2"
+                  role="group"
+                  aria-label="Available appointment times"
+                >
+                  {slots.map((slot) => (
+                    <button
+                      key={slot.time}
+                      type="button"
+                      disabled={!slot.available || slotsLoading}
+                      aria-pressed={time === slot.time}
+                      onClick={() => setTime(slot.time)}
+                      className={
+                        time === slot.time
+                          ? "rounded border border-gold bg-gold px-3 py-2 text-black"
+                          : "rounded border border-purple-light/30 px-3 py-2 text-white disabled:opacity-30"
+                      }
+                    >
+                      {slot.time}
+                    </button>
+                  ))}
+                </div>
+                {slotsLoading && <p role="status">Checking available times…</p>}
                 <p className="mt-2 text-xs text-muted">
                   Every appointment reserves 1 hour and 30 minutes. Choose a
-                  stylist below to see their available times.
+                  stylist and date to see their available times.
                 </p>
                 {slotsError && (
                   <p role="alert" className="mt-2 text-xs text-error">

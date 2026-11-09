@@ -31,7 +31,7 @@ export function StudioShell({ feature, eyebrow, title, emphasis, description, ba
             ? <span key={item.id} aria-current="page" className="studio-nav-active">{item.label}</span>
             : <Link key={item.id} href={item.href}>{item.label}</Link>)}
         </nav>
-        <span className="studio-header-note">Your look, reimagined</span>
+        <Link href="/how-ai-works" className="studio-header-note">How our AI works</Link>
       </div>
     </header>
     <div className="studio-main">
@@ -45,7 +45,7 @@ export function StudioShell({ feature, eyebrow, title, emphasis, description, ba
         <div className="studio-hero-art" aria-hidden="true"><span className="studio-orbit studio-orbit-one" /><span className="studio-orbit studio-orbit-two" /><span className="studio-hero-spark">✦</span><span className="studio-hero-monogram">B</span></div>
       </div>
       {children}
-      <footer className="studio-footer"><span>ANDREA&apos;S <span aria-hidden="true">✦</span> AI STUDIO</span><span>Explore a look that feels like you.</span></footer>
+      <footer className="studio-footer"><span>ANDREA&apos;S <span aria-hidden="true">✦</span> AI STUDIO</span><span>Explore a look that feels like you. <Link href="/how-ai-works">How our AI works</Link></span></footer>
     </div>
   </div>;
 }

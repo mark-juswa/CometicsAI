@@ -95,6 +95,19 @@
 .studio-progress-track span { display:block; width:35%; height:100%; background:linear-gradient(90deg,var(--purple),var(--gold)); animation:studio-progress 2.3s ease-in-out infinite alternate; }
 .studio-result-dialog { position:fixed; inset:0; width:min(calc(100% - 32px),1000px); max-height:min(92vh,920px); margin:auto; padding:0; border:1px solid rgba(176,64,216,.5); background:var(--card); color:white; box-shadow:0 35px 100px rgba(0,0,0,.65); overflow:auto; }
 .studio-result-dialog::backdrop { background:rgba(6,1,16,.82); backdrop-filter:blur(8px); }
+.studio-camera-option { margin-top:16px; }
+.studio-camera-option > button { display:inline-flex; align-items:center; gap:8px; }
+.studio-camera-dialog { position:fixed; inset:0; width:min(calc(100% - 24px),640px); max-height:92dvh; margin:auto; padding:24px; overflow:auto; border:1px solid rgba(176,64,216,.5); background:var(--card,#1c0c30); color:#fff; }
+.studio-camera-dialog::backdrop { background:rgba(6,1,16,.82); backdrop-filter:blur(8px); }
+.studio-camera-heading { display:flex; align-items:start; justify-content:space-between; gap:16px; }
+.studio-camera-heading h2 { margin:6px 0 12px; font:500 30px Georgia,serif; }
+.studio-camera-help,.studio-camera-privacy { color:var(--secondary,#c6bbd4); font-size:13px; line-height:1.6; }
+.studio-camera-preview { margin:18px 0; min-height:180px; background:#08040f; display:grid; place-items:center; }
+.studio-camera-preview video,.studio-camera-preview img { display:block; width:100%; max-height:48dvh; object-fit:contain; }
+.studio-camera-actions { display:flex; flex-wrap:wrap; gap:12px; margin:18px 0; }
+.studio-camera-dialog button:focus-visible,.studio-camera-option button:focus-visible { outline:2px solid var(--gold,#f0a800); outline-offset:4px; }
+.studio-header-note[href] { color:var(--gold-light); text-decoration:underline; text-underline-offset:4px; }
+.studio-footer a { color:var(--gold-light); text-decoration:underline; text-underline-offset:3px; margin-left:8px; }
 .studio-result-content { padding:27px; }
 .studio-result-header { display:flex; align-items:start; justify-content:space-between; gap:16px; margin-bottom:21px; }
 .studio-result-header h2 { margin:7px 0 5px; font:500 36px Georgia,serif; }

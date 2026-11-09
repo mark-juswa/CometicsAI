@@ -1,5 +1,9 @@
 # Coarse build scope
 
+## AI methodology and camera selection, 9 November 2026
+
+DONE local build and VERIFIED163 tests, TypeScript, production build, methodology browser rendering and synthetic camera review/selection/cleanup. Shared camera option covers Hair, Makeup, Nails and normal/guest consultation; public methodology separates training from generation and hybrid feature behavior. Real device/mobile acceptance and production integration NOT STARTED. No inference, catalog, database or provider changes. [Contract](../specs/0021-ai-methodology-camera.md), [evidence](../experiments/ai-methodology-camera-20261109.md).
+
 ## Generation navigation recovery, 9 November 2026
 
 DONE authorized web rollout: main fast forwarded to verified4689b4c and Render deployment dep-dborks1srm7s73ct9al0 reports Live. Public health/auth boundary and served recovery assets pass.29 additional inventory checks pass; schema prerequisites already present with no database mutation. No GPU call or provider/model change. Authenticated live navigation/generation acceptance remains NEEDS VERIFICATION. [Release receipt](../experiments/generation-recovery-deployment-20261109.md).

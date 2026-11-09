@@ -1,5 +1,6 @@
 "use client";
 import { ReferenceImagePicker } from "@/components/reference-image-picker";
+import { CameraCapture } from "@/components/camera-capture";
 
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import {
@@ -192,6 +193,7 @@ export default function Home() {
               {uploadError}
             </p>
           )}
+          <CameraCapture disabled={!job.ready || job.locked} onCapture={acceptFile} />
           <ReferenceImagePicker
             disabled={!job.ready || job.locked}
             onSelect={acceptFile}

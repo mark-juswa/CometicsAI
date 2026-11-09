@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "test:camera": "node --experimental-test-module-mocks --import tsx --test tests/camera-methodology.test.mjs",
     "test:recovery": "node --experimental-test-module-mocks --import tsx --test tests/generation-store.test.ts tests/generation-navigation.test.tsx tests/generation-auth.test.mjs",
     "dev": "node scripts/start-portal.mjs --dev",
     "build": "next build",

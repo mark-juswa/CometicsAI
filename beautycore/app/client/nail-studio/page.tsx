@@ -1,5 +1,6 @@
 "use client";
 import { ReferenceImagePicker } from "@/components/reference-image-picker";
+import { CameraCapture } from "@/components/camera-capture";
 
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import {
@@ -166,6 +167,7 @@ export default function NailsPage() {
               </div>
             </div>
           )}
+          <CameraCapture disabled={!job.ready || job.locked} facing="environment" onCapture={acceptFile} />
           <ReferenceImagePicker
             disabled={!job.ready || job.locked}
             onSelect={acceptFile}

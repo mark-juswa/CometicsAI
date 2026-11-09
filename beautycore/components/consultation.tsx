@@ -14,6 +14,7 @@ import { createStudioConsultationApi, type GenerationDetail, type Preferences, t
 import { readTrialSession, type GuestTrialStatus } from "@/lib/ai/guest-trial-client";
 import { rememberCustomPhoto } from "@/lib/ai/studio-photo-handoff";
 import { ReferenceImagePicker } from "@/components/reference-image-picker";
+import { CameraCapture } from "@/components/camera-capture";
 
 type CardStatus = "pending" | "generating" | "completed" | "failed" | "unknown";
 type Card = { recommendation: Recommendation; status: CardStatus; result: GenerateResponse | null;
@@ -542,6 +543,7 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
           {file && <div className="studio-file-row"><strong>{file.name}</strong><button type="button" className="studio-text-button"
             disabled={busy} onClick={() => inputRef.current?.click()}>Change photo</button></div>}
           <p className="consult-photo-note">{trial ? "Your photo is used for your chosen preview." : "One photo is reused for all three results."} Your photo is not sent to the conversational AI.</p>
+          <CameraCapture disabled={!!busy} facing={service === "nails" ? "environment" : "user"} onCapture={acceptFile} />
           {!trial && <ReferenceImagePicker disabled={!!busy} onSelect={acceptFile} />}
         </aside>
       </div>

@@ -1,5 +1,7 @@
 # Decision history
 
+2026-11-09 CONFIRMED: Supervisor requests adding AI training methodology and direct camera selection during image upload. Implement an evidence grounded public explanation and one native browser camera component for AI studios/consultation, reusing File validation and explicit generation. No new model training, automatic upload, production database change or real hardware permission grant is implied. Real phone acceptance and production integration remain separate. [Contract](../docs/specs/0021-ai-methodology-camera.md).
+
 2026-11-09 CONFIRMED: Supervisor requests merging the client based generation recovery fix and deploying to Render. Use the live dashboard's actual main branch rather than the stale historical serving branch guidance. Main fast forward and manual Render release4689b4c are VERIFIED; no GPU worker, credentials, database contents or model changes are part of this authorization. [Receipt](../docs/experiments/generation-recovery-deployment-20261109.md).
 
 2026-11-09 CONFIRMED: Supervisor requests fixing the proven navigation defect on the client branch. Keep accepted jobs and drafts outside route lifetimes, recover by reads, prevent silent replacement, isolate by authenticated owner and retain the models, catalogs, server serialization and salon enhancements. Implemented locally on `codex/generation-recovery`; production integration remains separate. [Contract](../docs/specs/0020-generation-recovery.md).

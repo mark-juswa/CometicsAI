@@ -27,6 +27,8 @@ test('the imported AI studio presents all four real Client destinations', () => 
       '/client/makeup-studio', '/client/nail-studio'].filter((route) => route !== current))
       assert.ok(html.includes(route));
     assert.ok(html.includes('studio-page'));
+    assert.ok(html.includes('/how-ai-works'));
+    if (Page !== ConsultationPage) assert.ok(html.includes('Use camera'));
     assert.equal(html.includes('/client/ai-advisor'), false);
   }
 });

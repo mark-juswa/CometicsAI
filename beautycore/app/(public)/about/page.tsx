@@ -52,6 +52,7 @@ export default function AboutPage() {
             Where beauty and wellness converge — and where nobody rushes you
             through a treatment to make the next booking.
           </p>
+          <Link href="/how-ai-works" className="mt-6 inline-flex text-sm font-semibold text-gold-light underline underline-offset-4">How our AI works: training and previews</Link>
         </div>
       </section>
 

@@ -1065,7 +1065,16 @@ test('saved preset preselects its database service and preserves manual choice o
 });
 
 
-test('service controls start work, request a stop reason and confirm completion with actual timing',async()=>{
+// Lifecycle tests need an admitted booking, independent of the current closing time.
+function lifecycleClock(t) {
+ const clock=new Date();clock.setUTCDate(clock.getUTCDate()-1);clock.setUTCHours(4,0,0,0);
+ const stamp=clock.getTime();t.mock.method(Date,'now',()=>stamp);deps.now=()=>stamp;
+ t.mock.method(deps.store,'processNoShows',()=>query('SELECT beautycore_process_no_shows($1::timestamptz) AS processed',[clock.toISOString()]));
+ t.after(()=>{delete deps.now;});
+}
+
+test('service controls start work, request a stop reason and confirm completion with actual timing',async(t)=>{
+ lifecycleClock(t);
  const scheduled=new Date(Date.now()+60000).toISOString();
  const response=await transport('/api/appointments',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({serviceName:"Women's Cut & Blowdry",serviceType:'hair',appointmentDate:scheduled,stylistId:S})});assert.equal(response.status,201);const id=(await response.json()).appointment.id;actor=S;
  function Harness(){const [row,setRow]=React.useState({id,status:'confirmed',appointmentDate:scheduled});const load=async()=>setRow((await(await transport('/api/appointments/'+id)).json()).appointment);return React.createElement(ServiceControls,{id,status:row.status,appointmentDate:row.appointmentDate,record:row,onUpdated:load});}
@@ -1079,7 +1088,8 @@ test('service controls start work, request a stop reason and confirm completion 
  const [tracking]=await query('SELECT started_at,ended_at FROM appointment_service_tracking WHERE appointment_id=$1',[id]);assert.ok(tracking.started_at);assert.ok(tracking.ended_at);
 });
 
-test('manual no-show is confirmed before it changes status and the client sees the retained record',async()=>{
+test('manual no-show is confirmed before it changes status and the client sees the retained record',async(t)=>{
+ lifecycleClock(t);
  const response=await transport('/api/appointments',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({serviceName:"Women's Cut & Blowdry",serviceType:'hair',appointmentDate:new Date(Date.now()+60000).toISOString(),stylistId:S})});const id=(await response.json()).appointment.id;
  const scheduled=new Date(Date.now()-300000).toISOString();await query("UPDATE appointments SET appointment_date=$2::timestamptz AT TIME ZONE 'UTC' WHERE id=$1",[id,scheduled]);actor=S;
  mount(ServiceControls,{id,status:'confirmed',appointmentDate:scheduled,record:{},onUpdated:()=>{}});

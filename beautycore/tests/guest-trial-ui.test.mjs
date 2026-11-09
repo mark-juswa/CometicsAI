@@ -220,6 +220,7 @@ async function prepare() {
   await waitFor(() => assert.ok(calls.some((c) => c.path.endsWith("/mode"))));
   fireEvent.click(screen.getByRole("button", { name: /Hairstyle / }));
   fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+  assert.ok(screen.getByRole("button", { name: "Use camera", exact: true }));
   fireEvent.change(screen.getByLabelText("Upload consultation photo"), {
     target: {
       files: [new File(["fixture"], "portrait.png", { type: "image/png" })],

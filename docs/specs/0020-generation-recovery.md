@@ -2,7 +2,7 @@
 
 **Date**: 2026-11-09
 **Decision**: CONFIRMED by the Supervisor's instruction to fix the investigated defect.
-**Progress**: DONE local implementation and verification. Production deployment NOT STARTED.
+**Progress**: DONE implementation, local verification and Render web deployment. Authenticated GPU acceptance NEEDS VERIFICATION.
 
 ## Summary
 
@@ -33,3 +33,5 @@ Implement admission and resume helpers, account scoped browser persistence, shar
 ## Evidence
 
 153 focused tests, TypeScript and the production build pass. All three manual pages pass browser navigation and refresh with native IndexedDB and synthetic API responses. Live cloud acceptance and consultation recovery on the client's browser remain separate. [Implementation and limits](../experiments/generation-recovery-20261109.md).
+
+The Supervisor authorized deployment. Main and Render now contain release4689b4c; dashboard Live status, public health/authentication boundary and actual recovery JS assets verify. No new GPU request. [Deployment receipt](../experiments/generation-recovery-deployment-20261109.md).

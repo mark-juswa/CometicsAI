@@ -2,7 +2,9 @@
 
 ## Generation navigation recovery, 9 November 2026
 
-DONE local correction and VERIFIED153 focused tests, TypeScript, production build and browser navigation/refresh of Hair, Makeup and Nails with native IndexedDB and controlled API responses. Shared workspace, ticket recovery, tab coordination, account cleanup and normal consultation restoration implemented on `codex/generation-recovery` above client enhancements. Production deployment and live Render/Runpod acceptance NOT STARTED. Models, catalogs, database and GPU services unchanged. [Contract](../specs/0020-generation-recovery.md), [evidence](../experiments/generation-recovery-20261109.md).
+DONE authorized web rollout: main fast forwarded to verified4689b4c and Render deployment dep-dborks1srm7s73ct9al0 reports Live. Public health/auth boundary and served recovery assets pass.29 additional inventory checks pass; schema prerequisites already present with no database mutation. No GPU call or provider/model change. Authenticated live navigation/generation acceptance remains NEEDS VERIFICATION. [Release receipt](../experiments/generation-recovery-deployment-20261109.md).
+
+DONE local correction and VERIFIED153 focused tests, TypeScript, production build and browser navigation/refresh of Hair, Makeup and Nails with native IndexedDB and controlled API responses. Shared workspace, ticket recovery, tab coordination, account cleanup and normal consultation restoration implemented on `codex/generation-recovery` above client enhancements. Render web deployment is DONE; authenticated live Render/Runpod acceptance remains NEEDS VERIFICATION. Models, catalogs, database and GPU services unchanged. [Contract](../specs/0020-generation-recovery.md), [evidence](../experiments/generation-recovery-20261109.md).
 
 ## Runpod serving preparation, 8 November 2026
 

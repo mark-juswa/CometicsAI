@@ -1,6 +1,6 @@
 # BeautyCore source and deployment handoff
 
-Date: 7 November 2026.
+Date: 7 November 2026. Deployment guidance updated 9 November 2026 from the actual Render dashboard.
 
 Runpod update, 8 November: the [Runpod server guide](runpod-serving.md) now provides a built and publicly published image with verified anonymous pull access, Linux staging, CPU model loads and notebook authentication. You can skip Docker build steps. Private inputs and secrets are supplied separately. Kaggle remains backup. Actual Runpod GPU validation and provider cutover remain open. [Build receipt](../experiments/runpod-docker-build-20261108.md).
 
@@ -8,7 +8,7 @@ Runpod update, 8 November: the [Runpod server guide](runpod-serving.md) now prov
 
 Repository: https://github.com/mark-juswa/CometicsAI
 
-Use `main` for the complete source handoff. The serving branch is `codex/render-kaggle-demo`. The publication receipt records the exact published commits. Older experiment results are preserved as evidence, including failed approaches. Their presence does not select them for production.
+Use `main` for the complete source handoff and the current Render deployment. `codex/render-kaggle-demo` is the historical serving branch. The publication receipts record exact published commits. Older experiment results are preserved as evidence, including failed approaches. Their presence does not select them for production.
 
 ```powershell
 git clone https://github.com/mark-juswa/CometicsAI.git
@@ -71,17 +71,9 @@ After correcting Git line ending conversion, a clean public source export passed
 
 Website: https://beautycore-demo.onrender.com
 
-The last directly observed Live Render release was commit `578330d34019e593fbb4b8fb4eaed898da3ff09d` on 6 November 2026. This handoff publication does not claim a new Render deployment. The service uses the `codex/render-kaggle-demo` branch and `beautycore` root. Build is `npm ci --include=dev && npm run build`; start is `npm run start -- --hostname 0.0.0.0 --port $PORT`; health is `/api/health`. The versioned Blueprint sets `autoDeployTrigger: 'off'`.
+The latest directly observed Live Render web release is commit `4689b4c5b4ba6e0312d9333f0f7411cd9aee5770` on 9 November 2026, including the client enhancements and generation recovery fix. The dashboard confirms branch `main` and `beautycore` root. Build is `npm ci --include=dev && npm run build`; start is `npm run start -- --hostname 0.0.0.0 --port $PORT`; health is `/api/health`. Auto Deploy is Off in both the dashboard and versioned Blueprint. [Release receipt](../experiments/generation-recovery-deployment-20261109.md).
 
-After reviewing a website change, merge it into `main`, then fast forward the serving branch if it has not diverged:
-
-```powershell
-git fetch origin
-git switch codex/render-kaggle-demo
-git pull --ff-only origin codex/render-kaggle-demo
-git merge --ff-only origin/main
-git push origin codex/render-kaggle-demo
-```
+After reviewing a website change, merge and push it to `main` through the repository's normal workflow. The current service does not require updating the historical serving branch. Preserve that branch and earlier releases for reference.
 
 An authorized Render operator can then use Manual Deploy, Deploy latest commit. Confirm the linked branch, dashboard setting and exact deployed commit first. Pushing source alone is not proof of a live deployment. If the client uses their own fork, create or reconnect a Render service to that fork with its own database and secrets. [Render deployment documentation](https://render.com/docs/deploys) explains manual and automatic deployment.
 

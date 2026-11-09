@@ -1,6 +1,6 @@
 # Generation recovery correction
 
-Date: 9 November 2026. Implementation DONE. Local verification VERIFIED. Production deployment NOT STARTED.
+Date: 9 November 2026. Implementation DONE. Local verification VERIFIED. Subsequent authorized Render web deployment DONE, see [release receipt](generation-recovery-deployment-20261109.md). Authenticated GPU acceptance remains separate.
 
 ## Cause and source
 

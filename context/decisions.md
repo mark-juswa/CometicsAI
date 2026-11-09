@@ -1,5 +1,7 @@
 # Decision history
 
+2026-11-09 CONFIRMED: Supervisor requests merging the client based generation recovery fix and deploying to Render. Use the live dashboard's actual main branch rather than the stale historical serving branch guidance. Main fast forward and manual Render release4689b4c are VERIFIED; no GPU worker, credentials, database contents or model changes are part of this authorization. [Receipt](../docs/experiments/generation-recovery-deployment-20261109.md).
+
 2026-11-09 CONFIRMED: Supervisor requests fixing the proven navigation defect on the client branch. Keep accepted jobs and drafts outside route lifetimes, recover by reads, prevent silent replacement, isolate by authenticated owner and retain the models, catalogs, server serialization and salon enhancements. Implemented locally on `codex/generation-recovery`; production integration remains separate. [Contract](../docs/specs/0020-generation-recovery.md).
 
 2026-11-08, PROPOSED: validate a separate RTX A6000 candidate using the existing Runpod architecture after repeated 3090 allocation failures and user reported A6000 availability signals. Local image preparation is complete; this does not approve paid deployment, new output quality or website cutover. Preserve original 3090 and Kaggle paths. [Candidate](../docs/experiments/runpod-a6000-candidate-20261108.md).

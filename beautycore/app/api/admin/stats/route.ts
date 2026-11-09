@@ -65,7 +65,7 @@ export async function GET() {
           status: inventory.status,
         })
         .from(inventory)
-        .where(sql`current_stock <= minimum_threshold`)
+        .where(sql`current_stock <= minimum_threshold AND NOT EXISTS(SELECT 1 FROM inventory_details d WHERE d.inventory_id=${inventory.id} AND d.active=false)`)
         .orderBy(inventory.currentStock),
 
       db

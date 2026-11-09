@@ -86,6 +86,7 @@ test.before(async () => {
     '0011_booking_services.sql',
     '0012_service_statuses.sql',
     '0013_service_lifecycle.sql',
+    '0014_service_inventory.sql',
   ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   assert.equal(
@@ -108,6 +109,7 @@ test.before(async () => {
     '0011_booking_services.sql',
     '0012_service_statuses.sql',
     '0013_service_lifecycle.sql',
+    '0014_service_inventory.sql',
   ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   image =
@@ -362,7 +364,7 @@ test('inventory stock movements are atomic, recorded and never allow negative st
   const [item] = await query("INSERT INTO inventory(product_name,category,current_stock,minimum_threshold,status) VALUES('Polish','Nail',2,3,'low_stock') RETURNING id");
   const insufficient = (await query("SELECT * FROM beautycore_inventory_move($1,$2,'out',3,NULL)", [item.id,A]))[0];
   assert.equal(insufficient.outcome, 'insufficient');
-  assert.equal((await query('SELECT current_stock FROM inventory WHERE id=$1',[item.id]))[0].current_stock,2);
+  assert.equal(Number((await query('SELECT current_stock FROM inventory WHERE id=$1',[item.id]))[0].current_stock),2);
   const removed = (await query("SELECT * FROM beautycore_inventory_move($1,$2,'out',1,'Used for service')", [item.id,A]))[0];
   assert.equal(removed.outcome, 'updated');
   assert.equal(removed.stock, 1);

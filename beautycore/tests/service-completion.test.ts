@@ -126,7 +126,7 @@ test('completion retries keep one timestamp and one set of product records witho
   assert.ok(record.completedAt);
   assert.equal(record.completedBy, S);
   assert.equal((await query('SELECT count(*)::int AS n FROM appointment_product_usage'))[0].n, 2);
-  assert.equal((await query('SELECT current_stock FROM inventory'))[0].current_stock, 3);
+  assert.equal(Number((await query('SELECT current_stock FROM inventory'))[0].current_stock), 3);
   const stamp = String(record.completedAt);
   await complete(id, []);
   assert.equal(

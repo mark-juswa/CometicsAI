@@ -3,13 +3,14 @@
 import {
   LayoutDashboard,
   CalendarDays,
-  Users,
+  Users, Package,
   Scissors,
   UserCircle,
 } from 'lucide-react';
 import Sidebar, { type SidebarLink } from './Sidebar';
 
 const links: SidebarLink[] = [
+  { href: '/stylist/inventory', label: 'Salon Supplies', icon: Package },
   { href: '/stylist/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/stylist/appointments', label: 'Appointments', icon: CalendarDays },
   { href: '/stylist/clients', label: 'Clients', icon: Users },

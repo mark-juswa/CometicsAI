@@ -1,4 +1,6 @@
 export type ProductUsage = {
+  consumeStock?: boolean;
+  adjustmentReason?: string|null;
   inventoryId?: string | null;
   productName: string;
   brand: string | null;
@@ -8,6 +10,7 @@ export type ProductUsage = {
 };
 export type AppointmentReview = { rating: number; comment: string | null; createdAt: string };
 export type ServiceRecord = {
+  inventoryConsumption?:{productName:string;unit:string;requestedQuantity:number;deductedQuantity:number;netQuantity:number;shortage:number;equipment:boolean}[];
   tracking?: {arrived_at?:string|null;started_at?:string|null;ended_at?:string|null;no_show_at?:string|null;release_at?:string|null;last_actor?:string|null}|null;
   activity?: {id:string;action:string;status:string;actor_id?:string|null;source:string;happened_at:string;explanation?:string|null}[];
 
@@ -23,6 +26,7 @@ export const PRODUCT_UNITS = [
   'piece',
   'pair',
   'bottle',
+  'tube',
   'pack',
   'set',
   'application',

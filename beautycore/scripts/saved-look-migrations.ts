@@ -19,7 +19,7 @@ export async function applySavedLookMigrations(
       "0011_booking_services.sql",
     ],
   ];
-  groups.push(["0012_service_statuses.sql"], ["0013_service_lifecycle.sql"]);
+  groups.push(["0012_service_statuses.sql"], ["0013_service_lifecycle.sql"], ["0014_service_inventory.sql"]);
   for (const names of additionalOnly
     ? [
         [
@@ -30,6 +30,7 @@ export async function applySavedLookMigrations(
         ],
         ["0012_service_statuses.sql"],
         ["0013_service_lifecycle.sql"],
+    ["0014_service_inventory.sql"],
       ]
     : groups) {
     const statements = names.flatMap((name) =>

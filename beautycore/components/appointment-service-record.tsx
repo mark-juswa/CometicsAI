@@ -13,6 +13,7 @@ export function AppointmentServiceRecord({ record }: { record: ServiceRecord }) 
           Completed {formatDate(record.completedAt)} at {formatTime(record.completedAt)}
         </p>
       )}
+      {!!record.inventoryConsumption?.length&&<details className="my-3"><summary>Stock usage and corrections</summary><ul>{record.inventoryConsumption.map((r,i)=><li key={i}>{r.productName} · {r.equipment?'Reusable tool; not deducted':Number(r.netQuantity)+' '+r.unit+' deducted (net)'}{Number(r.shortage)>0?' · '+Number(r.shortage)+' '+r.unit+' short; admin review needed':''}</li>)}</ul></details>}
       {!!record.products?.length && (
         <div>
           <p className="font-semibold">Products used</p>

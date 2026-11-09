@@ -4,9 +4,12 @@ import { readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
 import { drizzle } from 'drizzle-orm/pglite';
 import * as schema from '../db/schema.ts';
+import { applySavedLookMigrations } from '../scripts/saved-look-migrations.ts';
 const pg = new PGlite();
 await pg.exec(readFileSync('tests/fixtures/business-base.sql', 'utf8'));
-await pg.exec('ALTER TABLE users ADD COLUMN is_active boolean NOT NULL DEFAULT true');
+await applySavedLookMigrations((statements) => pg.transaction(async (tx) => {
+  for (const statement of statements) await tx.query(statement);
+}));
 const orm = drizzle(pg, { schema });
 let role = 'admin';
 test.mock.module('../db/index.ts', { namedExports: { db: orm } });

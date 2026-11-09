@@ -56,6 +56,9 @@ for (const path of ['next/image', 'next/link']) {
 }
 const { AuthProvider } = await import('../context/AuthContext.tsx');
 const { default: LoginForm } = await import('../app/(public)/login/login-form.tsx');
+const { inventoryApi } = await import('../lib/business/inventory.ts');
+const { ServiceCompletion } = await import('../components/service-completion.tsx');
+const { InventoryWorkspace } = await import('../components/inventory-workspace.tsx');
 const { ServiceControls } = await import('../components/service-controls.tsx');
 const { SavedLookActions } = await import('../components/saved-look-actions.tsx');
 const { default: NailsPage } = await import('../app/client/nail-studio/page.tsx');
@@ -239,10 +242,7 @@ async function transport(input, init = {}) {
   if (url.pathname.endsWith('/review'))
     return appointmentReview(req, url.pathname.split('/')[3], deps);
   if (url.pathname === '/api/admin/stylist-performance') return stylistPerformance(req, deps);
-  if (url.pathname === '/api/inventory')
-    return Response.json({
-      inventory: await query('SELECT id,product_name AS \"productName\",brand FROM inventory'),
-    });
+  if(url.pathname.startsWith('/api/inventory'))return inventoryApi(req,url.pathname.split('/')[3]??'products',{query,actor:deps.actor});
   if(url.pathname==='/api/appointments/availability')return bookingAvailability(req,{query});
   if (url.pathname.startsWith('/api/appointments'))
     return bookingApi(req, url.pathname.split('/')[3], deps);
@@ -269,6 +269,7 @@ test.before(async () => {
     '0011_booking_services.sql',
     '0012_service_statuses.sql',
     '0013_service_lifecycle.sql',
+    '0014_service_inventory.sql',
   ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   png = await sharp({ create: { width: 64, height: 64, channels: 3, background: '#e1c9c2' } })
@@ -305,7 +306,8 @@ test.beforeEach(async () => {
   pushes = [];
   actor = C;
   deps.settings.enabled = true;
-  await db.exec('TRUNCATE appointments,ai_generations,client_profiles,users CASCADE');
+  await db.exec('TRUNCATE appointments,inventory,inventory_suppliers,ai_generations,client_profiles,users CASCADE');
+  await query("UPDATE inventory_policy SET consumption_mode='configured',shortage_policy='block'");
   for (const [id, role, name] of [
     [C, 'client', 'Client One'],
     [S, 'stylist', 'Stylist One'],
@@ -700,6 +702,7 @@ test('both home dashboards share the booked look; product completion enables a c
   mount(StylistPage);
   fireEvent.click(await screen.findByLabelText('View visit: Gel Manicure, Client One'));
   fireEvent.click(await screen.findByRole('button', { name: 'Mark as Completed' }));
+  await waitFor(()=>assert.equal(screen.getByRole('button', {name:'Add product used'}).disabled,false));
   fireEvent.click(screen.getByRole('button', { name: 'Add product used' }));
   fireEvent.change(screen.getByLabelText('Product name'), { target: { value: 'Top coat' } });
   fireEvent.change(screen.getByLabelText('Brand'), { target: { value: 'Brand Demo' } });
@@ -1031,4 +1034,66 @@ test('manual no-show is confirmed before it changes status and the client sees t
  assert.equal((await query('SELECT status FROM appointments WHERE id=$1',[id]))[0].status,'confirmed');
  fireEvent.click(screen.getByRole('button',{name:'Confirm outcome'}));await waitFor(async()=>assert.equal((await query('SELECT status FROM appointments WHERE id=$1',[id]))[0].status,'no_show'));
  cleanup();actor=C;mount(ClientAppointments);fireEvent.click(screen.getByRole('button',{name:/All/}));await screen.findByText('No-Show');assert.equal((await query('SELECT count(*)::int AS n FROM appointments'))[0].n,1);
+});
+
+
+test('inventory UI adds a real product, records a purchase, configures a service and deducts actual completion usage',async()=>{
+ actor=A;await query("UPDATE inventory_policy SET shortage_policy='block',expiry_warning_days=30");mount(InventoryWorkspace);
+ fireEvent.click(screen.getByRole('button',{name:'Add product',exact:true}));
+ fireEvent.change(screen.getByLabelText('Product name',{exact:true}),{target:{value:'Salon Shampoo'}});
+ fireEvent.change(screen.getByLabelText('Category',{exact:true}),{target:{value:'Hair Care'}});
+ fireEvent.change(screen.getByLabelText('Stock unit'),{target:{value:'ml'}});
+ fireEvent.change(screen.getByLabelText('Opening stock'),{target:{value:'100'}});
+ fireEvent.change(screen.getByLabelText('Minimum stock'),{target:{value:'20'}});
+ fireEvent.change(screen.getByLabelText('Purchase cost per stock unit (PHP)'),{target:{value:'2'}});
+ fireEvent.click(screen.getByRole('button',{name:'Save product'}));await screen.findByRole('button',{name:'Salon Shampoo'});
+ const item=(await query("SELECT id FROM inventory WHERE product_name='Salon Shampoo'"))[0].id;
+ fireEvent.click(screen.getByRole('button',{name:'Stock transaction'}));
+ fireEvent.change(screen.getByLabelText('Quantity (ml)'),{target:{value:'5'}});fireEvent.change(screen.getByLabelText('Receipt / reference (optional)'),{target:{value:'P-01'}});
+ fireEvent.click(screen.getByRole('button',{name:'Confirm transaction'}));await screen.findByText('Stock transaction recorded.');
+ assert.equal(Number((await query('SELECT current_stock FROM inventory WHERE id=$1',[item]))[0].current_stock),105);
+ fireEvent.click(screen.getByRole('button',{name:'service supplies',exact:true}));
+ const service=(await query('SELECT id FROM salon_services WHERE name=$1',["Women's Cut & Blowdry"]))[0].id;
+ fireEvent.change(screen.getByLabelText('Salon service'),{target:{value:service}});
+ await waitFor(()=>assert.ok([...screen.getByLabelText('Required product',{exact:true}).options].some(o=>o.value===item)),{timeout:3000});
+ fireEvent.change(screen.getByLabelText('Required product',{exact:true}),{target:{value:item}});
+ fireEvent.change(screen.getByLabelText('Estimated quantity (ml)'),{target:{value:'10'}});fireEvent.click(screen.getByRole('button',{name:'Add requirement'}));fireEvent.click(screen.getByRole('button',{name:'Save service requirements'}));
+ await waitFor(async()=>assert.equal((await query('SELECT count(*)::int AS n FROM service_inventory_requirements WHERE service_id=$1',[service]))[0].n,1));
+ cleanup();actor=C;const response=await transport('/api/appointments',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({serviceId:service,stylistId:S,appointmentDate:'2030-10-17T02:00:00Z'})});assert.equal(response.status,201);const id=(await response.json()).appointment.id;
+ actor=S;mount(ServiceCompletion,{id,onCompleted:()=>{}});fireEvent.click(screen.getByRole('button',{name:'Mark as Completed'}));
+ await waitFor(()=>assert.equal(screen.getByLabelText('Quantity used').value,'10'));
+ fireEvent.change(screen.getByLabelText('Quantity used'),{target:{value:'8'}});fireEvent.change(screen.getByLabelText(/Reason for actual quantity change/),{target:{value:'Less required for this treatment'}});
+ fireEvent.click(screen.getByRole('button',{name:'Confirm completion'}));await waitFor(async()=>assert.equal((await query('SELECT status FROM appointments WHERE id=$1',[id]))[0].status,'completed'));
+ assert.equal(Number((await query('SELECT current_stock FROM inventory WHERE id=$1',[item]))[0].current_stock),97);
+ assert.equal((await query("SELECT count(*)::int AS n FROM inventory_transaction_details WHERE kind='service_consumption'"))[0].n,1);
+});
+
+test('completion lets staff report only a finished product without filling every supply or cost',async()=>{
+ actor=A;
+ const save=await transport('/api/inventory',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({productName:'Finished polish',category:'Nail Care',unit:'bottle',currentStock:4,minimumThreshold:1})});
+ assert.equal(save.status,201);const item=(await save.json()).item.id;
+ await query("UPDATE inventory_policy SET consumption_mode='reported_only'");
+ actor=C;const service=(await query("SELECT id FROM salon_services WHERE service_type='hair' AND active LIMIT 1"))[0].id;
+ const response=await transport('/api/appointments',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({serviceId:service,stylistId:S,appointmentDate:'2030-10-17T02:00:00Z'})});
+ assert.equal(response.status,201);const id=(await response.json()).appointment.id;
+ actor=S;mount(ServiceCompletion,{id,onCompleted:()=>{}});fireEvent.click(screen.getByRole('button',{name:'Mark as Completed'}));
+ await waitFor(()=>assert.equal(screen.getByRole('button',{name:'Add finished product'}).disabled,false));
+ assert.equal(screen.queryByLabelText('Inventory product'),null);
+ fireEvent.click(screen.getByRole('button',{name:'Add finished product'}));
+ await waitFor(()=>assert.ok([...screen.getByLabelText('Inventory product').options].some(x=>x.value===item)));
+ fireEvent.change(screen.getByLabelText('Inventory product'),{target:{value:item}});
+ fireEvent.change(screen.getByLabelText('Quantity used up'),{target:{value:'1'}});
+ assert.equal(screen.queryByLabelText('Product name'),null);assert.equal(screen.queryByLabelText('Material cost per selected unit (PHP)'),null);
+ fireEvent.click(screen.getByRole('button',{name:'Confirm completion'}));
+ await waitFor(async()=>assert.equal((await query('SELECT status FROM appointments WHERE id=$1',[id]))[0].status,'completed'));
+ assert.equal(Number((await query('SELECT current_stock FROM inventory WHERE id=$1',[item]))[0].current_stock),3);
+});
+
+test('inventory suppliers, history and reports expose real records while staff have read-only controls',async()=>{
+ actor=A;mount(InventoryWorkspace);fireEvent.click(screen.getByRole('button',{name:'suppliers',exact:true}));fireEvent.click(screen.getByRole('button',{name:'Add supplier'}));
+ fireEvent.change(screen.getByLabelText('Supplier name'),{target:{value:'Salon Supplier'}});fireEvent.change(screen.getByLabelText('email',{exact:true}),{target:{value:'supplier@example.invalid'}});fireEvent.click(screen.getByRole('button',{name:'Save supplier'}));
+ await screen.findByRole('button',{name:/Salon Supplier/});assert.equal((await query('SELECT count(*)::int AS n FROM inventory_suppliers'))[0].n,1);
+ fireEvent.click(screen.getByRole('button',{name:'transactions',exact:true}));await screen.findByRole('heading',{name:'Stock and purchase history'});
+ fireEvent.click(screen.getByRole('button',{name:'reports',exact:true}));await screen.findByRole('heading',{name:'Inventory reports & controls'});
+ cleanup();actor=S;mount(InventoryWorkspace,{readOnly:true});await screen.findByRole('heading',{name:'Salon Supplies'});assert.equal(screen.queryByRole('button',{name:'Add product',exact:true}),null);assert.equal(screen.queryByRole('button',{name:'suppliers',exact:true}),null);
 });

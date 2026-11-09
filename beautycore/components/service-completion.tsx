@@ -6,8 +6,13 @@ type CatalogProduct = {
   id: string;
   productName: string;
   brand?: string | null;
+  unit?: string;
+  itemType?: string;
 };
 type Line = {
+  configured?: boolean;
+  consumeStock?: boolean;
+  adjustmentReason?: string;
   inventoryId: string;
   productName: string;
   brand: string;
@@ -39,14 +44,54 @@ export function ServiceCompletion({
   const [open, setOpen] = useState(initiallyOpen);
   const [catalog, setCatalog] = useState<CatalogProduct[]>([]);
   const [lines, setLines] = useState<Line[]>([]);
+  const [reportedOnly, setReportedOnly] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [requirementsLoading, setRequirementsLoading] = useState(false);
+  const [requirementsError, setRequirementsError] = useState("");
+  const [requirementsRevision, setRequirementsRevision] = useState(0);
   const [catalogError, setCatalogError] = useState("");
   const lock = useRef(false);
   useEffect(() => {
     if (!open) return;
     const controller = new AbortController();
-    businessRequest("/api/inventory", { signal: controller.signal })
+    setRequirementsLoading(true);
+    setRequirementsError("");
+    businessRequest(
+      "/api/inventory/requirements?appointmentId=" + encodeURIComponent(id),
+      { signal: controller.signal },
+    )
+      .then((data) => {
+        if (!controller.signal.aborted) {
+          const onlyReported = data.consumptionMode !== "configured";
+          setReportedOnly(onlyReported);
+          setLines(
+            onlyReported ? [] : data.requirements.map((r: any) => ({
+              inventoryId: r.id,
+              productName: r.productName,
+              brand: r.brand ?? "",
+              quantity: String(r.estimatedQuantity),
+              unit: r.unit,
+              unitCost: "",
+              configured: true,
+              consumeStock: true,
+              adjustmentReason: "",
+            })),
+          );
+        }
+      })
+      .catch(() => {
+        if (!controller.signal.aborted)
+          setRequirementsError(
+            "Service requirements could not be loaded. Retry before completing this service.",
+          );
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setRequirementsLoading(false);
+      });
+    businessRequest("/api/inventory?limit=250&active=true", {
+      signal: controller.signal,
+    })
       .then((data) => setCatalog(data.inventory ?? []))
       .catch(() => {
         if (!controller.signal.aborted)
@@ -55,7 +100,7 @@ export function ServiceCompletion({
           );
       });
     return () => controller.abort();
-  }, [open]);
+  }, [open, id, requirementsRevision]);
   function update(index: number, patch: Partial<Line>) {
     setLines((current) =>
       current.map((line, i) => (i === index ? { ...line, ...patch } : line)),
@@ -75,6 +120,8 @@ export function ServiceCompletion({
         body: JSON.stringify({
           products: lines.map((line) => ({
             inventoryId: line.inventoryId || null,
+            consumeStock: line.consumeStock === true,
+            adjustmentReason: line.adjustmentReason || null,
             productName: line.productName,
             brand: line.brand || null,
             quantity: line.quantity === "" ? null : Number(line.quantity),
@@ -83,6 +130,7 @@ export function ServiceCompletion({
           })),
         }),
       });
+      window.dispatchEvent(new Event("inventory-updated"));
       setOpen(false);
       await onCompleted();
     } catch (cause) {
@@ -116,10 +164,22 @@ export function ServiceCompletion({
     >
       <h3>Complete service</h3>
       <p className="text-sm text-secondary">
-        Record the products actually used. Product lines, quantities and
-        material costs are optional. Leave unknown values blank. Stock is
-        updated separately by the admin.
+        {reportedOnly ? "Only add products that were used up during this service and their quantities. You do not need to list every product used. Only the reported quantities are deducted when completion is confirmed. Leave this empty if nothing was used up. Reusable tools are not deducted." : "Record the products actually used. Configured consumables are deducted when you confirm completion. Tools are never consumed. Explain actual quantity changes."}
       </p>
+      {requirementsLoading && (
+        <p role="status">Loading configured service supplies…</p>
+      )}
+      {requirementsError && (
+        <p role="alert">
+          {requirementsError}{" "}
+          <button
+            type="button"
+            onClick={() => setRequirementsRevision((r) => r + 1)}
+          >
+            Retry service supplies
+          </button>
+        </p>
+      )}
       {catalogError && <p role="status">{catalogError}</p>}
       {lines.map((line, index) => (
         <fieldset
@@ -132,6 +192,8 @@ export function ServiceCompletion({
             Inventory product
             <select
               value={line.inventoryId}
+              required={reportedOnly}
+              disabled={line.configured}
               onChange={(e) => {
                 const item = catalog.find(
                   (product) => product.id === e.target.value,
@@ -139,13 +201,18 @@ export function ServiceCompletion({
                 update(index, {
                   inventoryId: e.target.value,
                   ...(item
-                    ? { productName: item.productName, brand: item.brand ?? "" }
+                    ? {
+                        productName: item.productName,
+                        brand: item.brand ?? "",
+                        unit: item.unit ?? "",
+                        consumeStock: reportedOnly,
+                      }
                     : {}),
                 });
               }}
             >
-              <option value="">Unlisted product / enter name</option>
-              {catalog.map((item) => (
+              <option value="">{reportedOnly ? "Choose a product that was used up" : "Unlisted product / enter name"}</option>
+              {catalog.filter(item => !reportedOnly || item.itemType !== "equipment").map((item) => (
                 <option key={item.id} value={item.id}>
                   {item.productName}
                   {item.brand ? ` (${item.brand})` : ""}
@@ -153,7 +220,7 @@ export function ServiceCompletion({
               ))}
             </select>
           </label>
-          <label>
+          {!reportedOnly && <><label>
             Product name
             <input
               required
@@ -169,12 +236,13 @@ export function ServiceCompletion({
               value={line.brand}
               onChange={(e) => update(index, { brand: e.target.value })}
             />
-          </label>
+          </label></>}
           <label>
-            Quantity used
+            {reportedOnly ? "Quantity used up" : "Quantity used"}
             <input
               type="number"
-              min="0.001"
+              required={reportedOnly}
+              min={line.configured ? "0" : "0.001"}
               max="1000000"
               step="0.001"
               value={line.quantity}
@@ -184,6 +252,7 @@ export function ServiceCompletion({
           <label>
             Unit
             <select
+              disabled={reportedOnly}
               required={line.quantity !== "" || line.unitCost !== ""}
               value={line.unit}
               onChange={(e) => update(index, { unit: e.target.value })}
@@ -196,7 +265,7 @@ export function ServiceCompletion({
               ))}
             </select>
           </label>
-          <label>
+          {!reportedOnly && <><label>
             Material cost per selected unit (PHP)
             <input
               type="number"
@@ -207,8 +276,39 @@ export function ServiceCompletion({
               onChange={(e) => update(index, { unitCost: e.target.value })}
             />
           </label>
+          <label className="sm:col-span-2">
+            Reason for actual quantity change (required when different from the
+            estimate)
+            <input
+              maxLength={1000}
+              value={line.adjustmentReason ?? ""}
+              onChange={(e) =>
+                update(index, { adjustmentReason: e.target.value })
+              }
+            />
+          </label></>}
+          {!reportedOnly && !line.configured && line.inventoryId && (
+            <label>
+              <input
+                type="checkbox"
+                checked={line.consumeStock ?? false}
+                onChange={(e) =>
+                  update(index, { consumeStock: e.target.checked })
+                }
+              />{" "}
+              Deduct this additional product from stock (quantity and reason
+              required)
+            </label>
+          )}
+          {line.configured && (
+            <p className="text-xs text-muted">
+              Configured requirement. Set quantity to zero and explain if it was
+              not used.
+            </p>
+          )}
           <button
             type="button"
+            disabled={line.configured}
             className="studio-text-button"
             onClick={() =>
               setLines((current) => current.filter((_, i) => i !== index))
@@ -222,15 +322,23 @@ export function ServiceCompletion({
         <button
           type="button"
           className="studio-secondary-button"
-          disabled={busy || disabled || lines.length >= 20}
+          disabled={
+            busy ||
+            disabled ||
+            requirementsLoading ||
+            !!requirementsError ||
+            lines.length >= 50
+          }
           onClick={() => setLines((current) => [...current, blank()])}
         >
-          Add product used
+          {reportedOnly ? "Add finished product" : "Add product used"}
         </button>
         <button
           type="submit"
           className="studio-primary-button"
-          disabled={busy || disabled}
+          disabled={
+            busy || disabled || requirementsLoading || !!requirementsError
+          }
         >
           {busy ? "Completing…" : "Confirm completion"}
         </button>

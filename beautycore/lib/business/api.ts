@@ -387,17 +387,17 @@ function measured(value: unknown, label: string, decimals: number, positive: boo
 }
 function productsInput(value: unknown): ProductUsage[] {
   if (value === undefined) return [];
-  if (!Array.isArray(value) || value.length > 20) fail('Record up to 20 products.');
+  if (!Array.isArray(value) || value.length > 50) fail('Record up to 50 products.');
   return value.map((item) => {
     if (
       !object(item) ||
       Object.keys(item).some(
         (key) =>
-          !['inventoryId', 'productName', 'brand', 'quantity', 'unit', 'unitCost'].includes(key),
+          !['inventoryId', 'productName', 'brand', 'quantity', 'unit', 'unitCost', 'consumeStock', 'adjustmentReason'].includes(key),
       )
     )
       fail('Invalid product record.');
-    const quantity = measured(item.quantity, 'quantity', 3, true);
+    const quantity = measured(item.quantity, 'quantity', 3, false);
     const unitCost = measured(item.unitCost, 'cost per unit', 2, false);
     const unit = shortText(item.unit, 'Unit', 32);
     if (unit && !(PRODUCT_UNITS as readonly string[]).includes(unit))
@@ -406,6 +406,8 @@ function productsInput(value: unknown): ProductUsage[] {
     if (unitCost !== null && (quantity === null || !unit))
       fail('A material cost needs a quantity and its matching unit.');
     return {
+      consumeStock: item.consumeStock===true,
+      adjustmentReason: shortText(item.adjustmentReason,'Quantity adjustment reason',1000),
       inventoryId: item.inventoryId ? id(item.inventoryId) : null,
       productName: shortText(item.productName, 'Product name', 255, true)!,
       brand: shortText(item.brand, 'Brand', 120),
@@ -421,7 +423,15 @@ async function completeResult(
   products: ProductUsage[],
   deps: Dependencies,
 ) {
-  const result = await deps.store.complete(identity, actor, products);
+  let result;
+  try{result=await deps.store.complete(identity, actor, products);}catch(cause){
+    const error=cause as {code?:string;message?:string};
+    if(error.code==='22023'&&/unit_mismatch|quantity_precision/.test(error.message??''))fail('Use compatible stock units and a quantity that converts to at most three decimals.',400);
+    if(error.code==='23514'&&/insufficient_stock|product_unavailable/.test(error.message??''))fail('A required product is unavailable or has insufficient stock. No completion or stock changes were saved.',409);
+    throw cause;
+  }
+  const inventoryErrors:Record<string,string>={equipment_not_consumable:'Reusable equipment cannot be reported as a used-up supply.',inventory_shortage:'Service cannot be completed: a configured product or tool is unavailable, expired, inactive or below the required quantity. Ask an administrator to replenish stock or review the shortage policy.',adjustment_reason:'Explain any change from the configured product quantity.',duplicate_product:'List each inventory product only once.',invalid_quantity:'Enter an actual quantity and its matching unit.'};
+  if(inventoryErrors[String(result.outcome)])fail(inventoryErrors[String(result.outcome)],409);
   if (result.outcome === 'not_found') fail('Appointment not found.', 404);
   if (result.outcome === 'terminal') fail('A cancelled appointment cannot be completed.', 409);
   if (result.outcome === 'unassigned')
@@ -442,7 +452,7 @@ export function completeAppointment(request: Request, identity: string, deps: De
     if (actor.role === 'client') fail('Stylist or admin access is required.', 403);
     if (request.method !== 'POST') fail('Operation not found.', 404);
     id(identity);
-    const body = await boundedJson(request);
+    const body = await boundedJson(request,256*1024);
     if (Object.keys(body).some((key) => key !== 'products')) fail('Unexpected completion field.');
     return completeResult(identity, actor, productsInput(body.products), deps);
   });

@@ -12,7 +12,7 @@
     "db:push": "drizzle-kit push",
     "db:seed": "tsx db/seed.ts",
     "db:studio": "drizzle-kit studio",
-    "test:business": "node --experimental-test-module-mocks --import tsx --test --test-concurrency=1 tests/business-workflows.test.ts tests/business-ui.test.mjs tests/finance-stats.test.mjs tests/saved-look-migrations.test.ts tests/look-information.test.ts tests/service-completion.test.ts tests/additional-features.test.ts tests/auth-response.test.ts tests/revenue-report.test.ts tests/appointment-list.test.ts tests/saved-look-retry.test.ts tests/saved-look-image.test.ts tests/service-lifecycle.test.ts tests/no-show-worker.test.mjs",
+    "test:business": "node --experimental-test-module-mocks --import tsx --test --test-concurrency=1 tests/business-workflows.test.ts tests/business-ui.test.mjs tests/finance-stats.test.mjs tests/saved-look-migrations.test.ts tests/look-information.test.ts tests/service-completion.test.ts tests/additional-features.test.ts tests/auth-response.test.ts tests/revenue-report.test.ts tests/appointment-list.test.ts tests/saved-look-retry.test.ts tests/saved-look-image.test.ts tests/service-lifecycle.test.ts tests/no-show-worker.test.mjs tests/inventory-management.test.ts",
     "db:check:saved-looks": "tsx scripts/apply-saved-looks.ts --check",
     "db:apply:enhancements": "tsx scripts/apply-saved-looks.ts --apply --additional-only --schema-only",
     "test:guest-trial": "node --experimental-test-module-mocks --import tsx --test tests/guest-trial.test.ts tests/guest-trial-ui.test.mjs",
@@ -21,7 +21,8 @@
     "db:apply:scheduling": "tsx scripts/apply-booking-scheduling.ts --apply",
     "db:apply:booking-context": "tsx scripts/apply-booking-context.ts --apply",
     "worker:no-shows": "node scripts/no-show-worker.mjs",
-    "db:apply:service-lifecycle": "tsx scripts/apply-service-lifecycle.ts --apply"
+    "db:apply:service-lifecycle": "tsx scripts/apply-service-lifecycle.ts --apply",
+    "db:apply:inventory": "tsx scripts/apply-inventory.ts --apply"
   },
   "dependencies": {
     "@google/genai": "^1.31.0",

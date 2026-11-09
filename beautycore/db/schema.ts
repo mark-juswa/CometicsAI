@@ -1,6 +1,7 @@
 import type { LookDetails } from '../lib/business/look-information';
 import {
   pgTable,
+  date,
   uuid,
   text,
   boolean,
@@ -107,8 +108,8 @@ export const inventory = pgTable('inventory', {
   productName: varchar('product_name', { length: 255 }).notNull(),
   brand: varchar('brand', { length: 120 }),
   category: varchar('category', { length: 100 }).notNull(),
-  currentStock: integer('current_stock').notNull().default(0),
-  minimumThreshold: integer('minimum_threshold').notNull().default(10),
+  currentStock: numeric('current_stock',{mode:'number'}).notNull().default(0),
+  minimumThreshold: numeric('minimum_threshold',{mode:'number'}).notNull().default(10),
   unitPrice: integer('unit_price'),
   status: productStatusEnum('status').notNull().default('in_stock'),
   lastRestocked: timestamp('last_restocked'),
@@ -129,8 +130,8 @@ export const inventoryTransactions = pgTable('inventory_transactions', {
   inventoryId: uuid('inventory_id').references(() => inventory.id, { onDelete: 'set null' }),
   productName: varchar('product_name', { length: 255 }).notNull(),
   direction: varchar('direction', { length: 3 }).notNull(),
-  quantity: integer('quantity').notNull(),
-  stockAfter: integer('stock_after').notNull(),
+  quantity: numeric('quantity',{mode:'number'}).notNull(),
+  stockAfter: numeric('stock_after',{mode:'number'}).notNull(),
   note: varchar('note', { length: 500 }),
   recordedBy: uuid('recorded_by').notNull().references(() => users.id),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
@@ -387,3 +388,10 @@ export const appointmentServices = pgTable('appointment_services',{appointmentId
 export const appointmentLifecyclePolicy=pgTable('appointment_lifecycle_policy',{id:boolean('id').primaryKey().default(true),enabledAt:timestamp('enabled_at',{withTimezone:true}).notNull().defaultNow()});
 export const appointmentServiceTracking=pgTable('appointment_service_tracking',{appointmentId:uuid('appointment_id').primaryKey().references(()=>appointments.id,{onDelete:'cascade'}),arrivedAt:timestamp('arrived_at',{withTimezone:true}),startedAt:timestamp('started_at',{withTimezone:true}),endedAt:timestamp('ended_at',{withTimezone:true}),noShowAt:timestamp('no_show_at',{withTimezone:true}),noShowBy:uuid('no_show_by').references(()=>users.id),releaseAt:timestamp('release_at',{withTimezone:true}),lastActor:uuid('last_actor').references(()=>users.id),stopReason:text('stop_reason'),explanation:varchar('explanation',{length:1000})});
 export const appointmentActivity=pgTable('appointment_activity',{id:uuid('id').primaryKey().defaultRandom(),appointmentId:uuid('appointment_id').notNull().references(()=>appointments.id,{onDelete:'cascade'}),action:text('action').notNull(),previousStatus:text('previous_status'),status:text('status').notNull(),actorId:uuid('actor_id').references(()=>users.id),source:text('source').notNull(),happenedAt:timestamp('happened_at',{withTimezone:true}).notNull().defaultNow(),explanation:varchar('explanation',{length:1000}),details:jsonb('details').notNull().default({})});
+
+export const inventorySuppliers=pgTable('inventory_suppliers',{id:uuid('id').primaryKey().defaultRandom(),name:varchar('name',{length:160}).notNull(),contact:varchar('contact',{length:160}),email:varchar('email',{length:255}),phone:varchar('phone',{length:64}),address:varchar('address',{length:500}),notes:varchar('notes',{length:1000}),active:boolean('active').notNull().default(true)});
+export const inventoryDetails=pgTable('inventory_details',{inventoryId:uuid('inventory_id').primaryKey().references(()=>inventory.id,{onDelete:'cascade'}),sku:varchar('sku',{length:64}),itemType:text('item_type').notNull().default('consumable'),description:varchar('description',{length:2000}),unit:text('unit').notNull().default('piece'),maximumStock:numeric('maximum_stock',{mode:'number'}),purchaseCost:numeric('purchase_cost',{mode:'number'}),sellingPrice:numeric('selling_price',{mode:'number'}),supplierId:uuid('supplier_id').references(()=>inventorySuppliers.id),location:varchar('location',{length:160}),expirationDate:date('expiration_date'),active:boolean('active').notNull().default(true),imageData:text('image_data')});
+export const inventoryPolicy=pgTable('inventory_policy',{id:boolean('id').primaryKey().default(true),consumptionMode:text('consumption_mode').notNull().default('reported_only'),shortagePolicy:text('shortage_policy').notNull().default('block'),expiryWarningDays:integer('expiry_warning_days').notNull().default(30)});
+export const serviceInventoryRequirements=pgTable('service_inventory_requirements',{serviceId:text('service_id').notNull().references(()=>salonServices.id),inventoryId:uuid('inventory_id').notNull().references(()=>inventory.id),quantity:numeric('quantity',{mode:'number'}).notNull()},t=>[primaryKey({columns:[t.serviceId,t.inventoryId]})]);
+export const inventoryTransactionDetails=pgTable('inventory_transaction_details',{transactionId:uuid('transaction_id').primaryKey().references(()=>inventoryTransactions.id),kind:text('kind').notNull(),previousQuantity:numeric('previous_quantity',{mode:'number'}).notNull(),unit:text('unit').notNull(),unitCost:numeric('unit_cost',{mode:'number'}),supplierId:uuid('supplier_id').references(()=>inventorySuppliers.id),supplierName:text('supplier_name'),reference:varchar('reference',{length:160}),occurredAt:timestamp('occurred_at',{withTimezone:true}).notNull(),appointmentId:uuid('appointment_id').references(()=>appointments.id),serviceId:text('service_id').references(()=>salonServices.id),category:text('category').notNull(),brand:text('brand'),reason:varchar('reason',{length:1000}),requestId:uuid('request_id').notNull().unique(),requestData:jsonb('request_data').notNull()});
+export const inventoryServiceConsumption=pgTable('inventory_service_consumption',{appointmentId:uuid('appointment_id').notNull().references(()=>appointments.id),inventoryId:uuid('inventory_id').notNull().references(()=>inventory.id),serviceId:text('service_id').references(()=>salonServices.id),productName:text('product_name').notNull(),unit:text('unit').notNull(),configuredQuantity:numeric('configured_quantity',{mode:'number'}),requestedQuantity:numeric('requested_quantity',{mode:'number'}).notNull(),deductedQuantity:numeric('deducted_quantity',{mode:'number'}).notNull(),shortage:numeric('shortage',{mode:'number'}).notNull().default(0),equipment:boolean('equipment').notNull().default(false),reason:varchar('reason',{length:1000}),recordedBy:uuid('recorded_by').notNull().references(()=>users.id),createdAt:timestamp('created_at',{withTimezone:true}).notNull().defaultNow()},t=>[primaryKey({columns:[t.appointmentId,t.inventoryId]})]);

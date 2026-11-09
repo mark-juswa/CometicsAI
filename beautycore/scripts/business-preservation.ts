@@ -1,5 +1,8 @@
 /** Protect existing application records while installing additive schema changes. */
-export function preservingBusinessRecords(statements: string[]): string[] {
+export function preservingBusinessRecords(
+  statements: string[],
+  additionalTables: string[] = [],
+): string[] {
   const tables = [
     "users",
     "client_profiles",
@@ -10,7 +13,10 @@ export function preservingBusinessRecords(statements: string[]): string[] {
     "inventory_transactions",
     "appointment_reviews",
     "appointment_product_usage",
+    ...additionalTables,
   ];
+  if (tables.some((name) => !/^[_a-z]+$/.test(name)))
+    throw new Error("Invalid preservation table name");
   const snapshot = tables
     .map(
       (name) =>

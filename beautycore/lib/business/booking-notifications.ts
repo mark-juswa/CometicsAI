@@ -7,7 +7,7 @@ export type BookingNotification = {
   serviceName: string;
   appointmentDate: string;
   createdAt: string;
-  status: "pending" | "confirmed";
+  status: "pending" | "confirmed" | "in_progress";
   otherName: string | null;
 };
 export async function bookingNotifications(
@@ -21,7 +21,7 @@ export async function bookingNotifications(
       fail("Client or stylist access required.", 403);
     if (request.method !== "GET") fail("Operation not found.", 404);
     const rows = await deps.query(
-      `SELECT a.id,a.service_name AS "serviceName",a.appointment_date AT TIME ZONE 'UTC' AS "appointmentDate",a.created_at AT TIME ZONE 'UTC' AS "createdAt",a.status,a.stylist_id AS "stylistId",CASE WHEN $2='client' THEN s.name ELSE c.name END AS "otherName",count(*) OVER()::int AS total FROM appointments a LEFT JOIN users c ON c.id=a.client_id LEFT JOIN users s ON s.id=a.stylist_id WHERE (($2='client' AND a.client_id=$1) OR ($2='stylist' AND a.stylist_id=$1)) AND a.status IN ('pending','confirmed') AND (a.appointment_date AT TIME ZONE 'UTC')>=now() ORDER BY a.created_at DESC,a.id DESC LIMIT 20`,
+      `SELECT a.id,a.service_name AS "serviceName",a.appointment_date AT TIME ZONE 'UTC' AS "appointmentDate",a.created_at AT TIME ZONE 'UTC' AS "createdAt",a.status,a.stylist_id AS "stylistId",CASE WHEN $2='client' THEN s.name ELSE c.name END AS "otherName",count(*) OVER()::int AS total FROM appointments a LEFT JOIN users c ON c.id=a.client_id LEFT JOIN users s ON s.id=a.stylist_id WHERE (($2='client' AND a.client_id=$1) OR ($2='stylist' AND a.stylist_id=$1)) AND a.status IN ('pending','confirmed','in_progress') AND (a.appointment_date AT TIME ZONE 'UTC')>=now() ORDER BY a.created_at DESC,a.id DESC LIMIT 20`,
       [actor.id, actor.role],
     );
     return Response.json(

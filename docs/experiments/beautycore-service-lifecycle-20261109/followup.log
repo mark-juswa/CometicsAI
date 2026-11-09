@@ -1,0 +1,73 @@
+✔ appointment views and counts use Philippine dates and distinguish closed from active bookings (38.9188ms)
+✔ date ranges are inclusive, invalid ranges are empty, and zero pesos is a confirmed amount (4.1828ms)
+(node:27260) ExperimentalWarning: Module mocking is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ login displays a useful service error when the server returns a 404 HTML page (4325.5542ms)
+✔ standalone Nails generates once, saves once, and Book reuses the durable saved look (815.6614ms)
+✔ save failure preserves the preview, permits manual save retry and never generates (126.2792ms)
+✔ saved gallery reload and removal use account data and preserve booked references (341.594ms)
+✔ look-aware booking and assigned stylist preview complete against the same database (853.0716ms)
+✔ placeholder results have no account save or booking action (42.6803ms)
+✔ anonymous look-aware booking preserves its look in the login link (78.6117ms)
+✔ admin can assign a stylist and confirm the recorded amount through the existing booking UI (395.2037ms)
+✔ look information displays named service prices and labels saved/current estimates honestly (85.0624ms)
+✔ stylist availability switch saves immediately and retains the existing booking (175.5416ms)
+✔ saved image picker previews and loads original image bytes without starting generation (153.6437ms)
+✔ admin client history displays real services and records one actual payment receipt (232.8313ms)
+✔ dashboard revenue changes between daily, weekly, monthly and yearly periods using database records (540.0755ms)
+✔ stylist earnings roster shows day/month/year values and opens account editing only when requested (543.122ms)
+✔ admin navigation removes Market Trends and keeps Finance and Dashboard (125.9233ms)
+✔ consultation books selected look B while look A is displayed, with one saved result and no regeneration (508.2656ms)
+✔ both home dashboards share the booked look; product completion enables a client review and accurate admin performance (887.2108ms)
+✔ service deep links select the correct menu on arrival and on browser history navigation (234.6913ms)
+✔ admin booking details save notes, reschedule with Philippine time, and cancel while preserving history (871.6362ms)
+✔ finance report navigation keeps receipts, service activity and team reports separate (289.8835ms)
+✔ stylist client directory derives searchable summaries only from their own assigned bookings (136.5433ms)
+✔ public price list hides the mens cut while the booking catalog retains it (100.0077ms)
+✔ Hair studio reuses a private existing image without sending a generation request (465.7525ms)
+✔ Makeup studio reuses a private existing image without sending a generation request (427.366ms)
+✔ Nail studio reuses a private existing image without sending a generation request (329.2342ms)
+Not implemented: navigation to another Document
+✔ client and stylist booking alerts remain visible, link to a booking, and keep read state per account (284.1283ms)
+✔ admin opens a stylist to inspect completed services and filter their history (387.1572ms)
+✔ consultation history offers an owner-bound download for an unsaved archived generated look (153.1349ms)
+✔ a stylist booking link opens the requested visit even when it is on a later page (368.4977ms)
+✔ Book This Look recovers a lost save response with one saved record and no generation (425.1117ms)
+✔ calendar disables overlapping times and keeps the selected stylist (325.1053ms)
+✔ look-aware booking can reload a temporarily unavailable saved look (193.7256ms)
+✔ nails oversized generated look saves and books using one bounded copy (732.0841ms)
+✔ hairstyle oversized generated look saves and books using one bounded copy (621.4533ms)
+✔ makeup oversized generated look saves and books using one bounded copy (662.2117ms)
+✔ saved preset preselects its database service and preserves manual choice on date changes (276.5762ms)
+An update to ServiceCompletion inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+✔ service controls start work, request a stop reason and confirm completion with actual timing (188.0993ms)
+✔ manual no-show is confirmed before it changes status and the client sees the retained record (183.5897ms)
+✔ automatic no-show has an exact thirty-minute boundary, preserves details, and is idempotent (3426.9383ms)
+✔ recorded arrival protects the booking, and a later service start remains possible (95.7758ms)
+✔ running service cannot become no-show, blocks other bookings, and completes with real end/audit records (107.8049ms)
+✔ only assigned stylist/admin can act, stop requires confirmation, and malformed actor fields are rejected (101.1815ms)
+✔ no-show is terminal for ordinary actions and completion, with an admin-only future restoration (88.1299ms)
+✔ restoration rechecks conflicts and does not erase a no-show when it cannot reserve the new time (92.1662ms)
+✔ Other retains active status; cancellation ends running work and preserves history (90.3747ms)
+✔ start and sweep racing produce one valid outcome, never a started no-show (77.8346ms)
+✔ release offers the next future minute within working hours and running work blocks until stopped (65.7158ms)
+✔ automatic processing does not retroactively modify overdue records before policy activation (63.1258ms)
+✔ a released slot can be rebooked once under competing requests and no-show history cannot be deleted (100.7616ms)
+✔ arrival prevents manual no-show and existing receipts survive an unattended outcome (97.7224ms)
+ℹ tests 52
+ℹ suites 0
+ℹ pass 52
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 52443.3844

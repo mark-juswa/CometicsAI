@@ -1,0 +1,5 @@
+
+> beautycore@0.0.0 db:apply:service-lifecycle
+> tsx scripts/apply-service-lifecycle.ts --apply
+
+{"applied":true,"existingRecordsPreserved":true,"preservedRecordCounts":[{"name":"ai_generations","count":"77"},{"name":"appointment_payments","count":"0"},{"name":"appointment_product_usage","count":"0"},{"name":"appointment_reviews","count":"0"},{"name":"appointment_services","count":"0"},{"name":"appointments","count":"31"},{"name":"client_consultation_jobs","count":"18"},{"name":"client_consultation_results","count":"12"},{"name":"client_consultations","count":"9"},{"name":"client_profiles","count":"9"},{"name":"client_reference_images","count":"9"},{"name":"inventory","count":"18"},{"name":"inventory_transactions","count":"0"},{"name":"preset_services","count":"37"},{"name":"salon_services","count":"63"},{"name":"stylist_specialties","count":"15"},{"name":"stylist_work_settings","count":"6"},{"name":"users","count":"20"}],"automation":"Active from policy installation; earlier overdue appointments excluded"}

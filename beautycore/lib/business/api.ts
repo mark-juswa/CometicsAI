@@ -25,7 +25,7 @@ export type Dependencies = {
   publicOrigin?: string;
   now?: () => number;
 };
-const statuses = ['pending', 'confirmed', 'completed', 'cancelled'];
+const statuses = ['pending', 'confirmed', 'in_progress', 'completed', 'no_show', 'cancelled'];
 function json(value: unknown, status = 200) {
   return Response.json(value, { status, headers: PRIVATE });
 }
@@ -190,6 +190,7 @@ export function bookingApi(
   return controlled(async () => {
     const actor = await user(request, deps);
     if (identity) id(identity);
+    await deps.store.processNoShows();
     if (!identity && request.method === 'GET')
       return json({
         appointments: await deps.store.appointments(
@@ -237,6 +238,7 @@ export function bookingApi(
           ? price(body.totalPrice)
           : parsePrice(service.price);
       const appointment = await deps.store.createAppointment({
+        actorId: actor.id,
         serviceId: service.id,
         clientId: owner,
         stylistId: stylist,
@@ -262,7 +264,7 @@ export function bookingApi(
     if (request.method === 'GET') return json({ appointment: row });
     if (request.method === 'DELETE') {
       if (actor.role !== 'admin') fail('Admin access is required.', 403);
-      if (row.status === 'completed') fail('Completed service history cannot be deleted.', 409);
+      if (['completed','no_show','in_progress'].includes(String(row.status))) fail('Service history cannot be deleted.', 409);
       if (!(await deps.store.deleteAppointment(identity)))
         fail('The appointment changed. Reload the page.', 409);
       return json({ success: true });
@@ -284,7 +286,7 @@ export function bookingApi(
         fail('Complete the service separately from other changes.');
       return completeResult(identity, actor, [], deps);
     }
-    if (actor.role === 'client' && ['completed', 'cancelled'].includes(String(row.status)))
+    if (actor.role === 'client' && ['completed', 'cancelled', 'no_show'].includes(String(row.status)))
       fail('Only an active booking can be cancelled.', 403);
     if (
       ['completed', 'cancelled'].includes(String(row.status)) &&
@@ -295,6 +297,8 @@ export function bookingApi(
       )
     )
       fail('This appointment is closed. Its status and assignment cannot be changed.', 409);
+    if(actor.role==='client'&&row.status==='in_progress')fail('A running service can only be stopped by the assigned stylist or an administrator.',403);
+    if(['in_progress','no_show'].includes(String(body.status)))fail('Use the service controls to update this status.',409);
     const update: Record<string, unknown> = {};
     if (body.status !== undefined) {
       if (typeof body.status !== 'string' || !statuses.includes(body.status))
@@ -496,4 +500,23 @@ export function stylistPerformance(request: Request, deps: Dependencies) {
       amountBasis: 'Recorded completed-service amount',
     });
   });
+}
+
+export function serviceLifecycle(request:Request,identity:string,deps:Dependencies){
+ return controlled(async()=>{
+  const actor=await user(request,deps);id(identity);
+  const appointment=await deps.store.appointment(identity,actor);if(!appointment)fail('Appointment not found.',404);
+  if(request.method==='GET')return json({appointment});
+  if(request.method!=='POST')fail('Operation not found.',404);
+  if(actor.role!=='stylist'&&actor.role!=='admin')fail('Assigned stylist or administrator access required.',403);
+  const body=await boundedJson(request);
+  if(Object.keys(body).some(k=>!['action','reason','confirmed','appointmentDate'].includes(k))||!['start','arrive','no_show','cancel','other','restore'].includes(String(body.action)))fail('Choose a valid service action.');
+  if(['no_show','cancel','other','restore'].includes(String(body.action))&&body.confirmed!==true)fail('Confirm the selected service outcome.');
+  const reason=shortText(body.reason,'Reason',1000,['no_show','other','restore'].includes(String(body.action)));
+  const date=body.appointmentDate===undefined?null:dateInput(body.appointmentDate,true,deps.now?.());
+  const result=await deps.store.serviceAction(identity,actor,String(body.action),reason,date,deps.now?new Date(deps.now()).toISOString():undefined);
+  if(result.outcome==='not_found')fail('Appointment not found.',404);
+  if(!['updated','existing'].includes(String(result.outcome)))fail(result.outcome==='outside_window'?'Record arrival or start within 30 minutes of the scheduled start. An expired booking requires administrator restoration.':'This action is not valid for the current appointment. Refresh its details.',409);
+  return json({appointment:await deps.store.appointment(identity,actor)});
+ });
 }

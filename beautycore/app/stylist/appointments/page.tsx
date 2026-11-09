@@ -1,4 +1,5 @@
 "use client";
+import { ServiceControls } from "@/components/service-controls";
 import {
   PortalWorkspace,
   PortalMetrics,
@@ -116,9 +117,9 @@ export default function StylistAppointmentsPage() {
         if (statusFilter !== "all" && r.status !== statusFilter) return false;
         const t = new Date(r.appointmentDate).getTime();
         if (range === "upcoming")
-          return t >= now && ["pending", "confirmed"].includes(r.status);
+          return r.status==="in_progress" || (t>=now-1800000 || !!r.tracking?.arrived_at) && ["pending","confirmed"].includes(r.status);
         if (range === "past")
-          return t < now || ["cancelled", "completed"].includes(r.status);
+          return r.status!=="in_progress" && (t < now || ["cancelled", "completed", "no_show"].includes(r.status));
         return true;
       })
       .filter(
@@ -185,7 +186,7 @@ export default function StylistAppointmentsPage() {
               : rows.filter(
                   (r) =>
                     Date.parse(r.appointmentDate) >= now &&
-                    ["pending", "confirmed"].includes(r.status),
+                    ["pending", "confirmed", "in_progress"].includes(r.status),
                 ).length,
             icon: Clock,
             note: "Pending and confirmed",
@@ -260,7 +261,7 @@ export default function StylistAppointmentsPage() {
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >
-              {["all", "pending", "confirmed", "completed", "cancelled"].map(
+              {["all", "pending", "confirmed", "in_progress", "completed", "no_show", "cancelled"].map(
                 (value) => (
                   <option key={value} value={value}>
                     {value === "all" ? "All statuses" : value}
@@ -342,7 +343,7 @@ export default function StylistAppointmentsPage() {
                     {r.client?.email ?? "No client email available"}
                   </p>
                   <AppointmentLookPreview look={r.look} />
-                  <AppointmentServiceRecord record={r} />
+                  <AppointmentServiceRecord record={r} /><ServiceControls id={r.id} status={r.status} appointmentDate={r.appointmentDate} record={r} onUpdated={load} />
                   {r.notes && (
                     <p className="mt-4 whitespace-pre-wrap rounded-lg bg-surface/30 p-4 text-sm text-secondary">
                       {r.notes}
@@ -350,7 +351,7 @@ export default function StylistAppointmentsPage() {
                   )}
                 </div>
                 <div>
-                  {["pending", "confirmed"].includes(r.status) ? (
+                  {["pending", "confirmed", "in_progress"].includes(r.status) ? (
                     <div className="rounded-lg border border-purple-light/20 p-4">
                       <h4 className="portal-section-title mb-3">
                         Manage service
@@ -381,7 +382,7 @@ export default function StylistAppointmentsPage() {
                                 e.target.value as AppointmentStatus,
                               );
                           }}
-                          disabled={!!busy || completionBusy}
+                          disabled={!!busy || completionBusy || r.status==="in_progress"}
                         >
                           <option value="pending">Pending</option>
                           <option value="confirmed">Confirmed</option>

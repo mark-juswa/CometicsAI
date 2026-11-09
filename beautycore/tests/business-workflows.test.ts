@@ -84,6 +84,8 @@ test.before(async () => {
     '0009_customer_history.sql',
     '0010_ninety_minute_bookings.sql',
     '0011_booking_services.sql',
+    '0012_service_statuses.sql',
+    '0013_service_lifecycle.sql',
   ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   assert.equal(
@@ -104,6 +106,8 @@ test.before(async () => {
     '0009_customer_history.sql',
     '0010_ninety_minute_bookings.sql',
     '0011_booking_services.sql',
+    '0012_service_statuses.sql',
+    '0013_service_lifecycle.sql',
   ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   image =

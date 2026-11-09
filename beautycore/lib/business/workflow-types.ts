@@ -8,6 +8,9 @@ export type ProductUsage = {
 };
 export type AppointmentReview = { rating: number; comment: string | null; createdAt: string };
 export type ServiceRecord = {
+  tracking?: {arrived_at?:string|null;started_at?:string|null;ended_at?:string|null;no_show_at?:string|null;release_at?:string|null;last_actor?:string|null}|null;
+  activity?: {id:string;action:string;status:string;actor_id?:string|null;source:string;happened_at:string;explanation?:string|null}[];
+
   completedAt?: string | null;
   review?: AppointmentReview | null;
   products?: ProductUsage[];

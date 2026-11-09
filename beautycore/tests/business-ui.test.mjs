@@ -56,6 +56,7 @@ for (const path of ['next/image', 'next/link']) {
 }
 const { AuthProvider } = await import('../context/AuthContext.tsx');
 const { default: LoginForm } = await import('../app/(public)/login/login-form.tsx');
+const { ServiceControls } = await import('../components/service-controls.tsx');
 const { SavedLookActions } = await import('../components/saved-look-actions.tsx');
 const { default: NailsPage } = await import('../app/client/nail-studio/page.tsx');
 const { default: HairPage } = await import('../app/client/hair-studio/page.tsx');
@@ -87,6 +88,7 @@ const { workAvailability } = await import('../lib/business/work-availability.ts'
 const { clientHistory,clientImages,paymentHistory,consultationHistory,archiveConsultationResponse } = await import('../lib/business/customer-history.ts');
 const {
   bookingApi,
+  serviceLifecycle,
   savedLooks,
   dailyServices,
   completeAppointment,
@@ -231,6 +233,7 @@ async function transport(input, init = {}) {
     const parts = url.pathname.split('/').filter(Boolean);
     return savedLooks(req, parts[2], parts[3] === 'image', deps);
   }
+  if(url.pathname.endsWith('/service'))return serviceLifecycle(req,url.pathname.split('/')[3],deps);
   if (url.pathname.endsWith('/complete'))
     return completeAppointment(req, url.pathname.split('/')[3], deps);
   if (url.pathname.endsWith('/review'))
@@ -264,6 +267,8 @@ test.before(async () => {
     '0009_customer_history.sql',
     '0010_ninety_minute_bookings.sql',
     '0011_booking_services.sql',
+    '0012_service_statuses.sql',
+    '0013_service_lifecycle.sql',
   ])
     await db.exec(readFileSync('db/migrations/' + file, 'utf8'));
   png = await sharp({ create: { width: 64, height: 64, channels: 3, background: '#e1c9c2' } })
@@ -1001,4 +1006,29 @@ test('saved preset preselects its database service and preserves manual choice o
  assert.equal(screen.getByLabelText('Service',{exact:true}).value,'Gel Manicure');
  fireEvent.change(screen.getByLabelText(/Date \(Philippine time\)/),{target:{value:'2030-10-18'}});
  await waitFor(()=>assert.equal(screen.getByLabelText('Time',{exact:true}).disabled,false));assert.equal(screen.getByLabelText('Service',{exact:true}).value,'Gel Manicure');
+});
+
+
+test('service controls start work, request a stop reason and confirm completion with actual timing',async()=>{
+ const scheduled=new Date(Date.now()+60000).toISOString();
+ const response=await transport('/api/appointments',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({serviceName:"Women's Cut & Blowdry",serviceType:'hair',appointmentDate:scheduled,stylistId:S})});assert.equal(response.status,201);const id=(await response.json()).appointment.id;actor=S;
+ function Harness(){const [row,setRow]=React.useState({id,status:'confirmed',appointmentDate:scheduled});const load=async()=>setRow((await(await transport('/api/appointments/'+id)).json()).appointment);return React.createElement(ServiceControls,{id,status:row.status,appointmentDate:row.appointmentDate,record:row,onUpdated:load});}
+ mount(Harness);fireEvent.click(screen.getByRole('button',{name:'Start Service'}));
+ await waitFor(async()=>assert.equal((await query('SELECT status FROM appointments WHERE id=$1',[id]))[0].status,'in_progress'));
+ await waitFor(()=>assert.equal(screen.getByRole('button',{name:'Start Service'}).disabled,true));
+ fireEvent.click(screen.getByRole('button',{name:'Stop Service'}));fireEvent.change(screen.getByLabelText('Stop reason'),{target:{value:'completed'}});fireEvent.click(screen.getByRole('button',{name:'Record completion'}));
+ assert.equal((await query('SELECT status FROM appointments WHERE id=$1',[id]))[0].status,'in_progress');
+ fireEvent.click(await screen.findByRole('button',{name:'Confirm completion'}));
+ await waitFor(async()=>assert.equal((await query('SELECT status FROM appointments WHERE id=$1',[id]))[0].status,'completed'));
+ const [tracking]=await query('SELECT started_at,ended_at FROM appointment_service_tracking WHERE appointment_id=$1',[id]);assert.ok(tracking.started_at);assert.ok(tracking.ended_at);
+});
+
+test('manual no-show is confirmed before it changes status and the client sees the retained record',async()=>{
+ const response=await transport('/api/appointments',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({serviceName:"Women's Cut & Blowdry",serviceType:'hair',appointmentDate:new Date(Date.now()+60000).toISOString(),stylistId:S})});const id=(await response.json()).appointment.id;
+ const scheduled=new Date(Date.now()-300000).toISOString();await query("UPDATE appointments SET appointment_date=$2::timestamptz AT TIME ZONE 'UTC' WHERE id=$1",[id,scheduled]);actor=S;
+ mount(ServiceControls,{id,status:'confirmed',appointmentDate:scheduled,record:{},onUpdated:()=>{}});
+ fireEvent.click(screen.getByRole('button',{name:'Stop Service'}));fireEvent.change(screen.getByLabelText('Stop reason'),{target:{value:'no_show'}});fireEvent.change(screen.getByLabelText('Service outcome explanation'),{target:{value:'Customer confirmed they cannot attend'}});fireEvent.click(screen.getByRole('button',{name:'Review outcome'}));
+ assert.equal((await query('SELECT status FROM appointments WHERE id=$1',[id]))[0].status,'confirmed');
+ fireEvent.click(screen.getByRole('button',{name:'Confirm outcome'}));await waitFor(async()=>assert.equal((await query('SELECT status FROM appointments WHERE id=$1',[id]))[0].status,'no_show'));
+ cleanup();actor=C;mount(ClientAppointments);fireEvent.click(screen.getByRole('button',{name:/All/}));await screen.findByText('No-Show');assert.equal((await query('SELECT count(*)::int AS n FROM appointments'))[0].n,1);
 });

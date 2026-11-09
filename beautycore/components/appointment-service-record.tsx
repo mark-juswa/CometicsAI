@@ -6,6 +6,8 @@ import { formatDate, formatTime } from './ui';
 export function AppointmentServiceRecord({ record }: { record: ServiceRecord }) {
   return (
     <div className="mt-3 text-sm text-secondary">
+      {record.tracking&&<div aria-label="Service timing">{(['arrived_at','started_at','ended_at','no_show_at'] as const).map(key=>record.tracking?.[key]?<p key={key}>{({arrived_at:'Arrived',started_at:'Service started',ended_at:'Service ended',no_show_at:'Marked No-Show'})[key]}: {formatDate(record.tracking[key]!)} {formatTime(record.tracking[key]!)}</p>:null)}</div>}
+      {!!record.activity?.length&&<details><summary>Appointment activity ({record.activity.length})</summary><ol>{record.activity.map(event=><li key={event.id}>{event.action.replaceAll('_',' ')} · {formatDate(event.happened_at)} {formatTime(event.happened_at)} · {event.source==='system'?'System':event.actor_id?'Staff/account '+event.actor_id:'Recorded in database'}{event.explanation?' · '+event.explanation:''}</li>)}</ol></details>}
       {record.completedAt && (
         <p>
           Completed {formatDate(record.completedAt)} at {formatTime(record.completedAt)}

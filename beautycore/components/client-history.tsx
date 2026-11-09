@@ -233,7 +233,7 @@ export function ClientHistory({ clientId }: { clientId: string }) {
                 setPage(1);
               }}
             >
-              {["all", "pending", "confirmed", "completed", "cancelled"].map(
+              {["all", "pending", "confirmed", "in_progress", "completed", "no_show", "cancelled"].map(
                 (s) => (
                   <option value={s} key={s}>
                     {s === "all" ? "All statuses" : s}

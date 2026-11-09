@@ -44,6 +44,8 @@ export function Card({
 // ─── Status badge ───────────────────────────────────────────────────────────
 
 const statusStyles: Record<AppointmentStatus, { bg: string; text: string; label: string }> = {
+  in_progress: {bg:'bg-info/15 border-info/30',text:'text-info',label:'In Progress'},
+  no_show: {bg:'bg-error/15 border-error/30',text:'text-error',label:'No-Show'},
   confirmed: { bg: 'bg-success/15 border-success/30', text: 'text-success', label: 'Confirmed' },
   pending: { bg: 'bg-warning/15 border-warning/30', text: 'text-warning', label: 'Pending' },
   cancelled: { bg: 'bg-error/15 border-error/30', text: 'text-error', label: 'Cancelled' },

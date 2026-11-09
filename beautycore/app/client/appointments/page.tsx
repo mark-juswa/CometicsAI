@@ -79,9 +79,9 @@ export default function ClientAppointmentsPage() {
   const filtered = rows.filter((r) => {
     const t = new Date(r.appointmentDate).getTime();
     if (filter === "upcoming")
-      return t >= now && ["pending", "confirmed"].includes(r.status);
+      return r.status==="in_progress" || (t>=now-1800000 || !!r.tracking?.arrived_at) && ["pending","confirmed"].includes(r.status);
     if (filter === "past")
-      return t < now || ["cancelled", "completed"].includes(r.status);
+      return r.status!=="in_progress" && (t < now || ["cancelled", "completed", "no_show"].includes(r.status));
     return true;
   });
 

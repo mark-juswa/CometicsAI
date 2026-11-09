@@ -1,4 +1,5 @@
 "use client";
+import { ServiceControls } from "@/components/service-controls";
 import { PortalWorkspace, PortalMetrics } from "@/components/portal-workspace";
 import { businessRequest } from "@/lib/business/client";
 import { WorkAvailability } from "@/components/work-availability";
@@ -78,7 +79,7 @@ export default function StylistDashboard() {
     .filter(
       (r) =>
         new Date(r.appointmentDate).getTime() > now.getTime() &&
-        ["pending", "confirmed"].includes(r.status),
+        ["pending", "confirmed", "in_progress"].includes(r.status),
     )
     .sort(
       (a, b) =>
@@ -219,7 +220,7 @@ export default function StylistDashboard() {
                       {r.client?.name ?? "Unknown client"}
                     </p>
                     <AppointmentLookPreview look={r.look} />
-                    <AppointmentServiceRecord record={r} />
+                    <AppointmentServiceRecord record={r} /><ServiceControls id={r.id} status={r.status} appointmentDate={r.appointmentDate} record={r} onUpdated={load} />
                     {r.notes && (
                       <p className="mt-1.5 text-[11px] leading-relaxed text-secondary">
                         {r.notes}

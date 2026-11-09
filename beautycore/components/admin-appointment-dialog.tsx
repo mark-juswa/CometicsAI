@@ -1,4 +1,5 @@
 "use client";
+import { ServiceControls } from "@/components/service-controls";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -231,6 +232,14 @@ export function AdminAppointmentDialog({
             </p>
           </div>
         </div>
+        <ServiceControls
+          id={row.id}
+          status={row.status}
+          appointmentDate={row.appointmentDate}
+          record={row}
+          admin
+          onUpdated={() => onChanged("Service status updated.")}
+        />
         <div className="grid items-start gap-6 lg:grid-cols-2">
           <div className="space-y-5">
             <section className="rounded-lg border border-purple-light/15 p-4">
@@ -264,7 +273,7 @@ export function AdminAppointmentDialog({
             )}
             <section className="rounded-lg border border-purple-light/15 p-4">
               <h3 className="mb-3 font-serif text-lg">Appointment notes</h3>
-              {row.status === "cancelled" ? (
+              {["cancelled", "no_show"].includes(row.status) ? (
                 <p className="whitespace-pre-wrap text-sm text-secondary">
                   {row.notes || "No notes recorded."}
                 </p>
@@ -335,11 +344,13 @@ export function AdminAppointmentDialog({
                   id={row.id}
                   stylistId={row.stylistId}
                   lockedAssignment={
-                    row.status === "completed" || !directoryReady
+                    ["completed", "in_progress", "no_show"].includes(
+                      row.status,
+                    ) || !directoryReady
                   }
                   totalPrice={row.totalPrice}
                   stylists={choices}
-                  disabled={busy || completionBusy}
+                  disabled={busy || completionBusy || row.status === "no_show"}
                   onBusyChange={setAssignmentBusy}
                   onUpdated={() => onChanged("Assignment and pricing updated.")}
                 />
@@ -453,7 +464,7 @@ export function AdminAppointmentDialog({
                 attribution are preserved.
               </p>
             )}
-            {row.status !== "completed" && (
+            {!["completed", "no_show", "in_progress"].includes(row.status) && (
               <section className="rounded-lg border border-error/15 p-4">
                 <details>
                   <summary className="cursor-pointer text-xs text-muted">

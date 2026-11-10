@@ -1,5 +1,5 @@
 import styles from './style-catalog.json';
-import { allServices, parsePrice } from '../services';
+import { allServices, parsePrice, serviceGroups } from '../services';
 import type { FeatureId } from '../ai/browser-client';
 
 export type ServiceEstimate = {
@@ -46,7 +46,22 @@ function fingerprint(value: unknown) {
 export function resolveLookInformation(feature: FeatureId, styleId: string): LookDetails | null {
   const style = publicStyle(feature, styleId);
   if (!style) return null;
-  const options: ServiceEstimate[] = style.services.flatMap((name) => {
+  let serviceNames = style.services;
+  if (feature === 'hairstyle') {
+    const colourServices = serviceGroups
+      .find((group) => group.id === 'hair-design')
+      ?.categories.find((category) => category.title === 'Colour Services');
+    const pricedColours = (colourServices?.items ?? [])
+      .filter((service) => parsePrice(service.price) !== null)
+      .map((service) => service.name);
+    serviceNames = [...new Set([
+      "Women's Cut & Blowdry",
+      'Blowdry & Style',
+      ...style.services.filter((name) => name !== "Men's Cut"),
+      ...pricedColours,
+    ])];
+  }
+  const options: ServiceEstimate[] = serviceNames.flatMap((name) => {
     const service = allServices.find((s) => s.name === name && s.serviceType === type[feature]);
     if (!service) return [];
     const amount = parsePrice(service.price);
@@ -70,7 +85,9 @@ export function resolveLookInformation(feature: FeatureId, styleId: string): Loo
   const note =
     feature === 'nails'
       ? 'Choose the manicure service when booking. Nail art is priced per nail; ask the salon whether an additional charge applies.'
-      : 'These are service options, not a fixed price for this style. Choose the applicable service when booking; the salon confirms the final price.';
+      : feature === 'hairstyle'
+        ? 'These prices are estimates. Colour services are optional. The salon confirms your final price.'
+        : 'These are service options, not a fixed price for this style. Choose the applicable service when booking; the salon confirms the final price.';
   return {
     version: 1,
     feature,

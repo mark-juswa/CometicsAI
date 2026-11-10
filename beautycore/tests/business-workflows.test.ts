@@ -818,7 +818,7 @@ test('approved French Bob keeps its description and estimate through save, booki
   assert.equal(look.styleName, 'Textured French Bob with Wispy Bangs');
   assert.match(look.lookDetails.description, /curly/);
   assert.match(look.lookDetails.description, /change hair color/);
-  assert.deepEqual(look.lookDetails.options.map((s: { amount: number }) => s.amount), [180, 350]);
+  assert.deepEqual(look.lookDetails.options.map((s: { amount: number }) => s.amount), [350, 250, 800, 1200, 700, 1500, 350]);
   const responseBooking = await bookingApi(request('/api/appointments', 'POST', {
     ...booking(look.id), serviceName: "Women's Cut & Blowdry", totalPrice: 1,
   }), undefined, deps);
@@ -844,7 +844,7 @@ test('approved exp_butterfly_cut keeps its description and estimate through save
   const look = (await response.json()).look;
   assert.equal(look.styleName, publicStyle('hairstyle', 'exp_butterfly_cut')!.name);
   assert.match(look.lookDetails.description, /change hair color/);
-  assert.deepEqual(look.lookDetails.options.map((s: { amount: number }) => s.amount), [180, 350]);
+  assert.deepEqual(look.lookDetails.options.map((s: { amount: number }) => s.amount), [350, 250, 800, 1200, 700, 1500, 350]);
   const responseBooking = await bookingApi(request('/api/appointments', 'POST', {
     ...booking(look.id), serviceName: "Women's Cut & Blowdry", totalPrice: 1,
   }), undefined, deps);
@@ -870,7 +870,7 @@ test('approved exp_wolf_cut keeps its description and estimate through save, boo
   const look = (await response.json()).look;
   assert.equal(look.styleName, publicStyle('hairstyle', 'exp_wolf_cut')!.name);
   assert.match(look.lookDetails.description, /change hair color/);
-  assert.deepEqual(look.lookDetails.options.map((s: { amount: number }) => s.amount), [180, 350]);
+  assert.deepEqual(look.lookDetails.options.map((s: { amount: number }) => s.amount), [350, 250, 800, 1200, 700, 1500, 350]);
   const responseBooking = await bookingApi(request('/api/appointments', 'POST', {
     ...booking(look.id), serviceName: "Women's Cut & Blowdry", totalPrice: 1,
   }), undefined, deps);
@@ -896,7 +896,7 @@ test('approved exp_korean_two_block keeps its description and estimate through s
   const look = (await response.json()).look;
   assert.equal(look.styleName, publicStyle('hairstyle', 'exp_korean_two_block')!.name);
   assert.match(look.lookDetails.description, /change hair color/);
-  assert.deepEqual(look.lookDetails.options.map((s: { amount: number }) => s.amount), [180, 350]);
+  assert.deepEqual(look.lookDetails.options.map((s: { amount: number }) => s.amount), [350, 250, 800, 1200, 700, 1500, 350]);
   const responseBooking = await bookingApi(request('/api/appointments', 'POST', {
     ...booking(look.id), serviceName: "Women's Cut & Blowdry", totalPrice: 1,
   }), undefined, deps);
@@ -922,7 +922,7 @@ test('approved exp_comma_hair keeps its description and estimate through save, b
   const look = (await response.json()).look;
   assert.equal(look.styleName, publicStyle('hairstyle', 'exp_comma_hair')!.name);
   assert.match(look.lookDetails.description, /change hair color/);
-  assert.deepEqual(look.lookDetails.options.map((s: { amount: number }) => s.amount), [180, 350]);
+  assert.deepEqual(look.lookDetails.options.map((s: { amount: number }) => s.amount), [350, 250, 800, 1200, 700, 1500, 350]);
   const responseBooking = await bookingApi(request('/api/appointments', 'POST', {
     ...booking(look.id), serviceName: "Women's Cut & Blowdry", totalPrice: 1,
   }), undefined, deps);

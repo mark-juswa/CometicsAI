@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { isConsultationId, signConsultationHandle, verifyConsultationHandle } from './consultation-handle';
 
 export type AiUser = { id: string; role: string } | null;
@@ -29,6 +30,54 @@ const PRIVATE_HEADERS = { 'Cache-Control': 'private, no-store', 'Content-Type': 
 
 function json(status: number, message: string, code?: 'AI_BUSY'): Response {
   return new Response(JSON.stringify({ error: message, ...(code ? { code } : {}) }), { status, headers: PRIVATE_HEADERS });
+}
+
+// Diagnostics contain only a random reference, a fixed route template and status.
+// Never log portraits, bodies, handles, user IDs, credentials or tunnel addresses.
+function diagnosticFailure(status: number, message: string, method: string, op: Operation, category: string, upstreamStatus?: number): Response {
+  const reference = randomUUID();
+  const template = op.path.replace(/\/jobs\/[^/]+/, '/jobs/{id}')
+    .replace(/\/recommendations\/[^/]+(?=\/)/, '/recommendations/{id}');
+  console.warn(JSON.stringify({ event: 'ai_request_failure', reference,
+    operation: method + ' ' + template, status, category,
+    ...(upstreamStatus === undefined ? {} : { upstream_status: upstreamStatus }) }));
+  return json(status, message + ' Reference: ' + reference);
+}
+
+async function knownUpstreamFailure(upstream: Response, op: Operation): Promise<{ message: string; category: string } | null> {
+  if (!upstream.headers.get('content-type')?.toLowerCase().includes('application/json') || !upstream.body) return null;
+  const reader = upstream.body.getReader();
+  let bytes = new Uint8Array(0);
+  try {
+    while (true) {
+      const chunk = await reader.read();
+      if (chunk.done) break;
+      if (bytes.length + chunk.value.length > 4096) return null;
+      const next = new Uint8Array(bytes.length + chunk.value.length);
+      next.set(bytes); next.set(chunk.value, bytes.length); bytes = next;
+    }
+    const value: unknown = JSON.parse(new TextDecoder().decode(bytes));
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+    const detail = (value as Record<string, unknown>).detail;
+    // Match only inspected public validation messages, never relay arbitrary text.
+    if (op.body === 'image' || op.body === 'manual') {
+      const imageErrors: Record<string, [number, string]> = {
+        'Image width and height must each be between 64 and 4096 pixels.': [422, 'Your photo dimensions are unsupported. Choose a JPG or PNG between 64 and 4096 pixels on each side.'],
+        'Image dimensions are too large.': [422, 'Your photo resolution is too large. Resize it or take a photo using Use camera.'],
+        'The uploaded file is not a readable image.': [400, 'This photo could not be read. Export it as JPG or PNG, or use your camera.'],
+        'The image type does not match the file.': [415, 'The photo format does not match its file type. Export it as JPG or PNG.'],
+        'Please upload a JPG or PNG image.': [415, 'Choose a JPG or PNG photo.'],
+      };
+      const match = typeof detail === 'string' && Object.hasOwn(imageErrors, detail) ? imageErrors[detail] : undefined;
+      if (match && upstream.status === match[0]) return { message: match[1], category: 'photo_validation' };
+    }
+    if (op.consultation && upstream.status === 404 && detail === 'Consultation not found or expired.')
+      return { message: 'This consultation expired or the AI server restarted. Start a new consultation. If an image is still generating, check its status first.', category: 'consultation_expired' };
+    if (op.path.endsWith('/turn') && upstream.status === 429 && detail === 'The AI consultant is unavailable. Please try again shortly.')
+      return { message: 'The AI consultant has reached its request limit. Wait a moment before sending another message.', category: 'consultant_rate_limit' };
+    return null;
+  } catch { return null; }
+  finally { await reader.cancel().catch(() => {}); }
 }
 
 // Only recognize the facade's known pre-admission rejection. Never expose raw
@@ -219,8 +268,9 @@ export async function forwardAiRequest(request: Request, parts: string[], deps: 
       ...(deps.remoteBackend ? { signal: AbortSignal.timeout(90_000) } : {}),
     });
   } catch (error) {
-    if (error instanceof Error && ['AbortError', 'TimeoutError'].includes(error.name)) return json(504, 'AI service timed out. Check generation status before retrying.');
-    return json(502, 'AI service is unavailable. Check generation status before retrying.');
+    if (error instanceof Error && ['AbortError', 'TimeoutError'].includes(error.name))
+      return diagnosticFailure(504, 'AI service timed out. Check generation status before retrying.', request.method, op, 'transport_timeout');
+    return diagnosticFailure(502, 'AI service is unavailable. Check generation status before retrying.', request.method, op, 'transport_unavailable');
   }
   if (!upstream.ok) {
     const generationSubmission = request.method === 'POST' &&
@@ -229,7 +279,12 @@ export async function forwardAiRequest(request: Request, parts: string[], deps: 
       return json(429, 'Another AI generation is still running. Hair, Makeup, Nails and Consultation share one generation slot. Wait for it to finish, then try again. No new generation was started.', 'AI_BUSY');
     const allowed = new Set([400, 401, 403, 404, 409, 413, 415, 422, 429, 502, 503, 504]);
     const status = allowed.has(upstream.status) ? upstream.status : 502;
-    return json(status, status < 500 ? 'AI request could not be completed.' : 'AI service could not complete the request.');
+    // Busy recognition consumes its response; other statuses remain available
+    // for bounded, exact public-message matching.
+    const known = upstream.status === 429 && generationSubmission && deps.remoteBackend
+      ? null : await knownUpstreamFailure(upstream, op);
+    return diagnosticFailure(status, known?.message ?? (status < 500 ? 'AI request could not be completed.' : 'AI service could not complete the request.'),
+      request.method, op, known?.category ?? 'upstream_rejection', upstream.status);
   }
   if (!upstream.headers.get('content-type')?.toLowerCase().includes('application/json'))
     return json(502, 'AI service returned an invalid response.');

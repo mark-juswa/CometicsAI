@@ -388,7 +388,68 @@ test('unknown, oversized or non-generation 429 stays generic and never leaks ups
     const response = await handleAiRequest(request('POST', parts.join('/'),
       parts[0] === 'features' ? form : '{}', parts[0] === 'consultations' ? await handle() : undefined), [...parts], config);
     assert.equal(response.status, 429);
-    assert.deepEqual(await response.json(), { error: 'AI request could not be completed.' });
+    assert.match((await response.json()).error, /^AI request could not be completed\. Reference: [0-9a-f-]{36}$/);
   }
   assert.equal(seen.length, 3);
+});
+
+test('known photo rejection is actionable and diagnostics never contain private request data', async (t) => {
+  const logs: string[] = [];
+  t.mock.method(console, 'warn', (value: string) => logs.push(value));
+  const token = await handle();
+  const config = deps(undefined, () => Response.json({ detail: 'Image width and height must each be between 64 and 4096 pixels.' }, { status: 422 }));
+  const response = await handleAiRequest(request('PUT', 'consultations/photo', image('image/jpeg'), token), ['consultations', 'photo'], config);
+  const value = await response.json();
+  assert.equal(response.status, 422);
+  assert.match(value.error, /photo dimensions.*64 and 4096/);
+  const logged = JSON.parse(logs[0]);
+  assert.deepEqual(Object.keys(logged).sort(), ['category', 'event', 'operation', 'reference', 'status', 'upstream_status']);
+  assert.equal(logged.operation, 'PUT /consultations/{id}/photo');
+  assert.equal(logged.category, 'photo_validation');
+  assert.ok(value.error.endsWith(logged.reference));
+  for (const secret of [SECRET, token, USER, ID]) assert.equal(logs[0].includes(secret), false);
+});
+
+test('expired consultation and consultant limit are distinguished without retrying', async (t) => {
+  t.mock.method(console, 'warn', () => {});
+  for (const [status, detail, expected] of [
+    [404, 'Consultation not found or expired.', /consultation expired or the AI server restarted/],
+    [429, 'The AI consultant is unavailable. Please try again shortly.', /consultant has reached its request limit/],
+  ] as const) {
+    let attempts = 0;
+    const config = deps(undefined, () => { attempts++; return Response.json({ detail }, { status }); });
+    const response = await handleAiRequest(request('POST', 'consultations/turn', '{}', await handle()), ['consultations', 'turn'], config);
+    assert.equal(response.status, status);
+    assert.match((await response.json()).error, expected);
+    assert.equal(attempts, 1);
+  }
+});
+
+test('unrecognized error detail, wrong status and oversized detail never reach client or logs', async (t) => {
+  const logs: string[] = [];
+  t.mock.method(console, 'warn', (value: string) => logs.push(value));
+  for (const [status, detail] of [[422, 'private upstream portrait or credential'],
+    [400, 'Image width and height must each be between 64 and 4096 pixels.'],
+    [422, 'private upstream portrait or credential'.repeat(200)]] as const) {
+    const config = deps(undefined, () => Response.json({ detail }, { status }));
+    const response = await handleAiRequest(request('PUT', 'consultations/photo', image('image/png'), await handle()), ['consultations', 'photo'], config);
+    assert.match((await response.json()).error, /^AI request could not be completed\. Reference:/);
+  }
+  assert.equal(logs.length, 3);
+  assert.equal(logs.join('').includes('private upstream'), false);
+});
+
+test('job and recommendation identifiers are removed from diagnostic route templates', async (t) => {
+  const logs: string[] = [];
+  t.mock.method(console, 'warn', (value: string) => logs.push(value));
+  const config = deps(undefined, () => Response.json({ detail: 'private' }, { status: 500 }));
+  await handleAiRequest(request('GET', 'jobs/' + ID), ['jobs', ID], config);
+  await handleAiRequest(request('GET', 'consultations/recommendations/private-look/generation', undefined, await handle()),
+    ['consultations', 'recommendations', 'private-look', 'generation'], config);
+  assert.equal(logs.length, 2);
+  assert.equal(JSON.parse(logs[0]).operation, 'GET /jobs/{id}');
+  assert.equal(JSON.parse(logs[1]).operation, 'GET /consultations/{id}/recommendations/{id}/generation');
+  assert.equal(JSON.parse(logs[0]).upstream_status, 500);
+  assert.equal(logs.join('').includes(ID), false);
+  assert.equal(logs.join('').includes('private-look'), false);
 });

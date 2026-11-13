@@ -1,5 +1,7 @@
 # Engineering facts
 
+2026-11-13 VERIFIED Render beautycore-demo, main/root beautycore, Live release de883e8 in dep-dbr7578ae00c73eq4ku0. Health, methodology, guest entry and session200; anonymous AI features401. Website photo-error relay deployed, separate Runpod CPU update remains pending. [Receipt](../docs/experiments/photo-guard-render-deployment-20261113.md).
+
 2026-11-13 VERIFIED local implementation: backend/app/photo_suitability.py serializes local MediaPipe detectors, requires a face for Hair/Makeup and reuses the Nails hand localizer, returning controlled422/503 before dispatch. scripts/prepare_photo_detector.py prepares a fixed hash checked BlazeFace asset. Runpod packaging inventories CPU updates; runtime verifies original archives before applying updates to disposable staged CPU source. Website adapter relays only exact public guard messages. Final local A40 image photo-guard-a40-20261113-03 and staged CPU API pass without network/GPU. No live serving update. [Evidence](../docs/experiments/consultation-photo-guards-20261113.md).
 
 2026-11-10 VERIFIED adapter-core now uses bounded exact public error matching and random references correlated to route template/status/category logs, removing private route identifiers.71 adapter/client/jobs/guest/store tests and TypeScript pass. Render dep-dbp748ff3r2c73f9fg80 is Live for7086754. This diagnoses failures without exposing raw upstream bodies; it does not establish the reported client's root cause. [Evidence](../docs/experiments/client-ai-request-investigation-20261110.md).

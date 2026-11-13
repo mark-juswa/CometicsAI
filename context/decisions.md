@@ -1,5 +1,7 @@
 # Decision history
 
+2026-11-13 CONFIRMED: Supervisor requests publishing these changes to Render. Publish verified source to main and deploy the matching website relay. This does not imply the Runpod backend is updated by a Render release or authorize new paid GPU allocation. Website release de883e8 is VERIFIED Live; separate Runpod cutover remains pending. [Receipt](../docs/experiments/photo-guard-render-deployment-20261113.md).
+
 2026-11-13 CONFIRMED: Supervisor selects local photo checks for Hair/Makeup/Nails and retains text only Gemini. Extend existing validation and catalog recommendation boundaries, preserve training/model outputs and camera UI. Local suitability is not identity, liveness, complexion or face shape analysis. Serving image and website rollout remain separate from local implementation. [Design](../docs/specs/0022-consultation-relevance-photo-suitability.md).
 
 2026-11-09 CONFIRMED: Supervisor requests adding AI training methodology and direct camera selection during image upload. Implement an evidence grounded public explanation and one native browser camera component for AI studios/consultation, reusing File validation and explicit generation. No new model training, automatic upload, production database change or real hardware permission grant is implied. Real phone acceptance and production integration remain separate. [Contract](../docs/specs/0021-ai-methodology-camera.md).

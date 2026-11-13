@@ -1,6 +1,7 @@
 """Small deterministic provider and strict backend validation boundary."""
 
 from hashlib import sha256
+import re
 from typing import Protocol
 
 from pydantic import ValidationError
@@ -22,7 +23,12 @@ class InvalidRecommendation(ValueError):
 
 
 def _words(value: str) -> set[str]:
-    return {part.lower() for part in value.replace("-", " ").replace("_", " ").split() if part}
+    words = set(re.findall(r"[a-z0-9]+", value.lower()))
+    aliases = {'office': 'everyday', 'work': 'everyday', 'daily': 'everyday',
+               'wedding': 'formal', 'graduation': 'formal', 'party': 'evening',
+               'subtle': 'natural', 'minimal': 'natural', 'dramatic': 'bold',
+               'smokey': 'smoky', 'golden': 'gold', 'rose': 'pink'}
+    return words | {aliases[word] for word in words if word in aliases}
 
 
 _SERVICE_WORDS = frozenset({"hair", "hairstyle", "makeup", "nail", "nails"})
@@ -52,7 +58,36 @@ def candidate_styles(styles: list[CatalogStyle], preferences: Preferences) -> li
     terms = preference_terms(preferences)
     eligible = [style for style in styles if style.status in AVAILABLE_STATUSES
                 and not (_words(" ".join(style.tags)) | _words(style.name)) & avoids]
-    return sorted(eligible, key=lambda style: (-len(set(style.tags) & terms), style.style_id))
+    # Explicit Makeup intensity is a compatibility constraint, not a weak tie.
+    if preferences.makeup_intensity:
+        def compatible(style):
+            if style.feature != 'makeup':
+                return True
+            tags = set(style.tags)
+            intensity = 'bold' if 'bold' in tags else 'natural' if 'natural' in tags else 'soft'
+            return intensity == preferences.makeup_intensity
+        eligible = [style for style in eligible if compatible(style)]
+    if preferences.makeup_finish:
+        eligible = [style for style in eligible if style.feature != 'makeup'
+                    or preferences.makeup_finish in style.tags]
+    return sorted(eligible, key=lambda style: (-style_score(style, preferences), style.style_id))
+
+
+def style_score(style: CatalogStyle, preferences: Preferences) -> int:
+    tags = _words(' '.join(style.tags))
+    score = 2 * len(tags & preference_terms(preferences))
+    specific = {'makeup': (preferences.makeup_intensity, preferences.makeup_finish),
+                'hairstyle': (preferences.hair_length, preferences.hair_maintenance),
+                'nails': (preferences.nail_color, preferences.nail_finish)}[style.feature]
+    score += sum(8 * len(tags & _words(value)) for value in specific if value)
+    score += sum(3 * len(tags & _words(value)) for value in preferences.likes)
+    return score
+
+
+def grounded_reason(style: CatalogStyle, preferences: Preferences) -> str:
+    matched = sorted(_words(' '.join(style.tags)) & preference_terms(preferences))
+    return (f"{style.name} matches your stated {', '.join(matched[:3])} preferences."
+            if matched else f"{style.name} is a supported option to explore; no specific preference match was established.")
 
 
 class RecommendationProvider(Protocol):
@@ -72,13 +107,13 @@ class DeterministicProvider:
         rows = []
         for index, style in enumerate(primary[:3]):
             matched = sorted(set(style.tags) & terms)
-            reason = (f"{style.name} matches your {', '.join(matched[:2])} preference."
-                      if matched else f"{style.name} is a supported look to explore.")
+            reason = grounded_reason(style, state.preferences)
             complements = []
             if other_features:
                 other = other_features[index % len(other_features)]
                 complement = candidates[other][0]
-                complements.append(StyleChoice(feature=other, style_id=complement.style_id))
+                if style_score(complement, state.preferences) > 0:
+                    complements.append(StyleChoice(feature=other, style_id=complement.style_id))
             rows.append(ProposedRecommendation(
                 primary=StyleChoice(feature=state.primary_service, style_id=style.style_id),
                 reason=reason, complements=complements))
@@ -130,6 +165,8 @@ def validate_recommendations(raw: object, state: ConsultationState, catalog: Cat
             extra_style = active[extra.feature][extra.style_id]
             if extra_style.status not in AVAILABLE_STATUSES:
                 raise InvalidRecommendation("Complementary style is disabled.")
+            if style_score(extra_style, state.preferences) <= 0:
+                continue
             extras.append(ResolvedChoice(feature=extra.feature, style_id=extra.style_id,
                                          style_name=extra_style.name, service=SERVICES[extra.feature],
                                          nail_path=extra_style.nail_path))
@@ -139,5 +176,22 @@ def validate_recommendations(raw: object, state: ConsultationState, catalog: Cat
             primary=ResolvedChoice(feature=choice.feature, style_id=choice.style_id,
                                    style_name=primary_style.name, service=SERVICES[choice.feature],
                                    nail_path=primary_style.nail_path),
-            reason=row.reason, complements=extras))
+            reason=grounded_reason(primary_style, state.preferences), complements=extras))
+    # Gemini extracts intent; the backend owns the final preference ranking.
+    # Validate all proposed IDs first so hallucinations and exclusions never pass.
+    ranked = sorted(candidates[state.primary_service],
+                    key=lambda style: (-style_score(style, state.preferences), style.style_id))
+    if len(ranked) < 3:
+        raise InvalidRecommendation('Fewer than three compatible styles remain.')
+    selected_scores = sorted((style_score(active[row.primary.feature][row.primary.style_id], state.preferences)
+                              for row in resolved), reverse=True)
+    best_scores = [style_score(style, state.preferences) for style in ranked[:3]]
+    if selected_scores == best_scores:
+        return RecommendationSet(recommendations=resolved)
+    for index, style in enumerate(ranked[:3]):
+        primary = ResolvedChoice(feature=style.feature, style_id=style.style_id,
+            style_name=style.name, service=SERVICES[style.feature], nail_path=style.nail_path)
+        resolved[index] = resolved[index].model_copy(update={
+            'id': 'rec-' + sha256(f'{style.feature}:{style.style_id}'.encode()).hexdigest()[:12],
+            'primary': primary, 'reason': grounded_reason(style, state.preferences)})
     return RecommendationSet(recommendations=resolved)

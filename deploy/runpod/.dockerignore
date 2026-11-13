@@ -8,3 +8,5 @@
 !build-manifest.json
 !requirements/
 !requirements/**
+!cpu-updates/
+!cpu-updates/**

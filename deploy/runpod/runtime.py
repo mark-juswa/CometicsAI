@@ -39,7 +39,7 @@ def verify_distribution(root=HERE):
 
 
 def assemble(inputs, work, *, root=HERE):
-    verify_distribution(root)
+    manifest = verify_distribution(root)
     setup = load_module("release_setup", Path(root) / "release_setup.py")
     inputs, work = Path(inputs), Path(work)
     if work.exists():
@@ -50,13 +50,28 @@ def assemble(inputs, work, *, root=HERE):
         if not path.is_file() or sha256(path.read_bytes()).hexdigest() != expected:
             raise ValueError("Private input missing or changed: " + name)
     work.mkdir(parents=True, mode=0o700)
-    for name, expected, directory, manifest in setup.BUNDLES:
-        setup.extract(inputs / name, expected, work / directory, manifest)
+    for name, expected, directory, bundle_manifest in setup.BUNDLES:
+        setup.extract(inputs / name, expected, work / directory, bundle_manifest)
     setup.verify_release_pair(work, setup.STYLE_RELEASE_EXPECTED)
     cpu = json.loads((work / "cpu-src/demo_bundle.json").read_text())
     if cpu.get("worker_sources") != {name: row["sha256"] for name, row in setup.OPTIMIZED_SOURCES.items()}:
         raise ValueError("CPU and worker source pair differs")
     setup.stage_overlay(work, setup.OPTIMIZED_SOURCES)
+    # Historical archives remain immutable. Install only inventoried CPU updates
+    # after checking their original source pair; never touch GPU/model payloads.
+    cpu_root = (work / 'cpu-src').resolve()
+    for relative, expected in manifest.get('cpu_updates', {}).items():
+        target = (cpu_root / relative).resolve()
+        if not target.is_relative_to(cpu_root) or ':' in relative or '\\' in relative:
+            raise ValueError('Unsafe CPU update path')
+        name = 'cpu-updates/' + relative
+        raw = (Path(root) / name).read_bytes()
+        if manifest['files'].get(name) != expected or sha256(raw).hexdigest() != expected:
+            raise ValueError('CPU update integrity failed')
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(raw)
+    if manifest.get('cpu_updates'):
+        (work / 'cpu-updates.json').write_text(json.dumps(manifest['cpu_updates'], indent=2))
     return setup
 
 

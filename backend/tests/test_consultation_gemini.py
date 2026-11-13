@@ -16,6 +16,11 @@ from app.consultation.models import ConversationProposal, Preferences
 from app.consultation.store import ConsultationStore
 
 
+@pytest.fixture(autouse=True)
+def synthetic_photo_subject(monkeypatch):
+    monkeypatch.setattr('app.photo_suitability.check_subject', lambda *_: True)
+
+
 def test_gemini_default_model_remains_configurable(monkeypatch):
     monkeypatch.delenv("CONSULTATION_GEMINI_MODEL", raising=False)
     assert GeminiProvider(api_key="test").model == "gemini-3.5-flash-lite"
@@ -98,7 +103,7 @@ def test_conversation_commits_preferences_and_three_real_styles(feature):
     assert len(rows) == len({row["primary"]["style_id"] for row in rows}) == 3
     assert all(row["primary"]["feature"] == feature for row in rows)
     assert all(row["primary"]["service"]["estimate_kind"] == "demo_only" for row in rows)
-    assert all("stated direction" in row["reason"] for row in rows)
+    assert all('preferences' in row['reason'] or 'no specific preference match' in row['reason'] for row in rows)
     assert store.photo_bytes(UUID(identity)) == photo
     assert data["state"]["photo"] is not None
     assert client.post(f"/consultations/{identity}/recommendations").json() == data["recommendations"]

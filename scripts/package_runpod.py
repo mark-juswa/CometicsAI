@@ -12,7 +12,7 @@ NOTEBOOK_SHA = "b4a4e1c1482fd060d194f19f5570b6221131379e8214d18c064a713452ab08fd
 NAMES = ("capstone_train002_20260928_v1.bin", "beautycore_makeup_release_20261106.bin")
 DIGESTS = ("f0d1fed52e00b6c5a1da2cade3731237675cdebbfc0b2cde3b2dbda99a4019ac",
            "0c657ae4d2b62e11bd8c5728321330d5416fbfd1d36354d8482ac548f1449357")
-PROFILES = {"rtx3090": "profile.json", "rtx-a6000": "profiles/rtx-a6000.json"}
+PROFILES = {"rtx3090": "profile.json", "rtx-a6000": "profiles/rtx-a6000.json", "a40": "profiles/a40.json"}
 
 
 def digest(path):
@@ -38,7 +38,7 @@ def helpers(notebook):
     return source
 
 
-def build(destination, inputs, *, private_zip=True, profile="rtx3090"):
+def build(destination, inputs, *, private_zip=True, profile="rtx3090", face_model=None):
     if profile not in PROFILES:
         raise ValueError("Unknown Runpod GPU profile")
     profile_path = ROOT / "deploy/runpod" / PROFILES[profile]
@@ -51,6 +51,9 @@ def build(destination, inputs, *, private_zip=True, profile="rtx3090"):
         if not path.is_file() or digest(path) != expected:
             raise ValueError("Private serving input missing or changed: " + path.name)
     source = helpers(ROOT / "notebooks/render_kaggle_makeup_corrective_demo.ipynb")
+    face_model = Path(face_model or ROOT / 'data/vision/blaze_face_short_range.tflite')
+    if not face_model.is_file() or digest(face_model) != 'b4578f35940bf5a1a655214a1cce5cab13eba73c1297cd78e1a04c2380b0152f':
+        raise ValueError('Prepare the pinned local face detector before packaging')
     context = destination / "build-context"
     context.mkdir(parents=True)
     for name in ("Dockerfile", ".dockerignore", "runtime.py"):
@@ -58,6 +61,20 @@ def build(destination, inputs, *, private_zip=True, profile="rtx3090"):
     shutil.copyfile(profile_path, context / "profile.json")
     (context / "release_setup.py").write_bytes(source.encode())
     shutil.copyfile(ROOT / "scripts/render_kaggle_registration.py", context / "registration.py")
+    updates = context / 'cpu-updates'
+    updated_sources = ('backend/app/main.py', 'backend/app/photo_suitability.py',
+                       'backend/app/consultation/api.py', 'backend/app/consultation/gemini.py',
+                       'backend/app/consultation/recommend.py')
+    for name in updated_sources:
+        target = updates / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        raw = (ROOT / name).read_bytes()
+        compile(raw, name, 'exec')
+        target.write_bytes(raw)
+    target = updates / 'data/vision/blaze_face_short_range.tflite'
+    target.parent.mkdir(parents=True)
+    shutil.copyfile(face_model, target)
+    cpu_updates = {p.relative_to(updates).as_posix(): digest(p) for p in updates.rglob('*') if p.is_file()}
     requirements = context / "requirements"
     requirements.mkdir()
     with ZipFile(sources[1]) as archive:
@@ -77,6 +94,7 @@ def build(destination, inputs, *, private_zip=True, profile="rtx3090"):
         raise ValueError("Complete serving catalog differs")
     manifest = {"schema": "beautycore-runpod-build-v1", "notebook_sha256": NOTEBOOK_SHA,
                 "profile_id": selected_profile["profile_id"], "release_id": "styles-20261106-01",
+                "cpu_updates": cpu_updates, "photo_validation": 'local-subject-v1',
                 "catalog": {"model_styles": catalogs[0], "renderer_styles": capabilities["renderer_styles"]},
                 "files": {p.relative_to(context).as_posix(): digest(p)
                           for p in sorted(context.rglob("*")) if p.is_file()},
@@ -109,5 +127,6 @@ if __name__ == "__main__":
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--inputs", type=Path, default=ROOT / "client")
     parser.add_argument("--profile", choices=PROFILES, default="rtx3090")
+    parser.add_argument('--face-model', type=Path)
     args = parser.parse_args()
-    print(json.dumps(build(args.output, args.inputs, profile=args.profile), indent=2))
+    print(json.dumps(build(args.output, args.inputs, profile=args.profile, face_model=args.face_model), indent=2))

@@ -11,6 +11,7 @@ from app.nails.hybrid import HybridResult
 
 
 client = TestClient(main.app)
+pytestmark = pytest.mark.usefixtures('synthetic_photo_subject')
 LEGACY = {"hairstyle": ("/styles", "/generate", "bob"),
           "makeup": ("/makeup/styles", "/makeup/generate", "soft_glam"),
           "nails": ("/nails/styles", "/nails/generate", "classic_red")}

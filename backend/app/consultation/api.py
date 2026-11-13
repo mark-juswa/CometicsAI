@@ -24,6 +24,7 @@ from app.consultation.recommend import (DeterministicProvider, InsufficientCandi
                                         validate_recommendations)
 from app.consultation.store import (ConsultationStore, GenerationConflict,
                                     StaleConsultationError, StoreFullError)
+from app.photo_suitability import ensure_photo_subject
 
 
 _SERVICE_PREFERENCE_FIELDS = {
@@ -57,6 +58,15 @@ def build_router(style_loaders: Callable[[], Mapping[str, Callable[[], Awaitable
         except KeyError:
             raise HTTPException(404, "Consultation not found or expired.") from None
 
+    async def require_subject(consultation_id: UUID, state: ConsultationState):
+        raw = sessions.photo_bytes(consultation_id)
+        if not raw:
+            raise HTTPException(409, "Upload a photo before requesting recommendations.")
+        with Image.open(BytesIO(raw)) as opened:
+            from PIL import ImageOps
+            portrait = ImageOps.exif_transpose(opened).convert('RGB')
+        await ensure_photo_subject(portrait, state.primary_service)
+
     @router.get("/catalog", response_model=CatalogResponse)
     async def catalog() -> CatalogResponse:
         try:
@@ -80,6 +90,7 @@ def build_router(style_loaders: Callable[[], Mapping[str, Callable[[], Awaitable
         state_or_404(consultation_id)
         # The same validation contract used by /features/{feature}/generate.
         validated = await validate_image(image)
+        await ensure_photo_subject(validated, state_or_404(consultation_id).primary_service)
         await image.seek(0)
         content = await image.read()
         try:
@@ -105,6 +116,7 @@ def build_router(style_loaders: Callable[[], Mapping[str, Callable[[], Awaitable
     @router.post("/{consultation_id}/recommendations", response_model=RecommendationSet)
     async def recommend(consultation_id: UUID) -> RecommendationSet:
         state = state_or_404(consultation_id)
+        await require_subject(consultation_id, state)
         if conversational is not None:
             if state.recommendations is None:
                 raise HTTPException(409, "Complete the conversation before requesting recommendations.")
@@ -136,7 +148,7 @@ def build_router(style_loaders: Callable[[], Mapping[str, Callable[[], Awaitable
     async def turn(consultation_id: UUID, body: ConversationTurnInput) -> ConversationTurnResult:
         if conversational is None:
             raise HTTPException(409, "Conversational consultation is not enabled.")
-        state_or_404(consultation_id)
+        await require_subject(consultation_id, state_or_404(consultation_id))
         try:
             state = sessions.begin_turn(consultation_id, body.message)
         except GenerationConflict as exc:
@@ -156,6 +168,11 @@ def build_router(style_loaders: Callable[[], Mapping[str, Callable[[], Awaitable
             eligible = {feature: candidate_styles(styles, preferences)
                         for feature, styles in catalog.styles.items()}
             resolved = None
+            if proposal.status == 'ready_for_recommendation' and len(eligible[state.primary_service]) < 3:
+                proposal = proposal.model_copy(update={
+                    'status': 'more_information', 'recommendations': None,
+                    'assistant_message': 'Fewer than three supported looks match those preferences. Which intensity, finish or exclusion would you like to adjust?'
+                })
             if proposal.status == "ready_for_recommendation":
                 if not body.message and not any(row.role == "user" for row in state.messages):
                     raise InvalidRecommendation("At least one user answer is required.")
@@ -206,6 +223,7 @@ def build_router(style_loaders: Callable[[], Mapping[str, Callable[[], Awaitable
                  response_model=GenerationDetail)
     async def generate_recommendation(consultation_id: UUID, recommendation_id: str) -> GenerationDetail:
         state = state_or_404(consultation_id)
+        await require_subject(consultation_id, state)
         if dispatch is None:
             raise HTTPException(503, "Consultation generation is unavailable.")
         selected = next((row for row in (state.recommendations.recommendations

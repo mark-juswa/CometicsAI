@@ -1,5 +1,7 @@
 # Decision history
 
+2026-11-13 CONFIRMED: Supervisor selects local photo checks for Hair/Makeup/Nails and retains text only Gemini. Extend existing validation and catalog recommendation boundaries, preserve training/model outputs and camera UI. Local suitability is not identity, liveness, complexion or face shape analysis. Serving image and website rollout remain separate from local implementation. [Design](../docs/specs/0022-consultation-relevance-photo-suitability.md).
+
 2026-11-09 CONFIRMED: Supervisor requests adding AI training methodology and direct camera selection during image upload. Implement an evidence grounded public explanation and one native browser camera component for AI studios/consultation, reusing File validation and explicit generation. No new model training, automatic upload, production database change or real hardware permission grant is implied. Real phone acceptance and production integration remain separate. [Contract](../docs/specs/0021-ai-methodology-camera.md).
 
 2026-11-09 CONFIRMED: Supervisor requests merging the client based generation recovery fix and deploying to Render. Use the live dashboard's actual main branch rather than the stale historical serving branch guidance. Main fast forward and manual Render release4689b4c are VERIFIED; no GPU worker, credentials, database contents or model changes are part of this authorization. [Receipt](../docs/experiments/generation-recovery-deployment-20261109.md).

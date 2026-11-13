@@ -1,5 +1,9 @@
 # Coarse build scope
 
+## Relevant consultation and local photo checks, 13 November 2026
+
+IN PROGRESS. Local implementation and bounded verification DONE, production rollout NOT STARTED. Existing training methodology and camera option rechecked. Supervisor confirms local subject checks with photos excluded from Gemini. Preference ranking and Makeup constraints now govern recommendations; shared server checks reject wrong subjects before consultant or generation dispatch.113 backend,57 website and33 client price tests pass, plus native detector/staged CPU API checks, TypeScript and production build. Local A40 image built, not published. Full hand positive acceptance, broader detector cases, real Gemini dialogue and live website/Pod rollout remain NEEDS VERIFICATION. Models, catalog, datasets and earlier artifacts preserved. [Contract](../specs/0022-consultation-relevance-photo-suitability.md), [evidence](../experiments/consultation-photo-guards-20261113.md), [release guide](../guides/photo-check-release.md).
+
 ## AI methodology and camera selection, 9 November 2026
 
 DONE local build and VERIFIED163 tests, TypeScript, production build, methodology browser rendering and synthetic camera review/selection/cleanup. Shared camera option covers Hair, Makeup, Nails and normal/guest consultation; public methodology separates training from generation and hybrid feature behavior. DONE production integration on 10 November, Render dep-dbouvnbrjlhs73ccgb20 Live for7119a39; public camera option, methodology and health checks verified. Real device/mobile acceptance remains NEEDS VERIFICATION. No inference, catalog, database or provider changes. [Contract](../specs/0021-ai-methodology-camera.md), [implementation evidence](../experiments/ai-methodology-camera-20261109.md), [release receipt](../experiments/camera-deployment-20261110.md).

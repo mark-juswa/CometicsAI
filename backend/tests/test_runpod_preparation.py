@@ -92,9 +92,10 @@ def test_candidate_profile_preserves_original_review_and_all_dependency_checks()
     assert reviewed == original and reviewed["gpu"] == "Tesla T4"
 
 
-def test_a6000_candidate_accepts_only_its_hardware_with_reviewed_dependencies():
+@pytest.mark.parametrize("profile_file", ["rtx-a6000.json", "a40.json"])
+def test_48gb_candidate_accepts_only_its_hardware_with_reviewed_dependencies(profile_file):
     actual, reviewed, default = profile_case()
-    candidate = json.loads((ROOT / "deploy/runpod/profiles/rtx-a6000.json").read_text())
+    candidate = json.loads((ROOT / "deploy/runpod/profiles" / profile_file).read_text())
     actual.update(gpu=candidate["gpu"], gpu_total_bytes=48 * 1024**3)
     runtime.check_profile(actual, reviewed, candidate, 32 * 1024**3)
     # Neither image silently accepts the other's GPU, or a smaller virtual allocation.
@@ -107,12 +108,44 @@ def test_a6000_candidate_accepts_only_its_hardware_with_reviewed_dependencies():
     with pytest.raises(ValueError):
         runtime.check_profile(actual, reviewed, candidate, 25 * 1024**3)
     assert default["gpu"] == "NVIDIA GeForce RTX 3090"
+    assert package.PROFILES['a40'] == 'profiles/a40.json'
 
 
 def test_unknown_profile_fails_without_creating_output(tmp_path):
     with pytest.raises(ValueError, match="Unknown Runpod GPU profile"):
         package.build(tmp_path / "output", tmp_path, profile="anything")
     assert not (tmp_path / "output").exists()
+
+
+@pytest.mark.parametrize('relative', ['backend/app/guard.py', '../outside.py'])
+def test_cpu_updates_keep_build_manifest_separate_from_archive_manifests(tmp_path, monkeypatch, relative):
+    root = tmp_path / 'distribution'
+    inputs = tmp_path / 'inputs'
+    inputs.mkdir(); root.mkdir()
+    raw = b'original archive'
+    (inputs / 'fixture.bin').write_bytes(raw)
+    update = b'guard_enabled = True\n'
+    source = root / 'cpu-updates' / relative
+    source.parent.mkdir(parents=True, exist_ok=True)
+    source.write_bytes(update)
+    build_manifest = {'cpu_updates': {relative: sha256(update).hexdigest()},
+                      'files': {'cpu-updates/' + relative: sha256(update).hexdigest()}}
+    monkeypatch.setattr(runtime, 'verify_distribution', lambda *_: build_manifest)
+    def extract(_archive, _digest, output, archive_manifest):
+        assert archive_manifest == 'historical-manifest'
+        output.mkdir(parents=True)
+        (output / 'demo_bundle.json').write_text(json.dumps({'worker_sources': {}}))
+    setup = SimpleNamespace(BUNDLES=[('fixture.bin', sha256(raw).hexdigest(), 'cpu-src', 'historical-manifest')],
+        STYLE_RELEASE_EXPECTED={}, OPTIMIZED_SOURCES={}, extract=extract,
+        verify_release_pair=lambda *_: None, stage_overlay=lambda *_: None)
+    monkeypatch.setattr(runtime, 'load_module', lambda *_: setup)
+    work = tmp_path / 'work'
+    if relative.startswith('..'):
+        with pytest.raises(ValueError, match='Unsafe CPU update'):
+            runtime.assemble(inputs, work, root=root)
+    else:
+        runtime.assemble(inputs, work, root=root)
+        assert (work / 'cpu-src' / relative).read_bytes() == update
 
 
 def test_notebook_proxy_trust_is_bound_to_this_pod_without_disabling_xsrf():

@@ -2,6 +2,13 @@
 
 import os
 from pathlib import Path
+import pytest
+
+
+@pytest.fixture
+def synthetic_photo_subject(monkeypatch):
+    """Contract tests use drawn rectangles; detector evidence is tested separately."""
+    monkeypatch.setattr('app.photo_suitability.check_subject', lambda *_: True)
 
 
 def pytest_configure() -> None:

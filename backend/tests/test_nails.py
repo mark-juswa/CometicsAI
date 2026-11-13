@@ -15,6 +15,7 @@ from app.nails.geometry import ReviewedMaskSegmenter
 
 
 client = TestClient(app)
+pytestmark = pytest.mark.usefixtures('synthetic_photo_subject')
 
 
 def photo_bytes() -> bytes:

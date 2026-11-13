@@ -453,3 +453,15 @@ test('job and recommendation identifiers are removed from diagnostic route templ
   assert.equal(logs.join('').includes(ID), false);
   assert.equal(logs.join('').includes('private-look'), false);
 });
+
+test('wrong subject messages survive manual and consultation forwarding without exposing arbitrary detail', async (t) => {
+  t.mock.method(console, 'warn', () => {});
+  const message = 'Makeup requires one clear face. Upload a well-lit portrait, not a hand or another object.';
+  for (const parts of [['consultations', 'photo'], ['consultations', 'turn']] as const) {
+    const config = deps(undefined, () => Response.json({detail:message}, {status:422}));
+    const response = await handleAiRequest(request(parts[1] === 'photo' ? 'PUT' : 'POST', parts.join('/'),
+      parts[1] === 'photo' ? image('image/png') : '{}', await handle()), [...parts], config);
+    assert.equal(response.status, 422);
+    assert.ok((await response.json()).error.startsWith(message));
+  }
+});

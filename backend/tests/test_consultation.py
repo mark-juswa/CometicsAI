@@ -26,7 +26,9 @@ client = TestClient(main.app)
 
 
 @pytest.fixture(autouse=True)
-def clear_consultations():
+def clear_consultations(monkeypatch):
+    # These contract fixtures are colored rectangles, not detector evidence.
+    monkeypatch.setattr('app.photo_suitability.check_subject', lambda *_: True)
     main.consultation_store._entries.clear()
     yield
     main.consultation_store._entries.clear()
@@ -188,8 +190,7 @@ def test_mock_provider_is_deterministic_and_does_not_call_any_generator(monkeypa
     assert first.status_code == second.status_code == 200
     assert first.json() == second.json()
     assert all(row["primary"]["feature"] == "hairstyle" for row in first.json()["recommendations"])
-    assert all(row["complements"][0]["feature"] in {"makeup", "nails"}
-               for row in first.json()["recommendations"])
+    assert all(not row['complements'] for row in first.json()['recommendations'])
 
 
 def test_candidate_filter_and_insufficient_styles(monkeypatch):
@@ -284,9 +285,8 @@ def test_service_estimates_are_backend_owned_and_not_provider_values():
     result = client.post(f"/consultations/{identity}/recommendations").json()
     assert all(row["primary"]["service"] == SERVICES["makeup"].model_dump()
                for row in result["recommendations"])
-    assert all(row["complements"][0]["service"]["estimated_price"] ==
-               SERVICES[row["complements"][0]["feature"]].estimated_price
-               for row in result["recommendations"])
+    assert all(extra['service']['estimated_price'] == SERVICES[extra['feature']].estimated_price
+               for row in result['recommendations'] for extra in row['complements'])
 
 
 def test_bad_provider_is_rejected_at_http_boundary_without_generation():

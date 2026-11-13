@@ -1,4 +1,5 @@
 import base64
+import pytest
 from io import BytesIO
 
 from fastapi.testclient import TestClient
@@ -9,6 +10,7 @@ from app.makeup_styles import MAKEUP_STYLES
 
 
 client = TestClient(app)
+pytestmark = pytest.mark.usefixtures('synthetic_photo_subject')
 
 
 def portrait() -> bytes:

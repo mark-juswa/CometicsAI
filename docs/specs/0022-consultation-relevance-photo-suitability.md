@@ -32,6 +32,10 @@ Extend the current consultation filtering and validation boundaries. Local Media
 4. Map only known public photo errors, update deployment preparation and run offline/real image checks (AC-5).
 5. Package and validate the updated CPU serving source separately before authorized production rollout. GPU style generation quality is unchanged but live wrong subject rejection needs explicit verification.
 
+## Confirmed Kaggle backup preparation, 13 November 2026
+
+Supervisor additionally requests a current Kaggle backup before retiring an unused Runpod Pod ahead of a presentation in two or three weeks. Extend the exact accepted serving notebook with the same hash verified CPU files and face asset as the locally validated Runpod candidate. Preserve both private archives, original notebooks, GPU code/settings, strict reviewed T4 environment checks and all catalog IDs. Default to validation without website registration. Reuse the existing16 case real generation probe and require explicit visual acceptance before website connection. Package a private ZIP with notebook, archives, manifest and guide; keep secrets external. Local tests and Linux staging do not establish a working Kaggle GPU session. Pod backup inspection, termination, paid resource creation and live cutover are outside this preparation step. Current default Kaggle images may be incompatible; do not weaken guards or claim that importing notebook metadata pins a historical environment.
+
 ## References
 
 [Official MediaPipe Face Detector](https://developers.google.com/edge/mediapipe/solutions/vision/face_detector) supplies face bounding boxes and keypoints. Existing sources: backend/app/consultation/{gemini,recommend,api}.py, backend/app/main.py, backend/app/nails/geometry.py and docs/specs/0021-ai-methodology-camera.md.

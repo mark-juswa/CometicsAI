@@ -1,5 +1,7 @@
 # Decision history
 
+2026-11-13 CONFIRMED: Supervisor requests preparing the current all feature Kaggle backup before retiring the old Runpod Pod for a two or three week wait. Preserve model archives, reviewed worker and environment guards; package the new CPU updates separately and validate before explicit website connection. This preparation does not establish live Kaggle readiness or authorize losing unique Pod files. [Evidence](../docs/experiments/kaggle-current-backup-20261113.md).
+
 2026-11-13 CONFIRMED: Supervisor requests publishing these changes to Render. Publish verified source to main and deploy the matching website relay. This does not imply the Runpod backend is updated by a Render release or authorize new paid GPU allocation. Website release de883e8 is VERIFIED Live; separate Runpod cutover remains pending. [Receipt](../docs/experiments/photo-guard-render-deployment-20261113.md).
 
 2026-11-13 CONFIRMED: Supervisor selects local photo checks for Hair/Makeup/Nails and retains text only Gemini. Extend existing validation and catalog recommendation boundaries, preserve training/model outputs and camera UI. Local suitability is not identity, liveness, complexion or face shape analysis. Serving image and website rollout remain separate from local implementation. [Design](../docs/specs/0022-consultation-relevance-photo-suitability.md).

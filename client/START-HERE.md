@@ -1,5 +1,7 @@
 # BeautyCore client serving package, 6 November 2026
 
+13 November backup update: use `beautycore_kaggle_backup_20261113.ipynb` for the new local photo checks and preference ranking alongside all39styles. It starts in validation mode and does not replace the website connection automatically. The original notebook below remains preserved. [Current backup setup and acceptance gates](../docs/guides/kaggle-current-backup.md). The private current ZIP also contains both unchanged model binaries. Local staging passes; a real compatible Kaggle rehearsal is still required.
+
 Repository handoff update, 7 November: [source access, local development, push permissions and Render deployment](../docs/guides/client-repository-handoff.md). In a Git clone the two `.bin` files listed below are absent by design; obtain them privately from the project owner. The retained local serving ZIP includes both. Importing this notebook does not pin Kaggle's Docker image. The reviewed environment is Python 3.12.13, Torch 2.10.0+cu128, CUDA 12.8 and Tesla T4. Current startup is not yet verified after the reported host and input discovery errors.
 
 This package supports 18 Hair, 13 Makeup and 8 Nails styles (39 total).

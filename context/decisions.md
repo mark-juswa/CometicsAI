@@ -1,5 +1,11 @@
 # Decision history
 
+CONFIRMED16November2026: Supervisor explicitly says “deploy it on render”. Publish the approved consultation UI onto the existing deployment branch, manually deploy the existing Render website service, and verify its live release. Preserve current main changes, existing secrets/settings, database and AI/GPU server. [Release record](../docs/experiments/consultation-render-deployment-20261116.md).
+
+## Consultation prototype implementation approval, 16 November 2026
+
+CONFIRMED: Supervisor approves prototype v3 for implementation and explicitly requires safe architecture, preservation of the underlying functionality, and no unrelated feature changes. Implement on the current client enhancements baseline, retaining existing brand, shared state, guest restrictions, camera/reference inputs and save/booking contracts. This authorizes local source implementation and verification, not a production release, database migration, model change or live GPU request. [Spec0021](../docs/specs/0021-consultation-chat-layout.md), [implementation evidence](../docs/experiments/consultation-chat-ui-20261116.md).
+
 2026-11-09 CONFIRMED: Supervisor requests adding AI training methodology and direct camera selection during image upload. Implement an evidence grounded public explanation and one native browser camera component for AI studios/consultation, reusing File validation and explicit generation. No new model training, automatic upload, production database change or real hardware permission grant is implied. Real phone acceptance and production integration remain separate. [Contract](../docs/specs/0021-ai-methodology-camera.md).
 
 2026-11-09 CONFIRMED: Supervisor requests merging the client based generation recovery fix and deploying to Render. Use the live dashboard's actual main branch rather than the stale historical serving branch guidance. Main fast forward and manual Render release4689b4c are VERIFIED; no GPU worker, credentials, database contents or model changes are part of this authorization. [Receipt](../docs/experiments/generation-recovery-deployment-20261109.md).

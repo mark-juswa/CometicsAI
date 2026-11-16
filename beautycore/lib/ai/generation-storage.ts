@@ -1,5 +1,6 @@
 import type { FeatureId, GeneratedResult } from './browser-client';
 import { clearCustomPhotos } from './studio-photo-handoff';
+import { clearConsultationPreparation } from './consultation-preparation';
 
 export const DRAFT_TTL = 30 * 60 * 1000;
 export const FEATURES: FeatureId[] = ['hairstyle', 'makeup', 'nails'];
@@ -53,6 +54,7 @@ export function readTicket(storage: Storage, owner: string, feature: FeatureId):
 
 /** Called on logout/account change, never on ordinary route departure. */
 export function clearGenerationDrafts(owner: string) {
+  clearConsultationPreparation(owner);
   clearCustomPhotos();
   if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('beautycore-generation-clear', { detail: owner }));
   for (const feature of FEATURES) {

@@ -4,6 +4,7 @@ import { Inter, Playfair_Display } from 'next/font/google';
 import { AuthProvider } from '@/context/AuthContext';
 import './globals.css';
 import './ai-studio.css';
+import './consultation.css';
 
 const inter = Inter({
   subsets: ['latin'],

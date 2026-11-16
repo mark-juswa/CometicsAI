@@ -13,7 +13,7 @@ import { rememberCustomPhoto, takeCustomPhoto } from '../lib/ai/studio-photo-han
 import { GenerationContext } from '../components/generation-provider';
 import { GenerationStore } from '../lib/ai/generation-store';
 
-test('the imported AI studio presents all four real Client destinations', () => {
+test('AC-10 manual studios retain feature navigation while consultation uses its own workspace inside the client portal', () => {
   const pages = [
     { Page: ConsultationPage, current: '/client/ai-consultation' },
     { Page: HairPage, current: '/client/hair-studio' },
@@ -23,9 +23,15 @@ test('the imported AI studio presents all four real Client destinations', () => 
   for (const { Page, current } of pages) {
     const html = renderToStaticMarkup(React.createElement(GenerationContext.Provider,
       { value: new GenerationStore('static-render-fixture') }, React.createElement(Page)));
-    for (const route of ['/client/ai-consultation', '/client/hair-studio',
-      '/client/makeup-studio', '/client/nail-studio'].filter((route) => route !== current))
-      assert.ok(html.includes(route));
+    if (Page !== ConsultationPage) {
+      for (const route of ['/client/ai-consultation', '/client/hair-studio',
+        '/client/makeup-studio', '/client/nail-studio'].filter((route) => route !== current))
+        assert.ok(html.includes(route));
+    } else {
+      assert.ok(html.includes('/client/dashboard'));
+      assert.ok(html.includes('consultation-workspace'));
+      for (const service of ['Hairstyle', 'Makeup', 'Nails']) assert.ok(html.includes(service));
+    }
     assert.ok(html.includes('studio-page'));
     assert.ok(html.includes('/how-ai-works'));
     if (Page !== ConsultationPage) assert.ok(html.includes('Use camera'));

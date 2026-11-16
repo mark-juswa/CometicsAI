@@ -33,11 +33,13 @@ const failed = (id: string): GenerationDetail => ({
   result: null,
 });
 
-test('initial Client page shows service step only, with all three choices', () => {
+test('AC-1 initial Client consultation shows the direction composer and three choices with no photo or results rail', () => {
   const html = renderToStaticMarkup(React.createElement(ClientAiConsultationPage));
-  for (const name of ['Hairstyle', 'Makeup', 'Nails', 'CHOOSE A SERVICE', 'Continue']) assert.ok(html.includes(name));
+  for (const name of ['Hairstyle', 'Makeup', 'Nails', 'Your direction', 'Consultation', 'Your looks', 'Your reply', 'Send reply']) assert.ok(html.includes(name));
   assert.ok(!html.includes('Upload a photo'));
   assert.ok(!html.includes('Generate My Looks'));
+  assert.ok(!html.includes('Upload consultation photo'));
+  assert.ok(!html.includes('Your recommended looks'));
 });
 
 test('same-origin client keeps only signed handle, never uses raw upstream ID as a route', async () => {

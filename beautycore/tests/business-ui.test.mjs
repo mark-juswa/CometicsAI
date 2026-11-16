@@ -29,6 +29,7 @@ for (const name of [
 Object.defineProperty(globalThis, 'navigator', { value: dom.window.navigator, configurable: true });
 globalThis.self = window;
 globalThis.localStorage = window.localStorage;
+globalThis.sessionStorage = window.sessionStorage;
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 globalThis.confirm = () => true;
 window.matchMedia = () => ({
@@ -638,12 +639,13 @@ test('admin navigation removes Market Trends and keeps Finance and Dashboard', a
 test('consultation books selected look B while look A is displayed, with one saved result and no regeneration', async () => {
   mount(ConsultationPage);
   fireEvent.click(screen.getByRole('button', { name: /Nails —/ }));
-  fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
+  fireEvent.change(screen.getByLabelText('Your reply'), { target: { value: 'Polished nails for graduation' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Send reply' }));
   fireEvent.change(screen.getByLabelText('Upload consultation photo'), {
     target: { files: [new File([png], 'hand.png', { type: 'image/png' })] },
   });
   fireEvent.click(await screen.findByRole('button', { name: 'Find my looks' }));
-  fireEvent.click(await screen.findByRole('button', { name: 'Explore My Looks' }));
+  await screen.findByRole('complementary', { name: 'Your recommended looks' });
   fireEvent.click(screen.getByRole('button', { name: 'Generate My Looks' }));
   await waitFor(() =>
     assert.equal(

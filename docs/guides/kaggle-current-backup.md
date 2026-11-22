@@ -18,6 +18,8 @@ The ZIP includes the new notebook, the two unchanged private input archives, has
 6. Run the second code cell once. It installs isolated CPU dependencies, checks the face/hand/segmenter assets, starts the unchanged GPU model release and CPU API, and verifies the complete catalog. Expect `KAGGLE_BACKUP_READY_FOR_VALIDATION`. It does not register with Render. Do not start another worker if startup fails; inspect the saved stage log or use a clean session after stopping owned services.
 7. Run the third code cell. Expect `SUBJECT_REJECTION_PASS` for blank incorrect subjects across all three services. This does not prove acceptance of correct photos or completed generation.
 
+22 November validation correction: the hosted gateway returns an HTTP202 job ticket before the photo guard's final response. The original third cell wrongly required an immediate422. Use `client/beautycore_kaggle_backup_20261122.ipynb`, or replace only the third code cell with `scripts/kaggle_backup_controls.py` followed by `backup_validate(CLIENT_WORK)`. Keep the original notebook environment and existing two inputs. The corrected check submits each blank test once, follows that same job using GET status/result, and still requires the exact422 subject error. It never retries a POST or automatically connects the website. Existing startup, models and final acceptance requirements are unchanged. [Reproduction and verification](../experiments/kaggle-validation-failure-20261122.md).
+
 ## Rehearse before calling it a working backup
 
 Upload `makeup_corrective_application_probe.py` using Kaggle's file controls. In a separate code cell, execute it against the already running session:

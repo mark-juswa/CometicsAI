@@ -240,7 +240,6 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
   const [attachmentOpen, setAttachmentOpen] = useState(
     step === 2 && !consultationId,
   );
-  const [looksOpen, setLooksOpen] = useState(true);
   const [restoring, setRestoring] = useState(
     !trial && !!consultationId && !running.current,
   );
@@ -251,6 +250,7 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
   const continueButton = useRef<HTMLButtonElement>(null);
   const resultsPanel = useRef<HTMLElement>(null);
   const following = useRef(true);
+  const resultsVisible = useRef(false);
   const [showLatest, setShowLatest] = useState(false);
   const draftEpoch = useRef(consultationPreparationEpoch(draftOwner));
   const refocusReply = useRef(false);
@@ -303,9 +303,19 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
   }
 
   useEffect(() => {
-    if (following.current && transcript.current)
-      transcript.current.scrollTop = transcript.current.scrollHeight;
-    else if (chatMessages.length) setShowLatest(true);
+    const log = transcript.current;
+    const results = resultsPanel.current;
+    const firstResults = !!results && !resultsVisible.current;
+    resultsVisible.current = !!results;
+    if (following.current && log) {
+      if (firstResults && results) {
+        // Start at the recommendations, preserving older-message readers.
+        log.scrollTop +=
+          results.getBoundingClientRect().top - log.getBoundingClientRect().top;
+      } else if (!results) {
+        log.scrollTop = log.scrollHeight;
+      }
+    } else if (chatMessages.length) setShowLatest(true);
   }, [chatMessages, initialIntent, phase]);
 
   useEffect(() => {
@@ -1474,6 +1484,289 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
                       </div>
                     </div>
                   )}
+                  {ready && (
+                    <section
+                      id="cc-results"
+                      ref={resultsPanel}
+                      tabIndex={-1}
+                      className="cc-details"
+                      aria-label="Your recommended looks"
+                    >
+                      <div className="cc-inline-author">
+                        <span className="cc-message-avatar" aria-hidden="true">
+                          <Sparkles size={13} />
+                        </span>
+                        <span>Andrea’s consultant</span>
+                      </div>
+                      {preview && (
+                        <div className="cc-source-photo">
+                          <div>
+                            <strong>Your photo</strong>
+                            <small>
+                              {service === "nails" ? "HAND PHOTO" : "PORTRAIT"}
+                            </small>
+                          </div>
+                          <img
+                            src={preview}
+                            alt="Your original consultation photo"
+                          />
+                        </div>
+                      )}
+                      <div className="cc-results-title">
+                        <h2>
+                          {trial
+                            ? "Your trial recommendations"
+                            : "Your three looks"}
+                        </h2>
+                        <small role="status">
+                          {
+                            cards.filter((card) => card.status === "completed")
+                              .length
+                          }{" "}
+                          OF 3 READY
+                        </small>
+                      </div>
+                      {trial && (
+                        <GuestTrialIndicator
+                          state={trialFeedback}
+                          onOpen={() => setTrialLimitOpen(true)}
+                        />
+                      )}
+                      <div
+                        className="cc-look-list"
+                        aria-label="Recommendation cards"
+                      >
+                        {cards.map((card, index) => (
+                          <button
+                            key={card.recommendation.id}
+                            type="button"
+                            className="cc-look-choice"
+                            aria-label={`View look ${index + 1}: ${card.recommendation.primary.style_name}`}
+                            aria-pressed={
+                              activeCard?.recommendation.id ===
+                              card.recommendation.id
+                            }
+                            onClick={() => switchLook(card)}
+                          >
+                            <span>{`0${index + 1}`}</span>
+                            <div>
+                              <strong>
+                                {card.recommendation.primary.style_name}
+                              </strong>
+                              <span className="cc-recommendation-reason">
+                                {card.recommendation.reason}
+                              </span>
+                              <small>{cardLabel(card)}</small>
+                            </div>
+                            {card.status === "completed" ? (
+                              <Check size={14} aria-hidden="true" />
+                            ) : trial && trialFeedback === "used" ? (
+                              <LockKeyhole size={14} aria-hidden="true" />
+                            ) : null}
+                          </button>
+                        ))}
+                      </div>
+                      {activeCard && (
+                        <article
+                          className={`cc-featured ${cards.every((card) => card.status === "pending") ? "cc-recommendation-detail" : ""}`}
+                          aria-label="Featured look"
+                        >
+                          <div className="cc-result-image">
+                            {activeCard.result ? (
+                              <StudioPhoto
+                                src={activeCard.result.image.data_url}
+                                alt={`Generated ${activeCard.recommendation.primary.style_name} preview`}
+                              />
+                            ) : (
+                              <div className="cc-placeholder">
+                                {activeCard.status === "generating" ||
+                                activeCard.status === "completed" ? (
+                                  <span className="cc-spinner" />
+                                ) : (
+                                  <Sparkles size={24} aria-hidden="true" />
+                                )}
+                                <p>
+                                  {activeCard.status === "pending"
+                                    ? pendingPreviewMessage
+                                    : activeCard.status === "generating"
+                                      ? "Creating this look…"
+                                      : activeCard.status === "completed"
+                                        ? "Recovering this preview…"
+                                        : activeCard.status === "unknown"
+                                          ? "Check your request status"
+                                          : "Preview unavailable"}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                          <div className="cc-result-copy">
+                            <p className="cc-look-index">
+                              LOOK 0{activeIndex + 1} / 03 ·{" "}
+                              {cardLabel(activeCard)}
+                            </p>
+                            <h3>
+                              {activeCard.recommendation.primary.style_name}
+                            </h3>
+                            <p className="cc-reason">
+                              {activeCard.recommendation.reason}
+                            </p>
+                            <LookInformation
+                              feature={
+                                activeCard.recommendation.primary.feature
+                              }
+                              styleId={
+                                activeCard.recommendation.primary.style_id
+                              }
+                            />
+                            {activeCard.recommendation.complements.length >
+                              0 && (
+                              <p className="cc-note">
+                                Pairs with{" "}
+                                {activeCard.recommendation.complements
+                                  .map((item) => item.style_name)
+                                  .join(", ")}
+                                . Complementary visuals are not generated.
+                              </p>
+                            )}
+                            {activeCard.error && (
+                              <p role="alert" className="cc-error">
+                                {activeCard.error}
+                              </p>
+                            )}
+                            <div className="cc-result-actions">
+                              {activeCard.status === "completed" &&
+                                activeCard.result && (
+                                  <>
+                                    {!trial && (
+                                      <button
+                                        type="button"
+                                        className="cc-button cc-primary"
+                                        disabled={selectionBusy || restoring}
+                                        onClick={() => void select(activeCard)}
+                                      >
+                                        {selectedId ===
+                                        activeCard.recommendation.id
+                                          ? "Selected"
+                                          : "Select This Look"}
+                                      </button>
+                                    )}
+                                    <a
+                                      className="cc-button cc-secondary"
+                                      href={activeCard.result.image.data_url}
+                                      download={`andreas-${activeCard.recommendation.primary.style_id}.${activeCard.result.image.content_type === "image/jpeg" ? "jpg" : "png"}`}
+                                    >
+                                      Download
+                                    </a>
+                                  </>
+                                )}
+                              {!trial && activeCard.canRetry && (
+                                <button
+                                  className="cc-button cc-secondary"
+                                  type="button"
+                                  disabled={busy || manualBusy || turnLocked}
+                                  onClick={() => void retry(activeCard)}
+                                >
+                                  Retry this look
+                                </button>
+                              )}
+                              {activeCard.status === "unknown" && (
+                                <button
+                                  className="cc-button cc-secondary"
+                                  type="button"
+                                  disabled={
+                                    phase === "preparing" ||
+                                    phase === "generating"
+                                  }
+                                  onClick={() => void checkStatus(activeCard)}
+                                >
+                                  Check status
+                                </button>
+                              )}
+                              {trial &&
+                                activeCard.status !== "completed" &&
+                                (trialFeedback === "used" ||
+                                  trialFeedback === "unresolved") && (
+                                  <button
+                                    className="cc-button cc-primary"
+                                    type="button"
+                                    onClick={() => setTrialLimitOpen(true)}
+                                  >
+                                    {trialFeedback === "used"
+                                      ? "Unlock this preview"
+                                      : "View trial details"}
+                                  </button>
+                                )}
+                            </div>
+                          </div>
+                        </article>
+                      )}
+                      {cards.every((card) => card.status === "pending") &&
+                        (!trial || trialStatus?.state === "available") && (
+                          <button
+                            type="button"
+                            className="cc-button cc-primary cc-generate"
+                            disabled={busy || manualBusy || turnLocked}
+                            onClick={() => void generateLooks()}
+                          >
+                            {trial
+                              ? "Generate " +
+                                (activeCard?.recommendation.primary
+                                  .style_name || "This Look")
+                              : "Generate My Looks"}
+                            <Sparkles size={14} aria-hidden="true" />
+                          </button>
+                        )}
+                      {phase === "generating" && (
+                        <p role="status" className="cc-note">
+                          {trial
+                            ? "Creating your chosen trial preview."
+                            : "Your previews are generated one at a time."}{" "}
+                          Nails can take several minutes.
+                        </p>
+                      )}
+                      {!trial &&
+                        phase === "attention" &&
+                        cards.some((card) => card.status === "pending") &&
+                        !cards.some((card) => card.status === "unknown") && (
+                          <button
+                            type="button"
+                            className="cc-button cc-secondary"
+                            disabled={manualBusy || !!pendingTurn}
+                            onClick={() => void continuePending()}
+                          >
+                            Continue remaining looks
+                          </button>
+                        )}
+                      {!trial && selected && selected.result && (
+                        <section
+                          className="cc-selection"
+                          aria-label="Selected recommendation"
+                        >
+                          <p>
+                            <Check size={14} aria-hidden="true" />
+                            Your selected look
+                          </p>
+                          <h3>{selected.recommendation.primary.style_name}</h3>
+                          <p className="cc-note">
+                            Save this preview, or bring it to an appointment. No
+                            booking has been made.
+                          </p>
+                          {!restoring && (
+                            <SavedLookActions
+                              key={selected.recommendation.id}
+                              feature={selected.recommendation.primary.feature}
+                              result={selected.result}
+                              sourceKind="consultation"
+                              bookLabel="Book Selected Look"
+                            />
+                          )}
+                        </section>
+                      )}
+                      {customLink && (
+                        <div className="cc-custom">{customLink}</div>
+                      )}
+                    </section>
+                  )}
                   {phase === "preparing" && (
                     <p className="cc-waiting" role="status">
                       <span className="cc-spinner" aria-hidden="true" />
@@ -1634,21 +1927,22 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
                   <div className="cc-ready" role="status">
                     <Check size={18} aria-hidden="true" />
                     <span>
-                      Your three directions are ready. Explore your looks in the
-                      panel.
+                      Your recommendations, previews and next steps are here in
+                      the conversation.
                     </span>
                     <button
                       type="button"
                       className="cc-text-button"
                       onClick={() => {
                         setStep(3);
-                        setLooksOpen(true);
                         requestAnimationFrame(() => {
-                          resultsPanel.current?.focus();
-                          resultsPanel.current?.scrollIntoView({
-                            behavior: "auto",
-                            block: "nearest",
-                          });
+                          resultsPanel.current?.focus({ preventScroll: true });
+                          if (transcript.current && resultsPanel.current) {
+                            const log = transcript.current;
+                            log.scrollTop +=
+                              resultsPanel.current.getBoundingClientRect().top -
+                              log.getBoundingClientRect().top;
+                          }
                         });
                       }}
                     >
@@ -1871,259 +2165,6 @@ export default function Consultation({ trial = false }: { trial?: boolean }) {
               )}
             </div>
           </section>
-          {ready && (
-            <button
-              type="button"
-              className="cc-looks-toggle cc-button cc-secondary"
-              aria-expanded={looksOpen}
-              aria-controls="cc-results"
-              onClick={() => setLooksOpen((value) => !value)}
-            >
-              {looksOpen ? "Hide your looks" : "Show your looks"}
-            </button>
-          )}
-          {ready && (
-            <aside
-              id="cc-results"
-              ref={resultsPanel}
-              tabIndex={-1}
-              className={`cc-details ${looksOpen ? "" : "cc-looks-collapsed"}`}
-              aria-label="Your recommended looks"
-            >
-              {preview && (
-                <div className="cc-source-photo">
-                  <div>
-                    <strong>Your photo</strong>
-                    <small>
-                      {service === "nails" ? "HAND PHOTO" : "PORTRAIT"}
-                    </small>
-                  </div>
-                  <img src={preview} alt="Your original consultation photo" />
-                </div>
-              )}
-              <div className="cc-results-title">
-                <h2>
-                  {trial ? "Your trial recommendations" : "Your three looks"}
-                </h2>
-                <small>
-                  {cards.filter((card) => card.status === "completed").length}{" "}
-                  OF 3 READY
-                </small>
-              </div>
-              {trial && (
-                <GuestTrialIndicator
-                  state={trialFeedback}
-                  onOpen={() => setTrialLimitOpen(true)}
-                />
-              )}
-              <div className="cc-look-list" aria-label="Recommendation cards">
-                {cards.map((card, index) => (
-                  <button
-                    key={card.recommendation.id}
-                    type="button"
-                    className="cc-look-choice"
-                    aria-label={`View look ${index + 1}: ${card.recommendation.primary.style_name}`}
-                    aria-pressed={
-                      activeCard?.recommendation.id === card.recommendation.id
-                    }
-                    onClick={() => switchLook(card)}
-                  >
-                    <span>{`0${index + 1}`}</span>
-                    <div>
-                      <strong>{card.recommendation.primary.style_name}</strong>
-                      <small>{cardLabel(card)}</small>
-                    </div>
-                    {card.status === "completed" ? (
-                      <Check size={14} aria-hidden="true" />
-                    ) : trial && trialFeedback === "used" ? (
-                      <LockKeyhole size={14} aria-hidden="true" />
-                    ) : null}
-                  </button>
-                ))}
-              </div>
-              {activeCard && (
-                <article className="cc-featured" aria-label="Featured look">
-                  <div className="cc-result-image">
-                    {activeCard.result ? (
-                      <StudioPhoto
-                        src={activeCard.result.image.data_url}
-                        alt={`Generated ${activeCard.recommendation.primary.style_name} preview`}
-                      />
-                    ) : (
-                      <div className="cc-placeholder">
-                        {activeCard.status === "generating" ||
-                        activeCard.status === "completed" ? (
-                          <span className="cc-spinner" />
-                        ) : (
-                          <Sparkles size={24} aria-hidden="true" />
-                        )}
-                        <p>
-                          {activeCard.status === "pending"
-                            ? pendingPreviewMessage
-                            : activeCard.status === "generating"
-                              ? "Creating this look…"
-                              : activeCard.status === "completed"
-                                ? "Recovering this preview…"
-                                : activeCard.status === "unknown"
-                                  ? "Check your request status"
-                                  : "Preview unavailable"}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                  <p className="cc-look-index">
-                    LOOK 0{activeIndex + 1} / 03 · {cardLabel(activeCard)}
-                  </p>
-                  <h3>{activeCard.recommendation.primary.style_name}</h3>
-                  <p className="cc-reason">
-                    {activeCard.recommendation.reason}
-                  </p>
-                  <LookInformation
-                    feature={activeCard.recommendation.primary.feature}
-                    styleId={activeCard.recommendation.primary.style_id}
-                  />
-                  {activeCard.recommendation.complements.length > 0 && (
-                    <p className="cc-note">
-                      Pairs with{" "}
-                      {activeCard.recommendation.complements
-                        .map((item) => item.style_name)
-                        .join(", ")}
-                      . Complementary visuals are not generated.
-                    </p>
-                  )}
-                  {activeCard.error && (
-                    <p role="alert" className="cc-error">
-                      {activeCard.error}
-                    </p>
-                  )}
-                  <div className="cc-result-actions">
-                    {activeCard.status === "completed" && activeCard.result && (
-                      <>
-                        {!trial && (
-                          <button
-                            type="button"
-                            className="cc-button cc-primary"
-                            disabled={selectionBusy || restoring}
-                            onClick={() => void select(activeCard)}
-                          >
-                            {selectedId === activeCard.recommendation.id
-                              ? "Selected"
-                              : "Select This Look"}
-                          </button>
-                        )}
-                        <a
-                          className="cc-button cc-secondary"
-                          href={activeCard.result.image.data_url}
-                          download={`andreas-${activeCard.recommendation.primary.style_id}.${activeCard.result.image.content_type === "image/jpeg" ? "jpg" : "png"}`}
-                        >
-                          Download
-                        </a>
-                      </>
-                    )}
-                    {!trial && activeCard.canRetry && (
-                      <button
-                        className="cc-button cc-secondary"
-                        type="button"
-                        disabled={busy || manualBusy || turnLocked}
-                        onClick={() => void retry(activeCard)}
-                      >
-                        Retry this look
-                      </button>
-                    )}
-                    {activeCard.status === "unknown" && (
-                      <button
-                        className="cc-button cc-secondary"
-                        type="button"
-                        disabled={
-                          phase === "preparing" || phase === "generating"
-                        }
-                        onClick={() => void checkStatus(activeCard)}
-                      >
-                        Check status
-                      </button>
-                    )}
-                    {trial &&
-                      activeCard.status !== "completed" &&
-                      (trialFeedback === "used" ||
-                        trialFeedback === "unresolved") && (
-                        <button
-                          className="cc-button cc-primary"
-                          type="button"
-                          onClick={() => setTrialLimitOpen(true)}
-                        >
-                          {trialFeedback === "used"
-                            ? "Unlock this preview"
-                            : "View trial details"}
-                        </button>
-                      )}
-                  </div>
-                </article>
-              )}
-              {cards.every((card) => card.status === "pending") &&
-                (!trial || trialStatus?.state === "available") && (
-                  <button
-                    type="button"
-                    className="cc-button cc-primary cc-generate"
-                    disabled={busy || manualBusy || turnLocked}
-                    onClick={() => void generateLooks()}
-                  >
-                    {trial
-                      ? "Generate " +
-                        (activeCard?.recommendation.primary.style_name ||
-                          "This Look")
-                      : "Generate My Looks"}
-                    <Sparkles size={14} aria-hidden="true" />
-                  </button>
-                )}
-              {phase === "generating" && (
-                <p role="status" className="cc-note">
-                  {trial
-                    ? "Creating your chosen trial preview."
-                    : "Your previews are generated one at a time."}{" "}
-                  Nails can take several minutes.
-                </p>
-              )}
-              {!trial &&
-                phase === "attention" &&
-                cards.some((card) => card.status === "pending") &&
-                !cards.some((card) => card.status === "unknown") && (
-                  <button
-                    type="button"
-                    className="cc-button cc-secondary"
-                    disabled={manualBusy || !!pendingTurn}
-                    onClick={() => void continuePending()}
-                  >
-                    Continue remaining looks
-                  </button>
-                )}
-              {!trial && selected && selected.result && (
-                <section
-                  className="cc-selection"
-                  aria-label="Selected recommendation"
-                >
-                  <p>
-                    <Check size={14} aria-hidden="true" />
-                    Your selected look
-                  </p>
-                  <h3>{selected.recommendation.primary.style_name}</h3>
-                  <p className="cc-note">
-                    Save this preview, or bring it to an appointment. No booking
-                    has been made.
-                  </p>
-                  {!restoring && (
-                    <SavedLookActions
-                      key={selected.recommendation.id}
-                      feature={selected.recommendation.primary.feature}
-                      result={selected.result}
-                      sourceKind="consultation"
-                      bookLabel="Book Selected Look"
-                    />
-                  )}
-                </section>
-              )}
-              {customLink && <div className="cc-custom">{customLink}</div>}
-            </aside>
-          )}
         </div>
       </section>
       <footer className="cc-footer">

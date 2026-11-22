@@ -784,12 +784,12 @@ async function memberRecommendations() {
     "Suggested reply only fills input",
   );
   fireEvent.click(screen.getByRole("button", { name: "Send reply" }));
-  await screen.findByRole("complementary", { name: "Your recommended looks" });
+  await screen.findByRole("region", { name: "Your recommended looks" });
 }
 test("AC-2 local description clarifies ambiguous services and validates a photo before any API preparation", async () => {
   setupMember();
   mount(false);
-  assert.equal(screen.queryByRole("complementary"), null);
+  assert.equal(screen.queryByRole("region", { name: "Your recommended looks" }), null);
   assert.equal(screen.queryByLabelText("Upload consultation photo"), null);
   await describe("Something beautiful for graduation");
   assert.ok(screen.getByText(/Which service would you like/));
@@ -858,7 +858,7 @@ test("AC-3 rapid Continue clicks send exactly one retained first message and pre
   fireEvent.keyDown(input, { key: "Enter", shiftKey: true });
   assert.equal(calls.filter((call) => call.path.endsWith("/turn")).length, 1);
   fireEvent.keyDown(input, { key: "Enter" });
-  await screen.findByRole("complementary");
+  await screen.findByRole("region", { name: "Your recommended looks" });
   assert.equal(calls.filter((call) => call.path.endsWith("/turn")).length, 2);
   assert.equal(screen.queryByLabelText("Your reply"), null);
 });
@@ -966,7 +966,9 @@ test("AC-5 expired preparation has an explicit fresh start and no automatic repl
 });
 test("AC-4 member generation is sequential and choosing a preview does not generate or book it", async () => {
   await memberRecommendations();
-  assert.ok(screen.getByRole("log", { name: "Consultation conversation" }));
+  const log = screen.getByRole("log", { name: "Consultation conversation" });
+  assert.ok(within(log).getByRole("region", { name: "Your recommended looks" }));
+  assert.equal(document.querySelectorAll(".cc-body > .cc-details").length, 0);
   fireEvent.click(screen.getByRole("button", { name: "View look 2: Bob" }));
   assert.equal(
     calls.filter((call) => call.path.endsWith("/generation")).length,
@@ -1004,6 +1006,9 @@ test("AC-4 member generation is sequential and choosing a preview does not gener
     name: "Book Selected Look",
   });
   assert.equal(navigations.length, 0);
+  assert.ok(log.contains(book));
+  assert.ok(within(log).getByRole("button", { name: "Save Look", exact: true }));
+  assert.ok(within(log).getByRole("link", { name: "Download", exact: true }));
   fireEvent.click(book);
   await waitFor(() =>
     assert.deepEqual(navigations, ["/booking?look=saved%2Ffixture"]),
@@ -1075,7 +1080,7 @@ test("AC-8 structured mode preserves every preference and can clear optional not
     target: { value: "bleach, high upkeep" },
   });
   fireEvent.click(screen.getByRole("button", { name: "Find my looks" }));
-  await screen.findByRole("complementary");
+  await screen.findByRole("region", { name: "Your recommended looks" });
   assert.deepEqual(
     calls.find((call) => call.method === "PATCH").body.preferences,
     {
@@ -1534,7 +1539,7 @@ test("AC-8 guided guest preparation restores its direction after an interrupted 
   const find = screen.getByRole("button", { name: "Find my looks" });
   await waitFor(() => assert.equal(find.disabled, false));
   fireEvent.click(find);
-  await screen.findByRole("complementary", { name: "Your recommended looks" });
+  await screen.findByRole("region", { name: "Your recommended looks" });
   assert.equal(
     calls.find((call) => call.method === "PATCH").body.preferences.notes,
     "An easy haircut",

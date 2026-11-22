@@ -645,7 +645,7 @@ test('consultation books selected look B while look A is displayed, with one sav
     target: { files: [new File([png], 'hand.png', { type: 'image/png' })] },
   });
   fireEvent.click(await screen.findByRole('button', { name: 'Find my looks' }));
-  await screen.findByRole('complementary', { name: 'Your recommended looks' });
+  await screen.findByRole('region', { name: 'Your recommended looks' });
   fireEvent.click(screen.getByRole('button', { name: 'Generate My Looks' }));
   await waitFor(() =>
     assert.equal(

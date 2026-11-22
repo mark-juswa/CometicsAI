@@ -22,9 +22,6 @@
   min-width: 0;
   font-size: 11px;
 }
-.consultation-workspace .cc-body > .cc-looks-toggle {
-  display: none;
-}
 .consultation-workspace .cc-emblem {
   flex-shrink: 0;
 }
@@ -32,15 +29,6 @@
   max-width: 1440px;
   margin-inline: auto;
   padding: 32px 24px;
-}
-@media (max-width: 1000px) {
-  .consultation-workspace .cc-body > .cc-looks-toggle {
-    display: flex;
-    margin: 0 20px 20px;
-  }
-  .consultation-workspace .cc-details.cc-looks-collapsed {
-    display: none;
-  }
 }
 @media (max-width: 600px) {
   .consultation-workspace.cc-guest {
@@ -232,7 +220,7 @@
   min-height: 0;
 }
 .consultation-workspace .cc-body.cc-with-looks {
-  grid-template-columns: minmax(0, 1fr) 310px;
+  grid-template-columns: minmax(0, 1fr);
 }
 .consultation-workspace .cc-chat {
   display: flex;
@@ -245,7 +233,7 @@
   justify-self: center;
 }
 .consultation-workspace .cc-with-looks .cc-chat {
-  max-width: none;
+  max-width: 1000px;
 }
 .consultation-workspace .cc-welcome {
   display: flex;
@@ -346,6 +334,7 @@
 }
 .consultation-workspace .cc-transcript {
   flex: 1;
+  scroll-padding: 18px;
   min-height: 180px;
   max-height: 510px;
   overflow: auto;
@@ -750,24 +739,29 @@
   display: block;
 }
 .consultation-workspace .cc-details {
-  border-left: 1px solid var(--cc-line);
-  padding: 20px;
   min-width: 0;
-  background: rgba(17, 7, 30, 0.38);
+  flex: none;
+  padding: 8px 0 0 43px;
+}
+.consultation-workspace .cc-inline-author {
   display: flex;
-  flex-direction: column;
-  gap: 15px;
-  overflow: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-purple, #7b2fa0) transparent;
+  align-items: center;
+  gap: 13px;
+  margin: 0 0 16px -43px;
+  color: var(--cc-secondary);
+  font-size: 11px;
+  font-weight: 600;
 }
 .consultation-workspace .cc-source-photo {
   display: flex;
+  border: 1px solid var(--cc-line);
+  border-radius: 12px;
+  padding: 12px 15px;
+  margin-bottom: 17px;
+  background: rgba(45, 16, 84, 0.16);
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding-bottom: 17px;
-  border-bottom: 1px solid var(--cc-line);
 }
 .consultation-workspace .cc-source-photo strong {
   font-size: 12px;
@@ -797,10 +791,15 @@
 }
 .consultation-workspace .cc-look-list {
   display: grid;
-  gap: 7px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 15px 0 18px;
 }
 .consultation-workspace .cc-look-choice {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
   align-items: center;
   gap: 10px;
   padding: 9px;
@@ -844,12 +843,41 @@
 }
 .consultation-workspace .cc-look-choice > svg {
   color: var(--color-success, #6fcf97);
-  flex: none;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+.consultation-workspace .cc-recommendation-reason {
+  display: block;
+  color: var(--cc-muted);
+  font-size: 11px;
+  line-height: 1.7;
+  margin: 7px 0;
+}
+.consultation-workspace .cc-featured {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid var(--cc-line);
+  border-radius: 16px;
+  background: rgba(26, 10, 46, 0.5);
+  margin-bottom: 16px;
+}
+.consultation-workspace .cc-result-copy {
+  min-width: 0;
+  padding: 22px;
+}
+.consultation-workspace .cc-recommendation-detail {
+  display: block;
+}
+.consultation-workspace .cc-recommendation-detail .cc-result-image {
+  display: none;
 }
 .consultation-workspace .cc-result-image {
-  height: 180px;
-  border: 1px solid var(--cc-line);
-  border-radius: 12px;
+  min-height: 340px;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
   background: var(--cc-card);
   overflow: hidden;
 }
@@ -910,11 +938,13 @@
   flex: 1;
 }
 .consultation-workspace .cc-generate {
-  width: 100%;
+  width: fit-content;
 }
 .consultation-workspace .cc-selection {
-  padding-top: 15px;
-  border-top: 1px solid var(--cc-line);
+  padding: 20px;
+  border: 1px solid rgba(240, 168, 0, 0.3);
+  border-radius: 12px;
+  background: rgba(240, 168, 0, 0.025);
 }
 .consultation-workspace .cc-selection > p:first-child {
   display: flex;
@@ -928,8 +958,8 @@
   margin-top: 12px;
 }
 .consultation-workspace .cc-selection .saved-look-actions > div {
-  display: grid !important;
-  grid-template-columns: 1fr !important;
+  display: flex;
+  flex-wrap: wrap;
 }
 .consultation-workspace .cc-details .look-information {
   font-size: 11px;
@@ -986,7 +1016,7 @@
 }
 @media (max-width: 1250px) {
   .consultation-workspace .cc-body.cc-with-looks {
-    grid-template-columns: minmax(0, 1fr) 285px;
+    grid-template-columns: minmax(0, 1fr);
   }
   .consultation-workspace .cc-header {
     padding: 21px;
@@ -1010,18 +1040,13 @@
   .consultation-workspace .cc-with-looks .cc-transcript {
     padding-inline: 20px;
   }
-  .consultation-workspace .cc-details {
-    padding: 17px;
-  }
 }
 @media (max-width: 1000px) {
   .consultation-workspace .cc-body.cc-with-looks {
     grid-template-columns: 1fr;
   }
   .consultation-workspace .cc-details {
-    border-left: 0;
-    border-top: 1px solid var(--cc-line);
-    overflow: visible;
+    padding: 8px 0 0 43px;
   }
   .consultation-workspace .cc-look-list {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1030,11 +1055,8 @@
     flex-direction: column;
     align-items: flex-start;
   }
-  .consultation-workspace .cc-look-choice > svg {
-    display: none;
-  }
   .consultation-workspace .cc-result-image {
-    height: 310px;
+    min-height: 310px;
   }
   .consultation-workspace .cc-workspace {
     height: auto;
@@ -1179,13 +1201,33 @@
     font-size: 16px;
   }
   .consultation-workspace .cc-details {
-    padding: 19px;
+    padding: 8px 0 0;
+  }
+  .consultation-workspace .cc-inline-author {
+    margin-left: 0;
+  }
+  .consultation-workspace .cc-look-list {
+    grid-template-columns: 1fr;
+  }
+  .consultation-workspace .cc-look-choice {
+    flex-direction: row;
+    padding: 13px;
+  }
+  .consultation-workspace .cc-look-choice > div {
+    padding-right: 13px;
+  }
+  .consultation-workspace .cc-featured {
+    grid-template-columns: 1fr;
+  }
+  .consultation-workspace .cc-result-copy {
+    padding: 18px;
   }
   .consultation-workspace .cc-look-choice strong {
     font-size: 11px;
   }
   .consultation-workspace .cc-result-image {
     height: 285px;
+    min-height: 285px;
   }
   .consultation-workspace .cc-trial-note {
     padding: 12px 16px;

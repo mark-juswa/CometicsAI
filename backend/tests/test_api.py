@@ -1,4 +1,5 @@
 import base64
+import pytest
 from io import BytesIO
 
 from fastapi.testclient import TestClient
@@ -8,6 +9,7 @@ from app.main import MAX_FILE_BYTES, app
 
 
 client = TestClient(app)
+pytestmark = pytest.mark.usefixtures('synthetic_photo_subject')
 
 
 def image_bytes(format: str = "PNG", size: tuple[int, int] = (128, 96)) -> bytes:

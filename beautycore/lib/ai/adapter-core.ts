@@ -62,6 +62,9 @@ async function knownUpstreamFailure(upstream: Response, op: Operation): Promise<
     // Match only inspected public validation messages, never relay arbitrary text.
     if (op.body === 'image' || op.body === 'manual') {
       const imageErrors: Record<string, [number, string]> = {
+        'Makeup requires one clear face. Upload a well-lit portrait, not a hand or another object.': [422, 'Makeup requires one clear face. Upload a well-lit portrait, not a hand or another object.'],
+        'Hair preview requires one clear face with the head and hair in frame. Upload a portrait, not a hand or another object.': [422, 'Hair preview requires one clear face with the head and hair in frame. Upload a portrait, not a hand or another object.'],
+        'Nails requires one clear hand with visible nails. Upload a hand photo, not a portrait or another object.': [422, 'Nails requires one clear hand with visible nails. Upload a hand photo, not a portrait or another object.'],
         'Image width and height must each be between 64 and 4096 pixels.': [422, 'Your photo dimensions are unsupported. Choose a JPG or PNG between 64 and 4096 pixels on each side.'],
         'Image dimensions are too large.': [422, 'Your photo resolution is too large. Resize it or take a photo using Use camera.'],
         'The uploaded file is not a readable image.': [400, 'This photo could not be read. Export it as JPG or PNG, or use your camera.'],
@@ -71,6 +74,15 @@ async function knownUpstreamFailure(upstream: Response, op: Operation): Promise<
       const match = typeof detail === 'string' && Object.hasOwn(imageErrors, detail) ? imageErrors[detail] : undefined;
       if (match && upstream.status === match[0]) return { message: match[1], category: 'photo_validation' };
     }
+    if (upstream.status === 422 && typeof detail === 'string' &&
+        ['Makeup requires one clear face. Upload a well-lit portrait, not a hand or another object.',
+         'Hair preview requires one clear face with the head and hair in frame. Upload a portrait, not a hand or another object.',
+         'Nails requires one clear hand with visible nails. Upload a hand photo, not a portrait or another object.'].includes(detail))
+      return { message: detail, category: 'photo_validation' };
+    if (upstream.status === 503 && detail === 'Photo checking is temporarily unavailable. Please try again later.')
+      return { message: 'Photo checking is temporarily unavailable. Please try again later.', category: 'photo_check_unavailable' };
+    if (upstream.status === 422 && detail === 'Fewer than three supported styles match these preferences.')
+      return { message: 'Fewer than three supported looks match your preferences. Adjust the intensity, finish or things to avoid.', category: 'preferences_too_restrictive' };
     if (op.consultation && upstream.status === 404 && detail === 'Consultation not found or expired.')
       return { message: 'This consultation expired or the AI server restarted. Start a new consultation. If an image is still generating, check its status first.', category: 'consultation_expired' };
     if (op.path.endsWith('/turn') && upstream.status === 429 && detail === 'The AI consultant is unavailable. Please try again shortly.')

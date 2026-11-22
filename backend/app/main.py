@@ -12,6 +12,7 @@ from io import BytesIO
 from typing import Annotated
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from app.photo_suitability import ensure_photo_subject
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image, ImageOps, UnidentifiedImageError
 from pydantic import BaseModel, Field
@@ -200,6 +201,7 @@ async def generate_makeup(
     if style is None:
         raise HTTPException(status_code=400, detail="Please choose a valid makeup style.")
     portrait = await validated_image(image)
+    await ensure_photo_subject(portrait, 'makeup')
     try:
         preview = await makeup_engine.generate(portrait, style)
     except MakeupGenerationError as exc:
@@ -265,6 +267,7 @@ async def generate_nails(
     if style is None:
         raise HTTPException(status_code=400, detail="Please choose a valid nail style.")
     photo = await validated_image(image)
+    await ensure_photo_subject(photo, 'nails')
     validation_seconds = time.monotonic() - request_started
     mode = os.getenv("NAILS_PREVIEW_MODE", "mock").strip().lower()
     if mode == "hybrid":
@@ -330,6 +333,7 @@ async def generate(
         raise HTTPException(status_code=400, detail="Please choose a valid hairstyle.")
 
     portrait = await validated_image(image)
+    await ensure_photo_subject(portrait, 'hairstyle')
     try:
         generated = await engine.generate(portrait, style)
     except RemoteGenerationError as exc:

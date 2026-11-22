@@ -56,6 +56,7 @@ kaggle/working/
 *.bin
 *.gguf
 *.onnx
+*.tflite
 
 # Experiment downloads and bulky transient logs
 wandb/

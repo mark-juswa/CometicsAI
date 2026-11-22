@@ -15,6 +15,7 @@ from tests.central_remote_fixture import CentralRemoteScenario, png
 
 
 client = TestClient(main.app)
+pytestmark = pytest.mark.usefixtures('synthetic_photo_subject')
 
 
 def portrait() -> bytes:

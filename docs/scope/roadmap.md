@@ -1,8 +1,18 @@
 # Coarse build scope
 
+22 November 2026 Kaggle validator correction DONE locally: real gateway202 admission is now resolved through the same job's GET status/result before requiring the exact422 photo rejection.32 focused checks pass; companion notebook preserves startup/model/visual acceptance gates. Session is off and live revalidation remains NEEDS VERIFICATION. [Evidence](../experiments/kaggle-validation-failure-20261122.md).
+
 ## Consultation chat layout, 16 November 2026
 
 Planning and local implementation DONE, release not deployed. Supervisor approves prototype v3 preserving existing brand and functionality. [Spec0021](../specs/0021-consultation-chat-layout.md) is implemented on `codex/consultation-chat-ui`, based on client enhancements23b2555. VERIFIED206 tests, normal production build, seven controlled production-browser journeys and independent review Approve. Existing member/guest, shared recovery, camera, reference picker and save/booking actions remain. Physical keyboard/device and live provider/release checks remain NEEDS VERIFICATION. [Evidence](../experiments/consultation-chat-ui-20261116.md).
+
+## Relevant consultation and local photo checks, 13 November 2026
+
+Kaggle backup local preparation DONE: separate current all feature notebook/private ZIP, six CPU update files, strict T4 preflight and explicit postvalidation connection.43 offline tests and real archive/native CPU API staging pass. Live Kaggle rehearsal and unique Pod file backup remain NEEDS VERIFICATION; no termination or provider cutover. [Evidence](../experiments/kaggle-current-backup-20261113.md).
+
+Website release DONE on13November: source de883e8 published, Render dep-dbr7578ae00c73eq4ku0 VERIFIED Live and five public smoke checks pass. Runpod backend/image rollout remains NOT STARTED, so new recommendation and photo-check behavior is not yet live. [Release receipt](../experiments/photo-guard-render-deployment-20261113.md).
+
+IN PROGRESS. Local implementation and bounded verification DONE, production rollout NOT STARTED. Existing training methodology and camera option rechecked. Supervisor confirms local subject checks with photos excluded from Gemini. Preference ranking and Makeup constraints now govern recommendations; shared server checks reject wrong subjects before consultant or generation dispatch.113 backend,57 website and33 client price tests pass, plus native detector/staged CPU API checks, TypeScript and production build. Local A40 image built, not published. Full hand positive acceptance, broader detector cases, real Gemini dialogue and live website/Pod rollout remain NEEDS VERIFICATION. Models, catalog, datasets and earlier artifacts preserved. [Contract](../specs/0022-consultation-relevance-photo-suitability.md), [evidence](../experiments/consultation-photo-guards-20261113.md), [release guide](../guides/photo-check-release.md).
 
 ## AI methodology and camera selection, 9 November 2026
 

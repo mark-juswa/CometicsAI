@@ -4,7 +4,7 @@
 
 ## Consultation chat layout, 16 November 2026
 
-Planning and local implementation DONE, release not deployed. Supervisor approves prototype v3 preserving existing brand and functionality. [Spec0021](../specs/0021-consultation-chat-layout.md) is implemented on `codex/consultation-chat-ui`, based on client enhancements23b2555. VERIFIED206 tests, normal production build, seven controlled production-browser journeys and independent review Approve. Existing member/guest, shared recovery, camera, reference picker and save/booking actions remain. Physical keyboard/device and live provider/release checks remain NEEDS VERIFICATION. [Evidence](../experiments/consultation-chat-ui-20261116.md).
+Planning, implementation and Render website release DONE. Supervisor approves prototype v3 preserving existing brand and functionality. [Spec0021](../specs/0021-consultation-chat-layout.md) is implemented on `codex/consultation-chat-ui`, based on client enhancements23b2555. VERIFIED207 integrated tests, normal production build, seven controlled production-browser journeys and independent review Approve. Render67979a1 is Live with public page/assets verified. Existing member/guest, shared recovery, camera, reference picker and save/booking actions remain. Physical keyboard/device and live provider acceptance remain NEEDS VERIFICATION; Kaggle is off. [Implementation](../experiments/consultation-chat-ui-20261116.md), [release receipt](../experiments/consultation-render-deployment-20261116.md).
 
 ## Relevant consultation and local photo checks, 13 November 2026
 

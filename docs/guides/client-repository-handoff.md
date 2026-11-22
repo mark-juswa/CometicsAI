@@ -71,6 +71,8 @@ After correcting Git line ending conversion, a clean public source export passed
 
 Website: https://beautycore-demo.onrender.com
 
+22 November 2026 release update: the latest directly observed Live website commit is `67979a1afe47c12db167c88649288bace64015d0`, deployment `dep-dc1f0ut6e07s73d6n3g0`, including the approved consultation chat layout. Main, root, build/start commands and secrets are unchanged. The older release checkpoint below is historical. Kaggle is separately stopped; use the corrected backup validation cell before its remaining real output/visual and connection gates. [Current website receipt](../experiments/consultation-render-deployment-20261116.md), [Kaggle correction](../experiments/kaggle-validation-failure-20261122.md).
+
 The latest directly observed Live Render web release is commit `7119a3942ca035ad3d5d9cc80b01276a1046abdc` on 10 November 2026, including the client enhancements, generation recovery, camera photo entry and public AI methodology page. The dashboard confirms branch `main` and `beautycore` root. Build is `npm ci --include=dev && npm run build`; start is `npm run start -- --hostname 0.0.0.0 --port $PORT`; health is `/api/health`. Auto Deploy is Off in both the dashboard and versioned Blueprint. [Release receipt](../experiments/camera-deployment-20261110.md).
 
 After reviewing a website change, merge and push it to `main` through the repository's normal workflow. The current service does not require updating the historical serving branch. Preserve that branch and earlier releases for reference.

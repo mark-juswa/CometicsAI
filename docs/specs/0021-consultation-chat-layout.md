@@ -1,7 +1,7 @@
 # 0021. Consultation chat layout
 
 **Date**: 2026-11-16
-**Status**: DONE (local implementation, release not deployed)
+**Status**: DONE (website release67979a1 VERIFIED Live; live AI provider acceptance NEEDS VERIFICATION)
 **Decision**: CONFIRMED. The Supervisor approves prototype v3 for implementation, preserving existing brand styling and functionality, and keeping the conversation visible beside the recommended looks.
 **Planning progress**: DONE
 **Implementation progress**: DONE locally
